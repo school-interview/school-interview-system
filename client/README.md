@@ -86,6 +86,8 @@ If you use Mac, you can configure it by following step.
    export PATH=/Users/danfuji/flutter/flutter/bin:$PATH
    ```
 
+   ↑ Don't forget to add `/bin` after the location!
+
 ### Run Flutter doctor
 
 1. Open your Terminal.
