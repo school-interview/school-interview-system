@@ -1,19 +1,21 @@
 import 'package:client/component/input_text_field.dart';
+import 'package:client/component/custom_app_bar.dart';
+import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
 import 'package:client/view/avatar_select/avatar_select_view.dart';
-import 'package:client/view_model/start/start_view_model.dart';
+import 'package:client/view_model/profile_input/profile_input_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StartView extends ConsumerStatefulWidget {
-  const StartView({super.key});
+class ProfileInputView extends ConsumerStatefulWidget {
+  const ProfileInputView({super.key});
 
   @override
-  ConsumerState<StartView> createState() => _StartView();
+  ConsumerState<ProfileInputView> createState() => _ProfileInputView();
 }
 
-class _StartView extends ConsumerState<StartView> {
+class _ProfileInputView extends ConsumerState<ProfileInputView> {
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -26,13 +28,11 @@ class _StartView extends ConsumerState<StartView> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(startViewModelProvider.notifier);
+    final viewModel = ref.watch(profileInputViewModelProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("学生面談(工学部)"),
-      ),
+      backgroundColor: ColorDefinitions.primaryColor,
+      appBar: CostomAppBar().startAppBar,
       body: Center(
         child: Container(
           padding: const EdgeInsets.only(top: 20),
@@ -97,8 +97,8 @@ class _StartView extends ConsumerState<StartView> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    backgroundColor: ColorDefinitions.accentColor,
                     minimumSize: const Size(100, 50),
                   ),
                   child: const Text("次へ"),
@@ -112,7 +112,7 @@ class _StartView extends ConsumerState<StartView> {
   }
 
   /// 学科のプルダウンを作成するWidget
-  Widget _buildSelectMajorPullDown(StartViewModel viewModel) {
+  Widget _buildSelectMajorPullDown(ProfileInputViewModel viewModel) {
     const majorSelects = SelectItems.majors;
     List<DropdownMenuItem<String>> pullDownItems = [];
     for (int i = 0; i < majorSelects.length; i++) {
@@ -127,22 +127,10 @@ class _StartView extends ConsumerState<StartView> {
       width: 300,
       padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: const <BoxShadow>[
-            BoxShadow(
-              color: ColorDefinitions.boxShadowLayer1,
-              offset: Offset(0, 1),
-              blurRadius: 3,
-              spreadRadius: 1,
-            ),
-            BoxShadow(
-              color: ColorDefinitions.boxShadowLayer2,
-              offset: Offset(0, 1),
-              blurRadius: 2,
-              spreadRadius: 0,
-            ),
-          ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: BoxShadowStyle.boxShadowStyle(),
+      ),
       child: DropdownButtonFormField(
         items: pullDownItems,
         decoration: const InputDecoration(
@@ -153,6 +141,7 @@ class _StartView extends ConsumerState<StartView> {
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 12),
         ),
+        dropdownColor: Colors.white,
         validator: (value) {
           if (value == null) {
             return '選択してください。';

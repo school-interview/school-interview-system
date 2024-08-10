@@ -1,4 +1,6 @@
+import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
+import 'package:client/constant/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,16 +23,17 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("学生面談(工学部)"),
-      ),
+      backgroundColor: ColorDefinitions.primaryColor,
+      appBar: CostomAppBar().startAppBar,
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
-              const Text("面談相手を選択してください"),
+              const Text(
+                "面談相手を選択してください",
+                style: TextStyle(color: ColorDefinitions.textColor),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: _avatarList(),

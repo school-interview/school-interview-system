@@ -1,4 +1,4 @@
-import 'package:client/view/start/start_view.dart';
+import 'package:client/view/profile_input/profile_input_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +8,7 @@ void main() {
     ProviderScope(
       child: MaterialApp(
         scrollBehavior: CustomScrollBehavior(),
-        home: const StartView(),
+        home: const ProfileInputView(),
       ),
     ),
   );
