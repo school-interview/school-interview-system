@@ -1,22 +1,22 @@
 import 'package:client/repository/user/user_repository.dart';
 import 'package:client/repository/user/user_repository_impl.dart';
-import 'package:client/view_model/start/start_view_model_state.dart';
+import 'package:client/view_model/profile_input/profile_input_view_model_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final startViewModelProvider =
-    StateNotifierProvider<StartViewModel, StartViewModelState>(
-  (ref) => StartViewModel(
+final profileInputViewModelProvider =
+    StateNotifierProvider<ProfileInputViewModel, ProfileInputViewModelState>(
+  (ref) => ProfileInputViewModel(
     userRepository: UserRepositoryImpl(),
   ),
 );
 
-class StartViewModel extends StateNotifier<StartViewModelState> {
+class ProfileInputViewModel extends StateNotifier<ProfileInputViewModelState> {
   final UserRepository _userRepository;
 
-  StartViewModel({
+  ProfileInputViewModel({
     required UserRepository userRepository,
   })  : _userRepository = userRepository,
-        super(const StartViewModelState());
+        super(const ProfileInputViewModelState());
 
   setName(String name) {
     state = state.copyWith(name: name);
