@@ -1,5 +1,5 @@
 import 'package:client/constant/color.dart';
-import 'package:client/view_model/start/start_view_model.dart';
+import 'package:client/view_model/profile_input/profile_input_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,7 +7,7 @@ typedef ValidatorFunction = String? Function(String value);
 
 /// テキスト入力ボックス
 Widget buildInputTextField(
-  StartViewModel viewModel, {
+  ProfileInputViewModel viewModel, {
   required String labelText,
   required String hintText,
   int? limitText,

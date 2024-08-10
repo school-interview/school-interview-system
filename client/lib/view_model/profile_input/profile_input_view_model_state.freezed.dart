@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'start_view_model_state.dart';
+part of 'profile_input_view_model_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,29 +15,31 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$StartViewModelState {
+mixin _$ProfileInputViewModelState {
   String get name => throw _privateConstructorUsedError;
   String get schoolNumber => throw _privateConstructorUsedError;
   String get classColmunNumber => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $StartViewModelStateCopyWith<StartViewModelState> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ProfileInputViewModelStateCopyWith<ProfileInputViewModelState>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $StartViewModelStateCopyWith<$Res> {
-  factory $StartViewModelStateCopyWith(
-          StartViewModelState value, $Res Function(StartViewModelState) then) =
-      _$StartViewModelStateCopyWithImpl<$Res, StartViewModelState>;
+abstract class $ProfileInputViewModelStateCopyWith<$Res> {
+  factory $ProfileInputViewModelStateCopyWith(ProfileInputViewModelState value,
+          $Res Function(ProfileInputViewModelState) then) =
+      _$ProfileInputViewModelStateCopyWithImpl<$Res,
+          ProfileInputViewModelState>;
   @useResult
   $Res call({String name, String schoolNumber, String classColmunNumber});
 }
 
 /// @nodoc
-class _$StartViewModelStateCopyWithImpl<$Res, $Val extends StartViewModelState>
-    implements $StartViewModelStateCopyWith<$Res> {
-  _$StartViewModelStateCopyWithImpl(this._value, this._then);
+class _$ProfileInputViewModelStateCopyWithImpl<$Res,
+        $Val extends ProfileInputViewModelState>
+    implements $ProfileInputViewModelStateCopyWith<$Res> {
+  _$ProfileInputViewModelStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -69,22 +71,25 @@ class _$StartViewModelStateCopyWithImpl<$Res, $Val extends StartViewModelState>
 }
 
 /// @nodoc
-abstract class _$$StartViewModelStateImplCopyWith<$Res>
-    implements $StartViewModelStateCopyWith<$Res> {
-  factory _$$StartViewModelStateImplCopyWith(_$StartViewModelStateImpl value,
-          $Res Function(_$StartViewModelStateImpl) then) =
-      __$$StartViewModelStateImplCopyWithImpl<$Res>;
+abstract class _$$ProfileInputViewModelStateImplCopyWith<$Res>
+    implements $ProfileInputViewModelStateCopyWith<$Res> {
+  factory _$$ProfileInputViewModelStateImplCopyWith(
+          _$ProfileInputViewModelStateImpl value,
+          $Res Function(_$ProfileInputViewModelStateImpl) then) =
+      __$$ProfileInputViewModelStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String name, String schoolNumber, String classColmunNumber});
 }
 
 /// @nodoc
-class __$$StartViewModelStateImplCopyWithImpl<$Res>
-    extends _$StartViewModelStateCopyWithImpl<$Res, _$StartViewModelStateImpl>
-    implements _$$StartViewModelStateImplCopyWith<$Res> {
-  __$$StartViewModelStateImplCopyWithImpl(_$StartViewModelStateImpl _value,
-      $Res Function(_$StartViewModelStateImpl) _then)
+class __$$ProfileInputViewModelStateImplCopyWithImpl<$Res>
+    extends _$ProfileInputViewModelStateCopyWithImpl<$Res,
+        _$ProfileInputViewModelStateImpl>
+    implements _$$ProfileInputViewModelStateImplCopyWith<$Res> {
+  __$$ProfileInputViewModelStateImplCopyWithImpl(
+      _$ProfileInputViewModelStateImpl _value,
+      $Res Function(_$ProfileInputViewModelStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,7 +99,7 @@ class __$$StartViewModelStateImplCopyWithImpl<$Res>
     Object? schoolNumber = null,
     Object? classColmunNumber = null,
   }) {
-    return _then(_$StartViewModelStateImpl(
+    return _then(_$ProfileInputViewModelStateImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -113,8 +118,8 @@ class __$$StartViewModelStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$StartViewModelStateImpl implements _StartViewModelState {
-  const _$StartViewModelStateImpl(
+class _$ProfileInputViewModelStateImpl implements _ProfileInputViewModelState {
+  const _$ProfileInputViewModelStateImpl(
       {this.name = "", this.schoolNumber = "", this.classColmunNumber = ""});
 
   @override
@@ -129,14 +134,14 @@ class _$StartViewModelStateImpl implements _StartViewModelState {
 
   @override
   String toString() {
-    return 'StartViewModelState(name: $name, schoolNumber: $schoolNumber, classColmunNumber: $classColmunNumber)';
+    return 'ProfileInputViewModelState(name: $name, schoolNumber: $schoolNumber, classColmunNumber: $classColmunNumber)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$StartViewModelStateImpl &&
+            other is _$ProfileInputViewModelStateImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.schoolNumber, schoolNumber) ||
                 other.schoolNumber == schoolNumber) &&
@@ -151,16 +156,17 @@ class _$StartViewModelStateImpl implements _StartViewModelState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$StartViewModelStateImplCopyWith<_$StartViewModelStateImpl> get copyWith =>
-      __$$StartViewModelStateImplCopyWithImpl<_$StartViewModelStateImpl>(
-          this, _$identity);
+  _$$ProfileInputViewModelStateImplCopyWith<_$ProfileInputViewModelStateImpl>
+      get copyWith => __$$ProfileInputViewModelStateImplCopyWithImpl<
+          _$ProfileInputViewModelStateImpl>(this, _$identity);
 }
 
-abstract class _StartViewModelState implements StartViewModelState {
-  const factory _StartViewModelState(
+abstract class _ProfileInputViewModelState
+    implements ProfileInputViewModelState {
+  const factory _ProfileInputViewModelState(
       {final String name,
       final String schoolNumber,
-      final String classColmunNumber}) = _$StartViewModelStateImpl;
+      final String classColmunNumber}) = _$ProfileInputViewModelStateImpl;
 
   @override
   String get name;
@@ -170,6 +176,6 @@ abstract class _StartViewModelState implements StartViewModelState {
   String get classColmunNumber;
   @override
   @JsonKey(ignore: true)
-  _$$StartViewModelStateImplCopyWith<_$StartViewModelStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ProfileInputViewModelStateImplCopyWith<_$ProfileInputViewModelStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
