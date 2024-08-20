@@ -1,4 +1,4 @@
-# School Interview: Banckend Application
+# School Interview: Backend Application
 
 This is the backend application for school interview system.
 
