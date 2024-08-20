@@ -2,7 +2,7 @@
 
 This is the backend application for school interview system.
 
-## Set-up
+## Set Up
 
 ```
 poetry shell
