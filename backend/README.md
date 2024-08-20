@@ -20,7 +20,7 @@ If this is your first time to execute the command, poetry automatically create v
 poetry shell
 ```
 
-If you just wanna execute a command in the command, you can use `poetry run` command.
+If you just wanna execute a command in the environment, you can use `poetry run` command.
 
 ```
 poertry run <command here...>
