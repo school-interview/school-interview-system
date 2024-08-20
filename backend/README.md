@@ -4,6 +4,12 @@ This is the backend application for school interview system.
 
 ## Set Up
 
+🔔 If you haven't installed `Poetry` (package manager for Python, like `npm` for Nodejs), you need to install it first.
+
+You can read [the official document](https://python-poetry.org/docs/#installing-with-pipx) to install it.
+
+(I used `With pipx` installation method to install Poetry. Then, you need HomeBrew. If you have any trouble with installing it, feel free to ask me, DanFujisaki. It's pretty complicated.😅)
+
 ```
 poetry shell
 poetry install
@@ -26,7 +32,7 @@ You can execute it to launch the app.
 
 ```
 
-./backend/launcb-server.sh
+./backend/launch-server.sh
 
 ```
 
