@@ -29,3 +29,7 @@ pnpm-debug.log*
 
 # LLM 
 *.gguf
+
+# backend
+*.pyc
+__pycache__/
