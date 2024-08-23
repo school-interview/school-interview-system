@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  api:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+  db:
+    image: postgres:14
+    container_name: school-interivew-postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "postgres"
+volumes:
+  db-store:
