@@ -78,3 +78,15 @@ If you just wanna execute a command in the environment, you can use `poetry run`
 ```
 poertry run <command here...>
 ```
+
+## Tips: delete unused docker images
+
+When you develop app with docker, you build lots of images.
+
+That's better to delete unsed images since they consume storage space when they accumulate.
+
+1. Click "Clean up" in Images page.
+   ![Click "Clean up" in Images page.](./images/how-to-delete-image1.png)
+
+2. Click "unused images" and then click "Remove"
+   ![Click "unused images" and then click "Remove"](./images/how-to-delete-image2.png)
