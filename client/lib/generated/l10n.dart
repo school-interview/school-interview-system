@@ -69,6 +69,16 @@ class S {
       args: [],
     );
   }
+
+  /// `こちらのアバターと面談を開始しますか？`
+  String get avatarDialogDescription {
+    return Intl.message(
+      'こちらのアバターと面談を開始しますか？',
+      name: 'avatarDialogDescription',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
