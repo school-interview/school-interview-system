@@ -2,6 +2,7 @@ import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/generated/l10n.dart';
+import 'package:client/ui_core/image_network_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,6 +67,12 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
               return _avatarSelectBox(
                 onTapSelectBox: () {
                   // セレクトボックスをタップした時の処理
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) => _avatarDialog(
+                          avatarName: "名前",
+                          image: "https://cdn2.thecatapi.com/images/adb.jpg"));
                 },
               );
             },
@@ -94,12 +101,79 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("ここに写真"),
+              Text("ここに画像"),
               SizedBox(height: 8),
               Text("アバター名"),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// アバター選択時に表示するダイアログ
+  Widget _avatarDialog({
+    required String avatarName,
+    required String image,
+  }) {
+    return Dialog(
+      insetPadding:
+          const EdgeInsets.only(top: 40, right: 16, bottom: 32, left: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      backgroundColor: Colors.white,
+      child: Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                Icons.close,
+                size: 24,
+              ),
+            ),
+          ]),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // TODO アバターの画像と名前の表示レイアウト要修正
+                      const SizedBox(height: 8),
+                      ImageNetworkManager(
+                        iconUrl: image,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(avatarName),
+                      const SizedBox(height: 8),
+                      Text(S.of(context).avatarDialogDescription),
+                      const SizedBox(height: 8),
+                      // 面談画面へ遷移するボタン
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: ColorDefinitions.accentColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text('面談開始'),
+                        onPressed: () {
+                          // 面談画面へ遷移
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
