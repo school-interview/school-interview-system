@@ -1,8 +1,8 @@
+import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/input_text_field.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
-import 'package:client/generated/l10n.dart';
 import 'package:client/view/avatar_select/avatar_select_view.dart';
 import 'package:client/view_model/profile_input/profile_input_view_model.dart';
 import 'package:flutter/material.dart';
@@ -24,15 +24,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
 
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
-      appBar: AppBar(
-        backgroundColor: ColorDefinitions.secondaryColor,
-        title: Text(S.of(context).startAppBarTitle),
-        titleTextStyle: const TextStyle(
-          color: ColorDefinitions.textColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
-      ),
+      appBar: CustomAppBar().startAppBar(context),
       body: Center(
         child: Container(
           padding: const EdgeInsets.only(top: 20),

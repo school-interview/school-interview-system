@@ -26,7 +26,7 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
-      appBar: CostomAppBar().startAppBar(context),
+      appBar: CustomAppBar().startAppBar(context),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(top: 20),
