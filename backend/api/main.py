@@ -28,7 +28,7 @@ async def connect(sid, data):
 
 @sio.on("message")
 async def message(sid, data):
-    print("メッセージ from {}: {}".format(sid, data))
+    print("メッセージ from {}: {}".format(sid, data), flush=True)
 
 
 @sio.event
