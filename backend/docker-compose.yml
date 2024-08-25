@@ -6,6 +6,7 @@ services:
     volumes:
       - ./api:/app/api
       - ./test:/app/test
+      - ./launch-server.sh:/app/launch-server.sh
     ports:
       - 8000:8000
   db:
