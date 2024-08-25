@@ -23,7 +23,8 @@ async def on_ping(data):
 
 async def main():
     await sio.connect('ws://localhost:8000')
-    await sio.emit("message", {"data": "これがメッセージです。東京ディズニー{}".format(datetime.datetime.now())})
+    input_text = input("メッセージを入力：")
+    await sio.emit("message", {"data": input_text})
     await sio.disconnect()
 
 
