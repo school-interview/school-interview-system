@@ -33,4 +33,3 @@ pnpm-debug.log*
 # backend
 *.pyc
 __pycache__/
-.venv/*
