@@ -4,7 +4,8 @@ services:
   api:
     build: .
     volumes:
-      - .:/app
+      - ./api:/app/api
+      - ./test:/app/test
     ports:
       - 8000:8000
   db:
