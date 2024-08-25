@@ -1,3 +1,4 @@
+import 'package:client/component/button_component.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/input_text_field.dart';
 import 'package:client/component/style/box_shadow_style.dart';
@@ -77,24 +78,18 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                   },
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState?.validate() ?? false) {
-                      // バリデーションが成功した場合にのみ画面遷移を行う
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AvatarSelectView(),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: ColorDefinitions.accentColor,
-                    minimumSize: const Size(100, 50),
-                  ),
-                  child: const Text("次へ"),
-                )
+                ButtonComponent().normalButton(
+                    labelText: "次へ",
+                    onTapButton: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        // バリデーションが成功した場合にのみ画面遷移を行う
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AvatarSelectView(),
+                          ),
+                        );
+                      }
+                    })
               ],
             ),
           ),

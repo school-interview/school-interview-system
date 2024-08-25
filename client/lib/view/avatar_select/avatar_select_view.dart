@@ -1,3 +1,4 @@
+import 'package:client/component/button_component.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
@@ -154,19 +155,11 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                       Text(S.of(context).avatarDialogDescription),
                       const SizedBox(height: 8),
                       // 面談画面へ遷移するボタン
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: ColorDefinitions.accentColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: const Text('面談開始'),
-                        onPressed: () {
-                          // 面談画面へ遷移
-                        },
-                      ),
+                      ButtonComponent().normalButton(
+                          labelText: "面談開始",
+                          onTapButton: () {
+                            // 面談画面へ遷移
+                          })
                     ],
                   ),
                 ),
