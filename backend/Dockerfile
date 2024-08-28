@@ -1,5 +1,6 @@
 FROM python:3.12.5-alpine
 WORKDIR /app
+RUN apk add libpq-dev make gcc g++
 RUN pip install poetry
 COPY ./pyproject.toml ./poetry.toml ./poetry.lock* ./
 # RUN export SHELL="/bin/sh"
