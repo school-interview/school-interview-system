@@ -2,16 +2,16 @@ from database import connect_db
 from fastapi import FastAPI
 import socketio
 import asyncio
+from contextlib import asynccontextmanager
 
 
-app_fastapi = FastAPI()
-
-print("現在のタスク", asyncio.current_task())
-
-
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await connect_db()
+    yield
 
+
+app_fastapi = FastAPI(lifespan=lifespan)
 
 sio = socketio.AsyncServer(async_mode='asgi')
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)

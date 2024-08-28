@@ -12,6 +12,8 @@ uvicorn = "^0.30.6"
 python-socketio = "^5.11.3"
 aiohttp = "^3.10.5"
 sqlalchemy = "^2.0.32"
+psycopg2 = "^2.9.9"
+psycopg2-binary = "^2.9.9"
 
 
 [build-system]
