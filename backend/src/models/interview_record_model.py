@@ -5,13 +5,13 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 
 class InterviewRecord(BaseModel):
-    __tablebane__ = "InterviewRecords"
+    __tablename__ = "InterviewRecords"
     id: Mapped[str] = mapped_column(primary_key=True)
     session_id: Mapped[str] = mapped_column(ForeignKey("InterviewSessions.id"))
     session = relationship("InterviewSession", backref="interview_records")
-    total_earned_credits: Optional[Mapped[int]]
-    planned_credits: Optional[Mapped[int]]
-    gpa: Optional[Mapped[float]]
-    attendance_rate: Optional[Mapped[float]]
-    concern: Optional[Mapped[str]]
-    prefer_in_person_interview: Optional[Mapped[bool]]
+    total_earned_credits: Mapped[Optional[int]]
+    planned_credits: Mapped[Optional[int]]
+    gpa: Mapped[Optional[float]]
+    attendance_rate: Mapped[Optional[float]]
+    concern: Mapped[Optional[str]]
+    prefer_in_person_interview: Mapped[Optional[bool]]
