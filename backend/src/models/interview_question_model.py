@@ -8,5 +8,5 @@ class InterviewQuestion(BaseModel):
     __tablename__ = "InterviewQuestions"
     id: Mapped[str] = mapped_column(primary_key=True)
     question: Mapped[str] = mapped_column(String(100))
-    order: Mapped[int]
+    order: Mapped[int] = mapped_column(unique=True)
     description: Mapped[Optional[str]] = mapped_column(String(200))

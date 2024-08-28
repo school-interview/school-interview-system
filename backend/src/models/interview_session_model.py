@@ -12,5 +12,6 @@ class InterviewSession(BaseModel):
     teacher_id: Mapped[str] = mapped_column(ForeignKey("Teachers.id"))
     teacher = relationship("Teacher", backref="interview_sessions")
     start_at: Mapped[int]
-    progress = mapped_column(ForeignKey("InterviewSessions.order"))
+    progress: Mapped[int] = mapped_column(
+        ForeignKey("InterviewQuestions.order"))
     done: Mapped[bool]
