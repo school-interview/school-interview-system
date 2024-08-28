@@ -1,6 +1,17 @@
+from database import connect_db
 from fastapi import FastAPI
 import socketio
+import asyncio
+
+
 app_fastapi = FastAPI()
+
+print("現在のタスク", asyncio.current_task())
+
+
+async def startup():
+    await connect_db()
+
 
 sio = socketio.AsyncServer(async_mode='asgi')
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
