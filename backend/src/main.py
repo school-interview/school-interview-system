@@ -13,7 +13,7 @@ async def lifespan(app: FastAPI):
 
 app_fastapi = FastAPI(lifespan=lifespan)
 
-sio = socketio.AsyncServer(async_mode='asgi')
+sio = socketio .AsyncServer(async_mode='asgi')
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 
 
