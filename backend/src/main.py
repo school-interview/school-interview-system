@@ -4,25 +4,32 @@ import socketio
 import asyncio
 from contextlib import asynccontextmanager
 from controllers import rest_api_controllers
+from controllers import websocket_controllers
 from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker
+
+sio = socketio.AsyncServer(async_mode='asgi')
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    for controller in rest_api_controllers:
+    # RestAPIのコントローラを登録
+    for rest in rest_api_controllers:
         app.add_api_route(
-            controller.path,
-            controller.controller,
-            methods=[controller.method]
+            rest.path,
+            rest.controller,
+            methods=[rest.method]
         )
+    # Websocketのコントローラを登録
+    for ws in websocket_controllers:
+        sio.on(ws.event, ws.controller)
+
     yield
 
 
 app_fastapi = FastAPI(lifespan=lifespan)
 
 
-sio = socketio .AsyncServer(async_mode='asgi')
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 
 
