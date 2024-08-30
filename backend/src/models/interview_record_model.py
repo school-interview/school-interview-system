@@ -1,4 +1,4 @@
-from models import BaseModel
+from src.models import BaseModel
 from sqlalchemy import String, ForeignKey
 from typing import List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
