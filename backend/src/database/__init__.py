@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from src.database.seedings import seed_all
 
 
 async def connect_db():
@@ -7,5 +8,5 @@ async def connect_db():
         "postgresql://user:postgres@db:5432/school-interview", echo=True)
     connection = engine.connect()
     session = Session(engine)
-    session.commit()
+    seed_all(session)
     return engine, connection, session
