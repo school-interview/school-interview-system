@@ -3,15 +3,24 @@ from fastapi import FastAPI
 import socketio
 import asyncio
 from contextlib import asynccontextmanager
+from controllers import rest_api_controllers
+from sqlalchemy import Engine
+from sqlalchemy.orm import sessionmaker
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await connect_db()
+    for controller in rest_api_controllers:
+        app.add_api_route(
+            controller.path,
+            controller.controller,
+            methods=[controller.method]
+        )
     yield
 
 
 app_fastapi = FastAPI(lifespan=lifespan)
+
 
 sio = socketio .AsyncServer(async_mode='asgi')
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
