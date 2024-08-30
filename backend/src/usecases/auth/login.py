@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from typing import Tuple
 
 
-def login(session: Session, login_request: LoginRequest):
+def login(session: Session, login_request: LoginRequest) -> User:
     user_query: Tuple = select(User).where(
         User.student_id == login_request.student_id)
     user = session.execute(user_query).scalars().first()
