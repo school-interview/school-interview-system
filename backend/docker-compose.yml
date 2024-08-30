@@ -7,10 +7,16 @@ services:
       - ./src:/app/src
       - ./test:/app/test
       - ./launch-server.sh:/app/launch-server.sh
+      - ./alembic.ini:/app/alembic.ini
+      - ./migrations:/app/migrations
+      - ./.env:/app/.env
     ports:
       - 8000:8000
     environment:
       PYTHONPATH: "$PYTHONPATH:/app/src"
+      DATABASE_URL: "postgresql://user:postgres@db:5432/school-interview"
+    depends_on:
+      - db
   db:
     image: postgres:14
     container_name: school-interivew-postgres
