@@ -18,7 +18,6 @@ def connect_db():
 
 
 def session_factory():
-    print(SessionMaker)
     session = SessionMaker()
     try:
         yield session
