@@ -22,8 +22,7 @@ async def lifespan(app: FastAPI):
         )
     # Websocketのコントローラを登録
     for ws in websocket_controllers:
-        sio.on(ws.event, ws.controller)
-
+        sio.on(ws.event_name, ws.controller)
     yield
 
 
