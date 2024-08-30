@@ -24,7 +24,7 @@ async def on_ping(data):
 async def main():
     await sio.connect('ws://localhost:8000')
     input_text = input("メッセージを入力：")
-    await sio.emit("message", {"data": input_text})
+    await sio.emit("speak_to_teacher", {"data": input_text})
     await sio.disconnect()
 
 
