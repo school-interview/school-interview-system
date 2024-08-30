@@ -90,3 +90,17 @@ That's better to delete unsed images since they consume storage space when they 
 
 2. Click "unused images" and then click "Remove"
    ![Click "unused images" and then click "Remove"](./images/how-to-delete-image2.png)
+
+## Tips: `import` path should start with `src`
+
+This project uses Alembic as migration tool.
+
+There is a file called `env.py` in `migrations` directory.
+
+The file runs when migrating and it try to import `BaseModel` from `models` directory.
+
+It means that Python interpreter read the `BaseModel` modules.
+
+If you don't write import path that start with `src` such as `models.BaseModel` not `src.models.BaseModel`,
+
+Python interpreter can't find it because it can't see `models`. but it can see `src.models`
