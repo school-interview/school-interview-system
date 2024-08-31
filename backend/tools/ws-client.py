@@ -1,7 +1,16 @@
 import asyncio
 import socketio
-import datetime
+import requests
+from src.models import LoginRequest
 # これはWebsocketが使える環境かどうかテストするためのスクリプトです。
+
+login_request: LoginRequest = LoginRequest(
+    student_id="1119059",
+    name="藤崎暖",
+    department="情報学部",
+    grade=4
+)
+r = requests.put('http://localhost:8000/user', login_request)
 
 sio = socketio.AsyncClient(reconnection=False)
 
@@ -14,11 +23,6 @@ async def connect():
 @sio.event
 async def disconnect():
     print("WS接続切断")
-
-
-@sio.on('ping')
-async def on_ping(data):
-    print('on_ping: ', data)
 
 
 async def main():
