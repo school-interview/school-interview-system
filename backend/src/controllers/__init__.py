@@ -7,5 +7,5 @@ from src.models.websocket_controller_model import WebsocketController
 
 
 rest_api_controllers: List[RestApiController] = [*auth_controllers]
-interview_websocket_controllers: List[WebsocketController] = [
+websocket_controllers: List[WebsocketController] = [
     *interview_websocket_controllers, *connection_websocket_controllers]
