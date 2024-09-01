@@ -1,29 +1,42 @@
 from fastapi import Depends
+from src.usecases.websocket_connection.connection_managemet import delete_connection, register_connection
 from src.models.db_models.user_model import User
 from src.database import SessionMaker
 from src.models.websocket_controller_model import WebsocketController
 from typing import Dict, List
-from src.usecases.websocket_connection.connection_managemet import register_connection
 from src.usecases.auth.authenticate import authenticate
 from sqlalchemy.orm import sessionmaker
 import logging
+from websocket_server import sio
 
 
 async def connect(sid: str, environ, auth: Dict):
-    logging.info("sid:{}  connected. user_id is {}".format(
+    logging.info("接続開始 sid:{}  connected. user_id is {}".format(
         sid, auth['user_id']))
     session = SessionMaker()
     try:
+        await sio.send(None, "接続したよおお")
+        print("送信したよ", flush=True)
         user = authenticate(session, auth['user_id'])
-        logging.info("認証成功: user_id:{}".format(user.id))
+        register_connection(session, user.id, sid)
+        logging.info("Authentication Succeed : user_id:{}".format(user.id))
     except Exception as e:
+        logging.error("sid:{}  failed to connect".format(sid))
         raise ConnectionRefusedError('authentication failed')
     finally:
         session.close()
 
 
 async def disconnect(sid: str):
-    logging.info("sid:{}  disconnected".format(sid))
+    session = SessionMaker()
+    try:
+        delete_connection(session, sid)
+    except Exception as e:
+        logging.error("sid:{}  failed to disconnect. ".format(sid))
+        logging.error("reason: {}".format(e.__str__()))
+    finally:
+        session.close()
+    logging.info("接続開始が切れました sid:{}  disconnected".format(sid))
 
 
 connection_websocket_controllers: List[WebsocketController] = [

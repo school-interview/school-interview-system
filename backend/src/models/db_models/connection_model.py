@@ -5,8 +5,8 @@ from typing import List
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 
-class Connection(BaseModel):
-    __tablename__ = "Connections"
+class WebsocketConnection(BaseModel):
+    __tablename__ = "WebsocketConnections"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     socket_id: Mapped[str] = mapped_column(String(100))
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))

@@ -5,13 +5,10 @@ import asyncio
 from contextlib import asynccontextmanager
 from controllers import rest_api_controllers
 from controllers import websocket_controllers
-from sqlalchemy import Engine
-from sqlalchemy.orm import sessionmaker
 import logging
+from src.websocket_server import sio
 
 logging.basicConfig(level=logging.INFO)
-
-sio = socketio.AsyncServer(async_mode='asgi')
 
 
 @asynccontextmanager
