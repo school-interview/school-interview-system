@@ -22,12 +22,17 @@ sio = socketio.AsyncClient(reconnection=False)
 
 @sio.event
 async def connect():
-    print("WS接続成功")
+    print("WS接続成功", flush=True)
 
 
 @sio.event
 async def disconnect():
-    print("WS接続切断")
+    print("WS接続切断", flush=True)
+
+
+@sio.on("message")
+async def message(data):
+    print("メッセージ受信", data, flush=True)
 
 
 @sio.on('*')
@@ -37,7 +42,7 @@ async def message_from_teacher(data):
 
 async def main():
 
-    await sio.connect('ws://localhost:8000', auth={'user_id': user['id']})
+    await sio.connect('ws://localhost:8000', auth={'user_id': user['id']}, transports=['websocket'])
     print("あなたのsidは", sio.sid, flush=True)
     input_text = input("メッセージを入力：")
     await sio.emit("speak_to_teacher", input_text)

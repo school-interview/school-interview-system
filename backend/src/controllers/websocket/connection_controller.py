@@ -15,6 +15,8 @@ async def connect(sid: str, environ, auth: Dict):
         sid, auth['user_id']))
     session = SessionMaker()
     try:
+        await sio.send(None, "接続したよおお")
+        print("送信したよ", flush=True)
         user = authenticate(session, auth['user_id'])
         register_connection(session, user.id, sid)
         logging.info("Authentication Succeed : user_id:{}".format(user.id))
