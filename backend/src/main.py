@@ -7,8 +7,6 @@ from controllers import rest_api_controllers
 from controllers import websocket_controllers
 import logging
 from src.websocket_server import sio
-from sqlalchemy import MetaData
-
 
 logging.basicConfig(level=logging.INFO)
 
