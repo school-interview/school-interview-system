@@ -8,10 +8,9 @@ from controllers import websocket_controllers
 from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker
 import logging
+from socket_io import sio
 
 logging.basicConfig(level=logging.INFO)
-
-sio = socketio.AsyncServer(async_mode='asgi')
 
 
 @asynccontextmanager
