@@ -30,11 +30,19 @@ async def disconnect():
     print("WS接続切断")
 
 
+@sio.on('*')
+async def message_from_teacher(data):
+    print("先生からのメッセージ：", data, flush=True)
+
+
 async def main():
+
     await sio.connect('ws://localhost:8000', auth={'user_id': user['id']})
+    print("あなたのsidは", sio.sid, flush=True)
     input_text = input("メッセージを入力：")
     await sio.emit("speak_to_teacher", input_text)
+    await sio.wait()
+    # a = input("終了するにはエンター")
     await sio.disconnect()
-
 
 asyncio.run(main())
