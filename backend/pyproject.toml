@@ -16,6 +16,7 @@ psycopg2 = "^2.9.9"
 psycopg2-binary = "^2.9.9"
 alembic = "^1.13.2"
 python-dotenv = "^1.0.1"
+requests = "^2.32.3"
 
 
 [build-system]
