@@ -1,11 +1,12 @@
 
 from datetime import datetime
+import logging
 from time import time
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from src.models import InterviewSession
 from typing import Optional
-from src.usecases.websocket_connection.connection_managemet import get_connection
+from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
 from socketio import AsyncServer
 
 
@@ -44,12 +45,12 @@ def finish_interview(session: Session, interview_id: UUID):
     session.commit()
 
 
-def speak_to_teacher(session: Session, sio: AsyncServer, user_id: UUID, teacher_id: UUID):
-    connection = get_connection(session, user_id)
+async def speak_to_teacher(session: Session, sio: AsyncServer, user_id: UUID, teacher_id: UUID):
+    connection = get_connection_by_user_id(session, user_id)[0]
     if not connection:
         raise Exception("User {} is not connected.".format(user_id))
     # ここでlang-chainを動かす。
-
     # ユーザーへの返答
-    sio.emit("message_from_teacher", {
-             "message": "Hello, I'm teacher."}, to=connection.socket_id)
+    await sio.emit("message_from_teacher", {
+        "message": "Hello, I'm teacher."}, to=connection.socket_id, skip_sid=True)
+    logging.info("先生がメッセージを送りました")

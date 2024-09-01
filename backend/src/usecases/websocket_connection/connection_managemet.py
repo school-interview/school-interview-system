@@ -1,6 +1,8 @@
+from typing import Tuple
 import uuid
+from sqlalchemy import Row
 from sqlalchemy.orm import Session
-from models.db_models.connection_model import WebsocketConnection
+from src.models import WebsocketConnection
 
 
 def register_connection(session: Session, user_id: str, socket_id: str):
@@ -18,9 +20,18 @@ def register_connection(session: Session, user_id: str, socket_id: str):
         return new_connection
 
 
-def get_connection(session: Session, user_id: str) -> WebsocketConnection:
+def get_connection_by_user_id(session: Session, user_id: str) -> Tuple[WebsocketConnection]:
     connection_query = session.query(WebsocketConnection).where(
         WebsocketConnection.user_id == user_id)
+    connection = session.execute(connection_query).first()
+    if not connection:
+        raise Exception("Connection not found.")
+    return connection
+
+
+def get_connection_by_socket_id(session: Session, socket_id: str) -> Tuple[WebsocketConnection]:
+    connection_query = session.query(WebsocketConnection).where(
+        WebsocketConnection.socket_id == socket_id)
     connection = session.execute(connection_query).first()
     if not connection:
         raise Exception("Connection not found.")
@@ -30,7 +41,7 @@ def get_connection(session: Session, user_id: str) -> WebsocketConnection:
 def delete_connection(session: Session, socket_id: str):
     connection_query = session.query(WebsocketConnection).where(
         WebsocketConnection.socket_id == socket_id)
-    connection = session.execute(connection_query).first()
+    connection = session.execute(connection_query).first()[0]
     if connection:
         session.delete(connection)
         session.commit()
