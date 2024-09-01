@@ -1,17 +1,22 @@
-import asyncio
-import socketio
 import requests
+import socketio
+import asyncio
+from src.models import User
 from src.models import LoginRequest
+import json
+
 # これはWebsocketが使える環境かどうかテストするためのスクリプトです。
 
 login_request: LoginRequest = LoginRequest(
-    student_id="1119059",
+    student_id="9998997",
     name="藤崎暖",
     department="情報学部",
     grade=4
 )
-r = requests.put('http://localhost:8000/user', login_request)
-
+response = requests.put('http://localhost:8000/login',
+                        json=login_request.__dict__)
+user: User = response.json()
+print(user)
 sio = socketio.AsyncClient(reconnection=False)
 
 
@@ -26,9 +31,9 @@ async def disconnect():
 
 
 async def main():
-    await sio.connect('ws://localhost:8000')
+    await sio.connect('ws://localhost:8000', auth={'user_id': user['id']})
     input_text = input("メッセージを入力：")
-    await sio.emit("speak_to_teacher", {"data": input_text})
+    await sio.emit("speak_to_teacher", input_text)
     await sio.disconnect()
 
 

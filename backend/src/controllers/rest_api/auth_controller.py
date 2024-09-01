@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 
 
 def login_controller(login_request: LoginRequest, session: Session = Depends(session_factory)):
-    return login(session, login_request)
+    user = login(session, login_request)
+    return user
 
 
 auth_controllers: List[RestApiController] = [

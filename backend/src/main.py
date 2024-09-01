@@ -1,4 +1,4 @@
-from database import connect_db
+from database import SessionMaker, connect_db
 from fastapi import FastAPI
 import socketio
 import asyncio
@@ -7,6 +7,9 @@ from controllers import rest_api_controllers
 from controllers import websocket_controllers
 from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 sio = socketio.AsyncServer(async_mode='asgi')
 
@@ -21,7 +24,14 @@ async def lifespan(app: FastAPI):
             methods=[rest.method]
         )
     # Websocketのコントローラを登録
+    context = {
+        "session": SessionMaker,
+        "sio": sio
+    }
     for ws in websocket_controllers:
+        # async def c(*args):
+        #     print("引数情報", ws.event_name, args)
+        #     return await ws.controller(context, *args)
         sio.on(ws.event_name, ws.controller)
     yield
 
