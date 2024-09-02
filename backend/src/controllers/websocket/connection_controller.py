@@ -11,12 +11,12 @@ from websocket_server import sio
 
 
 async def connect(sid: str, environ, auth: Dict):
-    logging.info("接続開始 sid:{}  connected. user_id is {}".format(
+    logging.info("\n接続開始 sid:{}  connected. user_id is {}\n".format(
         sid, auth['user_id']))
     session = SessionMaker()
+    await sio.emit("message_from_teacher", {
+        "message": "Hello, I'm teacher."}, namespace="/")
     try:
-        await sio.send(None, "接続したよおお")
-        print("送信したよ", flush=True)
         user = authenticate(session, auth['user_id'])
         register_connection(session, user.id, sid)
         logging.info("Authentication Succeed : user_id:{}".format(user.id))
@@ -36,7 +36,7 @@ async def disconnect(sid: str):
         logging.error("reason: {}".format(e.__str__()))
     finally:
         session.close()
-    logging.info("接続開始が切れました sid:{}  disconnected".format(sid))
+    logging.info("接続が切れました sid:{}  disconnected".format(sid))
 
 
 connection_websocket_controllers: List[WebsocketController] = [

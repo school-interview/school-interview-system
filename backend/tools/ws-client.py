@@ -35,14 +35,21 @@ async def message(data):
     print("メッセージ受信", data, flush=True)
 
 
+@sio.on("message_from_teacher", namespace="/interview")
+async def message(data):
+    print("メッセージフロムティーチャー", data, flush=True)
+
+
 @sio.on('*')
-async def message_from_teacher(data):
+async def message_from_teacher(sid, data):
     print("先生からのメッセージ：", data, flush=True)
 
 
 async def main():
 
-    await sio.connect('ws://localhost:8000', auth={'user_id': user['id']}, transports=['websocket'])
+    await sio.connect('http://localhost:8000', auth={'user_id': user['id']}, transports=['websocket'],
+                      retry=True,
+                      namespaces=["/interview"])
     print("あなたのsidは", sio.sid, flush=True)
     input_text = input("メッセージを入力：")
     await sio.emit("speak_to_teacher", input_text)
