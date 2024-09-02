@@ -1,11 +1,11 @@
 from uuid import UUID
-from src.models import BaseModel
+from src.models import EntityBaseModel
 from sqlalchemy import String, ForeignKey
 from typing import List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 
-class InterviewRecord(BaseModel):
+class InterviewRecord(EntityBaseModel):
     __tablename__ = "InterviewRecords"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     session_id: Mapped[UUID] = mapped_column(

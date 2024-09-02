@@ -1,13 +1,17 @@
-from typing import NamedTuple, Any, Callable, Literal
+from typing import Any, Callable, Literal
+from abc import ABCMeta, abstractmethod
 from pydantic import BaseModel
 
 HttpMethod = Literal["GET", "POST", "PUT", "DELETE"]
 
 
-class RestApiController(NamedTuple):
+class RestApiController(metaclass=ABCMeta):
     method: HttpMethod
     path: str
-    controller: Callable[..., Any]
+
+    @abstractmethod
+    async def controller(self, *args: Any) -> Any:
+        pass
 
 
 class LoginRequest(BaseModel):

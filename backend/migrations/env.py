@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from src.models.db_models.base_model import BaseModel
+from src.models.db_models.base_model import EntityBaseModel
 
 from dotenv import load_dotenv
 import os
@@ -28,7 +28,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = BaseModel.metadata
+target_metadata = EntityBaseModel.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

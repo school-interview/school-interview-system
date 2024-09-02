@@ -1,4 +1,4 @@
-from src.models.db_models.base_model import BaseModel
+from src.models.db_models.base_model import EntityBaseModel
 from src.models.db_models.user_model import User
 from src.models.db_models.connection_model import WebsocketConnection
 from src.models.db_models.teacher_model import Teacher
