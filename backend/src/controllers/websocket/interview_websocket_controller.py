@@ -21,4 +21,6 @@ async def speak_to_teacher_controller(sid: str, data: Any):
 
 interview_websocket_controllers = [
     # WebsocketController("speak_to_teacher", speak_to_teacher_controller)
+    # ↑コンテナ内からのemitがうまくいかないので、一旦コメントアウト
+    #
 ]
