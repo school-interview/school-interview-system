@@ -1,5 +1,6 @@
 from typing import List
 from src.models import RestApiController
+from src.usecases import start_interview, speak_to_teacher, finish_interview
 
 
 class StartInterviewSessionRestApiController(RestApiController):
