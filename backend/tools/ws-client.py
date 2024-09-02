@@ -12,7 +12,7 @@ login_request: LoginRequest = LoginRequest(
     name="藤崎暖",
     department="情報学部",
     grade=4
-)
+)p0
 response = requests.put('http://localhost:8000/login',
                         json=login_request.__dict__)
 user: User = response.json()
