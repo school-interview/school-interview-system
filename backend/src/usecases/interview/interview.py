@@ -53,6 +53,5 @@ async def speak_to_teacher(session: Session, sio: AsyncServer, user_id: UUID, te
     # ユーザーへの返答
     # sio.start_background_task(sio.emit, "message_from_teacher", {
     #     "message": "Hello, I'm teacher."})
-    await sio.emit("message_from_teacher", {'message': "Hello, I'm teacher."},
-                   namespace="/interview")
+    await sio.emit("message_from_teacher", {'message': "Hello, I'm teacher."})
     logging.info("先生がメッセージを送りました")

@@ -14,8 +14,7 @@ async def connect(sid: str, environ, auth: Dict):
     logging.info("\n接続開始 sid:{}  connected. user_id is {}\n".format(
         sid, auth['user_id']))
     session = SessionMaker()
-    await sio.emit("message_from_teacher", {
-        "message": "Hello, I'm teacher."}, namespace="/")
+    print(environ, flush=True)
     try:
         user = authenticate(session, auth['user_id'])
         register_connection(session, user.id, sid)
