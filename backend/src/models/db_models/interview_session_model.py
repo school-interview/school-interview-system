@@ -5,6 +5,7 @@ from typing import List
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
+from pydantic import BaseModel
 
 
 class InterviewSession(EntityBaseModel):
