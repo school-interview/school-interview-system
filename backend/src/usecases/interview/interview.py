@@ -51,6 +51,8 @@ async def speak_to_teacher(session: Session, sio: AsyncServer, user_id: UUID, te
         raise Exception("User {} is not connected.".format(user_id))
     # ここでlang-chainを動かす。
     # ユーザーへの返答
-    await sio.emit("message_from_teacher", {
-        "message": "Hello, I'm teacher."}, to=connection.socket_id, skip_sid=True)
+    # sio.start_background_task(sio.emit, "message_from_teacher", {
+    #     "message": "Hello, I'm teacher."})
+    await sio.emit("message_from_teacher", {'message': "Hello, I'm teacher."},
+                   namespace="/interview")
     logging.info("先生がメッセージを送りました")
