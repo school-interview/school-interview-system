@@ -1,13 +1,14 @@
 from uuid import UUID
-from src.models import BaseModel
+from src.models import EntityBaseModel
 from sqlalchemy import String, ForeignKey
 from typing import List
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
+from pydantic import BaseModel
 
 
-class InterviewSession(BaseModel):
+class InterviewSession(EntityBaseModel):
     __tablename__ = "InterviewSessions"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
