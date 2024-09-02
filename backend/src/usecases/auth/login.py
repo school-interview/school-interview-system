@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import select
 from src.models.db_models.user_model import User
-from src.models.rest_api_controller_model import LoginRequest
+from src.models import LoginRequest
 from sqlalchemy.orm import Session
 from typing import Tuple
 

@@ -15,9 +15,10 @@ logging.basicConfig(level=logging.INFO)
 async def lifespan(app: FastAPI):
     # RestAPIのコントローラを登録
     for rest in rest_api_controllers:
+        print(rest.path, rest.method, flush=True)
         app.add_api_route(
-            rest.path,
-            rest.controller,
+            path=rest.path,
+            endpoint=rest.controller,
             methods=[rest.method]
         )
     # Websocketのコントローラを登録

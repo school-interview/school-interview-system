@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy.orm import Session
-from src.models import Teacher, BaseModel, InterviewQuestion
+from src.models import Teacher, EntityBaseModel, InterviewQuestion
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -65,5 +65,5 @@ def seed_questions(session: Session):
     session.commit()
 
 
-def get_number_of_rows(session: Session, model: BaseModel) -> int:
+def get_number_of_rows(session: Session, model: EntityBaseModel) -> int:
     return session.query(model).count()
