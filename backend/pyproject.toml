@@ -22,6 +22,7 @@ langchain-community = "^0.2.15"
 langchainhub = "^0.1.21"
 langchain-openai = "^0.1.23"
 langchain-chroma = "^0.1.3"
+langchain-huggingface = "^0.0.3"
 
 
 [build-system]
