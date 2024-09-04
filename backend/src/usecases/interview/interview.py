@@ -54,8 +54,9 @@ def finish_interview(session: Session, interview_session: InterviewSession):
 def speak_to_teacher(session: Session, interview_session: InterviewSession, message_from_user: str):
     if interview_session.done:
         raise Exception("The interview session is already done.")
-    response = TeacherResponse(message="Hello I am teacher")
-    return response
+    response_from_teacher = generate_message_from_teacher(
+        interview_session, message_from_user)
+    return TeacherResponse(message=response_from_teacher)
 
 
 def generate_message_from_teacher(interview_session: InterviewSession, message: str):
