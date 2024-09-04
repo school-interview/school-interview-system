@@ -8,6 +8,18 @@ from src.models import InterviewSession, TeacherResponse
 from typing import Optional
 from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
 from socketio import AsyncServer
+from langchain_core.pydantic_v1 import BaseModel, Field
+from huggingface_hub import hf_hub_download
+# from langchain_community.llms import LlamaCpp
+from langchain_community.chat_models import ChatLlamaCpp
+from langchain_community.vectorstores import Chroma
+# from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.document_loaders import WebBaseLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
@@ -42,5 +54,34 @@ def finish_interview(session: Session, interview_session: InterviewSession):
 def speak_to_teacher(session: Session, interview_session: InterviewSession, message_from_user: str):
     if interview_session.done:
         raise Exception("The interview session is already done.")
-    response = TeacherResponse(message="Hello I am teacher")
+    response_from_teacher = generate_message_from_teacher(
+        interview_session, message_from_user)
+    return TeacherResponse(message=response_from_teacher)
+
+
+def generate_message_from_teacher(interview_session: InterviewSession, message: str):
+    CONTEXT_SIZE = 2048
+    LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
+    CHUNK_SIZE = 256
+    CHUNK_OVERLAP = 64
+    EMB_MODEL = "sentence-transformers/distiluse-base-multilingual-cased-v2"
+    COLLECTION_NAME = "langchain"
+    llm = ChatLlamaCpp(
+        model_path=LLM_FILE,
+        n_gpu_layers=128,
+        n_ctx=CONTEXT_SIZE,
+        f16_kv=True,
+        verbose=True,
+        seed=0
+    )
+    template = """<s>[INST] <<SYS>>
+    あなたは学生の就学アドバイザーです。
+    <</SYS>>[/INST]
+    {input}"""
+    prompt = ChatPromptTemplate.from_template(template)
+    output_parser = StrOutputParser()
+    chain = {"input": RunnablePassthrough()} | prompt | llm | output_parser
+    response = chain.invoke({"input": message}, config={
+        "configurablebb": {"session_id": "abc123"}})
+    print("出力", type(response), response, flush=True)
     return response

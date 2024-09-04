@@ -16,8 +16,22 @@ docker compose up --build
 ```
 
 The app is available on `http://localhost:8000`.
-
 (When `--build` option is specified, Docker automatically build the docker image before the container launches.)
+
+## Update on setting up (2024/09/04)
+
+It turned out that Docker support GPU use only for Windows and Linux.
+
+Since we use macbook to develop this app, we can't benefits from Appli Sillicon's graphic hardware and we need to run the app without Docker container.
+
+I commented out the command to launch app server in `launch-server.sh`, so it only launches DB server when you run `docker compsoe up`.
+
+You need to run these commands after running `docker compse up`
+
+```
+poetry shell
+./launch-server-local.sh
+```
 
 ## Swagger
 
