@@ -13,6 +13,7 @@ class StartInterviewSessionRestApiController(RestApiController):
     path = "/interview"
 
     async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
+        print("てぃーちゃー", data.teacher_id)
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
         interview_session = start_interview(db_session, user_id, teacher_id)
@@ -42,9 +43,7 @@ class SpeakToTeacherRestApiController(RestApiController):
             raise Exception("Interview session not found.")
         message_from_teacher: TeacherResponse = speak_to_teacher(
             db_session, interview_session, message)
-        return {
-            "message": message_from_teacher.message
-        }
+        return message_from_teacher
 
 
 class FinishInterviewSessionRestApiController(RestApiController):

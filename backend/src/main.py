@@ -1,10 +1,10 @@
-from database import SessionMaker, connect_db
+from src.database import SessionMaker, connect_db
 from fastapi import FastAPI
 import socketio
 import asyncio
 from contextlib import asynccontextmanager
-from controllers import rest_api_controllers
-from controllers import websocket_controllers
+from src.controllers import rest_api_controllers
+from src.controllers import websocket_controllers
 import logging
 from src.websocket_server import sio
 

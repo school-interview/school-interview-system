@@ -1,13 +1,17 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from src.database.seedings import seed_all
+from dotenv import load_dotenv
+from os import environ
+load_dotenv()
 
 SessionMaker: sessionmaker = None
 
 
 def connect_db():
+    url = environ.get("DATABASE_URL")
     engine = create_engine(
-        "postgresql://user:postgres@db:5432/school-interview", echo=True)
+        url, echo=True)
     engine.connect()
     global SessionMaker
     SessionMaker = sessionmaker(bind=engine)

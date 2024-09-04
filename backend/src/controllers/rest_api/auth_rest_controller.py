@@ -2,7 +2,7 @@ from fastapi import Depends
 from src.database import session_factory
 from src.models import RestApiController, HttpMethod, LoginRequest, User
 from typing import List
-from usecases.auth.login import login
+from src.usecases.auth.login import login
 from sqlalchemy.orm import Session
 
 
