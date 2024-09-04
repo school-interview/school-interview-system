@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/bash
 echo "Start migrating database..."
 poetry run alembic upgrade head
 echo "Database migrated successfully"
