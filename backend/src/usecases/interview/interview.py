@@ -61,7 +61,7 @@ def speak_to_teacher(session: Session, interview_session: InterviewSession, mess
 
 def generate_message_from_teacher(interview_session: InterviewSession, message: str):
     CONTEXT_SIZE = 2048
-    LLM_FILE = "../../llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
+    LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
     CHUNK_SIZE = 256
     CHUNK_OVERLAP = 64
     EMB_MODEL = "sentence-transformers/distiluse-base-multilingual-cased-v2"
@@ -75,14 +75,13 @@ def generate_message_from_teacher(interview_session: InterviewSession, message: 
         seed=0
     )
     template = """<s>[INST] <<SYS>>
-    あなたは優秀な学生のメンターです。学生の発言に対してメンターとして答えてください。
+    あなたは学生の就学アドバイザーです。
     <</SYS>>[/INST]
-    学生の発言「{input}」"""
+    {input}"""
     prompt = ChatPromptTemplate.from_template(template)
     output_parser = StrOutputParser()
-    chain = {"input": RunnablePassthrough()} | prompt | llm
+    chain = {"input": RunnablePassthrough()} | prompt | llm | output_parser
     response = chain.invoke({"input": message}, config={
-        "configurablebb": {"session_id": "abc123"}})["answer"]
-    return {
-        "message": response
-    }
+        "configurablebb": {"session_id": "abc123"}})
+    print("出力", type(response), response, flush=True)
+    return response

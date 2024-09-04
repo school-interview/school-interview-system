@@ -7,7 +7,7 @@ from typing import Dict, List
 from src.usecases.auth.authenticate import authenticate
 from sqlalchemy.orm import sessionmaker
 import logging
-from websocket_server import sio
+from src.websocket_server import sio
 
 
 async def connect(sid: str, environ, auth: Dict):
