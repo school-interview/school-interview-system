@@ -1,6 +1,6 @@
 from typing import Any
 from src.usecases.interview.interview import speak_to_teacher
-from websocket_server import sio
+from src.websocket_server import sio
 from socketio import AsyncServer
 from src.database import SessionMaker
 from src.models import WebsocketController, WebsocketConnection

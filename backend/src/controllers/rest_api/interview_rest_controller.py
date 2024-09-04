@@ -43,9 +43,7 @@ class SpeakToTeacherRestApiController(RestApiController):
             raise Exception("Interview session not found.")
         message_from_teacher: TeacherResponse = speak_to_teacher(
             db_session, interview_session, message)
-        return {
-            "message": message_from_teacher.message
-        }
+        return message_from_teacher
 
 
 class FinishInterviewSessionRestApiController(RestApiController):
