@@ -115,9 +115,11 @@ If you use Mac, you can configure it by following step.
    ! Doctor found issues in 3 categories.
    ```
 
-   If you want to develop for **mobile apps**, all the `!` must be `✓`, but this is not necessary right now.
+   If you want to develop for **mobile apps**, all the `!` must be `✓`, but this is not necessary.
 
-3. Version Confirmation.
+   This is because the [device_preview](https://pub.dev/packages/device_preview) package is installed, so it will never run outside of `chrome`.
+
+4. Version Confirmation.
 
    To check the version, run the following command.
 
@@ -131,11 +133,11 @@ If you use Mac, you can configure it by following step.
 
 In `client` directory, you can run the following command to run the app.
 
-```
-flutter run
-```
+It must be run in `chrome`. (Don't run on iOS or Android, etc.)
 
-It may ask you whether the app target is iOS or web(chrome).
+```
+flutter run -d chrome
+```
 
 ### reference
 
