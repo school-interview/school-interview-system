@@ -41,6 +41,7 @@ class SpeakToTeacherRestApiController(RestApiController):
             interview_query).first()[0]
         if not interview_session:
             raise Exception("Interview session not found.")
+        print("メッセージ内容", type(message), message)
         message_from_teacher: TeacherResponse = speak_to_teacher(
             db_session, interview_session, message)
         return message_from_teacher
