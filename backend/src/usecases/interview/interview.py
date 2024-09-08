@@ -78,21 +78,18 @@ def generate_message_from_teacher(interview_session: InterviewSession, message: 
     CHUNK_OVERLAP = 64
     EMB_MODEL = "sentence-transformers/distiluse-base-multilingual-cased-v2"
     COLLECTION_NAME = "langchain"
-    url = "https://www.kanazawa-it.ac.jp/campus_guide/2024/chapter_3/list_1/page_9.html"
-    loader = WebBaseLoader(web_path=url,
-                           bs_kwargs=dict(parse_only=bs4.SoupStrainer(
-                               class_=("list_title", "cnt_block")
-                           ))
-                           )
-    docs = loader.load()
+
+    md_file = ''
+    with open("pdf/markdown_output/campusguide.md") as f:
+        md_file = f.read()
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000, chunk_overlap=200)
-    splits = text_splitter.split_documents(docs)
+    splits = text_splitter.split_text(md_file)
     embeddings = HuggingFaceEmbeddings(model_name=EMB_MODEL)
-    vectorstore = Chroma.from_documents(
-        documents=splits, embedding=embeddings)
-    retriever = vectorstore.as_retriever()
-    # prompt = hub.pull("rlm/rag-prompt")
+    vectorstore = Chroma.from_texts(
+        texts=splits, embedding=embeddings)
+    # vectorstore.
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
@@ -139,5 +136,5 @@ def generate_message_from_teacher(interview_session: InterviewSession, message: 
 def get_session_history(session_id: str) -> BaseChatMessageHistory:
     if session_id not in chat_history_store:
         chat_history_store[session_id] = ChatMessageHistory()
-    print("これがhistory_store", chat_history_store[session_id])
+    print("history_store", chat_history_store[session_id])
     return chat_history_store[session_id]
