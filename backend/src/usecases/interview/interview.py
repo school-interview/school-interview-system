@@ -87,8 +87,8 @@ def generate_message_from_teacher(interview_session: InterviewSession, message: 
     splits = text_splitter.split_text(md_file)
     embeddings = HuggingFaceEmbeddings(model_name=EMB_MODEL)
     vectorstore = Chroma.from_texts(
-        texts=splits, embedding=embeddings)
-    # vectorstore.
+        texts=splits, embedding=embeddings
+    )
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     def format_docs(docs):
@@ -102,7 +102,7 @@ def generate_message_from_teacher(interview_session: InterviewSession, message: 
         seed=0
     )
     template = """<s>[INST] <<SYS>>
-    あなたは学生の就学アドバイザーです。
+    あなたは学生の就学アドバイザーです。学生の悩みに対して与えられた情報に基づいて、適切なアドバイスを提供してください。必ず学生の悩みに答えるような回答を心がけてください。
     <</SYS>>
     {context}
     {history}
