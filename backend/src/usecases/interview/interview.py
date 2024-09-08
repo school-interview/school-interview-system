@@ -106,10 +106,12 @@ def generate_message_from_teacher(interview_session: InterviewSession, message: 
     )
     template = """<s>[INST] <<SYS>>
     あなたは学生の就学アドバイザーです。
-    <</SYS>>[/INST]
+    <</SYS>>
     {context}
     {history}
-    {question}"""
+    [/INST]
+    {question}
+    </s>"""
     prompt = ChatPromptTemplate.from_template(template)
     # {"question": RunnablePassthrough(), "context": retriever | format_docs}
     rag_chain = (
