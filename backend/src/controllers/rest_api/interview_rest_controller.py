@@ -13,19 +13,11 @@ class StartInterviewSessionRestApiController(RestApiController):
     path = "/interview"
 
     async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
-        print("てぃーちゃー", data.teacher_id)
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
-        interview_session = start_interview(db_session, user_id, teacher_id)
-
-        return {
-            "id": interview_session.id,
-            "user_id": interview_session.user_id,
-            "teacher_id": interview_session.teacher_id,
-            "start_at": interview_session.start_at,
-            "progress": interview_session.progress,
-            "done": interview_session.done
-        }
+        interview_session_model = start_interview(
+            db_session, user_id, teacher_id)
+        return InterviewSession(**interview_session_model)
 
 
 class SpeakToTeacherRestApiController(RestApiController):

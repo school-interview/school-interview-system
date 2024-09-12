@@ -10,7 +10,7 @@ class LoginRestApiController(RestApiController):
     method = "PUT"
     path = "/login"
 
-    async def controller(login_request: LoginRequest, session: Session = Depends(session_factory)):
+    async def controller(self, login_request: LoginRequest, session: Session = Depends(session_factory)):
         user = login(session, login_request)
         return user
 
