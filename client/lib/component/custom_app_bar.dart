@@ -2,7 +2,7 @@ import 'package:client/constant/color.dart';
 import 'package:client/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-class CostomAppBar {
+class CustomAppBar {
   /// スタート画面[ProfileInputView]と[AvatarSelectView]のAppBar
   PreferredSizeWidget startAppBar(BuildContext context) {
     return AppBar(
