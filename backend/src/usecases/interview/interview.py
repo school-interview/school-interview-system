@@ -4,7 +4,7 @@ import logging
 from time import time
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
-from src.models import InterviewSession, TeacherResponse
+from src.models import InterviewSession, InterviewSessionModel, TeacherResponse
 from typing import Optional
 from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
 from socketio import AsyncServer
@@ -35,8 +35,8 @@ chat_history_store = {}
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
     current_interview_query = session.query(
-        InterviewSession).where(InterviewSession.user_id == user_id and InterviewSession.done == False)
-    current_interview: Optional[InterviewSession] = session.execute(
+        InterviewSessionModel).where(InterviewSessionModel.user_id == user_id and InterviewSessionModel.done == False)
+    current_interview: Optional[InterviewSessionModel] = session.execute(
         current_interview_query).first()[0]
     if current_interview and delete_current_interview:
         finish_interview(session, current_interview)
@@ -57,13 +57,13 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     return interview_session
 
 
-def finish_interview(session: Session, interview_session: InterviewSession):
+def finish_interview(session: Session, interview_session: InterviewSessionModel):
     interview_session.done = True
     session.commit()
     del chat_history_store[interview_session.id]
 
 
-def speak_to_teacher(session: Session, interview_session: InterviewSession, message_from_user: str):
+def speak_to_teacher(session: Session, interview_session: InterviewSessionModel, message_from_user: str):
     if interview_session.done:
         raise Exception("The interview session is already done.")
     response_from_teacher = generate_message_from_teacher(
@@ -71,7 +71,7 @@ def speak_to_teacher(session: Session, interview_session: InterviewSession, mess
     return TeacherResponse(message=response_from_teacher)
 
 
-def generate_message_from_teacher(interview_session: InterviewSession, message: str):
+def generate_message_from_teacher(interview_session: InterviewSessionModel, message: str):
     CONTEXT_SIZE = 4096
     LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
     CHUNK_SIZE = 256
