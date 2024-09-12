@@ -4,6 +4,7 @@ import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/generated/l10n.dart';
 import 'package:client/ui_core/image_network_manager.dart';
+import 'package:client/view/interview/interview_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -159,6 +160,11 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                           labelText: "面談開始",
                           onTapButton: () {
                             // 面談画面へ遷移
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (builder) {
+                                return const InterviewView();
+                              }),
+                            );
                           })
                     ],
                   ),
