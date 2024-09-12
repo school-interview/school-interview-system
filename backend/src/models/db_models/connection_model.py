@@ -19,4 +19,4 @@ class WebsocketConnectionModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     socket_id: Mapped[str] = mapped_column(String(100))
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
-    user = relationship("User", backref="connections")
+    user = relationship("UserModel", backref="connections")
