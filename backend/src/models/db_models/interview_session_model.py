@@ -23,9 +23,9 @@ class InterviewSessionModel(EntityBaseModel):
     __tablename__ = "InterviewSessions"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
-    user = relationship("User", backref="interview_sessions")
+    user = relationship("UserModel", backref="interview_sessions")
     teacher_id: Mapped[UUID] = mapped_column(ForeignKey("Teachers.id"))
-    teacher = relationship("Teacher", backref="interview_sessions")
+    teacher = relationship("TeacherModel", backref="interview_sessions")
     start_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
     progress: Mapped[int] = mapped_column(
         ForeignKey("InterviewQuestions.order"))
