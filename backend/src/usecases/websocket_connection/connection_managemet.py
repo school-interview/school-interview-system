@@ -4,6 +4,8 @@ from sqlalchemy import Row
 from sqlalchemy.orm import Session
 from src.models import WebsocketConnection
 
+# 一旦websocketを使った処理を中止したのでここは使ってないです。（2024/09/12現在）
+
 
 def register_connection(session: Session, user_id: str, socket_id: str):
     current_connection = session.query(WebsocketConnection).filter(

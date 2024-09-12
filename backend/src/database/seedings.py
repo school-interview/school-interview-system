@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy.orm import Session
-from src.models import Teacher, EntityBaseModel, InterviewQuestion
+from src.models import TeacherModel, EntityBaseModel, InterviewQuestionModel
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -11,11 +11,11 @@ def seed_all(session: Session):
 
 
 def seed_teachers(session: Session):
-    row_count = get_number_of_rows(session, Teacher)
+    row_count = get_number_of_rows(session, TeacherModel)
     if row_count > 0:
         return
-    teachers: List[Teacher] = [
-        Teacher(
+    teachers: List[TeacherModel] = [
+        TeacherModel(
             id=uuid.uuid4(),
             name="Teacher 1",
             description="1人目の先生です。"
@@ -26,36 +26,36 @@ def seed_teachers(session: Session):
 
 
 def seed_questions(session: Session):
-    row_count = get_number_of_rows(session, InterviewQuestion)
+    row_count = get_number_of_rows(session, InterviewQuestionModel)
     if row_count > 0:
         return
-    questions: List[InterviewQuestion] = [
-        InterviewQuestion(
+    questions: List[InterviewQuestionModel] = [
+        InterviewQuestionModel(
             id=uuid.uuid4(),
             question="現状の取得単位数は？",
             order=1,
         ),
-        InterviewQuestion(
+        InterviewQuestionModel(
             id=uuid.uuid4(),
             question="今学期の取得予定単位数は？",
             order=2,
         ),
-        InterviewQuestion(
+        InterviewQuestionModel(
             id=uuid.uuid4(),
             question="累積GPAは?",
             order=3,
         ),
-        InterviewQuestion(
+        InterviewQuestionModel(
             id=uuid.uuid4(),
             question="出席率は？",
             order=4
         ),
-        InterviewQuestion(
+        InterviewQuestionModel(
             id=uuid.uuid4(),
             question="学校生活で困っていることは？",
             order=5
         ),
-        InterviewQuestion(
+        InterviewQuestionModel(
             id=uuid.uuid4(),
             question="教員との面談を希望しますか？",
             order=6
