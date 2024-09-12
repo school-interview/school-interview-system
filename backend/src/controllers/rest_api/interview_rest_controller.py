@@ -15,8 +15,9 @@ class StartInterviewSessionRestApiController(RestApiController):
     async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
-        interview_session = start_interview(db_session, user_id, teacher_id)
-        return InterviewSession(**interview_session)
+        interview_session_model = start_interview(
+            db_session, user_id, teacher_id)
+        return InterviewSession(**interview_session_model)
 
 
 class SpeakToTeacherRestApiController(RestApiController):
