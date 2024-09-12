@@ -6,7 +6,15 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel
 
 
-class User(EntityBaseModel):
+class User(BaseModel):
+    id: UUID
+    name: str
+    student_id: str
+    department: str
+    grade: int
+
+
+class UserModel(EntityBaseModel):
     __tablename__ = "Users"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)

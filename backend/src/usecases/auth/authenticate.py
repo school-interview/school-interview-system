@@ -1,9 +1,9 @@
 from sqlalchemy.orm.session import Session
-from src.models.db_models.user_model import User
+from src.models import UserModel
 
 
-def authenticate(session: Session, user_id: str) -> User:
-    query = session.query(User).where(User.id == user_id)
+def authenticate(session: Session, user_id: str) -> UserModel:
+    query = session.query(UserModel).where(UserModel.id == user_id)
     user = session.execute(query).scalars().first()
     if not user:
         raise Exception("User not found")
