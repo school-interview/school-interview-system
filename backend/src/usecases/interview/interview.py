@@ -4,7 +4,7 @@ import logging
 from time import time
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
-from src.models import InterviewSession, InterviewSessionModel, TeacherResponse
+from src.models import InterviewSessionModel, TeacherResponse
 from typing import Optional
 from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
 from socketio import AsyncServer
@@ -44,7 +44,7 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     elif current_interview:
         raise Exception(
             "The user {} are already in an interview session.".format(user_id))
-    interview_session = InterviewSession(
+    interview_session = InterviewSessionModel(
         id=uuid4(),
         user_id=user_id,
         teacher_id=teacher_id,
