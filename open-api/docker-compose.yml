@@ -5,5 +5,5 @@ services:
   openapi-generator:
     image: openapitools/openapi-generator-cli
     volumes:
-      - ./src:/src
-    command: generate -i http://gateway.docker.internal:8000/openapi.json -g dart -o /src/api_clients --skip-validate-spec
+      - ../:/src
+    command: generate -i http://gateway.docker.internal:8000/openapi.json -g dart -o /src/client/api_clients --skip-validate-spec
