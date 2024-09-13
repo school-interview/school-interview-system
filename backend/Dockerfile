@@ -6,5 +6,5 @@ COPY ./pyproject.toml ./poetry.toml ./poetry.lock* ./
 # RUN export SHELL="/bin/sh"
 RUN poetry install --no-root
 # RUN poetry shell
-CMD ["./launch-server.sh"]
+CMD ["./launch-server-docker.sh"]
 # CMD ["tail", "-F", "/dev/null"]
