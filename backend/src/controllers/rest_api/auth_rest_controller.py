@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 class LoginRestApiController(RestApiController):
     method = "PUT"
     path = "/login"
+    response_model = User
 
     async def controller(self, login_request: LoginRequest, session: Session = Depends(session_factory)):
         user = login(session, login_request)
