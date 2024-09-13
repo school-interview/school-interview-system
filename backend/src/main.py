@@ -19,7 +19,9 @@ async def lifespan(app: FastAPI):
         app.add_api_route(
             path=rest.path,
             endpoint=rest.controller,
-            methods=[rest.method]
+            methods=[rest.method],
+            response_model=rest.response_model if hasattr(
+                rest, "response_model") else None
         )
     # Websocketのコントローラを登録
     for ws in websocket_controllers:

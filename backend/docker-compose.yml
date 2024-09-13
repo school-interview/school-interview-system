@@ -17,6 +17,8 @@ services:
       DATABASE_URL: "postgresql://user:postgres@db:5432/school-interview"
     depends_on:
       - db
+    profiles:
+      - backend
   db:
     image: postgres:14
     container_name: school-interivew-postgres
@@ -27,5 +29,6 @@ services:
     environment:
       POSTGRES_USER: "user"
       POSTGRES_PASSWORD: "postgres"
+
 volumes:
   db-store:

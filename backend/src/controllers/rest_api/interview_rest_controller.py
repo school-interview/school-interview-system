@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 class StartInterviewSessionRestApiController(RestApiController):
     method = "POST"
     path = "/interview"
+    response_model = InterviewSession
 
     async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
         user_id = uuid.UUID(data.user_id)
@@ -23,6 +24,7 @@ class StartInterviewSessionRestApiController(RestApiController):
 class SpeakToTeacherRestApiController(RestApiController):
     method = "POST"
     path = "/interview/{interview_session_id}"
+    response_model = TeacherResponse
 
     async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
@@ -42,6 +44,7 @@ class SpeakToTeacherRestApiController(RestApiController):
 class FinishInterviewSessionRestApiController(RestApiController):
     method = "DELETE"
     path = "/interview/{interview_session_id}"
+    response_model = None
 
     async def controller(self, interview_session_id: str, db_session=Depends(session_factory)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
