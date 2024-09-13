@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  # openapiのclient用のコードを自動生成するコンテナ
+  openapi-generator:
+    image: openapitools/openapi-generator-cli
+    volumes:
+      - ../:/src
+    command: generate -i http://gateway.docker.internal:8000/openapi.json -g dart -o /src/client/api_clients --skip-validate-spec
