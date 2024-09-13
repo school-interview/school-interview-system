@@ -1,10 +1,10 @@
 name: client
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ">=3.4.3 <4.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -18,6 +18,8 @@ dependencies:
   shared_preferences: ^2.3.2
   provider: ^6.1.2
   device_preview: ^1.2.0
+  openapi:
+    path: ./api_clients
 
 dev_dependencies:
   flutter_test:
