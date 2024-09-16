@@ -1,7 +1,7 @@
 from typing import List, Optional
 import uuid
 from fastapi import Depends
-from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, TeacherResponse
+from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher
 from src.usecases import start_interview, speak_to_teacher, finish_interview
 from src.database import session_factory
 from fastapi.encoders import jsonable_encoder
@@ -18,7 +18,20 @@ class StartInterviewSessionRestApiController(RestApiController):
         teacher_id = uuid.UUID(data.teacher_id)
         interview_session_model = start_interview(
             db_session, user_id, teacher_id)
-        return InterviewSession(**interview_session_model)
+
+        return InterviewSession(
+            id=interview_session_model.id,
+            user_id=interview_session_model.user_id,
+            teacher_id=interview_session_model.teacher_id,
+            teacher=Teacher(
+                id=interview_session_model.teacher.id,
+                name=interview_session_model.teacher.name,
+                description=interview_session_model.teacher.description,
+            ),
+            start_at=interview_session_model.start_at,
+            progress=interview_session_model.progress,
+            done=interview_session_model.done
+        )
 
 
 class SpeakToTeacherRestApiController(RestApiController):
@@ -29,9 +42,9 @@ class SpeakToTeacherRestApiController(RestApiController):
     async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         message = data.message
-        interview_query = db_session.query(InterviewSession).where(
-            InterviewSession.id == interview_session_id)
-        interview_session: Optional[InterviewSession] = db_session.execute(
+        interview_query = db_session.query(InterviewSessionModel).where(
+            InterviewSessionModel.id == interview_session_id)
+        interview_session: Optional[InterviewSessionModel] = db_session.execute(
             interview_query).first()[0]
         if not interview_session:
             raise Exception("Interview session not found.")
