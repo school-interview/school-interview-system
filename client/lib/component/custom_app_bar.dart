@@ -13,6 +13,7 @@ class CustomAppBar {
         fontWeight: FontWeight.bold,
         fontSize: 24,
       ),
+      automaticallyImplyLeading: false,
     );
   }
 }
