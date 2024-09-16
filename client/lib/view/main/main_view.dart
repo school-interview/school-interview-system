@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:client/generated/l10n.dart';
-import 'package:client/view/profile_input/profile_input_view.dart';
+import 'package:client/router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +19,11 @@ class _MainView extends ConsumerState<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerDelegate: goRouter.routerDelegate,
+      routeInformationParser: goRouter.routeInformationParser,
+      routeInformationProvider: goRouter.routeInformationProvider,
+
       scrollBehavior: CustomScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,
@@ -28,7 +32,6 @@ class _MainView extends ConsumerState<MainView> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      home: const ProfileInputView(),
     );
   }
 }
