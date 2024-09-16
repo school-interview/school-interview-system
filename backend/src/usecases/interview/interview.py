@@ -6,8 +6,8 @@ from time import time
 from uuid import uuid4, UUID
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
-from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestion
-from typing import Dict, Optional
+from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
+from typing import Any, Dict, List, Optional
 from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
@@ -24,25 +24,41 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
+from langchain_core.tracers.stdout import ConsoleCallbackHandler
 
-load_dotenv("./.env-local")
+load_dotenv(".env.local")
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 
-### Statefully manage chat history ###
+# 会話の履歴を保持するためのdict（一旦メモリ上に保持）
 chat_history_store = {}
+
+
+questions: Dict[int, InterviewQuestion] = {}
+
+
+def getQuestions(session: Session):
+    if len(questions.keys()) > 0:
+        return questions
+    question_query = session.query(InterviewQuestionModel)
+    all_questions: List[InterviewQuestionModel] = session.execute(
+        question_query).scalars().all()
+    for question in all_questions:
+        questions[question.order] = question
+    return questions
 
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
     current_interview_query = session.query(
-        InterviewSessionModel).where(InterviewSessionModel.user_id == user_id and InterviewSessionModel.done == False)
-    current_interview: Optional[InterviewSessionModel] = session.execute(
-        current_interview_query).first()[0]
+        InterviewSessionModel).join(TeacherModel, InterviewSessionModel.teacher_id == TeacherModel.id).where(InterviewSessionModel.user_id == user_id and InterviewSessionModel.done == False)
+    current_interview_rows: Optional[InterviewSessionModel] = session.execute(
+        current_interview_query).first()
+    current_interview = current_interview_rows[0] if current_interview_rows else None
     if current_interview and delete_current_interview:
         finish_interview(session, current_interview)
         session.commit()
-    elif current_interview:
+    elif current_interview_rows:
         raise Exception(
             "The user {} are already in an interview session.".format(user_id))
     interview_session = InterviewSessionModel(
@@ -55,21 +71,30 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     )
     session.add(interview_session)
     session.commit()
-    return interview_session
+    current_interview_rows: Optional[InterviewSessionModel] = session.execute(
+        current_interview_query).first()
+    current_interview = current_interview_rows[0] if current_interview_rows else None
+    return current_interview
 
 
 def finish_interview(session: Session, interview_session: InterviewSessionModel):
     interview_session.done = True
     session.commit()
-    del chat_history_store[interview_session.id]
+    store_key = interview_session.id.__str__()
+    if store_key in chat_history_store:
+        del store_keychat_history_storne
 
 
 def speak_to_teacher(session: Session, interview_session: InterviewSessionModel, message_from_user: str):
     if interview_session.done:
         raise Exception("The interview session is already done.")
-    response_from_teacher = generate_message_from_teacher(
-        interview_session, message_from_user)
-    return TeacherResponse(message=response_from_teacher)
+    questions = getQuestions(session)
+    extract_answer(interview_session, message_from_user, questions)
+    # 一旦LLMは起動せず、ダミーのレスポンスを返す
+    # response_from_teacher = generate_message_from_teacher(
+    #     interview_session, message_from_user)
+
+    return TeacherResponse(message="aaa")
 
 
 def generate_message_from_teacher(interview_session: InterviewSessionModel, message: str):
@@ -143,7 +168,7 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
 def extract_answer(interview_session: InterviewSessionModel, message: str, questions: Dict[int, InterviewQuestion]):
     current_question = questions[interview_session.progress]
     prompt_template = current_question.prompt + """。以下の[text]から構造化データとして抽出してください。
-    必ず指定した形式を守ってください。
+    もし抽出できない場合はNoneを入力してください。
     [text]
     {text}
     """
@@ -156,24 +181,43 @@ def extract_answer(interview_session: InterviewSessionModel, message: str, quest
             content="Tips: Make sure to answer in the correct format."),
     ]
     prompt = ChatPromptTemplate(messages=prompt_msgs)
-
     llm = ChatOpenAI(
         temperature=0,
-        model_name="gpt-3.5-turbo"
+        model_name="gpt-3.5-turbo",
+        openai_api_key=OPENAI_API_KEY
     )
+
+    structured_output_class: Any = None
 
     match interview_session.progress:
         case 1:
-            print()
+            structured_output_class = SchoolCredit
         case 2:
-            print()
+            structured_output_class = SchoolCredit
         case 3:
-            print()
+            structured_output_class = Gpa
         case 4:
-            print()
+            structured_output_class = AttendanceRate
         case 5:
-            print()
+            structured_output_class = Trouble
         case 6:
-            print()
+            structured_output_class = PreferInPerson
 
-    pass
+    chain = prompt | llm.with_structured_output(structured_output_class)
+    response = chain.invoke({"text": message},
+                            config={"callbacks": [ConsoleCallbackHandler()]}).dict()
+    retrievedValue = None
+    match interview_session.progress:
+        case 1:
+            retrievedValue = response.credit
+        case 2:
+            retrievedValue = response.credit
+        case 3:
+            retrievedValue = response.gpa
+        case 4:
+            retrievedValue = response.attendance_rate
+        case 5:
+            retrievedValue = response.trouble
+        case 6:
+            retrievedValue = response.prefer_in_person
+    # ここで抽出した値をDBに保存する、そしてできたら次の質問に進む

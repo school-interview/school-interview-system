@@ -5,15 +5,15 @@ from typing import List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class InterviewSession(BaseModel):
     id: UUID
     user_id: UUID
-    user: Optional[User]
+    user: Optional[User] = Field(None)
     teacher_id: UUID
-    teacher: Optional[Teacher]
+    teacher: Optional[Teacher] = Field(None)
     start_at: datetime
     progress: int
     done: bool
