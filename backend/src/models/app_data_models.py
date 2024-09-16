@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Any, Callable, Literal
+from src.models import InterviewSession
 
 
 class InterviewSessionRequest(BaseModel):
@@ -20,3 +21,8 @@ class SpeakToTeacherRequest(BaseModel):
 
 class TeacherResponse(BaseModel):
     message: str
+
+
+class ExtractionResult(BaseModel):
+    interview_session: InterviewSession
+    succeeded_to_extract: bool
