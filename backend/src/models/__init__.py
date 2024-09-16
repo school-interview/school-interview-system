@@ -8,3 +8,4 @@ from src.models.db_models.interview_record_model import InterviewRecord, Intervi
 from src.models.rest_api_controller_model import RestApiController, HttpMethod
 from src.models.websocket_controller_model import WebsocketController
 from src.models.app_data_models import *
+from src.models.llm_structured_output_models import *
