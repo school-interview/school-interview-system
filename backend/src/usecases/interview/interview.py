@@ -137,3 +137,21 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
         "configurable": {"session_id": interview_session.id.__str__()}})
     vectorstore.delete_collection()
     return response
+
+
+def extract_answer(interview_session: InterviewSessionModel, message: str):
+    match interview_session.progress:
+        case 1:
+            print()
+        case 2:
+            print()
+        case 3:
+            print()
+        case 4:
+            print()
+        case 5:
+            print()
+        case 6:
+            print()
+
+    pass
