@@ -120,6 +120,12 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
         | StrOutputParser()
     )
 
+    def get_session_history(session_id: str) -> BaseChatMessageHistory:
+        if session_id not in chat_history_store:
+            chat_history_store[session_id] = ChatMessageHistory()
+        print("history_store", chat_history_store[session_id])
+        return chat_history_store[session_id]
+
     conversational_rag_chain = RunnableWithMessageHistory(
         rag_chain,
         get_session_history,
@@ -131,10 +137,3 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
         "configurable": {"session_id": interview_session.id.__str__()}})
     vectorstore.delete_collection()
     return response
-
-
-def get_session_history(session_id: str) -> BaseChatMessageHistory:
-    if session_id not in chat_history_store:
-        chat_history_store[session_id] = ChatMessageHistory()
-    print("history_store", chat_history_store[session_id])
-    return chat_history_store[session_id]
