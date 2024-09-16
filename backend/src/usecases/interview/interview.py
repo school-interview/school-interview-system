@@ -1,32 +1,33 @@
 
 from datetime import datetime
 import logging
+import os
 from time import time
 from uuid import uuid4, UUID
+from dotenv import load_dotenv
 from sqlalchemy.orm import Session
-from src.models import InterviewSessionModel, TeacherResponse
-from typing import Optional
+from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestion
+from typing import Dict, Optional
 from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
-from socketio import AsyncServer
-from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.chains import create_history_aware_retriever, create_retrieval_chain
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from huggingface_hub import hf_hub_download
-# from langchain_community.llms import LlamaCpp
 from langchain_community.chat_models import ChatLlamaCpp
 from langchain_community.vectorstores import Chroma
-# from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_huggingface import HuggingFaceEmbeddings
-import bs4
 from langchain import hub
+from langchain_openai import ChatOpenAI
+from langchain.schema import HumanMessage, SystemMessage
+
+load_dotenv("./.env-local")
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 
 ### Statefully manage chat history ###
@@ -139,7 +140,28 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
     return response
 
 
-def extract_answer(interview_session: InterviewSessionModel, message: str):
+def extract_answer(interview_session: InterviewSessionModel, message: str, questions: Dict[int, InterviewQuestion]):
+    current_question = questions[interview_session.progress]
+    prompt_template = current_question.prompt + """。以下の[text]から構造化データとして抽出してください。
+    必ず指定した形式を守ってください。
+    [text]
+    {text}
+    """
+    prompt_msgs = [
+        SystemMessage(
+            content="You are a world class algorithm for extracting documents in structured formats."
+        ),
+        HumanMessagePromptTemplate.from_template(prompt_template),
+        HumanMessage(
+            content="Tips: Make sure to answer in the correct format."),
+    ]
+    prompt = ChatPromptTemplate(messages=prompt_msgs)
+
+    llm = ChatOpenAI(
+        temperature=0,
+        model_name="gpt-3.5-turbo"
+    )
+
     match interview_session.progress:
         case 1:
             print()
