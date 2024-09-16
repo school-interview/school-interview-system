@@ -4,10 +4,10 @@ import 'package:client/component/input_text_field.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
-import 'package:client/view/avatar_select/avatar_select_view.dart';
 import 'package:client/view_model/profile_input/profile_input_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileInputView extends ConsumerStatefulWidget {
   const ProfileInputView({super.key});
@@ -83,11 +83,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     onTapButton: () {
                       if (formKey.currentState?.validate() ?? false) {
                         // バリデーションが成功した場合にのみ画面遷移を行う
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const AvatarSelectView(),
-                          ),
-                        );
+                        context.push("/avatar-select");
                       }
                     })
               ],
