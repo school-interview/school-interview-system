@@ -1,14 +1,6 @@
 
-from datetime import datetime
-import logging
 import os
-from time import time
-from uuid import uuid4, UUID
-from dotenv import load_dotenv
-from sqlalchemy.orm import Session
-from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
-from typing import Any, Dict, List, Optional
-from src.usecases.websocket_connection.connection_managemet import get_connection_by_user_id
+from typing import Any, Dict, List
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
@@ -25,45 +17,10 @@ from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
+from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
+from dotenv import load_dotenv
+from sqlalchemy.orm import Session
 
-
-def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
-    current_interview_query = session.query(
-        InterviewSessionModel).join(TeacherModel, InterviewSessionModel.teacher_id == TeacherModel.id).where(InterviewSessionModel.user_id == user_id and InterviewSessionModel.done == False)
-    current_interview_rows: Optional[InterviewSessionModel] = session.execute(
-        current_interview_query).first()
-    current_interview = current_interview_rows[0] if current_interview_rows else None
-    if current_interview and delete_current_interview:
-        finish_interview(session, current_interview)
-        session.commit()
-    elif current_interview_rows:
-        raise Exception(
-            "The user {} are already in an interview session.".format(user_id))
-    interview_session = InterviewSessionModel(
-        id=uuid4(),
-        user_id=user_id,
-        teacher_id=teacher_id,
-        start_at=datetime.now(),
-        progress=1,
-        done=False
-    )
-    session.add(interview_session)
-    session.commit()
-    current_interview_rows: Optional[InterviewSessionModel] = session.execute(
-        current_interview_query).first()
-    current_interview = current_interview_rows[0] if current_interview_rows else None
-    return current_interview
-
-
-def finish_interview(session: Session, interview_session: InterviewSessionModel):
-    interview_session.done = True
-    session.commit()
-    store_key = interview_session.id.__str__()
-    if store_key in chat_history_store:
-        del store_keychat_history_storne
-
-
-load_dotenv(".env.local")
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
@@ -92,11 +49,11 @@ def speak_to_teacher(session: Session, interview_session: InterviewSessionModel,
     questions = getQuestions(session)
     extraction_result = extract_answer(
         interview_session, message_from_user, questions)
-    if not extraction_result.succeeded_to_extract:
+    # if not extraction_result.succeeded_to_extract:
 
-    else:
-        interview_session.progress += 1
-        session.commit()
+    # else:
+    interview_session.progress += 1
+    session.commit()
     response_from_teacher = generate_message_from_teacher(
         interview_session, message_from_user)
 
