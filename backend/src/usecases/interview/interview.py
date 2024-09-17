@@ -26,28 +26,6 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
 
-load_dotenv(".env.local")
-
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-
-
-# 会話の履歴を保持するためのdict（一旦メモリ上に保持）
-chat_history_store = {}
-
-
-questions: Dict[int, InterviewQuestion] = {}
-
-
-def getQuestions(session: Session):
-    if len(questions.keys()) > 0:
-        return questions
-    question_query = session.query(InterviewQuestionModel)
-    all_questions: List[InterviewQuestionModel] = session.execute(
-        question_query).scalars().all()
-    for question in all_questions:
-        questions[question.order] = question
-    return questions
-
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
     current_interview_query = session.query(
@@ -85,16 +63,44 @@ def finish_interview(session: Session, interview_session: InterviewSessionModel)
         del store_keychat_history_storne
 
 
+load_dotenv(".env.local")
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+
+# 会話の履歴を保持するためのdict（一旦メモリ上に保持）
+chat_history_store = {}
+
+
+questions: Dict[int, InterviewQuestion] = {}
+
+
+def getQuestions(session: Session):
+    if len(questions.keys()) > 0:
+        return questions
+    question_query = session.query(InterviewQuestionModel)
+    all_questions: List[InterviewQuestionModel] = session.execute(
+        question_query).scalars().all()
+    for question in all_questions:
+        questions[question.order] = question
+    return questions
+
+
 def speak_to_teacher(session: Session, interview_session: InterviewSessionModel, message_from_user: str):
     if interview_session.done:
         raise Exception("The interview session is already done.")
     questions = getQuestions(session)
-    extract_answer(interview_session, message_from_user, questions)
-    # 一旦LLMは起動せず、ダミーのレスポンスを返す
-    # response_from_teacher = generate_message_from_teacher(
-    #     interview_session, message_from_user)
+    extraction_result = extract_answer(
+        interview_session, message_from_user, questions)
+    if not extraction_result.succeeded_to_extract:
 
-    return TeacherResponse(message="aaa")
+    else:
+        interview_session.progress += 1
+        session.commit()
+    response_from_teacher = generate_message_from_teacher(
+        interview_session, message_from_user)
+
+    return TeacherResponse(message_from_teacher=response_from_teacher)
 
 
 def generate_message_from_teacher(interview_session: InterviewSessionModel, message: str):
@@ -220,4 +226,9 @@ def extract_answer(interview_session: InterviewSessionModel, message: str, quest
             retrievedValue = response.trouble
         case 6:
             retrievedValue = response.prefer_in_person
-    # ここで抽出した値をDBに保存する、そしてできたら次の質問に進む
+
+    return ExtractionResult(
+        interview_session=interview_session,
+        succeeded_to_extract=True if retrievedValue else False,
+        extracted_value=retrievedValue
+    )
