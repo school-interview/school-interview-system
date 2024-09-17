@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session, sessionmaker
 from src.database.seedings import seed_all
 from dotenv import load_dotenv
 from os import environ
-load_dotenv()
 
 SessionMaker: sessionmaker = None
 
