@@ -1,6 +1,7 @@
 
 from sqlalchemy.orm import Session
 from src.models import InterviewSessionModel
+from src.usecases.interview.speak_to_teacher import chat_history_store
 
 
 def finish_interview(session: Session, interview_session: InterviewSessionModel):
