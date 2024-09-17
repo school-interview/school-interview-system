@@ -44,6 +44,7 @@ def getQuestions(session: Session):
 
 
 def speak_to_teacher(session: Session, interview_session: InterviewSessionModel, message_from_user: str):
+    use_local_llm = bool(os.getenv("USE_LOCAL_LLM"))
     if interview_session.done:
         raise Exception("The interview session is already done.")
     questions = getQuestions(session)
@@ -60,7 +61,7 @@ def speak_to_teacher(session: Session, interview_session: InterviewSessionModel,
     return TeacherResponse(message_from_teacher=response_from_teacher)
 
 
-def generate_message_from_teacher(interview_session: InterviewSessionModel, message: str):
+def generate_message_from_teacher(interview_session: InterviewSessionModel, message_from_student: str):
     CONTEXT_SIZE = 4096
     LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
     CHUNK_SIZE = 256
@@ -122,13 +123,13 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
         history_messages_key="history",
     )
 
-    response = conversational_rag_chain.invoke({"question": message}, config={
+    response = conversational_rag_chain.invoke({"question": message_from_student}, config={
         "configurable": {"session_id": interview_session.id.__str__()}})
     vectorstore.delete_collection()
     return response
 
 
-def extract_answer(interview_session: InterviewSessionModel, message: str, questions: Dict[int, InterviewQuestion]):
+def extract_answer(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
     current_question = questions[interview_session.progress]
     prompt_template = current_question.prompt + """。以下の[text]から構造化データとして抽出してください。
     もし抽出できない場合はNoneを入力してください。
@@ -167,7 +168,7 @@ def extract_answer(interview_session: InterviewSessionModel, message: str, quest
             structured_output_class = PreferInPerson
 
     chain = prompt | llm.with_structured_output(structured_output_class)
-    response = chain.invoke({"text": message},
+    response = chain.invoke({"text": message_from_student},
                             config={"callbacks": [ConsoleCallbackHandler()]}).dict()
     retrievedValue = None
     match interview_session.progress:
