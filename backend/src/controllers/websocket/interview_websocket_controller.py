@@ -1,5 +1,5 @@
 from typing import Any
-from src.usecases.interview.interview import speak_to_teacher
+from src.usecases.interview.speak_to_teacher import speak_to_teacher
 from src.websocket_server import sio
 from socketio import AsyncServer
 from src.database import SessionMaker
