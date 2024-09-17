@@ -11,6 +11,7 @@ from src.websocket_server import sio
 
 logging.basicConfig(level=logging.INFO)
 
+load_dotenv(".env")
 load_dotenv(".env.local")
 
 
