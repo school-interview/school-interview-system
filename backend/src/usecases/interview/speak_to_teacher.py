@@ -53,16 +53,18 @@ speak_to_teacher_chat_gpt_prompt_template = """
 {history}
 
 
-
 学生の発言：{question}
 """
 
 # RAGのベクトルストア。（念のためにグローバル変数としてメモリ上にキャッシュ）
 # TODO:　ファイルとかRedisとかに保存することを検討
+
+
+
 vectorstore: Optional[Chroma] = None
 
 
-def getQuestions(session: Session):
+def get_questions(session: Session):
     if len(questions.keys()) > 0:
         return questions
     question_query = session.query(InterviewQuestionModel)
@@ -83,12 +85,12 @@ def speak_to_teacher(session: Session, interview_session: InterviewSessionModel,
     # interview_session.progress += 1
     # session.commit()
     response_from_teacher = generate_message_from_teacher(
-        interview_session, message_from_user, use_local_llm)
+        session, interview_session, message_from_user, use_local_llm)
 
     return TeacherResponse(message_from_teacher=response_from_teacher)
 
 
-def generate_message_from_teacher(interview_session: InterviewSessionModel, message_from_student: str, use_local_llm: bool = False):
+def generate_message_from_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_student: str, use_local_llm: bool = False):
     CONTEXT_SIZE = 4096
     LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
     CHUNK_SIZE = 256
@@ -117,6 +119,31 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
             chat_history_store[session_id] = ChatMessageHistory()
         print("history_store", chat_history_store[session_id])
         return chat_history_store[session_id]
+    
+    def generate_prompt_template(current_question: InterviewQuestion):
+        common_inst = """
+        大学の情報：'{context}'
+        これまでのあなたと学生の会話履歴：{history}
+        学生があなたに今話しかけた内容：{question}
+
+あなたは学生の就学アドバイザーです。学生の悩みに対して与えられた情報に基づいて、適切なアドバイスを提供してください。必ず学生の悩みに答えるような回答を心がけてください。そしてこのシステムはRAGです。必ず与えられた情報源から回答してください。
+またあなたは「"""+ current_question.question +"""」と質問をし、学生に回答を求めています。必ず最後にその質問を問いかける文章を生成してください。必ずその質問を最後に付け加えるのです。You must put the question to the end of your response. It's better to add it with "ところで" because it's more natural in Japanese.(Anything is ok. but make it sounds natural in Japanese)
+
+実際にその学生に話しかけているような口調で答えてください。
+
+"""
+        template = ""
+        if use_local_llm:
+            start_llama_inst = "<s>[INST] <<SYS>>"
+            end_llama_inst = "<</SYS>>[/INST]"
+            template = start_llama_inst + common_inst + end_llama_inst + "学生の発言：{question}"
+        else:
+            template = common_inst + "学生の発言：{question}"
+        return template
+
+
+
+    current_question = get_questions(db_session)[interview_session.progress]
 
     if use_local_llm:
         llm = ChatLlamaCpp(
@@ -128,8 +155,9 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
             seed=0
         )
 
-        prompt = ChatPromptTemplate.from_template(
-            speak_to_teacher_llama_prompt_template)
+        prompt_template = generate_prompt_template(current_question)
+
+        prompt = ChatPromptTemplate.from_template(prompt_template)
         rag_chain = (
             {"context": RunnableLambda(lambda x: x['question']) | retriever | format_docs,
              "question": RunnablePassthrough(),
@@ -153,8 +181,10 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
             model_name="gpt-3.5-turbo",
             openai_api_key=OPENAI_API_KEY
         )
+        prompt_template = generate_prompt_template(current_question)
+        print(prompt_template)
         prompt = ChatPromptTemplate.from_template(
-            speak_to_teacher_chat_gpt_prompt_template)
+            prompt_template)
         rag_chain = (
             {"context": RunnableLambda(lambda x: x['question']) | retriever | format_docs,
              "question": RunnablePassthrough(),
