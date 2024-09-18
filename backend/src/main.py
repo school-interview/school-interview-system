@@ -14,6 +14,8 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv(".env")
 load_dotenv(".env.local")
 
+connect_db()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
