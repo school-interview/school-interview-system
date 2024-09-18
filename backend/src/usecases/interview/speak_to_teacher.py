@@ -1,6 +1,6 @@
 
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
@@ -57,6 +57,8 @@ speak_to_teacher_chat_gpt_prompt_template = """
 学生の発言：{question}
 """
 
+vectorstore: Optional[Chroma] = None
+
 
 def getQuestions(session: Session):
     if len(questions.keys()) > 0:
@@ -70,7 +72,7 @@ def getQuestions(session: Session):
 
 
 def speak_to_teacher(session: Session, interview_session: InterviewSessionModel, message_from_user: str):
-    use_local_llm = bool(os.getenv("USE_LOCAL_LLM"))
+    use_local_llm = bool(int(os.getenv("USE_LOCAL_LLM")))
     if interview_session.done:
         raise Exception("The interview session is already done.")
     # questions = getQuestions(session)
@@ -91,17 +93,18 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
     CHUNK_OVERLAP = 64
     EMB_MODEL = "sentence-transformers/distiluse-base-multilingual-cased-v2"
     COLLECTION_NAME = "langchain"
-
-    md_file = ''
-    with open("pdf/markdown_output/campusguide.md") as f:
-        md_file = f.read()
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000, chunk_overlap=200)
-    splits = text_splitter.split_text(md_file)
-    embeddings = HuggingFaceEmbeddings(model_name=EMB_MODEL)
-    vectorstore = Chroma.from_texts(
-        texts=splits, embedding=embeddings
-    )
+    global vectorstore
+    if vectorstore is None:
+        md_file = ''
+        with open("pdf/markdown_output/campusguide.md") as f:
+            md_file = f.read()
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000, chunk_overlap=200)
+        splits = text_splitter.split_text(md_file)
+        embeddings = HuggingFaceEmbeddings(model_name=EMB_MODEL)
+        vectorstore = Chroma.from_texts(
+            texts=splits, embedding=embeddings
+        )
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     def format_docs(docs):
@@ -141,7 +144,6 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
         )
         response = conversational_rag_chain.invoke({"question": message_from_student}, config={
             "configurable": {"session_id": interview_session.id.__str__()}})
-        vectorstore.delete_collection()
         return response
     else:
         llm = ChatOpenAI(
@@ -167,7 +169,6 @@ def generate_message_from_teacher(interview_session: InterviewSessionModel, mess
         )
         response = conversational_rag_chain.invoke({"question": message_from_student}, config={
             "configurable": {"session_id": interview_session.id.__str__()}})
-        vectorstore.delete_collection()
         return response
 
 
