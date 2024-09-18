@@ -57,6 +57,8 @@ speak_to_teacher_chat_gpt_prompt_template = """
 学生の発言：{question}
 """
 
+# RAGのベクトルストア。（念のためにグローバル変数としてメモリ上にキャッシュ）
+# TODO:　ファイルとかRedisとかに保存することを検討
 vectorstore: Optional[Chroma] = None
 
 
