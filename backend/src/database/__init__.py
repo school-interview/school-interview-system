@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from src.database.seedings import seed_all
 from dotenv import load_dotenv
 from os import environ
+from src.models import EntityBaseModel
 
 SessionMaker: sessionmaker = None
 
@@ -18,6 +19,7 @@ def connect_db():
     global SessionMaker
     SessionMaker = sessionmaker(bind=engine)
     session = Session(engine)
+    EntityBaseModel.metadata.create_all(engine)
     seed_all(session)
     session.close()
     return engine
