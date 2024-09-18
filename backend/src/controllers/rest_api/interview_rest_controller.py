@@ -47,7 +47,7 @@ class SpeakToTeacherRestApiController(RestApiController):
 
     async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
-        message = data.message
+        message = data.message_from_student
         interview_query = db_session.query(InterviewSessionModel).where(
             InterviewSessionModel.id == interview_session_id)
         interview_session: Optional[InterviewSessionModel] = db_session.execute(

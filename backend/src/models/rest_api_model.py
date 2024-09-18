@@ -35,7 +35,7 @@ class LoginRequest(BaseModel):
 
 
 class SpeakToTeacherRequest(BaseModel):
-    message_from_teacher: str
+    message_from_student: str
 
 
 class TeacherResponse(BaseModel):
