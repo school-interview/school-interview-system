@@ -6,9 +6,12 @@ from os import environ
 
 SessionMaker: sessionmaker = None
 
+load_dotenv(".env")
+
 
 def connect_db():
     url = environ.get("DATABASE_URL")
+    print("Connecting to database: ", url)
     engine = create_engine(
         url, echo=True)
     engine.connect()
@@ -26,6 +29,3 @@ def session_factory():
         yield session
     finally:
         session.close()
-
-
-connect_db()
