@@ -31,36 +31,8 @@ chat_history_store = {}
 # 質問たちはそんなにないので、一度取得したらキャッシュしておく
 questions: Dict[int, InterviewQuestion] = {}
 
-# ローカルLLMで動かすLlamaのプロンプトテンプレート
-speak_to_teacher_llama_prompt_template = """<s>[INST] <<SYS>>
-あなたは学生の就学アドバイザーです。学生の悩みに対して与えられた情報に基づいて、適切なアドバイスを提供してください。必ず学生の悩みに答えるような回答を心がけてください。
-<</SYS>>
-{context}
-{history}
-[/INST]
-{question}
-</s>"""
-
-# ChatGPTのプロンプトテンプレート
-speak_to_teacher_chat_gpt_prompt_template = """
-あなたは学生の就学アドバイザーです。学生の悩みに対して与えられた情報に基づいて、適切なアドバイスを提供してください。必ず学生の悩みに答えるような回答を心がけてください。
-
-次のデータをもとに、学生にアドバイスをしても良いです。
-{context}
-
-
-これはこれまでの会話履歴です。
-{history}
-
-
-学生の発言：{question}
-"""
-
 # RAGのベクトルストア。（念のためにグローバル変数としてメモリ上にキャッシュ）
 # TODO:　ファイルとかRedisとかに保存することを検討
-
-
-
 vectorstore: Optional[Chroma] = None
 
 
@@ -145,15 +117,17 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
     
     def generate_prompt_template(current_question: InterviewQuestion):
         common_inst = """
-        大学の情報：'{context}'
-        これまでのあなたと学生の会話履歴：{history}
-        学生があなたに今話しかけた内容：{question}
+        Infomation on this university(for RAG):'{context}'
+        Our chat history: {history}
+        What the student said to you(You need to answer for this question): {question}
 
-あなたは学生の就学アドバイザーです。学生の悩みに対して与えられた情報に基づいて、適切なアドバイスを提供してください。必ず学生の悩みに答えるような回答を心がけてください。そしてこのシステムはRAGです。必ず与えられた情報源から回答してください。
-またあなたは「"""+ current_question.question +"""」と質問をし、学生に回答を求めています。必ず最後にその質問を問いかける文章を生成してください。必ずその質問を最後に付け加えるのです。You must put the question to the end of your response. It's better to add it with "ところで" because it's more natural in Japanese.(Anything is ok. but make it sounds natural in Japanese)
+        Situation: You are professional Academic Advisor who support school life and carrer. Please respond to the student's question. Always try to resolve a problem the student has. And you are designed to utilize information on school(RAG). Please answer based on provided sources.
+                
+        You are asking this question, ["""+ current_question.question +"""] to the student and make the student answer your question. You must put the question to the end of your response. It's better to add it with "ところで", "" because it's more natural in Japanese.(Anything is ok. but make it sounds natural in Japanese)
 
-実際にその学生に話しかけているような口調で答えてください。
+        You must answer as if you are speaking directly to the student.
 
+        You must answer in Japanese.
 """
         template = ""
         if use_local_llm:
@@ -229,8 +203,8 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
 
 def extract_answer(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
     current_question = questions[interview_session.progress]
-    prompt_template = current_question.prompt + """。以下の[text]から構造化データとして抽出してください。
-    もし抽出できない場合はNoneを入力してください。
+    prompt_template = current_question.prompt + """
+    Please extract structured data from the following [text]. If extraction is not possible, input ‘None.’
     [text]
     {text}
     """
