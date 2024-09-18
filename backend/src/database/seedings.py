@@ -57,7 +57,7 @@ def seed_questions(session: Session):
         InterviewQuestionModel(
             id=uuid.uuid4(),
             question="学校生活で困っていることは？",
-            prompt="次の文章から学校生活で困っている要因を抽出してください。",
+            prompt="次の文章から学校生活で困っている要因を抽出してください。困っていることがないと見受けられる場合はNoneを入れてください。",
             order=5
         ),
         InterviewQuestionModel(

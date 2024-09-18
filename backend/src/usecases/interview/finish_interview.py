@@ -9,4 +9,4 @@ def finish_interview(session: Session, interview_session: InterviewSessionModel)
     session.commit()
     store_key = interview_session.id.__str__()
     if store_key in chat_history_store:
-        del store_keychat_history_storne
+        del chat_history_store[store_key]
