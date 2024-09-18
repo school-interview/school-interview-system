@@ -204,7 +204,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
 def extract_answer(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
     current_question = questions[interview_session.progress]
     prompt_template = current_question.prompt + """
-    Please extract structured data from the following [text]. If extraction is not possible, input ‘None.’
+    Please extract structured data from the following [text]. If extraction is not possible, input 'None'.
     [text]
     {text}
     """
