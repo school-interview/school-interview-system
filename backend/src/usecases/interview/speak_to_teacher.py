@@ -17,7 +17,7 @@ from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
-from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
+from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 
@@ -74,19 +74,42 @@ def get_questions(session: Session):
         questions[question.order] = question
     return questions
 
-
-def speak_to_teacher(session: Session, interview_session: InterviewSessionModel, message_from_user: str):
+def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str):
     use_local_llm = bool(int(os.getenv("USE_LOCAL_LLM")))
     if interview_session.done:
         raise Exception("The interview session is already done.")
-    # questions = getQuestions(session)
-    # extraction_result = extract_answer(
-    #     interview_session, message_from_user, questions)
-    # interview_session.progress += 1
-    # session.commit()
+    questions = get_questions(db_session)
+    extraction_result = extract_answer(
+        interview_session, message_from_user, questions)
+    if extraction_result.succeeded_to_extract:
+        interview_record_query = db_session.query(InterviewRecordModel).where(InterviewRecordModel.session_id == interview_session.id)
+        interview_records = db_session.execute(interview_record_query).first()
+        if not interview_records:
+            raise Exception("The interview record is not found.")
+        interview_record: InterviewRecordModel = interview_records[0]
+        match interview_session.progress:
+            case 1:
+                interview_record.total_earned_credits = extraction_result.extracted_value
+            case 2:
+                interview_record.planned_credits = extraction_result.extracted_value
+            case 3:
+                interview_record.gpa = extraction_result.extracted_value
+            case 4:
+                interview_record.attendance_rate = extraction_result.extracted_value
+            case 5: 
+                interview_record.concern = extraction_result.extracted_value
+            case 6:
+                interview_record.prefer_in_person_interview = extraction_result.extracted_value
+        interview_session.progress += 1
+        print("        interview_session.progress",        interview_session.progress)
+        if interview_session.progress > 6:
+            interview_session.progress = 6
+            interview_session.done = True
+            db_session.commit()
+            return TeacherResponse(message_from_teacher="面談はこれで終了です。ありがとうございました。")
+        db_session.commit()
     response_from_teacher = generate_message_from_teacher(
-        session, interview_session, message_from_user, use_local_llm)
-
+        db_session, interview_session, message_from_user, use_local_llm)
     return TeacherResponse(message_from_teacher=response_from_teacher)
 
 
@@ -246,22 +269,23 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
     response = chain.invoke({"text": message_from_student},
                             config={"callbacks": [ConsoleCallbackHandler()]}).dict()
     retrievedValue = None
+    print("れすぽんす",response)
     match interview_session.progress:
         case 1:
-            retrievedValue = response.credit
+            retrievedValue = response['credit']
         case 2:
-            retrievedValue = response.credit
+            retrievedValue = response['credit']
         case 3:
-            retrievedValue = response.gpa
+            retrievedValue = response['gpa']
         case 4:
-            retrievedValue = response.attendance_rate
+            retrievedValue = response['attendance_rate']
         case 5:
-            retrievedValue = response.trouble
+            retrievedValue = response["trouble"]
         case 6:
-            retrievedValue = response.prefer_in_person
+            retrievedValue = response["prefer_in_person"]
 
     return ExtractionResult(
         interview_session=interview_session,
-        succeeded_to_extract=True if retrievedValue else False,
+        succeeded_to_extract=False if retrievedValue is None else True,
         extracted_value=retrievedValue
     )

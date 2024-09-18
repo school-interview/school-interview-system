@@ -7,7 +7,7 @@ from typing import Optional
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
+from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel,InterviewRecordModel
 
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
@@ -30,7 +30,18 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
         progress=1,
         done=False
     )
+    interview_record = InterviewRecordModel(
+        id=uuid4(),
+        session_id=interview_session.id,
+        total_earned_credits=None,
+        planned_credits=None,
+        gpa=None,
+        attendance_rate=None,
+        concern=None,
+        prefer_in_person_interview=None
+    )
     session.add(interview_session)
+    session.add(interview_record)
     session.commit()
     current_interview_rows: Optional[InterviewSessionModel] = session.execute(
         current_interview_query).first()
