@@ -1,22 +1,10 @@
-from pydantic import BaseModel
-from typing import Any, Callable, Literal
+from pydantic import BaseModel, ConfigDict
+from typing import Any, Callable, Literal, Optional
+from src.models.db_models.interview_session_model import InterviewSessionModel
 
 
-class InterviewSessionRequest(BaseModel):
-    user_id: str
-    teacher_id: str
-
-
-class LoginRequest(BaseModel):
-    student_id: str
-    name: str
-    department: str
-    grade: int
-
-
-class SpeakToTeacherRequest(BaseModel):
-    message: str
-
-
-class TeacherResponse(BaseModel):
-    message: str
+class ExtractionResult(BaseModel):
+    interview_session: InterviewSessionModel
+    succeeded_to_extract: bool
+    extracted_value: Optional[Any]
+    model_config = ConfigDict(arbitrary_types_allowed=True)
