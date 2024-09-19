@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from src.database import SessionMaker, connect_db
 from fastapi import FastAPI
 import socketio
@@ -9,6 +10,11 @@ import logging
 from src.websocket_server import sio
 
 logging.basicConfig(level=logging.INFO)
+
+load_dotenv(".env")
+load_dotenv(".env.local")
+
+connect_db()
 
 
 @asynccontextmanager

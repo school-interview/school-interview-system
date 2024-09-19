@@ -1,24 +1,43 @@
 from typing import List, Optional
 import uuid
 from fastapi import Depends
-from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, TeacherResponse
+from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel
 from src.usecases import start_interview, speak_to_teacher, finish_interview
 from src.database import session_factory
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 
 
 class StartInterviewSessionRestApiController(RestApiController):
     method = "POST"
     path = "/interview"
-    response_model = InterviewSession
+    response_model = StartInterviewResponse
 
     async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
         interview_session_model = start_interview(
             db_session, user_id, teacher_id)
-        return InterviewSession(**interview_session_model)
+        interview_session = InterviewSession(
+            id=interview_session_model.id,
+            user_id=interview_session_model.user_id,
+            teacher_id=interview_session_model.teacher_id,
+            teacher=Teacher(
+                id=interview_session_model.teacher.id,
+                name=interview_session_model.teacher.name,
+                description=interview_session_model.teacher.description,
+            ),
+            start_at=interview_session_model.start_at,
+            progress=interview_session_model.progress,
+            done=interview_session_model.done
+        )
+        question_query = db_session.query(InterviewQuestionModel).where(
+            InterviewQuestionModel.order == 1)
+        first_question: Optional[InterviewQuestionModel] = db_session.execute(
+            question_query).first()[0]
+        response = StartInterviewResponse(
+            interview_session=interview_session,
+            message_from_teacher=first_question.question
+        )
+        return response
 
 
 class SpeakToTeacherRestApiController(RestApiController):
@@ -28,14 +47,13 @@ class SpeakToTeacherRestApiController(RestApiController):
 
     async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
-        message = data.message
-        interview_query = db_session.query(InterviewSession).where(
-            InterviewSession.id == interview_session_id)
-        interview_session: Optional[InterviewSession] = db_session.execute(
+        message = data.message_from_student
+        interview_query = db_session.query(InterviewSessionModel).where(
+            InterviewSessionModel.id == interview_session_id)
+        interview_session: Optional[InterviewSessionModel] = db_session.execute(
             interview_query).first()[0]
         if not interview_session:
             raise Exception("Interview session not found.")
-        print("メッセージ内容", type(message), message)
         message_from_teacher: TeacherResponse = speak_to_teacher(
             db_session, interview_session, message)
         return message_from_teacher

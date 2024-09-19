@@ -30,3 +30,4 @@ class InterviewRecordModel(EntityBaseModel):
     attendance_rate: Mapped[Optional[float]]
     concern: Mapped[Optional[str]]
     prefer_in_person_interview: Mapped[Optional[bool]]
+    
