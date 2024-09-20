@@ -13,25 +13,31 @@ part of openapi.api;
 class TeacherResponse {
   /// Returns a new [TeacherResponse] instance.
   TeacherResponse({
+    required this.interviewSession,
     required this.messageFromTeacher,
   });
+
+  InterviewSession interviewSession;
 
   String messageFromTeacher;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is TeacherResponse &&
+    other.interviewSession == interviewSession &&
     other.messageFromTeacher == messageFromTeacher;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
+    (interviewSession.hashCode) +
     (messageFromTeacher.hashCode);
 
   @override
-  String toString() => 'TeacherResponse[messageFromTeacher=$messageFromTeacher]';
+  String toString() => 'TeacherResponse[interviewSession=$interviewSession, messageFromTeacher=$messageFromTeacher]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+      json[r'interview_session'] = this.interviewSession;
       json[r'message_from_teacher'] = this.messageFromTeacher;
     return json;
   }
@@ -55,6 +61,7 @@ class TeacherResponse {
       }());
 
       return TeacherResponse(
+        interviewSession: InterviewSession.fromJson(json[r'interview_session'])!,
         messageFromTeacher: mapValueOfType<String>(json, r'message_from_teacher')!,
       );
     }
@@ -103,6 +110,7 @@ class TeacherResponse {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'interview_session',
     'message_from_teacher',
   };
 }
