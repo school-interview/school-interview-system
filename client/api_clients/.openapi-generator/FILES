@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 analysis_options.yaml
@@ -9,6 +8,7 @@ doc/InterviewSession.md
 doc/InterviewSessionRequest.md
 doc/LoginRequest.md
 doc/SpeakToTeacherRequest.md
+doc/StartInterviewResponse.md
 doc/Teacher.md
 doc/TeacherResponse.md
 doc/User.md
@@ -30,20 +30,10 @@ lib/model/interview_session.dart
 lib/model/interview_session_request.dart
 lib/model/login_request.dart
 lib/model/speak_to_teacher_request.dart
+lib/model/start_interview_response.dart
 lib/model/teacher.dart
 lib/model/teacher_response.dart
 lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
-test/default_api_test.dart
-test/http_validation_error_test.dart
-test/interview_session_request_test.dart
-test/interview_session_test.dart
-test/login_request_test.dart
-test/speak_to_teacher_request_test.dart
-test/teacher_response_test.dart
-test/teacher_test.dart
-test/user_test.dart
-test/validation_error_loc_inner_test.dart
-test/validation_error_test.dart

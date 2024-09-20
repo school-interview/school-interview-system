@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-class TeacherResponse {
-  /// Returns a new [TeacherResponse] instance.
-  TeacherResponse({
+class StartInterviewResponse {
+  /// Returns a new [StartInterviewResponse] instance.
+  StartInterviewResponse({
     required this.interviewSession,
     required this.messageFromTeacher,
   });
@@ -22,7 +22,7 @@ class TeacherResponse {
   String messageFromTeacher;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is TeacherResponse &&
+  bool operator ==(Object other) => identical(this, other) || other is StartInterviewResponse &&
     other.interviewSession == interviewSession &&
     other.messageFromTeacher == messageFromTeacher;
 
@@ -33,7 +33,7 @@ class TeacherResponse {
     (messageFromTeacher.hashCode);
 
   @override
-  String toString() => 'TeacherResponse[interviewSession=$interviewSession, messageFromTeacher=$messageFromTeacher]';
+  String toString() => 'StartInterviewResponse[interviewSession=$interviewSession, messageFromTeacher=$messageFromTeacher]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -42,10 +42,10 @@ class TeacherResponse {
     return json;
   }
 
-  /// Returns a new [TeacherResponse] instance and imports its values from
+  /// Returns a new [StartInterviewResponse] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static TeacherResponse? fromJson(dynamic value) {
+  static StartInterviewResponse? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -54,13 +54,13 @@ class TeacherResponse {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "TeacherResponse[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "TeacherResponse[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "StartInterviewResponse[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "StartInterviewResponse[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return TeacherResponse(
+      return StartInterviewResponse(
         interviewSession: InterviewSession.fromJson(json[r'interview_session'])!,
         messageFromTeacher: mapValueOfType<String>(json, r'message_from_teacher')!,
       );
@@ -68,11 +68,11 @@ class TeacherResponse {
     return null;
   }
 
-  static List<TeacherResponse> listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <TeacherResponse>[];
+  static List<StartInterviewResponse> listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <StartInterviewResponse>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = TeacherResponse.fromJson(row);
+        final value = StartInterviewResponse.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -81,12 +81,12 @@ class TeacherResponse {
     return result.toList(growable: growable);
   }
 
-  static Map<String, TeacherResponse> mapFromJson(dynamic json) {
-    final map = <String, TeacherResponse>{};
+  static Map<String, StartInterviewResponse> mapFromJson(dynamic json) {
+    final map = <String, StartInterviewResponse>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = TeacherResponse.fromJson(entry.value);
+        final value = StartInterviewResponse.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -95,14 +95,14 @@ class TeacherResponse {
     return map;
   }
 
-  // maps a json object with a list of TeacherResponse-objects as value to a dart map
-  static Map<String, List<TeacherResponse>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<TeacherResponse>>{};
+  // maps a json object with a list of StartInterviewResponse-objects as value to a dart map
+  static Map<String, List<StartInterviewResponse>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<StartInterviewResponse>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = TeacherResponse.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = StartInterviewResponse.listFromJson(entry.value, growable: growable,);
       }
     }
     return map;

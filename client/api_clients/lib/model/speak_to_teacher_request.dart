@@ -13,26 +13,26 @@ part of openapi.api;
 class SpeakToTeacherRequest {
   /// Returns a new [SpeakToTeacherRequest] instance.
   SpeakToTeacherRequest({
-    required this.message,
+    required this.messageFromStudent,
   });
 
-  String message;
+  String messageFromStudent;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is SpeakToTeacherRequest &&
-    other.message == message;
+    other.messageFromStudent == messageFromStudent;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
-    (message.hashCode);
+    (messageFromStudent.hashCode);
 
   @override
-  String toString() => 'SpeakToTeacherRequest[message=$message]';
+  String toString() => 'SpeakToTeacherRequest[messageFromStudent=$messageFromStudent]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'message'] = this.message;
+      json[r'message_from_student'] = this.messageFromStudent;
     return json;
   }
 
@@ -55,7 +55,7 @@ class SpeakToTeacherRequest {
       }());
 
       return SpeakToTeacherRequest(
-        message: mapValueOfType<String>(json, r'message')!,
+        messageFromStudent: mapValueOfType<String>(json, r'message_from_student')!,
       );
     }
     return null;
@@ -103,7 +103,7 @@ class SpeakToTeacherRequest {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
-    'message',
+    'message_from_student',
   };
 }
 
