@@ -130,5 +130,5 @@ class FinishInterviewSessionRestApiController(RestApiController):
         return None
 
 
-interview_rest_api_controllers: List[RestApiController] = [TeachersRestApiController(), StartInterviewSessionRestApiController(
+interview_rest_api_controllers: List[RestApiController] = [TeachersRestApiController(), UsersRestApiController(), StartInterviewSessionRestApiController(
 ), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController()]
