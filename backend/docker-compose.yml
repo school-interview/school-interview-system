@@ -6,10 +6,12 @@ services:
     volumes:
       - ./src:/app/src
       - ./test:/app/test
-      - ./launch-server.sh:/app/launch-server.sh
+      - ./launch-server-docker.sh:/app/launch-server-docker.sh
       - ./alembic.ini:/app/alembic.ini
       - ./migrations:/app/migrations
       - ./.env:/app/.env
+      - ./.env.local:/app/.env.local
+      - ./pdf:/app/pdf
     ports:
       - 8000:8000
     environment:
