@@ -53,8 +53,9 @@ class SpeakToTeacherRestApiController(RestApiController):
         message = data.message_from_student
         interview_query = db_session.query(InterviewSessionModel).where(
             InterviewSessionModel.id == interview_session_id)
-        interview_session_model: Optional[InterviewSessionModel] = db_session.execute(
-            interview_query).first()[0]
+        query_result: Optional[InterviewSessionModel] = db_session.execute(
+            interview_query).first()
+        interview_session_model = query_result[0] if query_result else None
         if not interview_session_model:
             raise ErrorResponse(
                 status_code=404,
