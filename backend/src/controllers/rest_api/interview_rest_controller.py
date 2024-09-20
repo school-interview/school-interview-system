@@ -1,7 +1,7 @@
 from typing import List, Optional
 import uuid
-from fastapi import Depends
-from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel
+from fastapi import Depends, HTTPException
+from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse
 from src.usecases import start_interview, speak_to_teacher, finish_interview
 from src.database import session_factory
 
@@ -14,8 +14,17 @@ class StartInterviewSessionRestApiController(RestApiController):
     async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
-        interview_session_model = start_interview(
-            db_session, user_id, teacher_id)
+        try:
+            interview_session_model = start_interview(
+                db_session, user_id, teacher_id)
+        except InterviewAlreadyStartedException:
+            raise ErrorResponse(
+                status_code=400,
+                type="interview_already_started",
+                title="Interview already started.",
+                detail="You can only start one interview at a time. Please finish the current interview first."
+            )
+
         interview_session = InterviewSession(
             id=interview_session_model.id,
             user_id=interview_session_model.user_id,
