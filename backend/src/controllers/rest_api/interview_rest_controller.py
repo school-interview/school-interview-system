@@ -32,7 +32,6 @@ class StartInterviewSessionRestApiController(RestApiController):
             interview_session_model.teacher.__dict__)
         interview_session.user = TypeAdapter(User).validate_python(
             interview_session_model.user.__dict__)
-
         question_query = db_session.query(InterviewQuestionModel).where(
             InterviewQuestionModel.order == 1)
         first_question: Optional[InterviewQuestionModel] = db_session.execute(
@@ -54,16 +53,16 @@ class SpeakToTeacherRestApiController(RestApiController):
         message = data.message_from_student
         interview_query = db_session.query(InterviewSessionModel).where(
             InterviewSessionModel.id == interview_session_id)
-        interview_session: Optional[InterviewSessionModel] = db_session.execute(
+        interview_session_model: Optional[InterviewSessionModel] = db_session.execute(
             interview_query).first()[0]
-        if not interview_session:
+        if not interview_session_model:
             raise ErrorResponse(
                 status_code=404,
                 type="interview_not_found",
                 title="Interview not found.",
                 detail="The interview session does not exist. Please start a new interview."
             )
-        elif interview_session.done:
+        elif interview_session_model.done:
             raise ErrorResponse(
                 status_code=400,
                 type="interview_already_done",
@@ -71,9 +70,15 @@ class SpeakToTeacherRestApiController(RestApiController):
                 detail="The interview has already been done. Please start a new interview."
             )
         message_from_teacher = speak_to_teacher(
-            db_session, interview_session, message)
+            db_session, interview_session_model, message)
 
-        return message_from_teacher
+        teacher_response = TeacherResponse(
+            message_from_teacher=message_from_teacher,
+            interview_session=TypeAdapter(
+                InterviewSession).validate_python(interview_session_model.__dict__)
+        )
+
+        return teacher_response
 
 
 class FinishInterviewSessionRestApiController(RestApiController):
