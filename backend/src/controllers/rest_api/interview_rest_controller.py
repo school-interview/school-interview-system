@@ -18,6 +18,7 @@ class StartInterviewSessionRestApiController(RestApiController):
         try:
             interview_session_model = start_interview(
                 db_session, user_id, teacher_id)
+
         except InterviewAlreadyStartedException:
             raise ErrorResponse(
                 status_code=400,
@@ -25,7 +26,6 @@ class StartInterviewSessionRestApiController(RestApiController):
                 title="Interview already started.",
                 detail="You can only start one interview at a time. Please finish the current interview first."
             )
-
         interview_session = TypeAdapter(
             InterviewSession).validate_python(interview_session_model.__dict__)
         interview_session.teacher = TypeAdapter(Teacher).validate_python(

@@ -42,6 +42,8 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     session.add(interview_session)
     session.add(interview_record)
     session.commit()
+    current_interview_query = session.query(
+        InterviewSessionModel).join(TeacherModel, InterviewSessionModel.teacher_id == TeacherModel.id).join(UserModel, InterviewSessionModel.user_id == UserModel.id).where(InterviewSessionModel.id == interview_session.id)
     current_interview_rows = session.execute(
         current_interview_query).first()
     current_interview = current_interview_rows[0] if current_interview_rows else None
