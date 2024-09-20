@@ -100,7 +100,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **controllerInterviewPost**
-> InterviewSession controllerInterviewPost(interviewSessionRequest)
+> StartInterviewResponse controllerInterviewPost(interviewSessionRequest)
 
 Controller
 
@@ -127,7 +127,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InterviewSession**](InterviewSession.md)
+[**StartInterviewResponse**](StartInterviewResponse.md)
 
 ### Authorization
 

@@ -9,3 +9,4 @@ from src.models.rest_api_model import *
 from src.models.websocket_controller_model import *
 from src.models.app_data_models import *
 from src.models.llm_structured_output_models import *
+from src.models.errors_model import *

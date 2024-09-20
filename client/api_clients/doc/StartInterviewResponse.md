@@ -1,4 +1,4 @@
-# openapi.model.SpeakToTeacherRequest
+# openapi.model.StartInterviewResponse
 
 ## Load the model package
 ```dart
@@ -8,7 +8,8 @@ import 'package:openapi/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**messageFromStudent** | **String** |  | 
+**interviewSession** | [**InterviewSession**](InterviewSession.md) |  | 
+**messageFromTeacher** | **String** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

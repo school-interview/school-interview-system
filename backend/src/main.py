@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
+from fastapi.responses import JSONResponse
 from src.database import SessionMaker, connect_db
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import socketio
 import asyncio
 from contextlib import asynccontextmanager
@@ -8,6 +9,7 @@ from src.controllers import rest_api_controllers
 from src.controllers import websocket_controllers
 import logging
 from src.websocket_server import sio
+from src.models import ErrorResponse
 
 logging.basicConfig(level=logging.INFO)
 
@@ -38,3 +40,15 @@ async def lifespan(app: FastAPI):
 app_fastapi = FastAPI(lifespan=lifespan)
 
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
+
+
+@app_fastapi.exception_handler(ErrorResponse)
+async def error_response_exception_handler(request: Request, error: ErrorResponse):
+    return JSONResponse(
+        status_code=error.status_code,
+        content={
+            "type": error.type,
+            "title": error.title,
+            "detail": error.detail
+        }
+    )

@@ -192,6 +192,8 @@ class ApiClient {
           return LoginRequest.fromJson(value);
         case 'SpeakToTeacherRequest':
           return SpeakToTeacherRequest.fromJson(value);
+        case 'StartInterviewResponse':
+          return StartInterviewResponse.fromJson(value);
         case 'Teacher':
           return Teacher.fromJson(value);
         case 'TeacherResponse':
