@@ -15,9 +15,9 @@ class InterviewSession {
   InterviewSession({
     required this.id,
     required this.userId,
-    required this.user,
+    this.user,
     required this.teacherId,
-    required this.teacher,
+    this.teacher,
     required this.startAt,
     required this.progress,
     required this.done,
@@ -162,9 +162,7 @@ class InterviewSession {
   static const requiredKeys = <String>{
     'id',
     'user_id',
-    'user',
     'teacher_id',
-    'teacher',
     'start_at',
     'progress',
     'done',
