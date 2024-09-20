@@ -50,6 +50,5 @@ async def error_response_exception_handler(request: Request, error: ErrorRespons
             "type": error.type,
             "title": error.title,
             "detail": error.detail
-
         }
     )
