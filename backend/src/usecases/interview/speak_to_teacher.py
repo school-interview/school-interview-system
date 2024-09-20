@@ -46,7 +46,8 @@ def get_questions(session: Session):
         questions[question.order] = question
     return questions
 
-def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str):
+
+def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str) -> str:
     use_local_llm = bool(int(os.getenv("USE_LOCAL_LLM")))
     if interview_session.done:
         raise Exception("The interview session is already done.")
@@ -54,7 +55,8 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
     extraction_result = extract_answer(
         interview_session, message_from_user, questions)
     if extraction_result.succeeded_to_extract:
-        interview_record_query = db_session.query(InterviewRecordModel).where(InterviewRecordModel.session_id == interview_session.id)
+        interview_record_query = db_session.query(InterviewRecordModel).where(
+            InterviewRecordModel.session_id == interview_session.id)
         interview_records = db_session.execute(interview_record_query).first()
         if not interview_records:
             raise Exception("The interview record is not found.")
@@ -68,21 +70,21 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
                 interview_record.gpa = extraction_result.extracted_value
             case 4:
                 interview_record.attendance_rate = extraction_result.extracted_value
-            case 5: 
+            case 5:
                 interview_record.concern = extraction_result.extracted_value
             case 6:
                 interview_record.prefer_in_person_interview = extraction_result.extracted_value
         interview_session.progress += 1
-        print("        interview_session.progress",        interview_session.progress)
         if interview_session.progress > 6:
             interview_session.progress = 6
             interview_session.done = True
             db_session.commit()
-            return TeacherResponse(message_from_teacher="面談はこれで終了です。ありがとうございました。")
+            # TODO: この返答雑すぎるので、もう少し工夫する。（ここもLLM使って生成したい）
+            return "面談はこれで終了です。ありがとうございました。"
         db_session.commit()
-    response_from_teacher = generate_message_from_teacher(
+    message_from_teacher = generate_message_from_teacher(
         db_session, interview_session, message_from_user, use_local_llm)
-    return TeacherResponse(message_from_teacher=response_from_teacher)
+    return message_from_teacher
 
 
 def generate_message_from_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_student: str, use_local_llm: bool = False):
@@ -114,7 +116,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
             chat_history_store[session_id] = ChatMessageHistory()
         print("history_store", chat_history_store[session_id])
         return chat_history_store[session_id]
-    
+
     def generate_prompt_template(current_question: InterviewQuestion):
         common_inst = """
         Infomation on this university(for RAG):'{context}'
@@ -123,7 +125,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
 
         Situation: You are professional Academic Advisor who support school life and carrer. Please respond to the student's question. Always try to resolve a problem the student has. And you are designed to utilize information on school(RAG). Please answer based on provided sources.
                 
-        You are asking this question, ["""+ current_question.question +"""] to the student and make the student answer your question. You must put the question to the end of your response. It's better to add it with "ところで", "" because it's more natural in Japanese.(Anything is ok. but make it sounds natural in Japanese)
+        You are asking this question, [""" + current_question.question + """] to the student and make the student answer your question. You must put the question to the end of your response. It's better to add it with "ところで", "" because it's more natural in Japanese.(Anything is ok. but make it sounds natural in Japanese)
 
         You must answer as if you are speaking directly to the student.
 
@@ -133,12 +135,11 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
         if use_local_llm:
             start_llama_inst = "<s>[INST] <<SYS>>"
             end_llama_inst = "<</SYS>>[/INST]"
-            template = start_llama_inst + common_inst + end_llama_inst + "学生の発言：{question}"
+            template = start_llama_inst + common_inst + \
+                end_llama_inst + "学生の発言：{question}"
         else:
             template = common_inst + "学生の発言：{question}"
         return template
-
-
 
     current_question = get_questions(db_session)[interview_session.progress]
 
@@ -243,7 +244,7 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
     response = chain.invoke({"text": message_from_student},
                             config={"callbacks": [ConsoleCallbackHandler()]}).dict()
     retrievedValue = None
-    print("れすぽんす",response)
+    print("れすぽんす", response)
     match interview_session.progress:
         case 1:
             retrievedValue = response['credit']
