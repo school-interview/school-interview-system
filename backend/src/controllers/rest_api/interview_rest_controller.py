@@ -91,8 +91,9 @@ class FinishInterviewSessionRestApiController(RestApiController):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         interview_query = db_session.query(InterviewSession).where(
             InterviewSession.id == interview_session_id)
-        interview_session: Optional[InterviewSession] = db_session.execute(
-            interview_query).first()[0]
+        query_result: Optional[InterviewSession] = db_session.execute(
+            interview_query).first()
+        interview_session = query_result[0] if query_result else None
         if not interview_session:
             raise ErrorResponse(
                 status_code=404,
