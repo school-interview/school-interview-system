@@ -19,7 +19,7 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     if current_interview and delete_current_interview:
         finish_interview(session, current_interview)
         session.commit()
-    elif current_interview_rows:
+    elif current_interview:
         raise InterviewAlreadyStartedException(user_id)
     interview_session = InterviewSessionModel(
         id=uuid4(),
@@ -42,7 +42,7 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     session.add(interview_session)
     session.add(interview_record)
     session.commit()
-    current_interview_rows: Optional[InterviewSessionModel] = session.execute(
+    current_interview_rows = session.execute(
         current_interview_query).first()
     current_interview = current_interview_rows[0] if current_interview_rows else None
     return current_interview
