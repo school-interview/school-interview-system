@@ -27,7 +27,7 @@ class UsersRestApiController(RestApiController):
 
     async def controller(self, db_session: Session = Depends(session_factory)):
         user_query = db_session.query(UserModel)
-        users = [TypeAdapter(UserModel).validate_python(
+        users = [TypeAdapter(User).validate_python(
             user[0].__dict__) for user in db_session.execute(user_query).all()]
         return users
 
