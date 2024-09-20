@@ -62,7 +62,19 @@ class SpeakToTeacherRestApiController(RestApiController):
         interview_session: Optional[InterviewSessionModel] = db_session.execute(
             interview_query).first()[0]
         if not interview_session:
-            raise Exception("Interview session not found.")
+            raise ErrorResponse(
+                status_code=404,
+                type="interview_not_found",
+                title="Interview not found.",
+                detail="The interview session does not exist. Please start a new interview."
+            )
+        elif interview_session.done:
+            raise ErrorResponse(
+                status_code=400,
+                type="interview_already_done",
+                title="Interview already done.",
+                detail="The interview has already been done. Please start a new interview."
+            )
         message_from_teacher: TeacherResponse = speak_to_teacher(
             db_session, interview_session, message)
         return message_from_teacher
@@ -80,7 +92,12 @@ class FinishInterviewSessionRestApiController(RestApiController):
         interview_session: Optional[InterviewSession] = db_session.execute(
             interview_query).first()[0]
         if not interview_session:
-            raise Exception("Interview session not found.")
+            raise ErrorResponse(
+                status_code=404,
+                type="interview_not_found",
+                title="Interview not found.",
+                detail="The interview session does not exist. Please start a new interview."
+            )
         finish_interview(db_session, interview_session)
         return None
 
