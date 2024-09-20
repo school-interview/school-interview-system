@@ -2,9 +2,34 @@ from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
-from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse
+from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel
 from src.usecases import start_interview, speak_to_teacher, finish_interview
 from src.database import session_factory
+from sqlalchemy.orm import Session
+
+
+class TeachersRestApiController(RestApiController):
+    method = "GET"
+    path = "/teachers"
+    response_model = List[Teacher]
+
+    async def controller(self, db_session: Session = Depends(session_factory)):
+        teacher_query = db_session.query(TeacherModel)
+        teachers = [TypeAdapter(Teacher).validate_python(
+            teacher[0].__dict__) for teacher in db_session.execute(teacher_query).all()]
+        return teachers
+
+
+class UsersRestApiController(RestApiController):
+    method = "GET"
+    path = "/users"
+    response_model = List[User]
+
+    async def controller(self, db_session: Session = Depends(session_factory)):
+        user_query = db_session.query(UserModel)
+        users = [TypeAdapter(User).validate_python(
+            user[0].__dict__) for user in db_session.execute(user_query).all()]
+        return users
 
 
 class StartInterviewSessionRestApiController(RestApiController):
@@ -105,5 +130,5 @@ class FinishInterviewSessionRestApiController(RestApiController):
         return None
 
 
-interview_rest_api_controllers: List[RestApiController] = [StartInterviewSessionRestApiController(
+interview_rest_api_controllers: List[RestApiController] = [TeachersRestApiController(), UsersRestApiController(), StartInterviewSessionRestApiController(
 ), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController()]

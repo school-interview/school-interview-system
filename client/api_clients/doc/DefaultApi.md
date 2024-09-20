@@ -13,6 +13,8 @@ Method | HTTP request | Description
 [**controllerInterviewInterviewSessionIdPost**](DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 [**controllerInterviewPost**](DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
 [**controllerLoginPut**](DefaultApi.md#controllerloginput) | **PUT** /login | Controller
+[**controllerTeachersGet**](DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
+[**controllerUsersGet**](DefaultApi.md#controllerusersget) | **GET** /users | Controller
 
 
 # **controllerInterviewInterviewSessionIdDelete**
@@ -177,6 +179,80 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerTeachersGet**
+> List<Teacher> controllerTeachersGet()
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = DefaultApi();
+
+try {
+    final result = api_instance.controllerTeachersGet();
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerTeachersGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List<Teacher>**](Teacher.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerUsersGet**
+> List<User> controllerUsersGet()
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = DefaultApi();
+
+try {
+    final result = api_instance.controllerUsersGet();
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerUsersGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List<User>**](User.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

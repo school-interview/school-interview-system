@@ -63,6 +63,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**controllerInterviewInterviewSessionIdPost**](doc//DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewPost**](doc//DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
 *DefaultApi* | [**controllerLoginPut**](doc//DefaultApi.md#controllerloginput) | **PUT** /login | Controller
+*DefaultApi* | [**controllerTeachersGet**](doc//DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
+*DefaultApi* | [**controllerUsersGet**](doc//DefaultApi.md#controllerusersget) | **GET** /users | Controller
 
 
 ## Documentation For Models
