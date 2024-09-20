@@ -2,36 +2,26 @@
 
 This is the backend application for school interview system.
 
+For more infomatino on API, see [API Design Doc | 修学面談システム](https://www.notion.so/API-Design-Doc-107879aba7c68062bfa4e4ea7a69815c)
+
 ## Set Up
 
 This project requires Docker.
 
 If you haven't installed Docker Desktop, you can [download and install it here.](https://docs.docker.com/desktop/install/mac-install/)
 
-After you install Docker Desktop, you can launch the backend app with these commands below. (This is all you need to launch it 😎)
+After you installed Docker Desktop, you can launch the backend app with these commands below. (This is all you need to launch it 😎)
 
 ```
 cd backend
-docker compose up --build
+docker compose --profile backend up --build
+
+docker compose --profile backend up
+// ↑ After you build the docker image, you don't need to specify --build option anymore
 ```
 
 The app is available on `http://localhost:8000`.
 (When `--build` option is specified, Docker automatically build the docker image before the container launches.)
-
-## Update on setting up (2024/09/04)
-
-It turned out that Docker support GPU use only for Windows and Linux.
-
-Since we use macbook to develop this app, we can't benefits from Appli Sillicon's graphic hardware and we need to run the app without Docker container.
-
-I commented out the command to launch app server in `launch-server.sh`, so it only launches DB server when you run `docker compsoe up`.
-
-You need to run these commands after running `docker compse up`
-
-```
-poetry shell
-./launch-server-local.sh
-```
 
 ## Swagger
 
