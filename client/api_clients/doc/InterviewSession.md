@@ -10,9 +10,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** |  | 
 **userId** | **String** |  | 
-**user** | [**User**](User.md) |  | 
+**user** | [**User**](User.md) |  | [optional] 
 **teacherId** | **String** |  | 
-**teacher** | [**Teacher**](Teacher.md) |  | 
+**teacher** | [**Teacher**](Teacher.md) |  | [optional] 
 **startAt** | [**DateTime**](DateTime.md) |  | 
 **progress** | **int** |  | 
 **done** | **bool** |  | 

@@ -163,7 +163,7 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [InterviewSessionRequest] interviewSessionRequest (required):
-  Future<InterviewSession?> controllerInterviewPost(InterviewSessionRequest interviewSessionRequest,) async {
+  Future<StartInterviewResponse?> controllerInterviewPost(InterviewSessionRequest interviewSessionRequest,) async {
     final response = await controllerInterviewPostWithHttpInfo(interviewSessionRequest,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -172,7 +172,7 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'InterviewSession',) as InterviewSession;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StartInterviewResponse',) as StartInterviewResponse;
     
     }
     return null;
