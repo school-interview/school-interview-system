@@ -44,6 +44,7 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     session.commit()
     current_interview_query = session.query(
         InterviewSessionModel).join(TeacherModel, InterviewSessionModel.teacher_id == TeacherModel.id).join(UserModel, InterviewSessionModel.user_id == UserModel.id).where(InterviewSessionModel.id == interview_session.id)
+    # .where(InterviewSessionModel.user_id == user_id and InterviewSessionModel.done == False)でなぜか同じ結果にならないことがある。↑ 調査。問題としてはfinish_interviewでdoneがTrueになってDBに格納されているはずなのにそうなってない？よくわかっていない。
     current_interview_rows = session.execute(
         current_interview_query).first()
     current_interview = current_interview_rows[0] if current_interview_rows else None
