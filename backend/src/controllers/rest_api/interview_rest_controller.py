@@ -1,7 +1,8 @@
 from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
-from src.models import RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse
+from pydantic import TypeAdapter
+from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse
 from src.usecases import start_interview, speak_to_teacher, finish_interview
 from src.database import session_factory
 
@@ -25,19 +26,13 @@ class StartInterviewSessionRestApiController(RestApiController):
                 detail="You can only start one interview at a time. Please finish the current interview first."
             )
 
-        interview_session = InterviewSession(
-            id=interview_session_model.id,
-            user_id=interview_session_model.user_id,
-            teacher_id=interview_session_model.teacher_id,
-            teacher=Teacher(
-                id=interview_session_model.teacher.id,
-                name=interview_session_model.teacher.name,
-                description=interview_session_model.teacher.description,
-            ),
-            start_at=interview_session_model.start_at,
-            progress=interview_session_model.progress,
-            done=interview_session_model.done
-        )
+        interview_session = TypeAdapter(
+            InterviewSession).validate_python(interview_session_model.__dict__)
+        interview_session.teacher = TypeAdapter(Teacher).validate_python(
+            interview_session_model.teacher.__dict__)
+        interview_session.user = TypeAdapter(User).validate_python(
+            interview_session_model.user.__dict__)
+
         question_query = db_session.query(InterviewQuestionModel).where(
             InterviewQuestionModel.order == 1)
         first_question: Optional[InterviewQuestionModel] = db_session.execute(
@@ -75,8 +70,9 @@ class SpeakToTeacherRestApiController(RestApiController):
                 title="Interview already done.",
                 detail="The interview has already been done. Please start a new interview."
             )
-        message_from_teacher: TeacherResponse = speak_to_teacher(
+        message_from_teacher = speak_to_teacher(
             db_session, interview_session, message)
+
         return message_from_teacher
 
 

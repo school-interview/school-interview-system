@@ -41,6 +41,7 @@ class SpeakToTeacherRequest(BaseModel):
 
 
 class TeacherResponse(BaseModel):
+    interview_session: InterviewSession
     message_from_teacher: str
 
 
