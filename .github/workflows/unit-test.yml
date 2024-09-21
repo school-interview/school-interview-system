@@ -28,13 +28,14 @@ jobs:
       - name: Cache venv dependencies
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
         with:
+          id: cache-python
           path: backend/.venv
           key: venv-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
           restore-keys: |
             venv-${{ runner.os }}-
       - name: after cache
         run: |
-          echo "-->${{steps.cache-go.outputs.cache-hit}}<--"
+          echo "-->${{steps.cache-python.outputs.cache-hit}}<--"
       - name: run tests
         run: pwd && poetry run pytest
         working-directory: backend
