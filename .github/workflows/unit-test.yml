@@ -15,9 +15,15 @@ jobs:
           python-version: 3.12
       - name: install poetry
         uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a
+      - name: Cache venv dependencies
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        with:
+          path: backend/.venv
+          key: venv-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
       - name: install dependencies
         run: poetry install --no-root
         working-directory: backend
       - name: run tests
         run: poetry run pytest
-        working-directory: backend
