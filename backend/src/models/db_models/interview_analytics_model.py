@@ -103,9 +103,9 @@ class InterviewAnalyticsModel(EntityBaseModel):
 
         # 進級できない場合は即座100プラスされるので係数はかけない
         level += 100 if failed_to_move_to_next_grade else 0
+        level += deviation_from_minimum_attendance_rate * 32.5
         level += deviation_from_preferred_credit_level * \
-            32.5  # 以下の項目に関しては要支援具合に応じて係数をかける。
-        level += deviation_from_minimum_attendance_rate * 27.5
+            27.5    # 以下の項目に関しては要支援具合に応じて係数をかける。
         level += high_attendance_low_gpa_rate * 22.5
         level += low_atendance_and_low_gpa_rate * 17.5
         if level > 100:
