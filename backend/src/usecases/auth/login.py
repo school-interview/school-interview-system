@@ -21,7 +21,7 @@ def login(db_session: Session, login_request: LoginRequest) -> UserModel:
             student_id=login_request.student_id,
             name=login_request.name,
             department=login_request.department,
-            grade=login_request.grade
+            semester=login_request.semester
         )
         db_session.add(user)
         db_session.commit()

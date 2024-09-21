@@ -2,7 +2,7 @@ from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
-from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics
+from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel
 from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview
 from src.database import session_factory
 from sqlalchemy.orm import Session
@@ -160,12 +160,11 @@ class AnalyticsInterviewRestApiController(RestApiController):
             InterviewRecordModel.session_id == interview_session_id)
         query_result = db_session.execute(interview_record_query).first()
         interview_record = query_result[0] if query_result else None
-        interview_analytics_model: InterviewAnalytics = analyze_interview(
+        interview_analytics_model: InterviewAnalyticsModel = analyze_interview(
             db_session, interview_session, interview_record)
-        # なぜかここでだけ sa_instance_state というプロパティが入っているので削除
+
+        interview_analytics_model.id  # 参照するまでマップされてなさそうな予感なので参照しておく。。。
         interview_analytics_dict = interview_analytics_model.__dict__
-        if '_sa_instance_state' in interview_analytics_dict:
-            del interview_analytics_dict['_sa_instance_state']
         interview_analytics = TypeAdapter(InterviewAnalytics).validate_python(
             interview_analytics_dict)
         return interview_analytics
