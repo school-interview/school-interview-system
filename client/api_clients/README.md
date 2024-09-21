@@ -45,10 +45,10 @@ final api_instance = DefaultApi();
 final interviewSessionId = interviewSessionId_example; // String | 
 
 try {
-    final result = api_instance.controllerInterviewInterviewSessionIdDelete(interviewSessionId);
+    final result = api_instance.controllerInterviewInterviewSessionIdAnalyticsGet(interviewSessionId);
     print(result);
 } catch (e) {
-    print('Exception when calling DefaultApi->controllerInterviewInterviewSessionIdDelete: $e\n');
+    print('Exception when calling DefaultApi->controllerInterviewInterviewSessionIdAnalyticsGet: $e\n');
 }
 
 ```
@@ -59,6 +59,7 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**controllerInterviewInterviewSessionIdAnalyticsGet**](doc//DefaultApi.md#controllerinterviewinterviewsessionidanalyticsget) | **GET** /interview/{interview_session_id}/analytics | Controller
 *DefaultApi* | [**controllerInterviewInterviewSessionIdDelete**](doc//DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewInterviewSessionIdPost**](doc//DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewPost**](doc//DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
@@ -70,6 +71,7 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [HTTPValidationError](doc//HTTPValidationError.md)
+ - [InterviewAnalytics](doc//InterviewAnalytics.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
  - [LoginRequest](doc//LoginRequest.md)

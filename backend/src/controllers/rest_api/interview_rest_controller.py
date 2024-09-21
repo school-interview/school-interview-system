@@ -2,8 +2,8 @@ from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
-from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel
-from src.usecases import start_interview, speak_to_teacher, finish_interview
+from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics
+from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview
 from src.database import session_factory
 from sqlalchemy.orm import Session
 
@@ -130,5 +130,46 @@ class FinishInterviewSessionRestApiController(RestApiController):
         return None
 
 
+class AnalyticsInterviewRestApiController(RestApiController):
+    method = "GET"
+    path = "/interview/{interview_session_id}/analytics"
+    response_model = InterviewAnalytics
+
+    async def controller(self, interview_session_id: str, db_session=Depends(session_factory)):
+        interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
+        interview_query = db_session.query(InterviewSessionModel).where(
+            InterviewSessionModel.id == interview_session_id)
+        query_result: Optional[InterviewSessionModel] = db_session.execute(
+            interview_query).first()
+        interview_session: InterviewSessionModel = query_result[0] if query_result else None
+        if not interview_session:
+            raise ErrorResponse(
+                status_code=404,
+                type="interview_not_found",
+                title="Interview not found.",
+                detail="The interview session does not exist. Please start a new interview."
+            )
+        if not interview_session.done:
+            raise ErrorResponse(
+                status_code=400,
+                type="interview_not_done",
+                title="Interview not done.",
+                detail="The interview session is not done yet. Please finish the interview first."
+            )
+        interview_record_query = db_session.query(InterviewRecordModel).where(
+            InterviewRecordModel.session_id == interview_session_id)
+        query_result = db_session.execute(interview_record_query).first()
+        interview_record = query_result[0] if query_result else None
+        interview_analytics_model: InterviewAnalytics = analyze_interview(
+            db_session, interview_session, interview_record)
+        # なぜかここでだけ sa_instance_state というプロパティが入っているので削除
+        interview_analytics_dict = interview_analytics_model.__dict__
+        if '_sa_instance_state' in interview_analytics_dict:
+            del interview_analytics_dict['_sa_instance_state']
+        interview_analytics = TypeAdapter(InterviewAnalytics).validate_python(
+            interview_analytics_dict)
+        return interview_analytics
+
+
 interview_rest_api_controllers: List[RestApiController] = [TeachersRestApiController(), UsersRestApiController(), StartInterviewSessionRestApiController(
-), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController()]
+), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController(), AnalyticsInterviewRestApiController()]

@@ -4,6 +4,7 @@ README.md
 analysis_options.yaml
 doc/DefaultApi.md
 doc/HTTPValidationError.md
+doc/InterviewAnalytics.md
 doc/InterviewSession.md
 doc/InterviewSessionRequest.md
 doc/LoginRequest.md
@@ -26,6 +27,7 @@ lib/auth/http_basic_auth.dart
 lib/auth/http_bearer_auth.dart
 lib/auth/oauth.dart
 lib/model/http_validation_error.dart
+lib/model/interview_analytics.dart
 lib/model/interview_session.dart
 lib/model/interview_session_request.dart
 lib/model/login_request.dart
@@ -37,3 +39,4 @@ lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
+test/interview_analytics_test.dart

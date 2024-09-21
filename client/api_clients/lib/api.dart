@@ -31,6 +31,7 @@ part 'auth/http_bearer_auth.dart';
 part 'api/default_api.dart';
 
 part 'model/http_validation_error.dart';
+part 'model/interview_analytics.dart';
 part 'model/interview_session.dart';
 part 'model/interview_session_request.dart';
 part 'model/login_request.dart';

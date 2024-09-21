@@ -9,6 +9,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**controllerInterviewInterviewSessionIdAnalyticsGet**](DefaultApi.md#controllerinterviewinterviewsessionidanalyticsget) | **GET** /interview/{interview_session_id}/analytics | Controller
 [**controllerInterviewInterviewSessionIdDelete**](DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 [**controllerInterviewInterviewSessionIdPost**](DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 [**controllerInterviewPost**](DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
@@ -16,6 +17,47 @@ Method | HTTP request | Description
 [**controllerTeachersGet**](DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 [**controllerUsersGet**](DefaultApi.md#controllerusersget) | **GET** /users | Controller
 
+
+# **controllerInterviewInterviewSessionIdAnalyticsGet**
+> InterviewAnalytics controllerInterviewInterviewSessionIdAnalyticsGet(interviewSessionId)
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = DefaultApi();
+final interviewSessionId = interviewSessionId_example; // String | 
+
+try {
+    final result = api_instance.controllerInterviewInterviewSessionIdAnalyticsGet(interviewSessionId);
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerInterviewInterviewSessionIdAnalyticsGet: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **interviewSessionId** | **String**|  | 
+
+### Return type
+
+[**InterviewAnalytics**](InterviewAnalytics.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **controllerInterviewInterviewSessionIdDelete**
 > Object controllerInterviewInterviewSessionIdDelete(interviewSessionId)
