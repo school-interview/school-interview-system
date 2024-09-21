@@ -17,7 +17,7 @@ class User {
     required this.name,
     required this.studentId,
     required this.department,
-    required this.grade,
+    required this.semester,
   });
 
   String id;
@@ -28,7 +28,9 @@ class User {
 
   String department;
 
-  int grade;
+  /// Minimum value: 1
+  /// Maximum value: 8
+  int semester;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is User &&
@@ -36,7 +38,7 @@ class User {
     other.name == name &&
     other.studentId == studentId &&
     other.department == department &&
-    other.grade == grade;
+    other.semester == semester;
 
   @override
   int get hashCode =>
@@ -45,10 +47,10 @@ class User {
     (name.hashCode) +
     (studentId.hashCode) +
     (department.hashCode) +
-    (grade.hashCode);
+    (semester.hashCode);
 
   @override
-  String toString() => 'User[id=$id, name=$name, studentId=$studentId, department=$department, grade=$grade]';
+  String toString() => 'User[id=$id, name=$name, studentId=$studentId, department=$department, semester=$semester]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -56,7 +58,7 @@ class User {
       json[r'name'] = this.name;
       json[r'student_id'] = this.studentId;
       json[r'department'] = this.department;
-      json[r'grade'] = this.grade;
+      json[r'semester'] = this.semester;
     return json;
   }
 
@@ -83,7 +85,7 @@ class User {
         name: mapValueOfType<String>(json, r'name')!,
         studentId: mapValueOfType<String>(json, r'student_id')!,
         department: mapValueOfType<String>(json, r'department')!,
-        grade: mapValueOfType<int>(json, r'grade')!,
+        semester: mapValueOfType<int>(json, r'semester')!,
       );
     }
     return null;
@@ -135,7 +137,7 @@ class User {
     'name',
     'student_id',
     'department',
-    'grade',
+    'semester',
   };
 }
 
