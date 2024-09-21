@@ -137,11 +137,11 @@ class AnalyticsInterviewRestApiController(RestApiController):
 
     async def controller(self, interview_session_id: str, db_session=Depends(session_factory)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
-        interview_query = db_session.query(InterviewSession).where(
-            InterviewSession.id == interview_session_id)
-        query_result: Optional[InterviewSession] = db_session.execute(
+        interview_query = db_session.query(InterviewSessionModel).where(
+            InterviewSessionModel.id == interview_session_id)
+        query_result: Optional[InterviewSessionModel] = db_session.execute(
             interview_query).first()
-        interview_session: InterviewSession = query_result[0] if query_result else None
+        interview_session: InterviewSessionModel = query_result[0] if query_result else None
         if not interview_session:
             raise ErrorResponse(
                 status_code=404,
@@ -160,10 +160,14 @@ class AnalyticsInterviewRestApiController(RestApiController):
             InterviewRecordModel.session_id == interview_session_id)
         query_result = db_session.execute(interview_record_query).first()
         interview_record = query_result[0] if query_result else None
-        interview_analytics_model = analyze_interview(
-            db_session, interview_record)
+        interview_analytics_model: InterviewAnalytics = analyze_interview(
+            db_session, interview_session, interview_record)
+        # なぜかここでだけ sa_instance_state というプロパティが入っているので削除
+        interview_analytics_dict = interview_analytics_model.__dict__
+        if '_sa_instance_state' in interview_analytics_dict:
+            del interview_analytics_dict['_sa_instance_state']
         interview_analytics = TypeAdapter(InterviewAnalytics).validate_python(
-            interview_analytics_model.__dict__)
+            interview_analytics_dict)
         return interview_analytics
 
 
