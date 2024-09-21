@@ -16,9 +16,9 @@ After you installed Docker Desktop, you can launch the backend app with these co
 
 ```
 cd backend
-docker compose --profile backend up --build
+docker compose --profile backend --profile db up --build
 
-docker compose --profile backend up
+docker compose --profile --profile db backend up
 // ↑ After you build the docker image, you don't need to specify --build option anymore
 ```
 
@@ -37,6 +37,14 @@ http://localhost:8000/docs
 
 # For backend developer
 
+## Testing
+
+```
+docker compose --profile testing up
+```
+
+## Launch server locally (not on Docker)
+
 🔔 If you haven't installed `Poetry` (package manager for Python, like `npm` for Nodejs), you need to install it first.
 
 You can read [the official document](https://python-poetry.org/docs/#installing-with-pipx) to install it.
@@ -47,8 +55,6 @@ You can read [the official document](https://python-poetry.org/docs/#installing-
 poetry shell
 poetry install
 ```
-
-## Launch server
 
 ### 1. Activate virtual environment
 
