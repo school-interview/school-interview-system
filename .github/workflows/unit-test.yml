@@ -28,6 +28,8 @@ jobs:
         with:
           path: backend/.venv
           key: venv-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
+          restore-keys: |
+            venv-${{ runner.os }}-
       - name: run tests
         run: pwd && poetry run pytest
         working-directory: backend
