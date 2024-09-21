@@ -27,3 +27,4 @@ jobs:
         working-directory: backend
       - name: run tests
         run: poetry run pytest
+        working-directory: backend
