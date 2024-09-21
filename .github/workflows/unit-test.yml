@@ -1,0 +1,15 @@
+name: UnitTest
+on: push
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@692973e
+      - name: cd backend
+        run: cd backend
+      - name: install dependencies
+        run: poetry install --no-root
+      - name: run tests
+        run: poetry run pytest
