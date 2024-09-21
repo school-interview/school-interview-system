@@ -16,9 +16,8 @@ class User(BaseModel):
 
 class UserModel(EntityBaseModel):
     __tablename__ = "Users"
-
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
     student_id: Mapped[str] = mapped_column(String(7))
     department: Mapped[str] = mapped_column(String(30))
-    grade: Mapped[int]
+    semester: Mapped[int]
