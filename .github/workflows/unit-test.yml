@@ -15,11 +15,9 @@ jobs:
           python-version: 3.12
       - name: install poetry
         uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a
-      - name: cd backend
-        run: cd backend
-      - name: pwd
-        run: pwd && ls
       - name: install dependencies
         run: poetry install --no-root
+        working-directory: backend
       - name: run tests
         run: poetry run pytest
+        working-directory: backend
