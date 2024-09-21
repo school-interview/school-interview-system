@@ -20,6 +20,7 @@ from langchain_core.tracers.stdout import ConsoleCallbackHandler
 from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
+from src.usecases.interview.finish_interview import finish_interview
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -77,8 +78,7 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
         interview_session.progress += 1
         if interview_session.progress > 6:
             interview_session.progress = 6
-            interview_session.done = True
-            db_session.commit()
+            finish_interview(db_session, interview_session, chat_history_store)
             # TODO: この返答雑すぎるので、もう少し工夫する。（ここもLLM使って生成したい）
             return "面談はこれで終了です。ありがとうございました。"
         db_session.commit()
