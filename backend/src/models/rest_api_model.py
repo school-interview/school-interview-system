@@ -33,7 +33,7 @@ class LoginRequest(BaseModel):
     student_id: str
     name: str
     department: str
-    grade: int
+    semester: int
 
 
 class SpeakToTeacherRequest(BaseModel):

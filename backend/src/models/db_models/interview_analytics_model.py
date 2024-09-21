@@ -34,23 +34,29 @@ class InterviewAnalyticsModel(EntityBaseModel):
     @staticmethod
     def create_from_interview_record(user: UserModel, interview_record: InterviewRecordModel):
         # 算出方法に関してはこちら。
-        # 今回は後期と仮定しています。なのでセミスターごとの処理の振り分けは行っておりません。本当はやらないといけないです。
         # https://www.notion.so/2024-09-17-104879aba7c6808cbcdfda7522e0d237
 
         # 各学年の進級条件単位数
         required_credits = {
-            1: 30,  # 1 -> 2
-            2: 62,  # 2 -> 3
-            3: 110,  # 3 -> 4
-            4: 124  # 4 -> graduate
+            1: 15,  # 1年前期
+            2: 30,  # 1年後期
+            3: 46,  # 2年前期
+            4: 62,  # 2年後期
+            5: 86,  # 3年前期
+            6: 110,  # 3年後期
+            7: 117,  # 4年前期
+            8: 124,  # 4年後期
         }
         # 各学年の推奨獲得単位数
         preffered_credits = {
-            0: 0,
-            1: 40,
-            2: 85,
-            3: 116,
-            4: 124
+            1: 20,  # 1年前期
+            2: 40,  # 1年後期
+            3: 62.5,  # 2年前期
+            4: 85,  # 2年後期
+            5: 100.5,  # 3年前期
+            6: 116,  # 3年後期
+            7: 120,  # 4年前期
+            8: 124,  # 4年後期
         }
 
         planned_credits = interview_record.planned_credits
@@ -62,15 +68,15 @@ class InterviewAnalyticsModel(EntityBaseModel):
 
         def is_failed_to_move_to_next_grade():
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
-            if credits_to_be_earned_in_total < required_credits[user.grade]:
+            if credits_to_be_earned_in_total < required_credits[user.semester]:
                 return 100
             return 0
 
         def get_deviation_from_preferred_credit_level():
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
-            if credits_to_be_earned_in_total < preffered_credits[user.grade]:
-                deviation = (preffered_credits[user.grade] - planned_credits)/(
-                    preffered_credits[user.grade] - required_credits[user.grade])
+            if credits_to_be_earned_in_total < preffered_credits[user.semester]:
+                deviation = (preffered_credits[user.semester] - planned_credits)/(
+                    preffered_credits[user.semester] - required_credits[user.semester])
                 return deviation
             return 0
 
