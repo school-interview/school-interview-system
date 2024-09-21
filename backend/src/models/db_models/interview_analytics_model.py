@@ -34,7 +34,6 @@ class InterviewAnalyticsModel(EntityBaseModel):
     @staticmethod
     def create_from_interview_record(user: UserModel, interview_record: InterviewRecordModel):
         # 算出方法に関してはこちら。
-        # 今回は後期と仮定しています。なのでセミスターごとの処理の振り分けは行っておりません。本当はやらないといけないです。
         # https://www.notion.so/2024-09-17-104879aba7c6808cbcdfda7522e0d237
 
         # 各学年の進級条件単位数
