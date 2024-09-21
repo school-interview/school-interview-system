@@ -1,9 +1,9 @@
 from src.models import InterviewRecordModel
 from sqlalchemy.orm import Session
-from src.models import InterviewAnalyticsModel, UserModel
+from src.models import InterviewAnalyticsModel, UserModel, InterviewSessionModel
 
 
-def analyze_interview(db_session: Session, interview_recrod: InterviewRecordModel):
+def analyze_interview(db_session: Session, interview_session: InterviewSessionModel, interview_recrod: InterviewRecordModel):
     existing_interview_analytics_query = db_session.query(InterviewAnalyticsModel).where(
         InterviewAnalyticsModel.session_id == interview_recrod.session_id)
     query_result = db_session.execute(
@@ -13,7 +13,7 @@ def analyze_interview(db_session: Session, interview_recrod: InterviewRecordMode
         # すでにInterviewAnalyticsが存在している場合はそのまま返す。
         return existing_interview_analytics
     user_query = db_session.query(UserModel).where(
-        UserModel.id == interview_recrod.user_id)
+        UserModel.id == interview_session.user_id)
     query_result = db_session.execute(user_query).first()
     user = query_result[0] if query_result else None
     interview_analytics = InterviewAnalyticsModel.create_from_interview_record(

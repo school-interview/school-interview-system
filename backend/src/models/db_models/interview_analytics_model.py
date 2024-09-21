@@ -42,6 +42,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
             1: 30,  # 1 -> 2
             2: 62,  # 2 -> 3
             3: 110,  # 3 -> 4
+            4: 124  # 4 -> graduate
         }
         # 各学年の推奨獲得単位数
         preffered_credits = {
