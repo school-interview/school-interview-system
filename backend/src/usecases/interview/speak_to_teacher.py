@@ -78,7 +78,7 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
         interview_session.progress += 1
         if interview_session.progress > 6:
             interview_session.progress = 6
-            finish_interview(db_session, interview_session)
+            finish_interview(db_session, interview_session, chat_history_store)
             # TODO: この返答雑すぎるので、もう少し工夫する。（ここもLLM使って生成したい）
             return "面談はこれで終了です。ありがとうございました。"
         db_session.commit()
