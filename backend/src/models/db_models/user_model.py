@@ -3,7 +3,7 @@ from src.models import EntityBaseModel
 from sqlalchemy import String
 from typing import List
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
@@ -11,7 +11,7 @@ class User(BaseModel):
     name: str
     student_id: str
     department: str
-    grade: int
+    semester: int = Field(ge=1, le=8)
 
 
 class UserModel(EntityBaseModel):
