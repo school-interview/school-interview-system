@@ -34,7 +34,9 @@ services:
     profiles:
       - db
   testing:
-    build: ./testing/
+    build:
+      context: .
+      dockerfile: ./test/Dockerfile
     volumes:
       - ./src:/app/src
       - ./test:/app/test
