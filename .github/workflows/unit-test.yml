@@ -34,6 +34,8 @@ jobs:
       - name: install poetry
         if: steps.cache-poetry.outputs.cache-hit == 'false'
         uses: snok/install-poetry@v1
+      - name: path to poetry
+        run: export PATH=$PATH:/home/runner/.local/bin/
       - name: install dependencies
         if: steps.cache-python.outputs.cache-hit == 'false'
         run: poetry install --no-root
