@@ -26,6 +26,7 @@ langchain-huggingface = "^0.0.3"
 llama-cpp-python = "^0.2.90"
 bs4 = "^0.0.2"
 pymupdf4llm = "^0.0.14"
+sqlalchemy-utils = "^0.41.2"
 
 
 [build-system]
