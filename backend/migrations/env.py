@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from src.models.db_models.base_model import EntityBaseModel
+from sqlalchemy_utils import database_exists, create_database
 
 from dotenv import load_dotenv
 import os
@@ -55,7 +56,6 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
-
     with context.begin_transaction():
         context.run_migrations()
 
@@ -72,6 +72,8 @@ def run_migrations_online() -> None:
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
+    if not database_exists(connectable.url):
+        create_database(connectable.url)
     url = config.get_main_option("sqlalchemy.url")
     with connectable.connect() as connection:
         context.configure(

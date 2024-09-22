@@ -6,6 +6,8 @@ For more infomatino on API, see [API Design Doc | 修学面談システム](http
 
 ## Set Up
 
+### Launch Server
+
 This project requires Docker.
 
 If you haven't installed Docker Desktop, you can [download and install it here.](https://docs.docker.com/desktop/install/mac-install/)
@@ -22,6 +24,8 @@ docker compose --profile backend up
 
 The app is available on `http://localhost:8000`.
 (When `--build` option is specified, Docker automatically build the docker image before the container launches.)
+
+### Prepare `.env.local` in `backend` directory.
 
 ## Swagger
 
