@@ -39,6 +39,7 @@ jobs:
         run: poetry install --no-root
         working-directory: backend
       - name: Cache venv dependencies
+        if: steps.cache-python.outputs.cache-hit == 'false'
         uses: actions/cache@v3
         with:
           path: backend/.venv
@@ -46,6 +47,7 @@ jobs:
           restore-keys: |
             venv-${{ runner.os }}-
       - name: Cache poetry dependencies
+        if: steps.cache-poetry.outputs.cache-hit == 'false'
         uses: actions/cache@v3
         with:
           path: /home/runner/.local/bin/poetry
