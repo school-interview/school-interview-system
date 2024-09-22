@@ -31,6 +31,25 @@ services:
     environment:
       POSTGRES_USER: "user"
       POSTGRES_PASSWORD: "postgres"
+    profiles:
+      - db
+  testing:
+    build:
+      context: .
+      dockerfile: ./test/Dockerfile
+    volumes:
+      - ./src:/app/src
+      - ./test:/app/test
+      - ./launch-server-docker.sh:/app/launch-server-docker.sh
+      - ./alembic.ini:/app/alembic.ini
+      - ./migrations:/app/migrations
+      - ./.env:/app/.env
+      - ./.env.local:/app/.env.local
+      - ./pdf:/app/pdf
+    environment:
+      PYTHONPATH: "$PYTHONPATH:/app/src"
+    profiles:
+      - testing
 
 volumes:
   db-store:
