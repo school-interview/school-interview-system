@@ -27,6 +27,13 @@ The app is available on `http://localhost:8000`.
 
 ### Prepare `.env.local` in `backend` directory.
 
+`.env.local` is used to store OpenAI's API key.
+(This file is ignored by Git)
+
+```
+OPENAI_API_KEY = Your API Key here
+```
+
 ## Swagger
 
 You can view Swagger by accessing `/docs` endopoint.
