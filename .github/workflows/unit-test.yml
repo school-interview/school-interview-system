@@ -32,7 +32,7 @@ jobs:
       #     restore-keys: |
       #       poetry-${{ runner.os }}-
       - name: install poetry
-        if: steps.cache-poetry.outputs.cache-hit == 'false'
+        # if: steps.cache-poetry.outputs.cache-hit == 'false'
         uses: snok/install-poetry@v1
       - name: install dependencies
         if: steps.cache-python.outputs.cache-hit == 'false'
@@ -47,7 +47,7 @@ jobs:
           restore-keys: |
             venv-${{ runner.os }}-
       - name: Cache poetry dependencies
-        if: steps.cache-poetry.outputs.cache-hit == 'false'
+        # if: steps.cache-poetry.outputs.cache-hit == 'false'
         uses: actions/cache@v3
         with:
           path: /home/runner/.local/bin/poetry
@@ -55,5 +55,5 @@ jobs:
           restore-keys: |
             poetry-${{ runner.os }}-
       - name: run tests
-        run: /home/runner/.local/bin/poetry run pytest
+        run: poetry run pytest
         working-directory: backend
