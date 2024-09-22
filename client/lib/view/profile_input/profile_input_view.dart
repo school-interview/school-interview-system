@@ -180,7 +180,12 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         },
         onChanged: (String? value) {
           if (value != null) {
-            viewModel.setName(value);
+            for (var item in semesterSelects.entries) {
+              if (item.value == value) {
+                viewModel.setSemester(item.key);
+                return;
+              }
+            }
           }
         },
       ),
