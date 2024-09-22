@@ -1,0 +1,43 @@
+name: UnitTest
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - name: cd backend
+        run: cd backend
+      - name: setup python
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
+        with:
+          python-version: 3.12
+      - name: restore .venv cache
+        id: cache-python
+        uses: actions/cache@v3
+        with:
+          path: backend/.venv
+          key: venv-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
+          restore-keys: |
+            venv-${{ runner.os }}-
+      # - name: restore poetry cache
+      #   id: cache-poetry
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /home/runner/.local/bin/poetry
+      #     key: poetry-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
+      #     restore-keys: |
+      #       poetry-${{ runner.os }}-
+      - name: install poetry
+        # if: steps.cache-poetry.outputs.cache-hit == 'false'
+        uses: snok/install-poetry@v1
+      - name: install dependencies
+        if: steps.cache-python.outputs.cache-hit == 'false'
+        run: poetry install --no-root
+        working-directory: backend
+      - name: run tests
+        run: poetry run pytest
+        working-directory: backend
