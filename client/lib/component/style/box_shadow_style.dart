@@ -1,4 +1,5 @@
 import 'package:client/constant/color.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 /// Box Shadowのスタイル
@@ -18,6 +19,16 @@ class BoxShadowStyle {
         offset: Offset(0, 1),
         blurRadius: 3,
         spreadRadius: 1,
+      ),
+    ];
+  }
+
+  static List<BoxShadow> chatBubbleShadowStyle() {
+    return <BoxShadow>[
+      const BoxShadow(
+        color: Colors.black12,
+        blurRadius: 4,
+        offset: Offset(2, 2),
       ),
     ];
   }
