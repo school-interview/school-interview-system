@@ -18,6 +18,7 @@ jobs:
       - name: restore .venv cache
         uses: actions/cache/restore@v3
         with:
+          id: cache-python
           path: backend/.venv
           key: venv-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
           restore-keys: |
@@ -25,13 +26,16 @@ jobs:
       - name: restore poetry cache
         uses: actions/cache/restore@v3
         with:
+          id: cache-poetry
           path: /home/runner/.local/bin/poetry
           key: poetry-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
           restore-keys: |
             poetry-${{ runner.os }}-
       - name: install poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
         uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a
       - name: install dependencies
+        if: steps.cache-python.outputs.cache-hit != 'true'
         run: poetry install --no-root
         working-directory: backend
       - name: Cache venv dependencies
@@ -50,9 +54,6 @@ jobs:
           key: poetry-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
           restore-keys: |
             poetry-${{ runner.os }}-
-      - name: after cache
-        run: |
-          echo "-->${{steps.cache-python.outputs.cache-hit}}<--"
       - name: run tests
         run: pwd && poetry run pytest
         working-directory: backend
