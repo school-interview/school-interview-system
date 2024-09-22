@@ -35,6 +35,8 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
               children: [
                 _buildSelectMajorPullDown(viewModel),
                 const SizedBox(height: 15),
+                _buildSelectSemesterPullDown(viewModel),
+                const SizedBox(height: 15),
                 buildInputTextField(
                   viewModel,
                   labelText: "学籍番号",
@@ -118,6 +120,51 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         items: pullDownItems,
         decoration: const InputDecoration(
           labelText: "学科",
+          labelStyle: TextStyle(
+            color: ColorDefinitions.formLabelTextColor,
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 12),
+        ),
+        dropdownColor: Colors.white,
+        validator: (value) {
+          if (value == null) {
+            return '選択してください。';
+          }
+          return null;
+        },
+        onChanged: (String? value) {
+          if (value != null) {
+            viewModel.setName(value);
+          }
+        },
+      ),
+    );
+  }
+
+  /// 学期のプルダウンを作成するWidget
+  Widget _buildSelectSemesterPullDown(ProfileInputViewModel viewModel) {
+    const semesterSelects = SelectItems.semesters;
+    List<DropdownMenuItem<String>> pullDownItems = [];
+    semesterSelects.forEach((key, value) {
+      DropdownMenuItem<String> newItem = DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+      pullDownItems.add(newItem);
+    });
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: BoxShadowStyle.boxShadowStyle(),
+      ),
+      child: DropdownButtonFormField(
+        items: pullDownItems,
+        decoration: const InputDecoration(
+          labelText: "学期",
           labelStyle: TextStyle(
             color: ColorDefinitions.formLabelTextColor,
           ),
