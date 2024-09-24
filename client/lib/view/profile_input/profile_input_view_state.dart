@@ -1,5 +1,6 @@
 import 'package:client/constant/result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart';
 
 part 'profile_input_view_state.freezed.dart';
 
@@ -18,6 +19,9 @@ abstract class ProfileInputViewState with _$ProfileInputViewState {
 
     /// 学期（前学期か後学期）
     @Default(1) int semester,
+
+    /// ユーザー登録APIレスポンス
+    User? user,
 
     /// API処理結果
     Result? result,

@@ -52,7 +52,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   final SpeechToText _speechToText = SpeechToText();
 
   /// 初回処理
-  Future<void> init() async {
+  Future<void> init({required String userId}) async {
     try {
       ApiResult<List<Teacher>> teacherResponse =
           await _interviewRepository.getTeachers();

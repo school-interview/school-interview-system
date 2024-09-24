@@ -36,6 +36,10 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
     state = state.copyWith(semester: semester);
   }
 
+  void setUser(User user) {
+    state = state.copyWith(user: user);
+  }
+
   void setResult(Result result) {
     state = state.copyWith(result: result);
   }
@@ -56,6 +60,7 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
           await _loginRepository.putUserInformation(userInfo);
       switch (response.statusCode) {
         case 200:
+          setUser(response.data!);
           setResult(Result.success);
           break;
         default:
