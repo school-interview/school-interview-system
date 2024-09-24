@@ -54,7 +54,14 @@ extension LoggerExtension on Logger {
   /// Log a method enter.
   void enter({dynamic message}) {
     final stackTrace = StackTrace.current.toString();
-    final topStack = stackTrace.split("#1")[1].split("#2")[0];
+
+    var topStack = stackTrace;
+    if (stackTrace.contains("#1")) {
+      topStack = stackTrace.split("#1")[1];
+    }
+    if (stackTrace.contains("#2")) {
+      topStack = topStack.split("#2")[0];
+    }
     if (isDebugOutput()) {
       // デバッグ用
       if (message == null) {
