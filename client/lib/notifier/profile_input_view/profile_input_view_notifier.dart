@@ -3,6 +3,7 @@ import 'package:client/constant/result.dart';
 import 'package:client/core/logger.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/login/login_repository.dart';
+import 'package:client/repository/login/login_repository_impl.dart';
 import 'package:client/view/profile_input/profile_input_view_state.dart';
 import 'package:openapi/api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,7 +18,7 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
   }
 
   /// ログインリポジトリ
-  late LoginRepository _loginRepository;
+  final LoginRepository _loginRepository = LoginRepositoryImpl();
 
   void setStudentId(String studentId) {
     state = state.copyWith(studentId: studentId);
