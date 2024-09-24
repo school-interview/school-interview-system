@@ -32,6 +32,7 @@ mixin _$InterviewViewState {
   /// 最新のinterivewSession
   InterviewSession? get currentInterviewSession =>
       throw _privateConstructorUsedError;
+  List<Teacher> get teachers => throw _privateConstructorUsedError;
 
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
@@ -53,6 +54,7 @@ abstract class $InterviewViewStateCopyWith<$Res> {
       bool isTalking,
       StartInterviewResponse? startInterviewResponse,
       InterviewSession? currentInterviewSession,
+      List<Teacher> teachers,
       Result? result});
 }
 
@@ -74,6 +76,7 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
     Object? isTalking = null,
     Object? startInterviewResponse = freezed,
     Object? currentInterviewSession = freezed,
+    Object? teachers = null,
     Object? result = freezed,
   }) {
     return _then(_value.copyWith(
@@ -97,6 +100,10 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.currentInterviewSession
           : currentInterviewSession // ignore: cast_nullable_to_non_nullable
               as InterviewSession?,
+      teachers: null == teachers
+          ? _value.teachers
+          : teachers // ignore: cast_nullable_to_non_nullable
+              as List<Teacher>,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -119,6 +126,7 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
       bool isTalking,
       StartInterviewResponse? startInterviewResponse,
       InterviewSession? currentInterviewSession,
+      List<Teacher> teachers,
       Result? result});
 }
 
@@ -138,6 +146,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
     Object? isTalking = null,
     Object? startInterviewResponse = freezed,
     Object? currentInterviewSession = freezed,
+    Object? teachers = null,
     Object? result = freezed,
   }) {
     return _then(_$InterviewViewStateImpl(
@@ -161,6 +170,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.currentInterviewSession
           : currentInterviewSession // ignore: cast_nullable_to_non_nullable
               as InterviewSession?,
+      teachers: null == teachers
+          ? _value._teachers
+          : teachers // ignore: cast_nullable_to_non_nullable
+              as List<Teacher>,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -178,7 +191,9 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
       this.isTalking = false,
       this.startInterviewResponse,
       this.currentInterviewSession,
-      this.result});
+      final List<Teacher> teachers = const [],
+      this.result})
+      : _teachers = teachers;
 
   /// アバターのセリフ
   @override
@@ -202,6 +217,14 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   /// 最新のinterivewSession
   @override
   final InterviewSession? currentInterviewSession;
+  final List<Teacher> _teachers;
+  @override
+  @JsonKey()
+  List<Teacher> get teachers {
+    if (_teachers is EqualUnmodifiableListView) return _teachers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_teachers);
+  }
 
   /// API処理結果
   @override
@@ -209,7 +232,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
   @override
   String toString() {
-    return 'InterviewViewState(avatarSpeech: $avatarSpeech, userSpeech: $userSpeech, isTalking: $isTalking, startInterviewResponse: $startInterviewResponse, currentInterviewSession: $currentInterviewSession, result: $result)';
+    return 'InterviewViewState(avatarSpeech: $avatarSpeech, userSpeech: $userSpeech, isTalking: $isTalking, startInterviewResponse: $startInterviewResponse, currentInterviewSession: $currentInterviewSession, teachers: $teachers, result: $result)';
   }
 
   @override
@@ -228,12 +251,20 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
             (identical(
                     other.currentInterviewSession, currentInterviewSession) ||
                 other.currentInterviewSession == currentInterviewSession) &&
+            const DeepCollectionEquality().equals(other._teachers, _teachers) &&
             (identical(other.result, result) || other.result == result));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, avatarSpeech, userSpeech,
-      isTalking, startInterviewResponse, currentInterviewSession, result);
+  int get hashCode => Object.hash(
+      runtimeType,
+      avatarSpeech,
+      userSpeech,
+      isTalking,
+      startInterviewResponse,
+      currentInterviewSession,
+      const DeepCollectionEquality().hash(_teachers),
+      result);
 
   @JsonKey(ignore: true)
   @override
@@ -250,6 +281,7 @@ abstract class _InterviewViewState implements InterviewViewState {
       final bool isTalking,
       final StartInterviewResponse? startInterviewResponse,
       final InterviewSession? currentInterviewSession,
+      final List<Teacher> teachers,
       final Result? result}) = _$InterviewViewStateImpl;
 
   @override
@@ -272,6 +304,8 @@ abstract class _InterviewViewState implements InterviewViewState {
 
   /// 最新のinterivewSession
   InterviewSession? get currentInterviewSession;
+  @override
+  List<Teacher> get teachers;
   @override
 
   /// API処理結果
