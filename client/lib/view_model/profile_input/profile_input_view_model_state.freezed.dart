@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ProfileInputViewModelState {
   String get name => throw _privateConstructorUsedError;
+  int get semester => throw _privateConstructorUsedError;
+  dynamic get department => throw _privateConstructorUsedError;
   String get schoolNumber => throw _privateConstructorUsedError;
   String get classColmunNumber => throw _privateConstructorUsedError;
 
@@ -32,7 +34,12 @@ abstract class $ProfileInputViewModelStateCopyWith<$Res> {
       _$ProfileInputViewModelStateCopyWithImpl<$Res,
           ProfileInputViewModelState>;
   @useResult
-  $Res call({String name, String schoolNumber, String classColmunNumber});
+  $Res call(
+      {String name,
+      int semester,
+      dynamic department,
+      String schoolNumber,
+      String classColmunNumber});
 }
 
 /// @nodoc
@@ -50,6 +57,8 @@ class _$ProfileInputViewModelStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? name = null,
+    Object? semester = null,
+    Object? department = freezed,
     Object? schoolNumber = null,
     Object? classColmunNumber = null,
   }) {
@@ -58,6 +67,14 @@ class _$ProfileInputViewModelStateCopyWithImpl<$Res,
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      semester: null == semester
+          ? _value.semester
+          : semester // ignore: cast_nullable_to_non_nullable
+              as int,
+      department: freezed == department
+          ? _value.department
+          : department // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       schoolNumber: null == schoolNumber
           ? _value.schoolNumber
           : schoolNumber // ignore: cast_nullable_to_non_nullable
@@ -79,7 +96,12 @@ abstract class _$$ProfileInputViewModelStateImplCopyWith<$Res>
       __$$ProfileInputViewModelStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String schoolNumber, String classColmunNumber});
+  $Res call(
+      {String name,
+      int semester,
+      dynamic department,
+      String schoolNumber,
+      String classColmunNumber});
 }
 
 /// @nodoc
@@ -96,6 +118,8 @@ class __$$ProfileInputViewModelStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = null,
+    Object? semester = null,
+    Object? department = freezed,
     Object? schoolNumber = null,
     Object? classColmunNumber = null,
   }) {
@@ -104,6 +128,11 @@ class __$$ProfileInputViewModelStateImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      semester: null == semester
+          ? _value.semester
+          : semester // ignore: cast_nullable_to_non_nullable
+              as int,
+      department: freezed == department ? _value.department! : department,
       schoolNumber: null == schoolNumber
           ? _value.schoolNumber
           : schoolNumber // ignore: cast_nullable_to_non_nullable
@@ -120,11 +149,21 @@ class __$$ProfileInputViewModelStateImplCopyWithImpl<$Res>
 
 class _$ProfileInputViewModelStateImpl implements _ProfileInputViewModelState {
   const _$ProfileInputViewModelStateImpl(
-      {this.name = "", this.schoolNumber = "", this.classColmunNumber = ""});
+      {this.name = "",
+      this.semester = 1,
+      this.department = "",
+      this.schoolNumber = "",
+      this.classColmunNumber = ""});
 
   @override
   @JsonKey()
   final String name;
+  @override
+  @JsonKey()
+  final int semester;
+  @override
+  @JsonKey()
+  final dynamic department;
   @override
   @JsonKey()
   final String schoolNumber;
@@ -134,7 +173,7 @@ class _$ProfileInputViewModelStateImpl implements _ProfileInputViewModelState {
 
   @override
   String toString() {
-    return 'ProfileInputViewModelState(name: $name, schoolNumber: $schoolNumber, classColmunNumber: $classColmunNumber)';
+    return 'ProfileInputViewModelState(name: $name, semester: $semester, department: $department, schoolNumber: $schoolNumber, classColmunNumber: $classColmunNumber)';
   }
 
   @override
@@ -143,6 +182,10 @@ class _$ProfileInputViewModelStateImpl implements _ProfileInputViewModelState {
         (other.runtimeType == runtimeType &&
             other is _$ProfileInputViewModelStateImpl &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.semester, semester) ||
+                other.semester == semester) &&
+            const DeepCollectionEquality()
+                .equals(other.department, department) &&
             (identical(other.schoolNumber, schoolNumber) ||
                 other.schoolNumber == schoolNumber) &&
             (identical(other.classColmunNumber, classColmunNumber) ||
@@ -150,8 +193,13 @@ class _$ProfileInputViewModelStateImpl implements _ProfileInputViewModelState {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, schoolNumber, classColmunNumber);
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      semester,
+      const DeepCollectionEquality().hash(department),
+      schoolNumber,
+      classColmunNumber);
 
   @JsonKey(ignore: true)
   @override
@@ -165,11 +213,17 @@ abstract class _ProfileInputViewModelState
     implements ProfileInputViewModelState {
   const factory _ProfileInputViewModelState(
       {final String name,
+      final int semester,
+      final dynamic department,
       final String schoolNumber,
       final String classColmunNumber}) = _$ProfileInputViewModelStateImpl;
 
   @override
   String get name;
+  @override
+  int get semester;
+  @override
+  dynamic get department;
   @override
   String get schoolNumber;
   @override
