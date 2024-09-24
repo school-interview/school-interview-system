@@ -35,7 +35,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
               children: [
                 _buildSelectMajorPullDown(),
                 const SizedBox(height: 15),
-                _buildSelectSemesterPullDown(viewModel),
+                _buildSelectSemesterPullDown(notifier),
                 const SizedBox(height: 15),
                 buildInputTextField(
                   labelText: "学籍番号",
@@ -143,7 +143,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
   }
 
   /// 学期のプルダウンを作成するWidget
-  Widget _buildSelectSemesterPullDown(ProfileInputViewModel viewModel) {
+  Widget _buildSelectSemesterPullDown(ProfileInputViewNotifier viewModel) {
     const semesterSelects = SelectItems.semesters;
     List<DropdownMenuItem<String>> pullDownItems = [];
     semesterSelects.forEach((key, value) {
