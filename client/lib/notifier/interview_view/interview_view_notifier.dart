@@ -59,7 +59,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       setTeachers(teacherResponse.data!);
 
       final requestId = InterviewSessionRequest(
-          userId: "userId", teacherId: teacherResponse.data!.first.id);
+          userId: userId, teacherId: teacherResponse.data!.first.id);
 
       ApiResult<StartInterviewResponse> response =
           await _interviewRepository.postInterviewSessionRequest(requestId);
