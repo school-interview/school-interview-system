@@ -34,11 +34,14 @@ class _InterviewView extends ConsumerState<InterviewView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              Image.asset('assets/image/sample_avatar.png'),
+              const SizedBox(height: 50),
               // アバターのセリフ
               _chatBubble(state.avatarSpeech, false),
               const SizedBox(height: 4),
               // ユーザーのセリフ
               _chatBubble(state.userSpeech, true),
+              const SizedBox(height: 24),
               // マイクボタン
               _micButton()
             ],
