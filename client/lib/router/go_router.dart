@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 final goRouter = GoRouter(
   // アプリが起動した時
-  initialLocation: '/interview',
+  initialLocation: '/profile-input',
   // パスと画面の組み合わせ
   routes: [
     // 情報入力画面
