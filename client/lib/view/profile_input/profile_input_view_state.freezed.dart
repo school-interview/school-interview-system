@@ -28,6 +28,9 @@ mixin _$ProfileInputViewState {
   /// 学期（前学期か後学期）
   int get semester => throw _privateConstructorUsedError;
 
+  /// ユーザー登録APIレスポンス
+  User? get user => throw _privateConstructorUsedError;
+
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
@@ -47,6 +50,7 @@ abstract class $ProfileInputViewStateCopyWith<$Res> {
       String name,
       String department,
       int semester,
+      User? user,
       Result? result});
 }
 
@@ -68,6 +72,7 @@ class _$ProfileInputViewStateCopyWithImpl<$Res,
     Object? name = null,
     Object? department = null,
     Object? semester = null,
+    Object? user = freezed,
     Object? result = freezed,
   }) {
     return _then(_value.copyWith(
@@ -87,6 +92,10 @@ class _$ProfileInputViewStateCopyWithImpl<$Res,
           ? _value.semester
           : semester // ignore: cast_nullable_to_non_nullable
               as int,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -109,6 +118,7 @@ abstract class _$$ProfileInputViewStateImplCopyWith<$Res>
       String name,
       String department,
       int semester,
+      User? user,
       Result? result});
 }
 
@@ -128,6 +138,7 @@ class __$$ProfileInputViewStateImplCopyWithImpl<$Res>
     Object? name = null,
     Object? department = null,
     Object? semester = null,
+    Object? user = freezed,
     Object? result = freezed,
   }) {
     return _then(_$ProfileInputViewStateImpl(
@@ -147,6 +158,10 @@ class __$$ProfileInputViewStateImplCopyWithImpl<$Res>
           ? _value.semester
           : semester // ignore: cast_nullable_to_non_nullable
               as int,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -163,6 +178,7 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
       this.name = "",
       this.department = "",
       this.semester = 1,
+      this.user,
       this.result});
 
   /// 学籍番号
@@ -185,13 +201,17 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
   @JsonKey()
   final int semester;
 
+  /// ユーザー登録APIレスポンス
+  @override
+  final User? user;
+
   /// API処理結果
   @override
   final Result? result;
 
   @override
   String toString() {
-    return 'ProfileInputViewState(studentId: $studentId, name: $name, department: $department, semester: $semester, result: $result)';
+    return 'ProfileInputViewState(studentId: $studentId, name: $name, department: $department, semester: $semester, user: $user, result: $result)';
   }
 
   @override
@@ -206,12 +226,13 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
                 other.department == department) &&
             (identical(other.semester, semester) ||
                 other.semester == semester) &&
+            (identical(other.user, user) || other.user == user) &&
             (identical(other.result, result) || other.result == result));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, studentId, name, department, semester, result);
+  int get hashCode => Object.hash(
+      runtimeType, studentId, name, department, semester, user, result);
 
   @JsonKey(ignore: true)
   @override
@@ -227,6 +248,7 @@ abstract class _ProfileInputViewState implements ProfileInputViewState {
       final String name,
       final String department,
       final int semester,
+      final User? user,
       final Result? result}) = _$ProfileInputViewStateImpl;
 
   @override
@@ -245,6 +267,10 @@ abstract class _ProfileInputViewState implements ProfileInputViewState {
 
   /// 学期（前学期か後学期）
   int get semester;
+  @override
+
+  /// ユーザー登録APIレスポンス
+  User? get user;
   @override
 
   /// API処理結果
