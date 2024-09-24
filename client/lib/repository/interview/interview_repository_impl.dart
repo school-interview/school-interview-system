@@ -23,6 +23,38 @@ class InterviewRepositoryImpl extends InterviewRepository {
           utf8.decode(result.bodyBytes),
           'StartInterviewResponse',
         ) as StartInterviewResponse;
+
+        logger.exit(message: 'status code:${result.statusCode}');
+        return ApiResult(statusCode: result.statusCode, data: body);
+      } else {
+        logger.exit(message: 'status code:${result.statusCode}');
+        return ApiResult(statusCode: result.statusCode);
+      }
+    } on Exception catch (e) {
+      logger.error(message: e.toString());
+      logger.exit();
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResult<TeacherResponse>> speakToTeacher(String interviewSessionId,
+      SpeakToTeacherRequest speakToTeacherRequest) async {
+    logger.enter();
+    ApiClient apiClient = ApiClient();
+    final api = DefaultApi(apiClient);
+
+    try {
+      final result =
+          await api.controllerInterviewInterviewSessionIdPostWithHttpInfo(
+        interviewSessionId,
+        speakToTeacherRequest,
+      );
+      if (result.isSuccess()) {
+        final body = await apiClient.deserializeAsync(
+          utf8.decode(result.bodyBytes),
+          'TeacherResponse',
+        ) as TeacherResponse;
         logger.exit(message: 'status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
