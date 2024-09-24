@@ -135,7 +135,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         },
         onChanged: (String? value) {
           if (value != null) {
-            notifier.setName(value);
+            notifier.setDepartment(value);
           }
         },
       ),
