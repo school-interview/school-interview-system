@@ -54,12 +54,12 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   /// 初回処理
   Future<void> init({required String userId}) async {
     try {
-      ApiResult<List<Teacher>> teacherResponse =
-          await _interviewRepository.getTeachers();
-      setTeachers(teacherResponse.data!);
+      // ApiResult<List<Teacher>> teacherResponse =
+      //     await _interviewRepository.getTeachers();
+      // setTeachers(teacherResponse.data!);
 
       final requestId = InterviewSessionRequest(
-          userId: userId, teacherId: teacherResponse.data!.first.id);
+          userId: userId, teacherId: "5469a2f5-937d-4b38-bf33-b6df675db9de");
 
       ApiResult<StartInterviewResponse> response =
           await _interviewRepository.postInterviewSessionRequest(requestId);

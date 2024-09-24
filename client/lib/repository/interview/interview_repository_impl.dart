@@ -18,13 +18,15 @@ class InterviewRepositoryImpl extends InterviewRepository {
     try {
       final result = await api
           .controllerInterviewPostWithHttpInfo(interviewSessionRequest);
+      print("いんたびゅーせっしょん");
+      print(result.body);
+
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
           'StartInterviewResponse',
         ) as StartInterviewResponse;
-
-        logger.exit(message: 'status code:${result.statusCode}');
+        // logger.exit(message: 'status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
         logger.exit(message: 'status code:${result.statusCode}');
@@ -50,12 +52,15 @@ class InterviewRepositoryImpl extends InterviewRepository {
         interviewSessionId,
         speakToTeacherRequest,
       );
+      print("すぴーかー");
+      print(result.body);
+
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
           'TeacherResponse',
         ) as TeacherResponse;
-        logger.exit(message: 'status code:${result.statusCode}');
+        // logger.exit(message: 'status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
         logger.exit(message: 'status code:${result.statusCode}');
