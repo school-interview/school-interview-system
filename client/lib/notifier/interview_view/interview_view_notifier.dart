@@ -44,9 +44,9 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   final SpeechToText _speechToText = SpeechToText();
 
   /// 初回処理
-  Future<void> init() async {
+  Future<void> init({required String userId}) async {
     final requestId =
-        InterviewSessionRequest(userId: "userId", teacherId: "teacherId");
+        InterviewSessionRequest(userId: userId, teacherId: "teacherId");
 
     try {
       ApiResult<StartInterviewResponse> response =
