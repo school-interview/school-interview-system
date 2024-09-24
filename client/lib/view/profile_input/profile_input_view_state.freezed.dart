@@ -162,7 +162,7 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
       {this.studentId = "",
       this.name = "",
       this.department = "",
-      this.semester = 0,
+      this.semester = 1,
       this.result});
 
   /// 学籍番号

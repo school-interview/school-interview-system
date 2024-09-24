@@ -17,7 +17,7 @@ abstract class ProfileInputViewState with _$ProfileInputViewState {
     @Default("") String department,
 
     /// 学期（前学期か後学期）
-    @Default(0) int semester,
+    @Default(1) int semester,
 
     /// API処理結果
     Result? result,
