@@ -3,6 +3,7 @@ import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
+import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,9 +18,10 @@ class _InterviewView extends ConsumerState<InterviewView> {
   @override
   void initState() {
     super.initState();
-    Future(() {
-      // Add your initialization code here
-    });
+    final notifier = ref.read(interviewViewNotifierProvider.notifier);
+    final userId = ref.watch(
+        profileInputViewNotifierProvider.select((value) => value.user!.id));
+    notifier.init(userId: userId);
   }
 
   @override
@@ -35,11 +37,14 @@ class _InterviewView extends ConsumerState<InterviewView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              Image.asset('assets/image/sample_avatar.png'),
+              const SizedBox(height: 50),
               // アバターのセリフ
               _chatBubble(state.avatarSpeech, false),
               const SizedBox(height: 4),
               // ユーザーのセリフ
               _chatBubble(state.userSpeech, true),
+              const SizedBox(height: 24),
               // マイクボタン
               _micButton()
             ],

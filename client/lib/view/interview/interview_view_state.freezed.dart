@@ -25,6 +25,13 @@ mixin _$InterviewViewState {
   /// ユーザーが話しているかどうかを判別する
   bool get isTalking => throw _privateConstructorUsedError;
 
+  /// 面談開始レスポンス
+  StartInterviewResponse? get startInterviewResponse =>
+      throw _privateConstructorUsedError;
+
+  /// API処理結果
+  Result? get result => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $InterviewViewStateCopyWith<InterviewViewState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -36,7 +43,12 @@ abstract class $InterviewViewStateCopyWith<$Res> {
           InterviewViewState value, $Res Function(InterviewViewState) then) =
       _$InterviewViewStateCopyWithImpl<$Res, InterviewViewState>;
   @useResult
-  $Res call({String avatarSpeech, String userSpeech, bool isTalking});
+  $Res call(
+      {String avatarSpeech,
+      String userSpeech,
+      bool isTalking,
+      StartInterviewResponse? startInterviewResponse,
+      Result? result});
 }
 
 /// @nodoc
@@ -55,6 +67,8 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
     Object? avatarSpeech = null,
     Object? userSpeech = null,
     Object? isTalking = null,
+    Object? startInterviewResponse = freezed,
+    Object? result = freezed,
   }) {
     return _then(_value.copyWith(
       avatarSpeech: null == avatarSpeech
@@ -69,6 +83,14 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.isTalking
           : isTalking // ignore: cast_nullable_to_non_nullable
               as bool,
+      startInterviewResponse: freezed == startInterviewResponse
+          ? _value.startInterviewResponse
+          : startInterviewResponse // ignore: cast_nullable_to_non_nullable
+              as StartInterviewResponse?,
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Result?,
     ) as $Val);
   }
 }
@@ -81,7 +103,12 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
       __$$InterviewViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String avatarSpeech, String userSpeech, bool isTalking});
+  $Res call(
+      {String avatarSpeech,
+      String userSpeech,
+      bool isTalking,
+      StartInterviewResponse? startInterviewResponse,
+      Result? result});
 }
 
 /// @nodoc
@@ -98,6 +125,8 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
     Object? avatarSpeech = null,
     Object? userSpeech = null,
     Object? isTalking = null,
+    Object? startInterviewResponse = freezed,
+    Object? result = freezed,
   }) {
     return _then(_$InterviewViewStateImpl(
       avatarSpeech: null == avatarSpeech
@@ -112,6 +141,14 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.isTalking
           : isTalking // ignore: cast_nullable_to_non_nullable
               as bool,
+      startInterviewResponse: freezed == startInterviewResponse
+          ? _value.startInterviewResponse
+          : startInterviewResponse // ignore: cast_nullable_to_non_nullable
+              as StartInterviewResponse?,
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Result?,
     ));
   }
 }
@@ -120,7 +157,11 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
 
 class _$InterviewViewStateImpl implements _InterviewViewState {
   const _$InterviewViewStateImpl(
-      {this.avatarSpeech = "", this.userSpeech = "", this.isTalking = false});
+      {this.avatarSpeech = "",
+      this.userSpeech = "",
+      this.isTalking = false,
+      this.startInterviewResponse,
+      this.result});
 
   /// アバターのセリフ
   @override
@@ -137,9 +178,17 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   @JsonKey()
   final bool isTalking;
 
+  /// 面談開始レスポンス
+  @override
+  final StartInterviewResponse? startInterviewResponse;
+
+  /// API処理結果
+  @override
+  final Result? result;
+
   @override
   String toString() {
-    return 'InterviewViewState(avatarSpeech: $avatarSpeech, userSpeech: $userSpeech, isTalking: $isTalking)';
+    return 'InterviewViewState(avatarSpeech: $avatarSpeech, userSpeech: $userSpeech, isTalking: $isTalking, startInterviewResponse: $startInterviewResponse, result: $result)';
   }
 
   @override
@@ -152,12 +201,15 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
             (identical(other.userSpeech, userSpeech) ||
                 other.userSpeech == userSpeech) &&
             (identical(other.isTalking, isTalking) ||
-                other.isTalking == isTalking));
+                other.isTalking == isTalking) &&
+            (identical(other.startInterviewResponse, startInterviewResponse) ||
+                other.startInterviewResponse == startInterviewResponse) &&
+            (identical(other.result, result) || other.result == result));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, avatarSpeech, userSpeech, isTalking);
+  int get hashCode => Object.hash(runtimeType, avatarSpeech, userSpeech,
+      isTalking, startInterviewResponse, result);
 
   @JsonKey(ignore: true)
   @override
@@ -171,7 +223,9 @@ abstract class _InterviewViewState implements InterviewViewState {
   const factory _InterviewViewState(
       {final String avatarSpeech,
       final String userSpeech,
-      final bool isTalking}) = _$InterviewViewStateImpl;
+      final bool isTalking,
+      final StartInterviewResponse? startInterviewResponse,
+      final Result? result}) = _$InterviewViewStateImpl;
 
   @override
 
@@ -185,6 +239,14 @@ abstract class _InterviewViewState implements InterviewViewState {
 
   /// ユーザーが話しているかどうかを判別する
   bool get isTalking;
+  @override
+
+  /// 面談開始レスポンス
+  StartInterviewResponse? get startInterviewResponse;
+  @override
+
+  /// API処理結果
+  Result? get result;
   @override
   @JsonKey(ignore: true)
   _$$InterviewViewStateImplCopyWith<_$InterviewViewStateImpl> get copyWith =>
