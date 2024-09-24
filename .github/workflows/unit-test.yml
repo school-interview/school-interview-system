@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: 3.12
       - name: restore .venv cache
-        id: cache-python
+        id: cache-venv
         uses: actions/cache@v3
         with:
           path: backend/.venv
@@ -35,7 +35,7 @@ jobs:
         # if: steps.cache-poetry.outputs.cache-hit == 'false'
         uses: snok/install-poetry@v1
       - name: install dependencies
-        if: steps.cache-python.outputs.cache-hit == 'false'
+        if: steps.cache-venv.outputs.cache-hit == 'false'
         run: poetry install --no-root
         working-directory: backend
       - name: run tests
