@@ -17,9 +17,8 @@ class _InterviewView extends ConsumerState<InterviewView> {
   @override
   void initState() {
     super.initState();
-    Future(() {
-      // Add your initialization code here
-    });
+    final notifier = ref.read(interviewViewNotifierProvider.notifier);
+    notifier.init();
   }
 
   @override
