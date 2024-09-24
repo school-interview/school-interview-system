@@ -94,7 +94,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
 
         def get_low_atendance_and_low_gpa_rate():
             if 66 <= attendance_rate and attendance_rate < 80 and gpa < 2.0:
-                attendance_rate_deviation = (80 - attendance_rate)/80-66
+                attendance_rate_deviation = (80 - attendance_rate)/(80-66)
                 gpa_deviation = (2.0 - gpa)/2.0
                 avg_deviation = (attendance_rate_deviation +
                                  gpa_deviation)/2  # 平均を取る
