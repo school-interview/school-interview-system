@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from src.database import SessionMaker, connect_db
 from fastapi import FastAPI, Request
 import socketio
@@ -38,6 +39,14 @@ async def lifespan(app: FastAPI):
 
 
 app_fastapi = FastAPI(lifespan=lifespan)
+allowed_origins = "*"
+app_fastapi.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 
