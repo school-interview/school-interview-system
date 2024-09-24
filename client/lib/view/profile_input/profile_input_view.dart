@@ -4,7 +4,7 @@ import 'package:client/component/input_text_field.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
-import 'package:client/view_model/profile_input/profile_input_view_model.dart';
+import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +21,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(profileInputViewModelProvider.notifier);
+    final notifier = ref.read(profileInputViewNotifierProvider.notifier);
 
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
@@ -33,12 +33,11 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
             key: formKey,
             child: Column(
               children: [
-                _buildSelectMajorPullDown(viewModel),
+                _buildSelectMajorPullDown(),
                 const SizedBox(height: 15),
                 _buildSelectSemesterPullDown(viewModel),
                 const SizedBox(height: 15),
                 buildInputTextField(
-                  viewModel,
                   labelText: "学籍番号",
                   hintText: "1234567",
                   limitText: 7,
@@ -51,21 +50,19 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     return null;
                   },
                   onChanged: (value) {
-                    viewModel.setSchoolNumber(value);
+                    notifier.setStudentId(value);
                   },
                 ),
                 const SizedBox(height: 15),
                 buildInputTextField(
-                  viewModel,
                   labelText: "クラスー名列番号",
                   hintText: "1EP1-01",
                   onChanged: (value) {
-                    viewModel.setClassColumnNumber(value);
+                    // TODO 名列番号の処理
                   },
                 ),
                 const SizedBox(height: 15),
                 buildInputTextField(
-                  viewModel,
                   labelText: "氏名",
                   hintText: "金工 太郎",
                   validator: (value) {
@@ -76,18 +73,20 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     return null;
                   },
                   onChanged: (value) {
-                    viewModel.setName(value);
+                    notifier.setName(value);
                   },
                 ),
                 const SizedBox(height: 30),
                 ButtonComponent().normalButton(
-                    labelText: "次へ",
-                    onTapButton: () {
-                      if (formKey.currentState?.validate() ?? false) {
-                        // バリデーションが成功した場合にのみ画面遷移を行う
-                        context.push("/avatar-select");
-                      }
-                    })
+                  labelText: "次へ",
+                  onTapButton: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      // バリデーションが成功した場合にのみ処理を行う
+                      notifier.postUserInfo();
+                      context.push("/avatar-select");
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -97,7 +96,9 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
   }
 
   /// 学科のプルダウンを作成するWidget
-  Widget _buildSelectMajorPullDown(ProfileInputViewModel viewModel) {
+  Widget _buildSelectMajorPullDown() {
+    final notifier = ref.read(profileInputViewNotifierProvider.notifier);
+
     const majorSelects = SelectItems.majors;
     List<DropdownMenuItem<String>> pullDownItems = [];
     for (int i = 0; i < majorSelects.length; i++) {
@@ -107,7 +108,6 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
       );
       pullDownItems.add(newItem);
     }
-
     return Container(
       width: 300,
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -135,7 +135,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         },
         onChanged: (String? value) {
           if (value != null) {
-            viewModel.setName(value);
+            notifier.setName(value);
           }
         },
       ),
