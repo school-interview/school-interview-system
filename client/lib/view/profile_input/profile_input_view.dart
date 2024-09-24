@@ -35,6 +35,8 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
               children: [
                 _buildSelectMajorPullDown(),
                 const SizedBox(height: 15),
+                _buildSelectSemesterPullDown(notifier),
+                const SizedBox(height: 15),
                 buildInputTextField(
                   labelText: "学籍番号",
                   hintText: "1234567",
@@ -134,6 +136,56 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         onChanged: (String? value) {
           if (value != null) {
             notifier.setDepartment(value);
+          }
+        },
+      ),
+    );
+  }
+
+  /// 学期のプルダウンを作成するWidget
+  Widget _buildSelectSemesterPullDown(ProfileInputViewNotifier viewModel) {
+    const semesterSelects = SelectItems.semesters;
+    List<DropdownMenuItem<String>> pullDownItems = [];
+    semesterSelects.forEach((key, value) {
+      DropdownMenuItem<String> newItem = DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+      pullDownItems.add(newItem);
+    });
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: BoxShadowStyle.boxShadowStyle(),
+      ),
+      child: DropdownButtonFormField(
+        items: pullDownItems,
+        decoration: const InputDecoration(
+          labelText: "学期",
+          labelStyle: TextStyle(
+            color: ColorDefinitions.formLabelTextColor,
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 12),
+        ),
+        dropdownColor: Colors.white,
+        validator: (value) {
+          if (value == null) {
+            return '選択してください。';
+          }
+          return null;
+        },
+        onChanged: (String? value) {
+          if (value != null) {
+            for (var item in semesterSelects.entries) {
+              if (item.value == value) {
+                viewModel.setSemester(item.key);
+                return;
+              }
+            }
           }
         },
       ),
