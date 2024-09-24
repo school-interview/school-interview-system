@@ -126,4 +126,29 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       return;
     }
   }
+
+  Future<void> _speakToTeacher(
+      InterviewSession interviewSession, String text) async {
+    logger.enter();
+    final speakToTeacherRequest =
+        SpeakToTeacherRequest(messageFromStudent: text);
+    try {
+      ApiResult<TeacherResponse> response = await _interviewRepository
+          .speakToTeacher(interviewSession.id, speakToTeacherRequest);
+      switch (response.statusCode) {
+        case 200:
+          setAvatarSpeech(response.data!.messageFromTeacher);
+          //TODO: ここでinterview sessionを更新する必要がある。
+          break;
+        default:
+          setAvatarSpeech("エラーが発生しました");
+          break;
+      }
+      logger.exit(message: "responseData:${response.data}");
+    } on Exception catch (e) {
+      logger.error(message: e.toString());
+      logger.exit();
+      return;
+    }
+  }
 }
