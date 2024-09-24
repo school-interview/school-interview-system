@@ -37,6 +37,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(startInterviewResponse: startInterviewResponse);
   }
 
+  void setCurrentInterviewSession(InterviewSession interviewSession) {
+    state = state.copyWith(currentInterviewSession: interviewSession);
+  }
+
   void setResult(Result result) {
     state = state.copyWith(result: result);
   }
@@ -55,6 +59,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         case 200:
           setAvatarSpeech(response.data!.messageFromTeacher);
           setStartInterviewResponse(response.data!);
+          setCurrentInterviewSession(response.data!.interviewSession);
           setResult(Result.success);
           break;
         default:
@@ -85,6 +90,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   void stopTalking() {
     _speechToText.stop();
     setIsTalking(false);
+    _speakToTeacher(
+        state.startInterviewResponse!.interviewSession, state.userSpeech);
   }
 
   Future<void> _speakToTeacher(
@@ -98,7 +105,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       switch (response.statusCode) {
         case 200:
           setAvatarSpeech(response.data!.messageFromTeacher);
-          //TODO: ここでinterview sessionを更新する必要がある。
+          setCurrentInterviewSession(response.data!.interviewSession);
           break;
         default:
           setAvatarSpeech("エラーが発生しました");
