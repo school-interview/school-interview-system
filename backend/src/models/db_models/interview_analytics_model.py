@@ -75,7 +75,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
         def get_deviation_from_preferred_credit_level():
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
             if credits_to_be_earned_in_total < preffered_credits[user.semester]:
-                deviation = (preffered_credits[user.semester] - planned_credits)/(
+                deviation = (preffered_credits[user.semester] - credits_to_be_earned_in_total)/(
                     preffered_credits[user.semester] - required_credits[user.semester])
                 return deviation
             return 0
@@ -94,7 +94,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
 
         def get_low_atendance_and_low_gpa_rate():
             if 66 <= attendance_rate and attendance_rate < 80 and gpa < 2.0:
-                attendance_rate_deviation = (80 - attendance_rate)/80-66
+                attendance_rate_deviation = (80 - attendance_rate)/(80-66)
                 gpa_deviation = (2.0 - gpa)/2.0
                 avg_deviation = (attendance_rate_deviation +
                                  gpa_deviation)/2  # 平均を取る
