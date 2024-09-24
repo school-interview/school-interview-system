@@ -45,14 +45,22 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(result: result);
   }
 
+  void setTeachers(List<Teacher> teachers) {
+    state = state.copyWith(teachers: teachers);
+  }
+
   final SpeechToText _speechToText = SpeechToText();
 
   /// 初回処理
   Future<void> init() async {
-    final requestId =
-        InterviewSessionRequest(userId: "userId", teacherId: "teacherId");
-
     try {
+      ApiResult<List<Teacher>> teacherResponse =
+          await _interviewRepository.getTeachers();
+      setTeachers(teacherResponse.data!);
+
+      final requestId = InterviewSessionRequest(
+          userId: "userId", teacherId: teacherResponse.data!.first.id);
+
       ApiResult<StartInterviewResponse> response =
           await _interviewRepository.postInterviewSessionRequest(requestId);
       switch (response.statusCode) {

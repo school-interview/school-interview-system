@@ -22,6 +22,7 @@ abstract class InterviewViewState with _$InterviewViewState {
 
     /// 最新のinterivewSession
     InterviewSession? currentInterviewSession,
+    @Default([]) List<Teacher> teachers,
 
     /// API処理結果
     Result? result,

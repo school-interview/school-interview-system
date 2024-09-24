@@ -67,4 +67,30 @@ class InterviewRepositoryImpl extends InterviewRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<ApiResult<List<Teacher>>> getTeachers() async {
+    logger.enter();
+    ApiClient apiClient = ApiClient();
+    final api = DefaultApi(apiClient);
+
+    try {
+      final result = await api.controllerTeachersGetWithHttpInfo();
+      if (result.isSuccess()) {
+        final body = await apiClient.deserializeAsync(
+          utf8.decode(result.bodyBytes),
+          'List<Teacher>',
+        ) as List<Teacher>;
+        logger.exit(message: 'status code:${result.statusCode}');
+        return ApiResult(statusCode: result.statusCode, data: body);
+      } else {
+        logger.exit(message: 'status code:${result.statusCode}');
+        return ApiResult(statusCode: result.statusCode);
+      }
+    } on Exception catch (e) {
+      logger.error(message: e.toString());
+      logger.exit();
+      rethrow;
+    }
+  }
 }
