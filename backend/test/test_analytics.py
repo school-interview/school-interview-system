@@ -80,8 +80,50 @@ def test_student2():
     analytics = InterviewAnalyticsModel.create_from_interview_record(
         user, record)
     assert analytics.fail_to_move_to_next_grade == False
-    assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.38
     assert analytics.deviation_from_minimum_attendance_rate == 0
+    assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.45
     assert analytics.high_attendance_low_gpa_rate == 0
     assert analytics.low_atendance_and_low_gpa_rate == 0
-    assert round(analytics.support_necessity_level, 2) == 10.58
+    assert round(analytics.support_necessity_level, 2) == 12.5
+
+
+def create_student_3():
+    # 2年後期で行われた面談で、単位数的にはギリ進級できる学生
+    user_model = UserModel(
+        id=uuid4(),
+        name="藤崎暖",
+        student_id="1119059",
+        department="情報工学部",
+        semester=4
+    )
+    interview_session = InterviewSessionModel(
+        id=uuid4(),
+        user_id=user_model.id,
+        teacher_id=uuid4(),
+        start_at=datetime.now(),
+        progress=6,
+        done=True
+    )
+    interview_record = InterviewRecordModel(
+        id=uuid4(),
+        session_id=interview_session.id,
+        total_earned_credits=46,
+        planned_credits=18,
+        gpa=1.53,
+        attendance_rate=87,
+        concern=None,
+        prefer_in_person_interview=False
+    )
+    return user_model, interview_session, interview_record
+
+
+def test_student_3():
+    user, _, record = create_student_3()
+    analytics = InterviewAnalyticsModel.create_from_interview_record(
+        user, record)
+    assert analytics.fail_to_move_to_next_grade == False
+    assert analytics.deviation_from_minimum_attendance_rate == 0
+    assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.91
+    assert round(analytics.high_attendance_low_gpa_rate, 2) == 0.23
+    assert analytics.low_atendance_and_low_gpa_rate == 0
+    assert round(analytics.support_necessity_level, 2) == 30.4
