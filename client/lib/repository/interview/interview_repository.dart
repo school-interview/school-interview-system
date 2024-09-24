@@ -8,4 +8,5 @@ abstract class InterviewRepository {
       InterviewSessionRequest interviewSessionRequest);
   Future<ApiResult<TeacherResponse>> speakToTeacher(
       String interviewSessionId, SpeakToTeacherRequest speakToTeacherRequest);
+  // Future<ApiResult<TeacherResponse>> getTeachers();
 }
