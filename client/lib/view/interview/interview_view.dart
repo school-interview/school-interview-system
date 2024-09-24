@@ -18,10 +18,12 @@ class _InterviewView extends ConsumerState<InterviewView> {
   @override
   void initState() {
     super.initState();
-    final notifier = ref.read(interviewViewNotifierProvider.notifier);
-    final userId = ref.watch(
-        profileInputViewNotifierProvider.select((value) => value.user!.id));
-    notifier.init(userId: userId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notifier = ref.read(interviewViewNotifierProvider.notifier);
+      final userId = ref.watch(
+          profileInputViewNotifierProvider.select((value) => value.user!.id));
+      notifier.init(userId: userId);
+    });
   }
 
   @override
