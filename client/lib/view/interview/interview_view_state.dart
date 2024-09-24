@@ -1,4 +1,6 @@
+import 'package:client/constant/result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart';
 
 part 'interview_view_state.freezed.dart';
 
@@ -14,5 +16,11 @@ abstract class InterviewViewState with _$InterviewViewState {
 
     /// ユーザーが話しているかどうかを判別する
     @Default(false) bool isTalking,
+
+    /// 面談開始レスポンス
+    StartInterviewResponse? startInterviewResponse,
+
+    /// API処理結果
+    Result? result,
   }) = _InterviewViewState;
 }
