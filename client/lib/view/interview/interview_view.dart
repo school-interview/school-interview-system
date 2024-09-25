@@ -18,10 +18,12 @@ class _InterviewView extends ConsumerState<InterviewView> {
   @override
   void initState() {
     super.initState();
-    final notifier = ref.read(interviewViewNotifierProvider.notifier);
-    final userId = ref.watch(
-        profileInputViewNotifierProvider.select((value) => value.user!.id));
-    notifier.init(userId: userId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notifier = ref.read(interviewViewNotifierProvider.notifier);
+      // final userId = ref.watch(
+      //     profileInputViewNotifierProvider.select((value) => value.user!.id));
+      notifier.init(userId: "bffc5b89-680a-4e4b-9532-cbb0238b79af");
+    });
   }
 
   @override
@@ -34,19 +36,23 @@ class _InterviewView extends ConsumerState<InterviewView> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Stack(
             children: [
               Image.asset('assets/image/sample_avatar.png'),
-              const SizedBox(height: 50),
-              // アバターのセリフ
-              _chatBubble(state.avatarSpeech, false),
-              const SizedBox(height: 4),
-              // ユーザーのセリフ
-              _chatBubble(state.userSpeech, true),
-              const SizedBox(height: 24),
-              // マイクボタン
-              _micButton()
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const SizedBox(height: 50),
+                  // アバターのセリフ
+                  _chatBubble(state.avatarSpeech, false),
+                  const SizedBox(height: 4),
+                  // ユーザーのセリフ
+                  _chatBubble(state.userSpeech, true),
+                  const SizedBox(height: 24),
+                  // マイクボタン
+                  _micButton()
+                ],
+              ),
             ],
           ),
         ),

@@ -20,6 +20,10 @@ abstract class InterviewViewState with _$InterviewViewState {
     /// 面談開始レスポンス
     StartInterviewResponse? startInterviewResponse,
 
+    /// 最新のinterivewSession
+    InterviewSession? currentInterviewSession,
+    @Default([]) List<Teacher> teachers,
+
     /// API処理結果
     Result? result,
   }) = _InterviewViewState;

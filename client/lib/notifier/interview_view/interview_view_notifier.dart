@@ -37,24 +37,37 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(startInterviewResponse: startInterviewResponse);
   }
 
+  void setCurrentInterviewSession(InterviewSession interviewSession) {
+    state = state.copyWith(currentInterviewSession: interviewSession);
+  }
+
   void setResult(Result result) {
     state = state.copyWith(result: result);
+  }
+
+  void setTeachers(List<Teacher> teachers) {
+    state = state.copyWith(teachers: teachers);
   }
 
   final SpeechToText _speechToText = SpeechToText();
 
   /// 初回処理
   Future<void> init({required String userId}) async {
-    final requestId =
-        InterviewSessionRequest(userId: userId, teacherId: "teacherId");
-
     try {
+      // ApiResult<List<Teacher>> teacherResponse =
+      //     await _interviewRepository.getTeachers();
+      // setTeachers(teacherResponse.data!);
+
+      final requestId = InterviewSessionRequest(
+          userId: userId, teacherId: "5469a2f5-937d-4b38-bf33-b6df675db9de");
+
       ApiResult<StartInterviewResponse> response =
           await _interviewRepository.postInterviewSessionRequest(requestId);
       switch (response.statusCode) {
         case 200:
           setAvatarSpeech(response.data!.messageFromTeacher);
           setStartInterviewResponse(response.data!);
+          setCurrentInterviewSession(response.data!.interviewSession);
           setResult(Result.success);
           break;
         default:
@@ -85,5 +98,32 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   void stopTalking() {
     _speechToText.stop();
     setIsTalking(false);
+    _speakToTeacher(
+        state.startInterviewResponse!.interviewSession, state.userSpeech);
+  }
+
+  Future<void> _speakToTeacher(
+      InterviewSession interviewSession, String text) async {
+    logger.enter();
+    final speakToTeacherRequest =
+        SpeakToTeacherRequest(messageFromStudent: text);
+    try {
+      ApiResult<TeacherResponse> response = await _interviewRepository
+          .speakToTeacher(interviewSession.id, speakToTeacherRequest);
+      switch (response.statusCode) {
+        case 200:
+          setAvatarSpeech(response.data!.messageFromTeacher);
+          setCurrentInterviewSession(response.data!.interviewSession);
+          break;
+        default:
+          setAvatarSpeech("エラーが発生しました");
+          break;
+      }
+      logger.exit(message: "responseData:${response.data}");
+    } on Exception catch (e) {
+      logger.error(message: e.toString());
+      logger.exit();
+      return;
+    }
   }
 }
