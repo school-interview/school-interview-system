@@ -12,7 +12,7 @@ doc/SpeakToTeacherRequest.md
 doc/StartInterviewResponse.md
 doc/Teacher.md
 doc/TeacherResponse.md
-doc/TeachersResponse.md
+doc/TeachersListResponse.md
 doc/User.md
 doc/ValidationError.md
 doc/ValidationErrorLocInner.md
@@ -36,9 +36,9 @@ lib/model/speak_to_teacher_request.dart
 lib/model/start_interview_response.dart
 lib/model/teacher.dart
 lib/model/teacher_response.dart
-lib/model/teachers_response.dart
+lib/model/teachers_list_response.dart
 lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
-test/teachers_response_test.dart
+test/teachers_list_response_test.dart
