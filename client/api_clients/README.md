@@ -79,6 +79,7 @@ Class | Method | HTTP request | Description
  - [StartInterviewResponse](doc//StartInterviewResponse.md)
  - [Teacher](doc//Teacher.md)
  - [TeacherResponse](doc//TeacherResponse.md)
+ - [TeachersResponse](doc//TeachersResponse.md)
  - [User](doc//User.md)
  - [ValidationError](doc//ValidationError.md)
  - [ValidationErrorLocInner](doc//ValidationErrorLocInner.md)
