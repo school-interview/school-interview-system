@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:client/app.dart';
-import 'package:client/core/logger.dart';
 import 'package:client/core/response_extension.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
@@ -12,29 +11,25 @@ class InterviewRepositoryImpl extends InterviewRepository {
   @override
   Future<ApiResult<StartInterviewResponse>> postInterviewSessionRequest(
       InterviewSessionRequest interviewSessionRequest) async {
-    logger.enter(message: 'interviewSessionRequest:$interviewSessionRequest');
+    logger.t('interviewSessionRequest:$interviewSessionRequest');
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
       final result = await api
           .controllerInterviewPostWithHttpInfo(interviewSessionRequest);
-      print("いんたびゅーせっしょん");
-      print(result.body);
-
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
           'StartInterviewResponse',
         ) as StartInterviewResponse;
-        // logger.exit(message: 'status code:${result.statusCode}');
+        logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
-        logger.exit(message: 'status code:${result.statusCode}');
+        logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode);
       }
     } on Exception catch (e) {
-      logger.error(message: e.toString());
-      logger.exit();
+      logger.e(e.toString());
       rethrow;
     }
   }
@@ -42,19 +37,15 @@ class InterviewRepositoryImpl extends InterviewRepository {
   @override
   Future<ApiResult<TeacherResponse>> speakToTeacher(String interviewSessionId,
       SpeakToTeacherRequest speakToTeacherRequest) async {
-    logger.enter();
+    logger.i("run speakToTeacher()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
-
     try {
       final result =
           await api.controllerInterviewInterviewSessionIdPostWithHttpInfo(
         interviewSessionId,
         speakToTeacherRequest,
       );
-      print("すぴーかー");
-      print(result.body);
-
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
@@ -63,22 +54,20 @@ class InterviewRepositoryImpl extends InterviewRepository {
         // logger.exit(message: 'status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
-        logger.exit(message: 'status code:${result.statusCode}');
+        logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode);
       }
     } on Exception catch (e) {
-      logger.error(message: e.toString());
-      logger.exit();
+      logger.e(e.toString());
       rethrow;
     }
   }
 
   @override
   Future<ApiResult<List<Teacher>>> getTeachers() async {
-    logger.enter();
+    logger.i("run getTeacher()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
-
     try {
       final result = await api.controllerTeachersGetWithHttpInfo();
       if (result.isSuccess()) {
@@ -86,15 +75,14 @@ class InterviewRepositoryImpl extends InterviewRepository {
           utf8.decode(result.bodyBytes),
           'List<Teacher>',
         ) as List<Teacher>;
-        logger.exit(message: 'status code:${result.statusCode}');
+        logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
-        logger.exit(message: 'status code:${result.statusCode}');
+        logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode);
       }
     } on Exception catch (e) {
-      logger.error(message: e.toString());
-      logger.exit();
+      logger.e(e.toString());
       rethrow;
     }
   }
