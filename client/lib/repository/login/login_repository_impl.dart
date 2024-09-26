@@ -10,7 +10,7 @@ import 'package:openapi/api.dart';
 class LoginRepositoryImpl extends LoginRepository {
   /// ユーザー情報登録API
   @override
-  Future<ApiResult<User>> putUserInformation(LoginRequest loginRequest) async {
+  Future<ApiResult<User>> putUserInfo(LoginRequest loginRequest) async {
     logger.t('loginRequest:$loginRequest');
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);

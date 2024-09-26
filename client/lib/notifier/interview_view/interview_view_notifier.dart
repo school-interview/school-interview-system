@@ -53,12 +53,12 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   /// 初回処理
   Future<void> init({required String userId}) async {
     try {
-      // ApiResult<List<Teacher>> teacherResponse =
-      //     await _interviewRepository.getTeachers();
-      // setTeachers(teacherResponse.data!);
+      ApiResult<List<Teacher>> teacherResponse =
+          await _interviewRepository.getTeachersList();
+      setTeachers(teacherResponse.data!);
 
       final requestId = InterviewSessionRequest(
-          userId: userId, teacherId: "5469a2f5-937d-4b38-bf33-b6df675db9de");
+          userId: userId, teacherId: state.teachers.first.id);
 
       ApiResult<StartInterviewResponse> response =
           await _interviewRepository.postInterviewSessionRequest(requestId);
@@ -71,11 +71,11 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           logger.t("responseData:${response.data}");
           break;
         default:
-          setResult(Result.putUserInformationError);
+          setResult(Result.fail);
           break;
       }
     } on Exception catch (e) {
-      setResult(Result.putUserInformationError);
+      setResult(Result.fail);
       logger.e(e.toString());
       return;
     }
@@ -107,7 +107,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         SpeakToTeacherRequest(messageFromStudent: text);
     try {
       ApiResult<TeacherResponse> response = await _interviewRepository
-          .speakToTeacher(interviewSession.id, speakToTeacherRequest);
+          .getMessageFromTeacher(interviewSession.id, speakToTeacherRequest);
       switch (response.statusCode) {
         case 200:
           setAvatarSpeech(response.data!.messageFromTeacher);
