@@ -50,6 +50,6 @@ class StartInterviewResponse(BaseModel):
     message_from_teacher: str
 
 
-class TeachersResponse(BaseModel):
+class TeachersListResponse(BaseModel):
     teachers: List[Teacher]
     count: int
