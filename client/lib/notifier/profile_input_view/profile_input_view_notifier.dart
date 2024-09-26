@@ -1,6 +1,5 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
-import 'package:client/core/logger.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/login/login_repository.dart';
 import 'package:client/repository/login/login_repository_impl.dart';
@@ -46,7 +45,7 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
 
   /// ユーザー情報登録APIを実行
   Future<void> postUserInfo() async {
-    logger.enter();
+    logger.i("run postUserInfo()");
     // 学生情報
     final userInfo = LoginRequest(
       studentId: state.studentId,
@@ -54,10 +53,10 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
       department: state.department,
       semester: state.semester,
     );
-
     try {
       ApiResult<User> response =
           await _loginRepository.putUserInformation(userInfo);
+      logger.t("userInfo:$userInfo");
       switch (response.statusCode) {
         case 200:
           setUser(response.data!);
@@ -67,11 +66,10 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
           setResult(Result.putUserInformationError);
           break;
       }
-      logger.exit(message: "responseData:${response.data}");
+      logger.t("responseData:${response.data}");
     } on Exception catch (e) {
-      logger.error(message: e.toString());
+      logger.e(e.toString());
       setResult(Result.putUserInformationError);
-      logger.exit();
       return;
     }
   }
