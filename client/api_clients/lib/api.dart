@@ -39,6 +39,7 @@ part 'model/speak_to_teacher_request.dart';
 part 'model/start_interview_response.dart';
 part 'model/teacher.dart';
 part 'model/teacher_response.dart';
+part 'model/teachers_response.dart';
 part 'model/user.dart';
 part 'model/validation_error.dart';
 part 'model/validation_error_loc_inner.dart';

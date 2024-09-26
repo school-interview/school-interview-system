@@ -226,7 +226,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **controllerTeachersGet**
-> List<Teacher> controllerTeachersGet()
+> TeachersResponse controllerTeachersGet()
 
 Controller
 
@@ -249,7 +249,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**List<Teacher>**](Teacher.md)
+[**TeachersResponse**](TeachersResponse.md)
 
 ### Authorization
 
