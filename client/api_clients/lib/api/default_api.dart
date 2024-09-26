@@ -312,7 +312,7 @@ class DefaultApi {
   }
 
   /// Controller
-  Future<List<Teacher>?> controllerTeachersGet() async {
+  Future<TeachersListResponse?> controllerTeachersGet() async {
     final response = await controllerTeachersGetWithHttpInfo();
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -321,11 +321,8 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<Teacher>') as List)
-        .cast<Teacher>()
-        .toList(growable: false);
-
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'TeachersListResponse',) as TeachersListResponse;
+    
     }
     return null;
   }

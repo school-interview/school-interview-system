@@ -1,7 +1,7 @@
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Callable, List, Literal, Optional
 from abc import ABCMeta, abstractmethod
 from pydantic import BaseModel
-from src.models import InterviewSession
+from src.models import InterviewSession, Teacher
 
 HttpMethod = Literal["GET", "POST", "PUT", "DELETE"]
 
@@ -48,3 +48,8 @@ class TeacherResponse(BaseModel):
 class StartInterviewResponse(BaseModel):
     interview_session: InterviewSession
     message_from_teacher: str
+
+
+class TeachersListResponse(BaseModel):
+    teachers: List[Teacher]
+    count: int
