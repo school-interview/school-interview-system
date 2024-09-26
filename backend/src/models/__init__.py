@@ -6,8 +6,9 @@ from src.models.db_models.interview_session_model import InterviewSession, Inter
 from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel
 from src.models.db_models.interview_record_model import InterviewRecord, InterviewRecordModel
 from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel
+from src.models.app_models.extraction_result_model import ExtractionResult
 from src.models.rest_api_model import *
 from src.models.websocket_controller_model import *
-from src.models.app_data_models import *
+
 from src.models.llm_structured_output_models import *
 from src.models.errors_model import *
