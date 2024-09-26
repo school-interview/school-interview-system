@@ -35,7 +35,8 @@ class InterviewRepositoryImpl extends InterviewRepository {
   }
 
   @override
-  Future<ApiResult<TeacherResponse>> speakToTeacher(String interviewSessionId,
+  Future<ApiResult<TeacherResponse>> getMessageFromTeacher(
+      String interviewSessionId,
       SpeakToTeacherRequest speakToTeacherRequest) async {
     logger.i("run speakToTeacher()");
     ApiClient apiClient = ApiClient();
@@ -64,7 +65,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
   }
 
   @override
-  Future<ApiResult<List<Teacher>>> getTeachers() async {
+  Future<ApiResult<List<Teacher>>> getTeachersList() async {
     logger.i("run getTeacher()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);

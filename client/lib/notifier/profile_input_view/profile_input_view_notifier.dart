@@ -54,8 +54,7 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
       semester: state.semester,
     );
     try {
-      ApiResult<User> response =
-          await _loginRepository.putUserInformation(userInfo);
+      ApiResult<User> response = await _loginRepository.putUserInfo(userInfo);
       logger.t("userInfo:$userInfo");
       switch (response.statusCode) {
         case 200:
@@ -63,13 +62,13 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
           setResult(Result.success);
           break;
         default:
-          setResult(Result.putUserInformationError);
+          setResult(Result.fail);
           break;
       }
       logger.t("responseData:${response.data}");
     } on Exception catch (e) {
       logger.e(e.toString());
-      setResult(Result.putUserInformationError);
+      setResult(Result.fail);
       return;
     }
   }
