@@ -200,8 +200,8 @@ class ApiClient {
           return Teacher.fromJson(value);
         case 'TeacherResponse':
           return TeacherResponse.fromJson(value);
-        case 'TeachersResponse':
-          return TeachersResponse.fromJson(value);
+        case 'TeachersListResponse':
+          return TeachersListResponse.fromJson(value);
         case 'User':
           return User.fromJson(value);
         case 'ValidationError':
