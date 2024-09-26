@@ -1,6 +1,5 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
-import 'package:client/core/logger.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
 import 'package:client/repository/interview/interview_repository_impl.dart';
@@ -69,16 +68,15 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           setStartInterviewResponse(response.data!);
           setCurrentInterviewSession(response.data!.interviewSession);
           setResult(Result.success);
+          logger.t("responseData:${response.data}");
           break;
         default:
           setResult(Result.putUserInformationError);
           break;
       }
-      logger.exit(message: "responseData:${response.data}");
     } on Exception catch (e) {
-      logger.error(message: e.toString());
       setResult(Result.putUserInformationError);
-      logger.exit();
+      logger.e(e.toString());
       return;
     }
   }
@@ -104,7 +102,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
 
   Future<void> _speakToTeacher(
       InterviewSession interviewSession, String text) async {
-    logger.enter();
+    logger.i("run speakToTeacher()");
     final speakToTeacherRequest =
         SpeakToTeacherRequest(messageFromStudent: text);
     try {
@@ -119,10 +117,9 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           setAvatarSpeech("エラーが発生しました");
           break;
       }
-      logger.exit(message: "responseData:${response.data}");
+      logger.t("responseData:${response.data}");
     } on Exception catch (e) {
-      logger.error(message: e.toString());
-      logger.exit();
+      logger.e(e.toString());
       return;
     }
   }
