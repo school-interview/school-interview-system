@@ -1,10 +1,9 @@
 
 
 from typing import List
-
+from sqlalchemy.orm import Session
 from fastapi import Depends
 from pydantic import TypeAdapter
-from pytest import Session
 from src.database import session_factory
 from src.models import RestApiController, Teacher, TeacherModel, TeacherResponse
 
