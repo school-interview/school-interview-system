@@ -20,5 +20,6 @@ from src.models.api_models.requests.speak_to_teacher_request_model import SpeakT
 from src.models.api_models.responses.error_response_model import ErrorResponse
 from src.models.api_models.responses.start_interview_response_model import StartInterviewResponse
 from src.models.api_models.responses.teacher_response_model import TeacherResponse
+from src.models.api_models.responses.teachers_list_response_model import TeachersListResponse
 from src.models.error_models.app_exception_model import AppException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
