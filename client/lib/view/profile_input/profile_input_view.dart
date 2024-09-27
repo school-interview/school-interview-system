@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// 情報入力画面
 class ProfileInputView extends ConsumerStatefulWidget {
   const ProfileInputView({super.key});
 

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// アバター選択画面
 class AvatarSelectView extends ConsumerStatefulWidget {
   const AvatarSelectView({super.key});
 
@@ -20,9 +21,9 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   @override
   void initState() {
     super.initState();
-    Future(() {
+    Future(() async {
       final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
-      notifier.getTeacherList();
+      await notifier.getTeacherList();
     });
   }
 
@@ -55,15 +56,12 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   Widget _avatarList() {
     final state = ref.watch(avatarSelectViewNotifierProvider);
     final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
-    final teacherList = ref.watch(avatarSelectViewNotifierProvider
-        .select((value) => value.teacherListResponse?.teachers));
-
     return Scrollbar(
       child: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: GridView.builder(
-            itemCount: state.teacherListResponse?.count,
+            itemCount: state.teacherCount,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -74,17 +72,17 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
             ),
             itemBuilder: (context, index) {
               return _avatarSelectBox(
-                avatarName: teacherList![index].name,
+                avatarName: state.teacherList[index].name,
                 onTapSelectBox: () {
                   // セレクトボックスをタップした時の処理
-                  notifier.setSelectedTeacherId(teacherList[index].id);
+                  notifier.setSelectedTeacherId(state.teacherList[index].id);
                   showDialog(
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) => _avatarDialog(
-                      avatarName: teacherList[index].name,
+                      avatarName: state.teacherList[index].name,
                       image: "https://cdn2.thecatapi.com/images/adb.jpg",
-                      selectedTeacherId: teacherList[index].id,
+                      selectedTeacherId: state.teacherList[index].id,
                     ),
                   );
                 },

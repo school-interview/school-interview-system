@@ -11,8 +11,9 @@ abstract class AvatarSelectViewState with _$AvatarSelectViewState {
     /// API処理結果
     Result? result,
 
-    /// 教員リストレスポンス
-    TeachersListResponse? teacherListResponse,
+    /// 教員リスト取得APIレスポンス
+    @Default([]) List<Teacher> teacherList,
+    @Default(0) int teacherCount,
 
     /// 選択した教員ID
     @Default("") String selectedTeacherId,
