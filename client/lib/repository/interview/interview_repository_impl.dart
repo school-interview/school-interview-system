@@ -11,6 +11,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
   @override
   Future<ApiResult<StartInterviewResponse>> postInterviewSessionRequest(
       InterviewSessionRequest interviewSessionRequest) async {
+    logger.i("run postInterviewSessionRequest()");
     logger.t('interviewSessionRequest:$interviewSessionRequest');
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);

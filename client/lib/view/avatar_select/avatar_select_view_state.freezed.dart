@@ -19,14 +19,16 @@ mixin _$AvatarSelectViewState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
-  /// 教員リストレスポンス
+  /// 教員リスト取得APIレスポンス
   List<Teacher> get teacherList => throw _privateConstructorUsedError;
   int get teacherCount => throw _privateConstructorUsedError;
 
   /// 選択した教員ID
   String get selectedTeacherId => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AvatarSelectViewStateCopyWith<AvatarSelectViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +57,8 @@ class _$AvatarSelectViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -109,6 +113,8 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
       $Res Function(_$AvatarSelectViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -152,10 +158,10 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   @override
   final Result? result;
 
-  /// 教員リストレスポンス
+  /// 教員リスト取得APIレスポンス
   final List<Teacher> _teacherList;
 
-  /// 教員リストレスポンス
+  /// 教員リスト取得APIレスポンス
   @override
   @JsonKey()
   List<Teacher> get teacherList {
@@ -200,7 +206,9 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
       teacherCount,
       selectedTeacherId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AvatarSelectViewStateImplCopyWith<_$AvatarSelectViewStateImpl>
@@ -215,22 +223,24 @@ abstract class _AvatarSelectViewState implements AvatarSelectViewState {
       final int teacherCount,
       final String selectedTeacherId}) = _$AvatarSelectViewStateImpl;
 
-  @override
-
   /// API処理結果
-  Result? get result;
   @override
+  Result? get result;
 
-  /// 教員リストレスポンス
+  /// 教員リスト取得APIレスポンス
+  @override
   List<Teacher> get teacherList;
   @override
   int get teacherCount;
-  @override
 
   /// 選択した教員ID
-  String get selectedTeacherId;
   @override
-  @JsonKey(ignore: true)
+  String get selectedTeacherId;
+
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AvatarSelectViewStateImplCopyWith<_$AvatarSelectViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

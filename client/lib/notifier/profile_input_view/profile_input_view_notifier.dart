@@ -1,5 +1,6 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
+import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/login/login_repository.dart';
 import 'package:client/repository/login/login_repository_impl.dart';
@@ -16,8 +17,9 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
     return const ProfileInputViewState();
   }
 
-  /// ログインリポジトリ
-  final LoginRepository _loginRepository = LoginRepositoryImpl();
+  void setResult(Result result) {
+    state = state.copyWith(result: result);
+  }
 
   void setStudentId(String studentId) {
     state = state.copyWith(studentId: studentId);
@@ -35,13 +37,12 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
     state = state.copyWith(semester: semester);
   }
 
-  void setUser(User user) {
-    state = state.copyWith(user: user);
-  }
+  /// ログインリポジトリ
+  final LoginRepository _loginRepository = LoginRepositoryImpl();
 
-  void setResult(Result result) {
-    state = state.copyWith(result: result);
-  }
+  /// 永続化マネージャー
+  final SharedPreferenceManager _sharedPreferenceManager =
+      SharedPreferenceManager();
 
   /// ユーザー情報登録APIを実行
   Future<void> putUserInfo() async {
@@ -56,7 +57,10 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
       ApiResult<User> response = await _loginRepository.putUserInfo(userInfo);
       switch (response.statusCode) {
         case 200:
-          setUser(response.data!);
+          await _sharedPreferenceManager.setString(
+            PrefKeys.userId,
+            response.data!.id,
+          );
           setResult(Result.success);
           break;
         default:

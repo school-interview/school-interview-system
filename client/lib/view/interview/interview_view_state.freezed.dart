@@ -16,28 +16,24 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$InterviewViewState {
+  /// API処理結果
+  Result? get result => throw _privateConstructorUsedError;
+
   /// アバターのセリフ
-  String get avatarSpeech => throw _privateConstructorUsedError;
+  String get avatarMessage => throw _privateConstructorUsedError;
 
   /// ユーザーのセリフ
-  String get userSpeech => throw _privateConstructorUsedError;
+  String get userMessage => throw _privateConstructorUsedError;
 
   /// ユーザーが話しているかどうかを判別する
   bool get isTalking => throw _privateConstructorUsedError;
 
-  /// 面談開始レスポンス
-  StartInterviewResponse? get startInterviewResponse =>
-      throw _privateConstructorUsedError;
+  /// 最新のinterviewSessionId
+  String get currentInterviewSessionId => throw _privateConstructorUsedError;
 
-  /// 最新のinterivewSession
-  InterviewSession? get currentInterviewSession =>
-      throw _privateConstructorUsedError;
-  List<Teacher> get teachers => throw _privateConstructorUsedError;
-
-  /// API処理結果
-  Result? get result => throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
+  /// Create a copy of InterviewViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InterviewViewStateCopyWith<InterviewViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,13 +45,11 @@ abstract class $InterviewViewStateCopyWith<$Res> {
       _$InterviewViewStateCopyWithImpl<$Res, InterviewViewState>;
   @useResult
   $Res call(
-      {String avatarSpeech,
-      String userSpeech,
+      {Result? result,
+      String avatarMessage,
+      String userMessage,
       bool isTalking,
-      StartInterviewResponse? startInterviewResponse,
-      InterviewSession? currentInterviewSession,
-      List<Teacher> teachers,
-      Result? result});
+      String currentInterviewSessionId});
 }
 
 /// @nodoc
@@ -68,46 +62,38 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InterviewViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? avatarSpeech = null,
-    Object? userSpeech = null,
-    Object? isTalking = null,
-    Object? startInterviewResponse = freezed,
-    Object? currentInterviewSession = freezed,
-    Object? teachers = null,
     Object? result = freezed,
+    Object? avatarMessage = null,
+    Object? userMessage = null,
+    Object? isTalking = null,
+    Object? currentInterviewSessionId = null,
   }) {
     return _then(_value.copyWith(
-      avatarSpeech: null == avatarSpeech
-          ? _value.avatarSpeech
-          : avatarSpeech // ignore: cast_nullable_to_non_nullable
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Result?,
+      avatarMessage: null == avatarMessage
+          ? _value.avatarMessage
+          : avatarMessage // ignore: cast_nullable_to_non_nullable
               as String,
-      userSpeech: null == userSpeech
-          ? _value.userSpeech
-          : userSpeech // ignore: cast_nullable_to_non_nullable
+      userMessage: null == userMessage
+          ? _value.userMessage
+          : userMessage // ignore: cast_nullable_to_non_nullable
               as String,
       isTalking: null == isTalking
           ? _value.isTalking
           : isTalking // ignore: cast_nullable_to_non_nullable
               as bool,
-      startInterviewResponse: freezed == startInterviewResponse
-          ? _value.startInterviewResponse
-          : startInterviewResponse // ignore: cast_nullable_to_non_nullable
-              as StartInterviewResponse?,
-      currentInterviewSession: freezed == currentInterviewSession
-          ? _value.currentInterviewSession
-          : currentInterviewSession // ignore: cast_nullable_to_non_nullable
-              as InterviewSession?,
-      teachers: null == teachers
-          ? _value.teachers
-          : teachers // ignore: cast_nullable_to_non_nullable
-              as List<Teacher>,
-      result: freezed == result
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
-              as Result?,
+      currentInterviewSessionId: null == currentInterviewSessionId
+          ? _value.currentInterviewSessionId
+          : currentInterviewSessionId // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -121,13 +107,11 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String avatarSpeech,
-      String userSpeech,
+      {Result? result,
+      String avatarMessage,
+      String userMessage,
       bool isTalking,
-      StartInterviewResponse? startInterviewResponse,
-      InterviewSession? currentInterviewSession,
-      List<Teacher> teachers,
-      Result? result});
+      String currentInterviewSessionId});
 }
 
 /// @nodoc
@@ -138,46 +122,38 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
       $Res Function(_$InterviewViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InterviewViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? avatarSpeech = null,
-    Object? userSpeech = null,
-    Object? isTalking = null,
-    Object? startInterviewResponse = freezed,
-    Object? currentInterviewSession = freezed,
-    Object? teachers = null,
     Object? result = freezed,
+    Object? avatarMessage = null,
+    Object? userMessage = null,
+    Object? isTalking = null,
+    Object? currentInterviewSessionId = null,
   }) {
     return _then(_$InterviewViewStateImpl(
-      avatarSpeech: null == avatarSpeech
-          ? _value.avatarSpeech
-          : avatarSpeech // ignore: cast_nullable_to_non_nullable
+      result: freezed == result
+          ? _value.result
+          : result // ignore: cast_nullable_to_non_nullable
+              as Result?,
+      avatarMessage: null == avatarMessage
+          ? _value.avatarMessage
+          : avatarMessage // ignore: cast_nullable_to_non_nullable
               as String,
-      userSpeech: null == userSpeech
-          ? _value.userSpeech
-          : userSpeech // ignore: cast_nullable_to_non_nullable
+      userMessage: null == userMessage
+          ? _value.userMessage
+          : userMessage // ignore: cast_nullable_to_non_nullable
               as String,
       isTalking: null == isTalking
           ? _value.isTalking
           : isTalking // ignore: cast_nullable_to_non_nullable
               as bool,
-      startInterviewResponse: freezed == startInterviewResponse
-          ? _value.startInterviewResponse
-          : startInterviewResponse // ignore: cast_nullable_to_non_nullable
-              as StartInterviewResponse?,
-      currentInterviewSession: freezed == currentInterviewSession
-          ? _value.currentInterviewSession
-          : currentInterviewSession // ignore: cast_nullable_to_non_nullable
-              as InterviewSession?,
-      teachers: null == teachers
-          ? _value._teachers
-          : teachers // ignore: cast_nullable_to_non_nullable
-              as List<Teacher>,
-      result: freezed == result
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
-              as Result?,
+      currentInterviewSessionId: null == currentInterviewSessionId
+          ? _value.currentInterviewSessionId
+          : currentInterviewSessionId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -186,53 +162,39 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
 
 class _$InterviewViewStateImpl implements _InterviewViewState {
   const _$InterviewViewStateImpl(
-      {this.avatarSpeech = "",
-      this.userSpeech = "",
+      {this.result,
+      this.avatarMessage = "",
+      this.userMessage = "",
       this.isTalking = false,
-      this.startInterviewResponse,
-      this.currentInterviewSession,
-      final List<Teacher> teachers = const [],
-      this.result})
-      : _teachers = teachers;
+      this.currentInterviewSessionId = ""});
+
+  /// API処理結果
+  @override
+  final Result? result;
 
   /// アバターのセリフ
   @override
   @JsonKey()
-  final String avatarSpeech;
+  final String avatarMessage;
 
   /// ユーザーのセリフ
   @override
   @JsonKey()
-  final String userSpeech;
+  final String userMessage;
 
   /// ユーザーが話しているかどうかを判別する
   @override
   @JsonKey()
   final bool isTalking;
 
-  /// 面談開始レスポンス
-  @override
-  final StartInterviewResponse? startInterviewResponse;
-
-  /// 最新のinterivewSession
-  @override
-  final InterviewSession? currentInterviewSession;
-  final List<Teacher> _teachers;
+  /// 最新のinterviewSessionId
   @override
   @JsonKey()
-  List<Teacher> get teachers {
-    if (_teachers is EqualUnmodifiableListView) return _teachers;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_teachers);
-  }
-
-  /// API処理結果
-  @override
-  final Result? result;
+  final String currentInterviewSessionId;
 
   @override
   String toString() {
-    return 'InterviewViewState(avatarSpeech: $avatarSpeech, userSpeech: $userSpeech, isTalking: $isTalking, startInterviewResponse: $startInterviewResponse, currentInterviewSession: $currentInterviewSession, teachers: $teachers, result: $result)';
+    return 'InterviewViewState(result: $result, avatarMessage: $avatarMessage, userMessage: $userMessage, isTalking: $isTalking, currentInterviewSessionId: $currentInterviewSessionId)';
   }
 
   @override
@@ -240,33 +202,25 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$InterviewViewStateImpl &&
-            (identical(other.avatarSpeech, avatarSpeech) ||
-                other.avatarSpeech == avatarSpeech) &&
-            (identical(other.userSpeech, userSpeech) ||
-                other.userSpeech == userSpeech) &&
+            (identical(other.result, result) || other.result == result) &&
+            (identical(other.avatarMessage, avatarMessage) ||
+                other.avatarMessage == avatarMessage) &&
+            (identical(other.userMessage, userMessage) ||
+                other.userMessage == userMessage) &&
             (identical(other.isTalking, isTalking) ||
                 other.isTalking == isTalking) &&
-            (identical(other.startInterviewResponse, startInterviewResponse) ||
-                other.startInterviewResponse == startInterviewResponse) &&
-            (identical(
-                    other.currentInterviewSession, currentInterviewSession) ||
-                other.currentInterviewSession == currentInterviewSession) &&
-            const DeepCollectionEquality().equals(other._teachers, _teachers) &&
-            (identical(other.result, result) || other.result == result));
+            (identical(other.currentInterviewSessionId,
+                    currentInterviewSessionId) ||
+                other.currentInterviewSessionId == currentInterviewSessionId));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      avatarSpeech,
-      userSpeech,
-      isTalking,
-      startInterviewResponse,
-      currentInterviewSession,
-      const DeepCollectionEquality().hash(_teachers),
-      result);
+  int get hashCode => Object.hash(runtimeType, result, avatarMessage,
+      userMessage, isTalking, currentInterviewSessionId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InterviewViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InterviewViewStateImplCopyWith<_$InterviewViewStateImpl> get copyWith =>
@@ -276,42 +230,36 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
 abstract class _InterviewViewState implements InterviewViewState {
   const factory _InterviewViewState(
-      {final String avatarSpeech,
-      final String userSpeech,
+      {final Result? result,
+      final String avatarMessage,
+      final String userMessage,
       final bool isTalking,
-      final StartInterviewResponse? startInterviewResponse,
-      final InterviewSession? currentInterviewSession,
-      final List<Teacher> teachers,
-      final Result? result}) = _$InterviewViewStateImpl;
-
-  @override
-
-  /// アバターのセリフ
-  String get avatarSpeech;
-  @override
-
-  /// ユーザーのセリフ
-  String get userSpeech;
-  @override
-
-  /// ユーザーが話しているかどうかを判別する
-  bool get isTalking;
-  @override
-
-  /// 面談開始レスポンス
-  StartInterviewResponse? get startInterviewResponse;
-  @override
-
-  /// 最新のinterivewSession
-  InterviewSession? get currentInterviewSession;
-  @override
-  List<Teacher> get teachers;
-  @override
+      final String currentInterviewSessionId}) = _$InterviewViewStateImpl;
 
   /// API処理結果
-  Result? get result;
   @override
-  @JsonKey(ignore: true)
+  Result? get result;
+
+  /// アバターのセリフ
+  @override
+  String get avatarMessage;
+
+  /// ユーザーのセリフ
+  @override
+  String get userMessage;
+
+  /// ユーザーが話しているかどうかを判別する
+  @override
+  bool get isTalking;
+
+  /// 最新のinterviewSessionId
+  @override
+  String get currentInterviewSessionId;
+
+  /// Create a copy of InterviewViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InterviewViewStateImplCopyWith<_$InterviewViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
