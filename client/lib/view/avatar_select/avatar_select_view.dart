@@ -3,6 +3,7 @@ import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/generated/l10n.dart';
+import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/ui_core/image_network_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +21,8 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   void initState() {
     super.initState();
     Future(() {
-      // Add your initialization code here
+      final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
+      notifier.getTeacherList();
     });
   }
 
@@ -51,12 +53,17 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
 
   /// アバターの一覧を生成するWidget
   Widget _avatarList() {
+    final state = ref.watch(avatarSelectViewNotifierProvider);
+    final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
+    final teacherList = ref.watch(avatarSelectViewNotifierProvider
+        .select((value) => value.teacherListResponse?.teachers));
+
     return Scrollbar(
       child: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: GridView.builder(
-            itemCount: 8,
+            itemCount: state.teacherListResponse?.count,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -67,14 +74,17 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
             ),
             itemBuilder: (context, index) {
               return _avatarSelectBox(
+                avatarName: teacherList![index].name,
                 onTapSelectBox: () {
                   // セレクトボックスをタップした時の処理
+                  notifier.setSelectedTeacherId(teacherList[index].id);
                   showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) => _avatarDialog(
-                          avatarName: "名前",
-                          image: "https://cdn2.thecatapi.com/images/adb.jpg"));
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) => _avatarDialog(
+                        avatarName: teacherList[index].name,
+                        image: "https://cdn2.thecatapi.com/images/adb.jpg"),
+                  );
                 },
               );
             },
@@ -85,7 +95,10 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   }
 
   /// アバターセレクトボックスを生成するWidget
-  Widget _avatarSelectBox({required Function() onTapSelectBox}) {
+  Widget _avatarSelectBox({
+    required String avatarName,
+    required Function() onTapSelectBox,
+  }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -100,12 +113,12 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
           customBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("ここに画像"),
-              SizedBox(height: 8),
-              Text("アバター名"),
+              const Text("ここに画像"),
+              const SizedBox(height: 8),
+              Text(avatarName),
             ],
           ),
         ),
@@ -157,11 +170,12 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                       const SizedBox(height: 8),
                       // 面談画面へ遷移するボタン
                       ButtonComponent().normalButton(
-                          labelText: "面談開始",
-                          onTapButton: () {
-                            // 面談画面へ遷移
-                            context.push("/interview");
-                          })
+                        labelText: "面談開始",
+                        onTapButton: () {
+                          // 面談画面へ遷移
+                          context.push("/interview");
+                        },
+                      )
                     ],
                   ),
                 ),

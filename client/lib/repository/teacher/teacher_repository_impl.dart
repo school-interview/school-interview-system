@@ -9,8 +9,8 @@ import 'package:openapi/api.dart';
 class TeacherRepositoryImpl extends TeacherRepository {
   /// 教員リスト取得API
   @override
-  Future<ApiResult<List<Teacher>>> getTeachersList() async {
-    logger.i("run getTeacher()");
+  Future<ApiResult<TeachersListResponse>> getTeacherList() async {
+    logger.i("run getTeacherList()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
@@ -18,8 +18,8 @@ class TeacherRepositoryImpl extends TeacherRepository {
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
-          'List<Teacher>',
-        ) as List<Teacher>;
+          'TeachersListResponse',
+        ) as TeachersListResponse;
         logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
