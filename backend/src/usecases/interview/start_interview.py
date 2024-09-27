@@ -7,7 +7,7 @@ from typing import Optional
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, UserModel, ExtractionResult, TeacherModel, InterviewRecordModel, InterviewAlreadyStartedException, Teacher
+from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Concern, PreferInPerson, UserModel, ExtractionResult, TeacherModel, InterviewRecordModel, InterviewAlreadyStartedException, Teacher
 
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):

@@ -17,7 +17,7 @@ from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
-from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Trouble, PreferInPerson, ExtractionResult, TeacherModel
+from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Concern, PreferInPerson, ExtractionResult, TeacherModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
@@ -236,7 +236,7 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
         case 4:
             structured_output_class = AttendanceRate
         case 5:
-            structured_output_class = Trouble
+            structured_output_class = Concern
         case 6:
             structured_output_class = PreferInPerson
 
