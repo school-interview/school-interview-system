@@ -53,7 +53,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
           utf8.decode(result.bodyBytes),
           'TeacherResponse',
         ) as TeacherResponse;
-        // logger.exit(message: 'status code:${result.statusCode}');
+        logger.t('status code:${result.statusCode}');
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
         logger.t('status code:${result.statusCode}');
