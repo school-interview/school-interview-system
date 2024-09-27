@@ -21,7 +21,7 @@ class AvatarSelectViewNotifier extends _$AvatarSelectViewNotifier {
     state = state.copyWith(result: result);
   }
 
-  void setTeacherList(TeachersListResponse teacherListResponse) {
+  void setTeacherListResponse(TeachersListResponse teacherListResponse) {
     state = state.copyWith(teacherListResponse: teacherListResponse);
   }
 
@@ -36,7 +36,7 @@ class AvatarSelectViewNotifier extends _$AvatarSelectViewNotifier {
           await _teacherRepository.getTeacherList();
       switch (response.statusCode) {
         case 200:
-          setTeacherList(response.data!);
+          setTeacherListResponse(response.data!);
           setResult(Result.success);
           logger.t("responseData:${response.data}");
           break;

@@ -10,7 +10,7 @@ class LoginRepositoryImpl extends LoginRepository {
   /// ユーザー情報登録API
   @override
   Future<ApiResult<User>> putUserInfo(LoginRequest loginRequest) async {
-    logger.t('loginRequest:$loginRequest');
+    logger.i('loginRequest:$loginRequest');
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
@@ -21,6 +21,7 @@ class LoginRepositoryImpl extends LoginRepository {
           'User',
         ) as User;
         logger.t('status code:${result.statusCode}');
+        logger.t("data:${result.body}");
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
         logger.t('status code:${result.statusCode}');
