@@ -14,7 +14,7 @@ abstract class AvatarSelectViewState with _$AvatarSelectViewState {
     /// 教員リストレスポンス
     TeachersListResponse? teacherListResponse,
 
-    /// 教員ID
+    /// 選択した教員ID
     @Default("") String selectedTeacherId,
   }) = _AvatarSelectViewState;
 }

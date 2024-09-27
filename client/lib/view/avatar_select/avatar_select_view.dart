@@ -82,8 +82,10 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) => _avatarDialog(
-                        avatarName: teacherList[index].name,
-                        image: "https://cdn2.thecatapi.com/images/adb.jpg"),
+                      avatarName: teacherList[index].name,
+                      image: "https://cdn2.thecatapi.com/images/adb.jpg",
+                      selectedTeacherId: teacherList[index].id,
+                    ),
                   );
                 },
               );
@@ -130,6 +132,7 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   Widget _avatarDialog({
     required String avatarName,
     required String image,
+    required String selectedTeacherId,
   }) {
     return Dialog(
       insetPadding:
@@ -172,6 +175,9 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                       ButtonComponent().normalButton(
                         labelText: "面談開始",
                         onTapButton: () {
+                          final notifier = ref
+                              .read(avatarSelectViewNotifierProvider.notifier);
+                          notifier.setSelectedTeacherId(selectedTeacherId);
                           // 面談画面へ遷移
                           context.push("/interview");
                         },
