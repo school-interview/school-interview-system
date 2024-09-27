@@ -44,8 +44,7 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
   }
 
   /// ユーザー情報登録APIを実行
-  Future<void> postUserInfo() async {
-    logger.i("run postUserInfo()");
+  Future<void> putUserInfo() async {
     // 学生情報
     final userInfo = LoginRequest(
       studentId: state.studentId,
@@ -55,7 +54,6 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
     );
     try {
       ApiResult<User> response = await _loginRepository.putUserInfo(userInfo);
-      logger.t("userInfo:$userInfo");
       switch (response.statusCode) {
         case 200:
           setUser(response.data!);
