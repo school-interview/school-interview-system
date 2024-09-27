@@ -2,7 +2,7 @@ from fastapi import Depends
 from src.usecases.websocket_connection.connection_managemet import delete_connection, register_connection
 from src.models.db_models.user_model import User
 from src.database import SessionMaker
-from src.models.websocket_controller_model import WebsocketController
+from src.models import WebsocketController
 from typing import Dict, List
 from src.usecases.auth.authenticate import authenticate
 from sqlalchemy.orm import sessionmaker
