@@ -1,4 +1,4 @@
-from src.models.errors_model import AppException
+from src.models import AppException
 
 
 class InterviewAlreadyStartedException(AppException):
