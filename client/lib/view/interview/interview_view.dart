@@ -4,7 +4,6 @@ import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
-import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,20 +19,17 @@ class _InterviewView extends ConsumerState<InterviewView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    Future(() async {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      final userId = ref.watch(
-          profileInputViewNotifierProvider.select((value) => value.user!.id));
       final teacherId = ref.watch(avatarSelectViewNotifierProvider
           .select((value) => value.selectedTeacherId));
-      notifier.init(userId: userId, teacherId: teacherId);
+      await notifier.startInterview(teacherId: teacherId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(interviewViewNotifierProvider);
-
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
       appBar: CustomAppBar().startAppBar(context),
@@ -48,10 +44,10 @@ class _InterviewView extends ConsumerState<InterviewView> {
                 children: [
                   const SizedBox(height: 50),
                   // アバターのセリフ
-                  _chatBubble(state.avatarSpeech, false),
+                  _chatBubble(state.avatarMessage, false),
                   const SizedBox(height: 4),
                   // ユーザーのセリフ
-                  _chatBubble(state.userSpeech, true),
+                  _chatBubble(state.userMessage, true),
                   const SizedBox(height: 24),
                   // マイクボタン
                   _micButton()
@@ -102,7 +98,6 @@ class _InterviewView extends ConsumerState<InterviewView> {
   Widget _micButton() {
     final notifier = ref.read(interviewViewNotifierProvider.notifier);
     final state = ref.watch(interviewViewNotifierProvider);
-
     return Container(
       width: 60,
       height: 60,

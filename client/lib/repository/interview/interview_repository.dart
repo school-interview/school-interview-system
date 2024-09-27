@@ -7,7 +7,7 @@ abstract class InterviewRepository {
   Future<ApiResult<StartInterviewResponse>> postInterviewSessionRequest(
       InterviewSessionRequest interviewSessionRequest);
 
-  /// 教員メッセージ受信API
+  /// 教員メッセージ取得API
   Future<ApiResult<TeacherResponse>> getMessageFromTeacher(
       String interviewSessionId, SpeakToTeacherRequest speakToTeacherRequest);
 }
