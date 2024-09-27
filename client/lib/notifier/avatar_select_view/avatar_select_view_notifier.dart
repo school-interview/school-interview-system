@@ -17,12 +17,16 @@ class AvatarSelectViewNotifier extends _$AvatarSelectViewNotifier {
 
   final _teacherRepository = TeacherRepositoryImpl();
 
-  void setResult(Result result) {
+  void _setResult(Result result) {
     state = state.copyWith(result: result);
   }
 
-  void setTeacherListResponse(TeachersListResponse teacherListResponse) {
-    state = state.copyWith(teacherListResponse: teacherListResponse);
+  void _setTeacherList(List<Teacher> teacherList) {
+    state = state.copyWith(teacherList: teacherList);
+  }
+
+  void _setTeacherCount(int teacherCount) {
+    state = state.copyWith(teacherCount: teacherCount);
   }
 
   void setSelectedTeacherId(String selectedTeacherId) {
@@ -36,16 +40,17 @@ class AvatarSelectViewNotifier extends _$AvatarSelectViewNotifier {
           await _teacherRepository.getTeacherList();
       switch (response.statusCode) {
         case 200:
-          setTeacherListResponse(response.data!);
-          setResult(Result.success);
+          _setTeacherList(response.data!.teachers);
+          _setTeacherCount(response.data!.count);
+          _setResult(Result.success);
           logger.t("responseData:${response.data}");
           break;
         default:
-          setResult(Result.fail);
+          _setResult(Result.fail);
           break;
       }
     } on Exception catch (e) {
-      setResult(Result.fail);
+      _setResult(Result.fail);
       logger.e(e.toString());
       return;
     }

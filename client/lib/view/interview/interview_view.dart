@@ -8,6 +8,7 @@ import 'package:client/notifier/profile_input_view/profile_input_view_notifier.d
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// 面談画面
 class InterviewView extends ConsumerStatefulWidget {
   const InterviewView({super.key});
 

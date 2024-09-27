@@ -21,6 +21,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
           'TeachersListResponse',
         ) as TeachersListResponse;
         logger.t('status code:${result.statusCode}');
+        logger.t("data:${result.body}");
         return ApiResult(statusCode: result.statusCode, data: body);
       } else {
         logger.t('status code:${result.statusCode}');
