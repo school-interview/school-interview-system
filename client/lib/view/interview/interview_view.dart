@@ -2,6 +2,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
+import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
 import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,11 @@ class _InterviewView extends ConsumerState<InterviewView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      // final userId = ref.watch(
-      //     profileInputViewNotifierProvider.select((value) => value.user!.id));
-      notifier.init(userId: "bffc5b89-680a-4e4b-9532-cbb0238b79af");
+      final userId = ref.watch(
+          profileInputViewNotifierProvider.select((value) => value.user!.id));
+      final teacherId = ref.watch(avatarSelectViewNotifierProvider
+          .select((value) => value.selectedTeacherId));
+      notifier.init(userId: userId, teacherId: teacherId);
     });
   }
 
