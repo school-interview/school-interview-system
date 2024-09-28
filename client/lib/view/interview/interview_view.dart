@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
@@ -6,6 +7,7 @@ import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.d
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// 面談画面
 class InterviewView extends ConsumerStatefulWidget {
@@ -44,10 +46,10 @@ class _InterviewView extends ConsumerState<InterviewView> {
                 children: [
                   const SizedBox(height: 50),
                   // アバターのセリフ
-                  _chatBubble(state.avatarMessage, false),
+                  _avatarChatBubble(state.avatarMessage),
                   const SizedBox(height: 4),
                   // ユーザーのセリフ
-                  _chatBubble(state.userMessage, true),
+                  _userChatBubble(state.userMessage),
                   const SizedBox(height: 24),
                   // マイクボタン
                   _micButton()
@@ -60,27 +62,22 @@ class _InterviewView extends ConsumerState<InterviewView> {
     );
   }
 
-  /// チャットの吹き出しUIを生成するWidget
+  /// ユーザーチャットの吹き出しUIを生成するWidget
   ///
   /// [text] 話した内容を持つ
-  /// [isTalkByMe] 自分が話しているかどうかを判別する
-  Widget _chatBubble(String text, bool isTalkByMe) {
+  Widget _userChatBubble(String text) {
     return Align(
-      alignment: isTalkByMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: Alignment.centerRight,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: isTalkByMe ? Colors.green[100] : Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(16),
-              topRight: const Radius.circular(16),
-              bottomLeft: isTalkByMe
-                  ? const Radius.circular(16)
-                  : const Radius.circular(0),
-              bottomRight: isTalkByMe
-                  ? const Radius.circular(0)
-                  : const Radius.circular(16),
+            color: Colors.green[100],
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(16),
+              bottomRight: Radius.circular(0),
             ),
             boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
         child: Text(
@@ -90,6 +87,49 @@ class _InterviewView extends ConsumerState<InterviewView> {
             fontSize: 16,
           ),
         ),
+      ),
+    );
+  }
+
+  /// アバターチャットの吹き出しUIを生成するWidget
+  ///
+  /// [text] 話した内容を持つ
+  Widget _avatarChatBubble(String text) {
+    final state = ref.watch(interviewViewNotifierProvider);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+            ),
+            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
+        child: state.isLoading
+            ? LoadingAnimationWidget.waveDots(
+                color: Colors.black87,
+                size: 16,
+              )
+            : DefaultTextStyle(
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16,
+                ),
+                child: AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  animatedTexts: [
+                    TyperAnimatedText(
+                      text,
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -116,8 +156,10 @@ class _InterviewView extends ConsumerState<InterviewView> {
             color: Colors.white,
             size: state.isTalking ? 30 : 20,
           ),
-          onPressed: () {
-            state.isTalking ? notifier.stopTalking() : notifier.startTalking();
+          onPressed: () async {
+            state.isTalking
+                ? await notifier.stopTalking()
+                : await notifier.startTalking();
           },
         ),
       ),

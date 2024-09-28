@@ -22,6 +22,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(result: result);
   }
 
+  void setIsLoading(bool isLoading) {
+    state = state.copyWith(isLoading: isLoading);
+  }
+
   void setAvatarMessage(String avatarMessage) {
     state = state.copyWith(avatarMessage: avatarMessage);
   }
@@ -60,6 +64,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           await _interviewRepository.postInterviewSessionRequest(requestId);
       switch (response.statusCode) {
         case 200:
+          setIsLoading(false);
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
           setResult(Result.success);
@@ -91,10 +96,11 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// ユーザーが話し終えたときの処理
-  void stopTalking() {
+  Future<void> stopTalking() async {
+    setIsLoading(true);
     _speechToText.stop();
     setIsTalking(false);
-    _speakToTeacher(
+    await _speakToTeacher(
       currentInterviewSessionId: state.currentInterviewSessionId,
       userSpeech: state.userMessage,
     );
@@ -118,6 +124,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         case 200:
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
+          setIsLoading(false);
           break;
         default:
           setAvatarMessage("エラーが発生しました");
