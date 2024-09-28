@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// 情報入力画面
 class ProfileInputView extends ConsumerStatefulWidget {
   const ProfileInputView({super.key});
 
@@ -79,11 +80,14 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                 const SizedBox(height: 30),
                 ButtonComponent().normalButton(
                   labelText: "次へ",
-                  onTapButton: () {
+                  onTapButton: () async {
                     if (formKey.currentState?.validate() ?? false) {
                       // バリデーションが成功した場合にのみ処理を行う
-                      notifier.postUserInfo();
-                      context.push("/avatar-select");
+                      await notifier.putUserInfo();
+                      // 非同期処理の後にウィジェットがまだ存在するかを確認
+                      if (context.mounted) {
+                        context.push("/avatar-select");
+                      }
                     }
                   },
                 ),

@@ -1,6 +1,5 @@
 import 'package:client/constant/color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 /// Box Shadowのスタイル
 class BoxShadowStyle {
