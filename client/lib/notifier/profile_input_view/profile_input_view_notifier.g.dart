@@ -7,7 +7,7 @@ part of 'profile_input_view_notifier.dart';
 // **************************************************************************
 
 String _$profileInputViewNotifierHash() =>
-    r'624d6cb84510f299c5fb901969ff5a31c504aae2';
+    r'6d9ddef0357e65298cea9c73db715ddfda41e7a7';
 
 /// See also [ProfileInputViewNotifier].
 @ProviderFor(ProfileInputViewNotifier)

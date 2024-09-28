@@ -1,6 +1,5 @@
 import 'package:client/constant/result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:openapi/api.dart';
 
 part 'interview_view_state.freezed.dart';
 
@@ -8,23 +7,19 @@ part 'interview_view_state.freezed.dart';
 abstract class InterviewViewState with _$InterviewViewState {
   /// インタビュー画面の状態を表すクラス
   const factory InterviewViewState({
+    /// API処理結果
+    Result? result,
+
     /// アバターのセリフ
-    @Default("") String avatarSpeech,
+    @Default("") String avatarMessage,
 
     /// ユーザーのセリフ
-    @Default("") String userSpeech,
+    @Default("") String userMessage,
 
     /// ユーザーが話しているかどうかを判別する
     @Default(false) bool isTalking,
 
-    /// 面談開始レスポンス
-    StartInterviewResponse? startInterviewResponse,
-
-    /// 最新のinterivewSession
-    InterviewSession? currentInterviewSession,
-    @Default([]) List<Teacher> teachers,
-
-    /// API処理結果
-    Result? result,
+    /// 最新のinterviewSessionId
+    @Default("") String currentInterviewSessionId,
   }) = _InterviewViewState;
 }

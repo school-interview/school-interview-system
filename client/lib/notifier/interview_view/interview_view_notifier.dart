@@ -1,5 +1,6 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
+import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
 import 'package:client/repository/interview/interview_repository_impl.dart';
@@ -17,65 +18,59 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     return const InterviewViewState();
   }
 
-  final InterviewRepository _interviewRepository = InterviewRepositoryImpl();
-
-  void setAvatarSpeech(String avatarSpeech) {
-    state = state.copyWith(avatarSpeech: avatarSpeech);
+  void setResult(Result result) {
+    state = state.copyWith(result: result);
   }
 
-  void setUserSpeech(String userSpeech) {
-    state = state.copyWith(userSpeech: userSpeech);
+  void setAvatarMessage(String avatarMessage) {
+    state = state.copyWith(avatarMessage: avatarMessage);
+  }
+
+  void setUserMessage(String userMessage) {
+    state = state.copyWith(userMessage: userMessage);
   }
 
   void setIsTalking(bool isTalking) {
     state = state.copyWith(isTalking: isTalking);
   }
 
-  void setStartInterviewResponse(
-      StartInterviewResponse startInterviewResponse) {
-    state = state.copyWith(startInterviewResponse: startInterviewResponse);
-  }
-
-  void setCurrentInterviewSession(InterviewSession interviewSession) {
-    state = state.copyWith(currentInterviewSession: interviewSession);
-  }
-
-  void setResult(Result result) {
-    state = state.copyWith(result: result);
-  }
-
-  void setTeachers(List<Teacher> teachers) {
-    state = state.copyWith(teachers: teachers);
+  void setCurrentInterviewSessionId(String currentInterviewSessionId) {
+    state =
+        state.copyWith(currentInterviewSessionId: currentInterviewSessionId);
   }
 
   final SpeechToText _speechToText = SpeechToText();
 
+  final InterviewRepository _interviewRepository = InterviewRepositoryImpl();
+
+  final SharedPreferenceManager _sharedPreferenceManager =
+      SharedPreferenceManager();
+
   /// 初回処理
-  Future<void> init({required String userId}) async {
+  /// 面談を開始する
+  Future<void> startInterview({
+    required String teacherId,
+  }) async {
     try {
-      // ApiResult<List<Teacher>> teacherResponse =
-      //     await _interviewRepository.getTeachers();
-      // setTeachers(teacherResponse.data!);
-
-      final requestId = InterviewSessionRequest(
-          userId: userId, teacherId: "5469a2f5-937d-4b38-bf33-b6df675db9de");
-
+      final userId =
+          await _sharedPreferenceManager.getString(PrefKeys.userId) ?? "";
+      final requestId =
+          InterviewSessionRequest(userId: userId, teacherId: teacherId);
       ApiResult<StartInterviewResponse> response =
           await _interviewRepository.postInterviewSessionRequest(requestId);
       switch (response.statusCode) {
         case 200:
-          setAvatarSpeech(response.data!.messageFromTeacher);
-          setStartInterviewResponse(response.data!);
-          setCurrentInterviewSession(response.data!.interviewSession);
+          setAvatarMessage(response.data!.messageFromTeacher);
+          setCurrentInterviewSessionId(response.data!.interviewSession.id);
           setResult(Result.success);
           logger.t("responseData:${response.data}");
           break;
         default:
-          setResult(Result.putUserInformationError);
+          setResult(Result.fail);
           break;
       }
     } on Exception catch (e) {
-      setResult(Result.putUserInformationError);
+      setResult(Result.fail);
       logger.e(e.toString());
       return;
     }
@@ -83,11 +78,14 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
 
   /// ユーザーが話し始めたときの処理
   Future<void> startTalking() async {
+    setUserMessage("");
     var available = await _speechToText.initialize();
     if (available) {
-      _speechToText.listen(onResult: (result) {
-        setUserSpeech(result.recognizedWords);
-      });
+      _speechToText.listen(
+        onResult: (result) {
+          setUserMessage(result.recognizedWords);
+        },
+      );
       setIsTalking(true);
     }
   }
@@ -97,24 +95,32 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     _speechToText.stop();
     setIsTalking(false);
     _speakToTeacher(
-        state.startInterviewResponse!.interviewSession, state.userSpeech);
+      currentInterviewSessionId: state.currentInterviewSessionId,
+      userSpeech: state.userMessage,
+    );
   }
 
-  Future<void> _speakToTeacher(
-      InterviewSession interviewSession, String text) async {
+  /// 教員メッセージ取得API
+  Future<void> _speakToTeacher({
+    required String currentInterviewSessionId,
+    required String userSpeech,
+  }) async {
     logger.i("run speakToTeacher()");
     final speakToTeacherRequest =
-        SpeakToTeacherRequest(messageFromStudent: text);
+        SpeakToTeacherRequest(messageFromStudent: userSpeech);
     try {
-      ApiResult<TeacherResponse> response = await _interviewRepository
-          .speakToTeacher(interviewSession.id, speakToTeacherRequest);
+      ApiResult<TeacherResponse> response =
+          await _interviewRepository.getMessageFromTeacher(
+        currentInterviewSessionId,
+        speakToTeacherRequest,
+      );
       switch (response.statusCode) {
         case 200:
-          setAvatarSpeech(response.data!.messageFromTeacher);
-          setCurrentInterviewSession(response.data!.interviewSession);
+          setAvatarMessage(response.data!.messageFromTeacher);
+          setCurrentInterviewSessionId(response.data!.interviewSession.id);
           break;
         default:
-          setAvatarSpeech("エラーが発生しました");
+          setAvatarMessage("エラーが発生しました");
           break;
       }
       logger.t("responseData:${response.data}");

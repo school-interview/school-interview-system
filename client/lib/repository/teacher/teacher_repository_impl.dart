@@ -3,23 +3,23 @@ import 'dart:convert';
 import 'package:client/app.dart';
 import 'package:client/core/response_extension.dart';
 import 'package:client/repository/api_result.dart';
-import 'package:client/repository/login/login_repository.dart';
+import 'package:client/repository/teacher/teacher_repository.dart';
 import 'package:openapi/api.dart';
 
-class LoginRepositoryImpl extends LoginRepository {
-  /// ユーザー情報登録API
+class TeacherRepositoryImpl extends TeacherRepository {
+  /// 教員リスト取得API
   @override
-  Future<ApiResult<User>> putUserInfo(LoginRequest loginRequest) async {
-    logger.i('loginRequest:$loginRequest');
+  Future<ApiResult<TeachersListResponse>> getTeacherList() async {
+    logger.i("run getTeacherList()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
-      final result = await api.controllerLoginPutWithHttpInfo(loginRequest);
+      final result = await api.controllerTeachersGetWithHttpInfo();
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
-          'User',
-        ) as User;
+          'TeachersListResponse',
+        ) as TeachersListResponse;
         logger.t('status code:${result.statusCode}');
         logger.t("data:${result.body}");
         return ApiResult(statusCode: result.statusCode, data: body);
