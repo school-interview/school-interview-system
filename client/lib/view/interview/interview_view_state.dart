@@ -1,3 +1,4 @@
+import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/constant/result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,8 +20,8 @@ abstract class InterviewViewState with _$InterviewViewState {
     /// ユーザーのセリフ
     @Default("") String userMessage,
 
-    /// ユーザーが話しているかどうかを判別する
-    @Default(false) bool isTalking,
+    /// 誰が話しているかを判別する
+    @Default(WhoTalking.none) WhoTalking whoTalking,
 
     /// 最新のinterviewSessionId
     @Default("") String currentInterviewSessionId,

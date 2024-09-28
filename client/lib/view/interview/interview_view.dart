@@ -3,6 +3,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
+import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
 import 'package:flutter/material.dart';
@@ -138,29 +139,30 @@ class _InterviewView extends ConsumerState<InterviewView> {
   Widget _micButton() {
     final notifier = ref.read(interviewViewNotifierProvider.notifier);
     final state = ref.watch(interviewViewNotifierProvider);
-    return Container(
-      width: 60,
-      height: 60,
-      margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: state.isTalking ? Colors.red : Colors.blue[200],
-        shape: BoxShape.circle,
-      ),
-      child: AvatarGlow(
-        animate: state.isTalking ? true : false,
-        glowColor: ColorDefinitions.accentColor,
-        glowRadiusFactor: state.isTalking ? 0.7 : 0.0,
-        child: IconButton(
-          icon: Icon(
-            state.isTalking ? Icons.stop : Icons.mic,
-            color: Colors.white,
-            size: state.isTalking ? 30 : 20,
+    return Opacity(
+      opacity: state.whoTalking == WhoTalking.avatar ? 0.5 : 1.0,
+      child: Container(
+        width: 60,
+        height: 60,
+        margin: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: notifier.micColor(state.whoTalking),
+          shape: BoxShape.circle,
+        ),
+        child: AvatarGlow(
+          animate: state.whoTalking == WhoTalking.user ? true : false,
+          glowColor: ColorDefinitions.accentColor,
+          glowRadiusFactor: state.whoTalking == WhoTalking.user ? 0.7 : 0.0,
+          child: IconButton(
+            icon: Icon(
+              notifier.micIcon(state.whoTalking),
+              color: Colors.white,
+              size: state.whoTalking == WhoTalking.user ? 30 : 20,
+            ),
+            onPressed: () async {
+              await notifier.micButtonTapAction();
+            },
           ),
-          onPressed: () async {
-            state.isTalking
-                ? await notifier.stopTalking()
-                : await notifier.startTalking();
-          },
         ),
       ),
     );

@@ -28,8 +28,8 @@ mixin _$InterviewViewState {
   /// ユーザーのセリフ
   String get userMessage => throw _privateConstructorUsedError;
 
-  /// ユーザーが話しているかどうかを判別する
-  bool get isTalking => throw _privateConstructorUsedError;
+  /// 誰が話しているかを判別する
+  WhoTalking get whoTalking => throw _privateConstructorUsedError;
 
   /// 最新のinterviewSessionId
   String get currentInterviewSessionId => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $InterviewViewStateCopyWith<$Res> {
       bool isLoading,
       String avatarMessage,
       String userMessage,
-      bool isTalking,
+      WhoTalking whoTalking,
       String currentInterviewSessionId});
 }
 
@@ -75,7 +75,7 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
     Object? isLoading = null,
     Object? avatarMessage = null,
     Object? userMessage = null,
-    Object? isTalking = null,
+    Object? whoTalking = null,
     Object? currentInterviewSessionId = null,
   }) {
     return _then(_value.copyWith(
@@ -95,10 +95,10 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.userMessage
           : userMessage // ignore: cast_nullable_to_non_nullable
               as String,
-      isTalking: null == isTalking
-          ? _value.isTalking
-          : isTalking // ignore: cast_nullable_to_non_nullable
-              as bool,
+      whoTalking: null == whoTalking
+          ? _value.whoTalking
+          : whoTalking // ignore: cast_nullable_to_non_nullable
+              as WhoTalking,
       currentInterviewSessionId: null == currentInterviewSessionId
           ? _value.currentInterviewSessionId
           : currentInterviewSessionId // ignore: cast_nullable_to_non_nullable
@@ -120,7 +120,7 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
       bool isLoading,
       String avatarMessage,
       String userMessage,
-      bool isTalking,
+      WhoTalking whoTalking,
       String currentInterviewSessionId});
 }
 
@@ -141,7 +141,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? avatarMessage = null,
     Object? userMessage = null,
-    Object? isTalking = null,
+    Object? whoTalking = null,
     Object? currentInterviewSessionId = null,
   }) {
     return _then(_$InterviewViewStateImpl(
@@ -161,10 +161,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.userMessage
           : userMessage // ignore: cast_nullable_to_non_nullable
               as String,
-      isTalking: null == isTalking
-          ? _value.isTalking
-          : isTalking // ignore: cast_nullable_to_non_nullable
-              as bool,
+      whoTalking: null == whoTalking
+          ? _value.whoTalking
+          : whoTalking // ignore: cast_nullable_to_non_nullable
+              as WhoTalking,
       currentInterviewSessionId: null == currentInterviewSessionId
           ? _value.currentInterviewSessionId
           : currentInterviewSessionId // ignore: cast_nullable_to_non_nullable
@@ -181,7 +181,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
       this.isLoading = true,
       this.avatarMessage = "",
       this.userMessage = "",
-      this.isTalking = false,
+      this.whoTalking = WhoTalking.none,
       this.currentInterviewSessionId = ""});
 
   /// API処理結果
@@ -203,10 +203,10 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   @JsonKey()
   final String userMessage;
 
-  /// ユーザーが話しているかどうかを判別する
+  /// 誰が話しているかを判別する
   @override
   @JsonKey()
-  final bool isTalking;
+  final WhoTalking whoTalking;
 
   /// 最新のinterviewSessionId
   @override
@@ -215,7 +215,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
   @override
   String toString() {
-    return 'InterviewViewState(result: $result, isLoading: $isLoading, avatarMessage: $avatarMessage, userMessage: $userMessage, isTalking: $isTalking, currentInterviewSessionId: $currentInterviewSessionId)';
+    return 'InterviewViewState(result: $result, isLoading: $isLoading, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId)';
   }
 
   @override
@@ -230,8 +230,8 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
                 other.avatarMessage == avatarMessage) &&
             (identical(other.userMessage, userMessage) ||
                 other.userMessage == userMessage) &&
-            (identical(other.isTalking, isTalking) ||
-                other.isTalking == isTalking) &&
+            (identical(other.whoTalking, whoTalking) ||
+                other.whoTalking == whoTalking) &&
             (identical(other.currentInterviewSessionId,
                     currentInterviewSessionId) ||
                 other.currentInterviewSessionId == currentInterviewSessionId));
@@ -239,7 +239,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
   @override
   int get hashCode => Object.hash(runtimeType, result, isLoading, avatarMessage,
-      userMessage, isTalking, currentInterviewSessionId);
+      userMessage, whoTalking, currentInterviewSessionId);
 
   /// Create a copy of InterviewViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -257,7 +257,7 @@ abstract class _InterviewViewState implements InterviewViewState {
       final bool isLoading,
       final String avatarMessage,
       final String userMessage,
-      final bool isTalking,
+      final WhoTalking whoTalking,
       final String currentInterviewSessionId}) = _$InterviewViewStateImpl;
 
   /// API処理結果
@@ -276,9 +276,9 @@ abstract class _InterviewViewState implements InterviewViewState {
   @override
   String get userMessage;
 
-  /// ユーザーが話しているかどうかを判別する
+  /// 誰が話しているかを判別する
   @override
-  bool get isTalking;
+  WhoTalking get whoTalking;
 
   /// 最新のinterviewSessionId
   @override
