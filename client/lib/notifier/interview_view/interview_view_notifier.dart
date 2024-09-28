@@ -29,7 +29,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(isLoading: isLoading);
   }
 
-  void setWhoTalking(WhoTalking whoTalking) {
+  void _setWhoTalking(WhoTalking whoTalking) {
     state = state.copyWith(whoTalking: whoTalking);
   }
 
@@ -74,10 +74,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           TextToSpeech.speak(
             response.data!.messageFromTeacher,
             startFunc: () {
-              setWhoTalking(WhoTalking.avatar);
+              _setWhoTalking(WhoTalking.avatar);
             },
             endFunc: () {
-              setWhoTalking(WhoTalking.none);
+              _setWhoTalking(WhoTalking.none);
             },
           );
           logger.t("responseData:${response.data}");
@@ -108,7 +108,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   /// ユーザーが話し始めたときの処理
   Future<void> _startTalking() async {
     setUserMessage("");
-    setWhoTalking(WhoTalking.user);
+    _setWhoTalking(WhoTalking.user);
     var available = await _speechToText.initialize();
     if (available) {
       _speechToText.listen(
@@ -123,7 +123,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   Future<void> _stopTalking() async {
     setIsLoading(true);
     _speechToText.stop();
-    setWhoTalking(WhoTalking.avatar);
+    _setWhoTalking(WhoTalking.avatar);
     await _speakToTeacher(
       currentInterviewSessionId: state.currentInterviewSessionId,
       userSpeech: state.userMessage,
@@ -152,10 +152,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           TextToSpeech.speak(
             response.data!.messageFromTeacher,
             startFunc: () {
-              setWhoTalking(WhoTalking.avatar);
+              _setWhoTalking(WhoTalking.avatar);
             },
             endFunc: () {
-              setWhoTalking(WhoTalking.none);
+              _setWhoTalking(WhoTalking.none);
             },
           );
           break;
