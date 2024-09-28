@@ -16,12 +16,18 @@ class TextToSpeech {
   }
 
   /// テキストを音声に変換して再生する
-  static speak(String text) async {
+  static speak(
+    String text, {
+    required Function startFunc,
+    required Function endFunc,
+  }) async {
     tts.setStartHandler(() {
+      startFunc();
       logger.i("TTS STARTED");
     });
 
     tts.setCompletionHandler(() {
+      endFunc();
       logger.i("TTS COMPLETED");
     });
 
@@ -29,7 +35,7 @@ class TextToSpeech {
       logger.e(message);
     });
 
-    await tts.setSpeechRate(1.2); // 速度を設定
+    await tts.setSpeechRate(1.5); // 速度を設定
     await tts.setVolume(1.0); // 音量を設定
     await tts.setPitch(1.0); // ピッチを設定
     await tts.awaitSpeakCompletion(true);
