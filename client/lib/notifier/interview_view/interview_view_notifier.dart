@@ -1,5 +1,6 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
+import 'package:client/core/text_to_speech.dart';
 import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
@@ -68,6 +69,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
           setResult(Result.success);
+          TextToSpeech.speak(response.data!.messageFromTeacher);
           logger.t("responseData:${response.data}");
           break;
         default:
@@ -122,9 +124,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       );
       switch (response.statusCode) {
         case 200:
+          setIsLoading(false);
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
-          setIsLoading(false);
+          TextToSpeech.speak(response.data!.messageFromTeacher);
           break;
         default:
           setAvatarMessage("エラーが発生しました");
