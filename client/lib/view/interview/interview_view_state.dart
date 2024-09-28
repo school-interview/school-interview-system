@@ -10,6 +10,9 @@ abstract class InterviewViewState with _$InterviewViewState {
     /// API処理結果
     Result? result,
 
+    /// ローディング中かどうかを判別する
+    @Default(true) bool isLoading,
+
     /// アバターのセリフ
     @Default("") String avatarMessage,
 

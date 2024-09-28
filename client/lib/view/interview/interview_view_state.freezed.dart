@@ -19,6 +19,9 @@ mixin _$InterviewViewState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
+  /// ローディング中かどうかを判別する
+  bool get isLoading => throw _privateConstructorUsedError;
+
   /// アバターのセリフ
   String get avatarMessage => throw _privateConstructorUsedError;
 
@@ -46,6 +49,7 @@ abstract class $InterviewViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Result? result,
+      bool isLoading,
       String avatarMessage,
       String userMessage,
       bool isTalking,
@@ -68,6 +72,7 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
   @override
   $Res call({
     Object? result = freezed,
+    Object? isLoading = null,
     Object? avatarMessage = null,
     Object? userMessage = null,
     Object? isTalking = null,
@@ -78,6 +83,10 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       avatarMessage: null == avatarMessage
           ? _value.avatarMessage
           : avatarMessage // ignore: cast_nullable_to_non_nullable
@@ -108,6 +117,7 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Result? result,
+      bool isLoading,
       String avatarMessage,
       String userMessage,
       bool isTalking,
@@ -128,6 +138,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? result = freezed,
+    Object? isLoading = null,
     Object? avatarMessage = null,
     Object? userMessage = null,
     Object? isTalking = null,
@@ -138,6 +149,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       avatarMessage: null == avatarMessage
           ? _value.avatarMessage
           : avatarMessage // ignore: cast_nullable_to_non_nullable
@@ -163,6 +178,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
 class _$InterviewViewStateImpl implements _InterviewViewState {
   const _$InterviewViewStateImpl(
       {this.result,
+      this.isLoading = true,
       this.avatarMessage = "",
       this.userMessage = "",
       this.isTalking = false,
@@ -171,6 +187,11 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   /// API処理結果
   @override
   final Result? result;
+
+  /// ローディング中かどうかを判別する
+  @override
+  @JsonKey()
+  final bool isLoading;
 
   /// アバターのセリフ
   @override
@@ -194,7 +215,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
   @override
   String toString() {
-    return 'InterviewViewState(result: $result, avatarMessage: $avatarMessage, userMessage: $userMessage, isTalking: $isTalking, currentInterviewSessionId: $currentInterviewSessionId)';
+    return 'InterviewViewState(result: $result, isLoading: $isLoading, avatarMessage: $avatarMessage, userMessage: $userMessage, isTalking: $isTalking, currentInterviewSessionId: $currentInterviewSessionId)';
   }
 
   @override
@@ -203,6 +224,8 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
         (other.runtimeType == runtimeType &&
             other is _$InterviewViewStateImpl &&
             (identical(other.result, result) || other.result == result) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
             (identical(other.avatarMessage, avatarMessage) ||
                 other.avatarMessage == avatarMessage) &&
             (identical(other.userMessage, userMessage) ||
@@ -215,7 +238,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, result, avatarMessage,
+  int get hashCode => Object.hash(runtimeType, result, isLoading, avatarMessage,
       userMessage, isTalking, currentInterviewSessionId);
 
   /// Create a copy of InterviewViewState
@@ -231,6 +254,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 abstract class _InterviewViewState implements InterviewViewState {
   const factory _InterviewViewState(
       {final Result? result,
+      final bool isLoading,
       final String avatarMessage,
       final String userMessage,
       final bool isTalking,
@@ -239,6 +263,10 @@ abstract class _InterviewViewState implements InterviewViewState {
   /// API処理結果
   @override
   Result? get result;
+
+  /// ローディング中かどうかを判別する
+  @override
+  bool get isLoading;
 
   /// アバターのセリフ
   @override
