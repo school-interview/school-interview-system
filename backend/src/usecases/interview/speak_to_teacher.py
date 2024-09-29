@@ -17,6 +17,7 @@ from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
+from pydantic import TypeAdapter
 from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Concern, PreferInPerson, ExtractionResult, TeacherModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
@@ -44,7 +45,8 @@ def get_questions(session: Session):
     all_questions: List[InterviewQuestionModel] = session.execute(
         question_query).scalars().all()
     for question in all_questions:
-        questions[question.order] = question
+        questions[question.order] = TypeAdapter(
+            InterviewQuestion).validate_python(question.__dict__)
     return questions
 
 
