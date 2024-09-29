@@ -16,10 +16,9 @@ After you installed Docker Desktop, you can launch the backend app with these co
 
 ```
 cd backend
-docker compose --profile backend --profile db up --build
-
-docker compose --profile --profile db backend up
-// ↑ After you build the docker image, you don't need to specify --build option anymore
+make start
+// or
+docker compose --profile db --profile  backend up
 ```
 
 The app is available on `http://localhost:8000`.
