@@ -1,6 +1,7 @@
 import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/constant/result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:openapi/api.dart';
 
 part 'interview_view_state.freezed.dart';
 
@@ -25,5 +26,8 @@ abstract class InterviewViewState with _$InterviewViewState {
 
     /// 最新のinterviewSessionId
     @Default("") String currentInterviewSessionId,
+
+    /// 面談結果
+    InterviewAnalytics? interviewAnalytics,
   }) = _InterviewViewState;
 }

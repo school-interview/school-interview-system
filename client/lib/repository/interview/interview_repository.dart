@@ -10,4 +10,8 @@ abstract class InterviewRepository {
   /// 教員メッセージ取得API
   Future<ApiResult<TeacherResponse>> getMessageFromTeacher(
       String interviewSessionId, SpeakToTeacherRequest speakToTeacherRequest);
+
+  /// 要支援レベル取得API
+  Future<ApiResult<InterviewAnalytics>> getInterviewAnalytics(
+      String interviewSessionId);
 }

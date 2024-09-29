@@ -34,6 +34,10 @@ mixin _$InterviewViewState {
   /// 最新のinterviewSessionId
   String get currentInterviewSessionId => throw _privateConstructorUsedError;
 
+  /// 面談結果
+  InterviewAnalytics? get interviewAnalytics =>
+      throw _privateConstructorUsedError;
+
   /// Create a copy of InterviewViewState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -53,7 +57,8 @@ abstract class $InterviewViewStateCopyWith<$Res> {
       String avatarMessage,
       String userMessage,
       WhoTalking whoTalking,
-      String currentInterviewSessionId});
+      String currentInterviewSessionId,
+      InterviewAnalytics? interviewAnalytics});
 }
 
 /// @nodoc
@@ -77,6 +82,7 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
     Object? userMessage = null,
     Object? whoTalking = null,
     Object? currentInterviewSessionId = null,
+    Object? interviewAnalytics = freezed,
   }) {
     return _then(_value.copyWith(
       result: freezed == result
@@ -103,6 +109,10 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.currentInterviewSessionId
           : currentInterviewSessionId // ignore: cast_nullable_to_non_nullable
               as String,
+      interviewAnalytics: freezed == interviewAnalytics
+          ? _value.interviewAnalytics
+          : interviewAnalytics // ignore: cast_nullable_to_non_nullable
+              as InterviewAnalytics?,
     ) as $Val);
   }
 }
@@ -121,7 +131,8 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
       String avatarMessage,
       String userMessage,
       WhoTalking whoTalking,
-      String currentInterviewSessionId});
+      String currentInterviewSessionId,
+      InterviewAnalytics? interviewAnalytics});
 }
 
 /// @nodoc
@@ -143,6 +154,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
     Object? userMessage = null,
     Object? whoTalking = null,
     Object? currentInterviewSessionId = null,
+    Object? interviewAnalytics = freezed,
   }) {
     return _then(_$InterviewViewStateImpl(
       result: freezed == result
@@ -169,6 +181,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.currentInterviewSessionId
           : currentInterviewSessionId // ignore: cast_nullable_to_non_nullable
               as String,
+      interviewAnalytics: freezed == interviewAnalytics
+          ? _value.interviewAnalytics
+          : interviewAnalytics // ignore: cast_nullable_to_non_nullable
+              as InterviewAnalytics?,
     ));
   }
 }
@@ -182,7 +198,8 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
       this.avatarMessage = "",
       this.userMessage = "",
       this.whoTalking = WhoTalking.none,
-      this.currentInterviewSessionId = ""});
+      this.currentInterviewSessionId = "",
+      this.interviewAnalytics});
 
   /// API処理結果
   @override
@@ -213,9 +230,13 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   @JsonKey()
   final String currentInterviewSessionId;
 
+  /// 面談結果
+  @override
+  final InterviewAnalytics? interviewAnalytics;
+
   @override
   String toString() {
-    return 'InterviewViewState(result: $result, isLoading: $isLoading, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId)';
+    return 'InterviewViewState(result: $result, isLoading: $isLoading, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId, interviewAnalytics: $interviewAnalytics)';
   }
 
   @override
@@ -234,12 +255,14 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
                 other.whoTalking == whoTalking) &&
             (identical(other.currentInterviewSessionId,
                     currentInterviewSessionId) ||
-                other.currentInterviewSessionId == currentInterviewSessionId));
+                other.currentInterviewSessionId == currentInterviewSessionId) &&
+            (identical(other.interviewAnalytics, interviewAnalytics) ||
+                other.interviewAnalytics == interviewAnalytics));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, result, isLoading, avatarMessage,
-      userMessage, whoTalking, currentInterviewSessionId);
+      userMessage, whoTalking, currentInterviewSessionId, interviewAnalytics);
 
   /// Create a copy of InterviewViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -258,7 +281,8 @@ abstract class _InterviewViewState implements InterviewViewState {
       final String avatarMessage,
       final String userMessage,
       final WhoTalking whoTalking,
-      final String currentInterviewSessionId}) = _$InterviewViewStateImpl;
+      final String currentInterviewSessionId,
+      final InterviewAnalytics? interviewAnalytics}) = _$InterviewViewStateImpl;
 
   /// API処理結果
   @override
@@ -283,6 +307,10 @@ abstract class _InterviewViewState implements InterviewViewState {
   /// 最新のinterviewSessionId
   @override
   String get currentInterviewSessionId;
+
+  /// 面談結果
+  @override
+  InterviewAnalytics? get interviewAnalytics;
 
   /// Create a copy of InterviewViewState
   /// with the given fields replaced by the non-null parameter values.
