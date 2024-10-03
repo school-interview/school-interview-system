@@ -8,9 +8,7 @@ import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.d
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:openapi/api.dart';
 
 /// 面談画面
 class InterviewView extends ConsumerStatefulWidget {
@@ -34,12 +32,6 @@ class _InterviewView extends ConsumerState<InterviewView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<InterviewAnalytics?>(
-        interviewViewNotifierProvider
-            .select((value) => value.interviewAnalytics), (_, next) {
-      // 面談結果が帰ってきたとき画面遷移する
-      context.push("");
-    });
     final state = ref.watch(interviewViewNotifierProvider);
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,

@@ -145,16 +145,16 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
             startFunc: () {
               _setWhoTalking(WhoTalking.avatar);
             },
-            endFunc: () {
+            endFunc: () async {
               _setWhoTalking(WhoTalking.none);
+              // 面談が終了した場合、要支援レベルを取得する
+              if (response.data!.interviewSession.done) {
+                await _getInterviewAnalytics(
+                    currentInterviewSessionId: state.currentInterviewSessionId);
+                // TODO 画面遷移処理
+              }
             },
           );
-
-          // 面談が終了した場合、要支援レベルを取得する
-          if (response.data!.interviewSession.done) {
-            await _getInterviewAnalytics(
-                currentInterviewSessionId: state.currentInterviewSessionId);
-          }
           break;
         default:
           setAvatarMessage("エラーが発生しました");
