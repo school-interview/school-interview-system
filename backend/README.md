@@ -2,7 +2,7 @@
 
 This is the backend application for school interview system.
 
-For more information on this projectg, see [修学面談システム HQ Home](https://school-interview.atlassian.net/wiki/spaces/a8558504ee1440048aefa419afc80e13/overview)
+For more information on this project, see [修学面談システム HQ Home](https://school-interview.atlassian.net/wiki/spaces/a8558504ee1440048aefa419afc80e13/overview)
 
 For more infomatino on API, see [API Spec | 修学面談システム](https://school-interview.atlassian.net/wiki/spaces/a8558504ee1440048aefa419afc80e13/pages/98739/API+Spec)
 
