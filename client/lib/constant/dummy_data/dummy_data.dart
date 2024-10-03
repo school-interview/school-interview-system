@@ -7,10 +7,10 @@ class DummyData {
     id: "id",
     sessionId: "sessionId",
     failToMoveToNextGrade: false,
-    deviationFromPreferredCreditLevel: 0,
-    deviationFromMinimumAttendanceRate: 0,
-    highAttendanceLowGpaRate: 0,
-    lowAtendanceAndLowGpaRate: 0,
-    supportNecessityLevel: 0,
+    deviationFromPreferredCreditLevel: 10.0,
+    deviationFromMinimumAttendanceRate: 15.0,
+    highAttendanceLowGpaRate: 3.0,
+    lowAtendanceAndLowGpaRate: 6.0,
+    supportNecessityLevel: 34.0,
   );
 }
