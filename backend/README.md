@@ -2,7 +2,9 @@
 
 This is the backend application for school interview system.
 
-For more infomatino on API, see [API Design Doc | 修学面談システム](https://www.notion.so/API-Design-Doc-107879aba7c68062bfa4e4ea7a69815c)
+For more information on this projectg, see [修学面談システム HQ Home](https://school-interview.atlassian.net/wiki/spaces/a8558504ee1440048aefa419afc80e13/overview)
+
+For more infomatino on API, see [API Spec | 修学面談システム](https://school-interview.atlassian.net/wiki/spaces/a8558504ee1440048aefa419afc80e13/pages/98739/API+Spec)
 
 ## Set Up
 
