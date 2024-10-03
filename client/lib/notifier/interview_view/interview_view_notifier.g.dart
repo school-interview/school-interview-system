@@ -7,7 +7,7 @@ part of 'interview_view_notifier.dart';
 // **************************************************************************
 
 String _$interviewViewNotifierHash() =>
-    r'0f6e83b6e9b000927e8a44ab802e88c0780af96e';
+    r'808c2e0a581cc58c8f508bd03cbcd575f89ec7b6';
 
 /// See also [InterviewViewNotifier].
 @ProviderFor(InterviewViewNotifier)

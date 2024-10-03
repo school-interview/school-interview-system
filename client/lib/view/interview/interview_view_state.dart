@@ -29,5 +29,8 @@ abstract class InterviewViewState with _$InterviewViewState {
 
     /// 面談結果
     InterviewAnalytics? interviewAnalytics,
+
+    /// 面談が終了したかどうかを判別する
+    @Default(false) bool isFinishInterview,
   }) = _InterviewViewState;
 }
