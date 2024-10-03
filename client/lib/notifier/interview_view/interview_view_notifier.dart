@@ -50,6 +50,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(interviewAnalytics: interviewAnalytics);
   }
 
+  void _setIsFinishInterview(bool isFinishInterview) => state = state.copyWith(isFinishInterview: isFinishInterview);
+
   final SpeechToText _speechToText = SpeechToText();
 
   final InterviewRepository _interviewRepository = InterviewRepositoryImpl();
@@ -151,7 +153,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
               if (response.data!.interviewSession.done) {
                 await _getInterviewAnalytics(
                     currentInterviewSessionId: state.currentInterviewSessionId);
-                // TODO 画面遷移処理
+                _setIsFinishInterview(true);
               }
             },
           );

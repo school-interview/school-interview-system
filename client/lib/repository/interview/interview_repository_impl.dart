@@ -42,6 +42,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
     SpeakToTeacherRequest speakToTeacherRequest,
   ) async {
     logger.i("run getMessageFromTeacher()");
+    logger.t("interviewSessionId:$interviewSessionId, speakToTeacherRequest:$speakToTeacherRequest");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
