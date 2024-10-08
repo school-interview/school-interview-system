@@ -34,6 +34,8 @@ async def verify_token(jwt: str):
         # https://github.com/orgs/school-interview/projects/2/views/1?pane=issue&itemId=82535648&issue=school-interview%7Cschool-interview-system%7C123
 
         # TODO: RefreshTokenを使ってIDトークンの再取得を行う
+        # ↓ 参考になるかも
+        # https://developers.google.com/identity/protocols/oauth2/web-server#python_8
         id_info: IdInfo = id_token.verify_oauth2_token(
             jwt, requests.Request(), CLIENT_ID
         )
