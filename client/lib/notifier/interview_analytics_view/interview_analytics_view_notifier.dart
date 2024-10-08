@@ -18,4 +18,19 @@ class InterviewAnalyticsViewNotifier extends _$InterviewAnalyticsViewNotifier {
     final value = ((factor?.toDouble() ?? 0) * parameter).toStringAsFixed(1);
     return value;
   }
+
+  /// 円グラフにセットするデータマップを作成する
+  Map<String, double> createChartDataMap(
+      List<double> values, bool isFullScore) {
+    Map<String, double> dataMap = {};
+    if (isFullScore) {
+      dataMap.addAll({"1": 100});
+      return dataMap;
+    } else {
+      for (int i = 0; i < values.length; i++) {
+        dataMap.addAll({"${i + 1}": values[i]});
+      }
+      return dataMap;
+    }
+  }
 }
