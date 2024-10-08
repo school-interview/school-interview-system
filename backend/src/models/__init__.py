@@ -14,6 +14,7 @@ from src.models.app_models.llm_structured_outputs.concern_model import Concern
 from src.models.app_models.llm_structured_outputs.gpa_model import Gpa
 from src.models.app_models.llm_structured_outputs.prefer_in_person_model import PreferInPerson
 from src.models.app_models.llm_structured_outputs.school_credit_model import SchoolCredit
+from src.models.app_models.id_info_model import IdInfo
 from src.models.api_models.requests.interview_session_request_model import InterviewSessionRequest
 from src.models.api_models.requests.login_request_model import LoginRequest
 from src.models.api_models.requests.speak_to_teacher_request_model import SpeakToTeacherRequest
