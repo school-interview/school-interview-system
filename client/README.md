@@ -119,7 +119,7 @@ If you use Mac, you can configure it by following step.
 
    This is because the [device_preview](https://pub.dev/packages/device_preview) package is installed, so it will never run outside of `chrome`.
 
-4. Version Confirmation.
+3. Version Confirmation.
 
    To check the version, run the following command.
 
@@ -142,3 +142,17 @@ flutter run -d chrome
 ### reference
 
 - https://docs.flutter.dev/get-started/install/macos/web
+
+# How to generate Freezed code
+
+```
+// freezed生成
+dart run build_runner build --delete-conflicting-outputs
+```
+
+# How to generate Provider code
+
+```
+// provider生成
+flutter pub run build_runner build --delete-conflicting-outputs
+```
