@@ -64,7 +64,7 @@ class OAuthCallbackRestApiController(RestApiController):
     path = "/oauth2/callback"
     response_model = Any
 
-    async def controller(self, code: str, session: Session = Depends(session_factory)):
+    async def controller(self, code: str, request: Request, session: Session = Depends(session_factory)):
         async with httpx.AsyncClient() as client:
             token_response = await client.post(TOKEN_URL, data={
                 "code": code,
@@ -81,8 +81,12 @@ class OAuthCallbackRestApiController(RestApiController):
                 title="Failed to get token",
                 detail=token_response_json.get("error_description")
             )
-        id_info = await verify_token(token_response_json["id_token"])
-        return id_info
+        id_token = token_response_json["id_token"]
+        refresh_token = token_response_json["refresh_token"]
+        id_info = await verify_token(id_token)
+        request.session['id_token'] = id_token
+        request.session['refresh_token'] = refresh_token
+        return request.session['id_token']
 
 
 auth_rest_api_controllers: List[RestApiController] = [
