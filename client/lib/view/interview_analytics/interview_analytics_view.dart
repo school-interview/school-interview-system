@@ -59,10 +59,10 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
       double.parse(e4Value)
     ];
     // 円グラフに表示するデータ
-    Map<String, double> dataMap = {};
-    for (int i = 0; i < valueList.length; i++) {
-      dataMap.addAll({"${i + 1}": valueList[i]});
-    }
+    final isFullScore =
+        interviewState.interviewAnalytics?.failToMoveToNextGrade ?? false;
+    Map<String, double> dataMap =
+        notifier.createChartDataMap(valueList, isFullScore);
 
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
@@ -77,85 +77,94 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              Card(
-                color: ColorDefinitions.primaryColor,
-                elevation: 5,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 5),
-                    const Text(
-                      "要支援レベル",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: PieChart(
-                        dataMap: dataMap,
-                        centerWidget: _centerWidget(),
-                        animationDuration: const Duration(milliseconds: 800),
-                        chartRadius: 140,
-                        initialAngleInDegree: 270,
-                        chartType: ChartType.ring,
-                        ringStrokeWidth: 32,
-                        legendOptions: const LegendOptions(showLegends: false),
-                        chartValuesOptions: const ChartValuesOptions(
-                          showChartValueBackground: true,
-                          showChartValues: true,
-                          showChartValuesOutside: true,
-                          decimalPlaces: 1,
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Card(
+                    color: ColorDefinitions.primaryColor,
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 5),
+                        const Text(
+                          "要支援レベル",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                        totalValue: 100,
-                        baseChartColor: Colors.grey,
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: PieChart(
+                            dataMap: dataMap,
+                            centerWidget: _centerWidget(isFullScore),
+                            animationDuration:
+                                const Duration(milliseconds: 800),
+                            chartRadius: 140,
+                            initialAngleInDegree: 270,
+                            chartType: ChartType.ring,
+                            ringStrokeWidth: 32,
+                            legendOptions:
+                                const LegendOptions(showLegends: false),
+                            chartValuesOptions: const ChartValuesOptions(
+                              showChartValueBackground: true,
+                              showChartValues: true,
+                              showChartValuesOutside: true,
+                              decimalPlaces: 1,
+                            ),
+                            totalValue: 100,
+                            baseChartColor: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "要支援レベル内訳",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Scrollbar(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _supportNecessityLevelElement(
-                        description: e1.description,
-                        parameter: e1.parameter,
-                        value: e1Value,
-                        chartColor: e1.chartColor,
-                      ),
-                      _supportNecessityLevelElement(
-                        description: e2.description,
-                        parameter: e2.parameter,
-                        value: e2Value,
-                        chartColor: e2.chartColor,
-                      ),
-                      _supportNecessityLevelElement(
-                        description: e3.description,
-                        parameter: e3.parameter,
-                        value: e3Value,
-                        chartColor: e3.chartColor,
-                      ),
-                      _supportNecessityLevelElement(
-                        description: e4.description,
-                        parameter: e4.parameter,
-                        value: e4Value,
-                        chartColor: e4.chartColor,
-                      ),
-                    ],
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "要支援レベル内訳",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+
+                  /// 進級条件に満たない場合と満たす場合で表示する内容を変える
+                  isFullScore
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text("修得単位数が進級条件に満たないため、支援必須と判断されました。"),
+                        )
+                      : Column(
+                          children: [
+                            _supportNecessityLevelElement(
+                              description: e1.description,
+                              parameter: e1.parameter,
+                              value: e1Value,
+                              chartColor: e1.chartColor,
+                            ),
+                            _supportNecessityLevelElement(
+                              description: e2.description,
+                              parameter: e2.parameter,
+                              value: e2Value,
+                              chartColor: e2.chartColor,
+                            ),
+                            _supportNecessityLevelElement(
+                              description: e3.description,
+                              parameter: e3.parameter,
+                              value: e3Value,
+                              chartColor: e3.chartColor,
+                            ),
+                            _supportNecessityLevelElement(
+                              description: e4.description,
+                              parameter: e4.parameter,
+                              value: e4Value,
+                              chartColor: e4.chartColor,
+                            ),
+                          ],
+                        ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -163,13 +172,15 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
   }
 
   /// 要支援レベル円グラフ中央に表示するWidget
-  Widget _centerWidget() {
+  Widget _centerWidget(bool isFullScore) {
     final interviewState = ref.watch(interviewViewNotifierProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "${interviewState.interviewAnalytics?.supportNecessityLevel.toDouble().toStringAsFixed(1) ?? 0}",
+          isFullScore
+              ? "100"
+              : "${interviewState.interviewAnalytics?.supportNecessityLevel.toDouble().toStringAsFixed(1) ?? 0}",
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -194,60 +205,70 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
     const double meterHeight = 20;
     const double meterRadius = 20;
     double meterWidth = MediaQuery.of(context).size.width * 0.6;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              description,
-              style: const TextStyle(fontSize: 16),
-            ),
-            // TODO 不要であれば削除
-            IconButton(
-              onPressed: () {
-                // ボタン押下
-                // TODO ボタンを押下したときの処理（内訳の詳細説明を表示する想定）
-              },
-              icon: const Icon(Icons.info_outline, size: 20),
-            )
-          ],
-        ),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  width: meterWidth,
-                  height: meterHeight,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(meterRadius),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                description,
+                style: const TextStyle(fontSize: 16),
+              ),
+              // TODO 不要であれば削除
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: () {
+                  // ボタン押下
+                  // TODO ボタンを押下したときの処理（内訳の詳細説明を表示する想定）
+                },
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(
+                  Icons.info_outline,
+                  size: 20,
                 ),
-                AnimatedContainer(
-                  width: state.isAnimated
-                      ? (meterWidth * double.parse(value)) / parameter
-                      : 0,
-                  height: meterHeight,
-                  decoration: BoxDecoration(
-                    color: chartColor,
-                    borderRadius: BorderRadius.circular(meterRadius),
+              )
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    width: meterWidth,
+                    height: meterHeight,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(meterRadius),
+                    ),
                   ),
-                  duration: const Duration(milliseconds: 800),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Text(" /$parameter"),
-          ],
-        ),
-      ],
+                  AnimatedContainer(
+                    width: state.isAnimated
+                        ? (meterWidth * double.parse(value)) / parameter
+                        : 0,
+                    height: meterHeight,
+                    decoration: BoxDecoration(
+                      color: chartColor,
+                      borderRadius: BorderRadius.circular(meterRadius),
+                    ),
+                    duration: const Duration(milliseconds: 800),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                value,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Text(" /$parameter"),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
