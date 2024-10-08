@@ -6,6 +6,8 @@ from src.models.db_models.interview_session_model import InterviewSession, Inter
 from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel
 from src.models.db_models.interview_record_model import InterviewRecord, InterviewRecordModel
 from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel
+from src.models.db_models.admin_model import Admin, AdminModel
+from src.models.db_models.student_model import Student, StudentModel
 from src.models.app_models.extraction_result_model import ExtractionResult
 from src.models.app_models.rest_api_controller_model import RestApiController, HttpMethod
 from src.models.app_models.websocket_controller_model import WebsocketController
