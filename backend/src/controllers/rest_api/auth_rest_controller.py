@@ -1,5 +1,5 @@
 import os
-from fastapi import Depends, HTTPException, Query
+from fastapi import Depends, HTTPException, Query, Request
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import RedirectResponse
 from src.database import session_factory
@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import httpx
 from google.oauth2 import id_token
 from google.auth.transport import requests
+
 load_dotenv(".env.local")
 
 CLIENT_ID = os.getenv("CLIENT_ID")
@@ -18,6 +19,7 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
+
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl=AUTHORIZATION_URL,
@@ -27,7 +29,9 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 
 async def verify_token(jwt: str):
     try:
-        # TODO: 毎回鍵をフェッチしているようなのでそれをキャッシュする（どこかのコメントに方法が書かれていた。）
+        # TODO: 毎回certificatesをフェッチしているようなのでそれをキャッシュする
+        # ↓　Issueのリンク
+        # https://github.com/orgs/school-interview/projects/2/views/1?pane=issue&itemId=82535648&issue=school-interview%7Cschool-interview-system%7C123
         id_info = id_token.verify_oauth2_token(
             jwt, requests.Request(), CLIENT_ID
         )
