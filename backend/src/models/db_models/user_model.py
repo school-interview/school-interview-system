@@ -10,6 +10,7 @@ class User(BaseModel):
     id: UUID
     name: str
     email: str
+    is_admin: bool
 
 
 class UserModel(EntityBaseModel):
