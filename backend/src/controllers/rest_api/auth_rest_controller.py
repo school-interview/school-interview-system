@@ -27,6 +27,7 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 
 async def verify_token(jwt: str):
     try:
+        # TODO: 毎回鍵をフェッチしているようなのでそれをキャッシュする（どこかのコメントに方法が書かれていた。）
         id_info = id_token.verify_oauth2_token(
             jwt, requests.Request(), CLIENT_ID
         )
