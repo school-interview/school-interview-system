@@ -3,6 +3,7 @@ WORKDIR /app
 RUN apt install libpq-dev make gcc g++ 
 RUN pip install poetry
 COPY ./pyproject.toml ./poetry.toml ./poetry.lock* ./
+COPY ./certificate ./certificate
 # RUN export SHELL="/bin/sh"
 RUN poetry install --no-root
 # RUN poetry shell
