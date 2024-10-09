@@ -53,11 +53,15 @@ class OAuthCallbackRestApiController(RestApiController):
             )
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
-        id_info = await verify_token(id_token)
+        id_info = verify_token(id_token)
+
         request.session['id_token'] = id_token
         request.session['refresh_token'] = refresh_token
+        request.session.setdefault("domain", "http://localhost:8001")
+        print("保存されたせっしょん", request.session)
         login(session, id_info)
-        return RedirectResponse(CLIENT_URL)
+        response = RedirectResponse(CLIENT_URL)
+        return response
 
 
 auth_rest_api_controllers: List[RestApiController] = [

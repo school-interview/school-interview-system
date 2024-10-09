@@ -51,7 +51,7 @@ app_fastapi.add_middleware(
 )
 app_fastapi.add_middleware(
     SessionMiddleware,
-    secret_key=SESSION_SECRET_KEY
+    secret_key=SESSION_SECRET_KEY,
     # https_only=True
 )
 
