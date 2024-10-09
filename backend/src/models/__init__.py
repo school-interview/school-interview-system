@@ -1,5 +1,5 @@
 from src.models.db_models.base_model import EntityBaseModel
-from src.models.db_models.user_model import User, UserModel
+from src.models.db_models.user_model import User, UserModel, UserUpdate
 from src.models.db_models.connection_model import WebsocketConnection, WebsocketConnectionModel
 from src.models.db_models.teacher_model import Teacher, TeacherModel
 from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel
