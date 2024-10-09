@@ -4,7 +4,8 @@ from fastapi import Request
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from google.oauth2 import id_token
 from google.auth.transport import requests
-from src.models import ErrorResponse, IdInfo
+from src.crud import UserCrud
+from src.models import ErrorResponse, IdInfo, UserModel
 
 
 load_dotenv(".env.local")
@@ -21,7 +22,7 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 )
 
 
-async def verify_token(jwt: str):
+def verify_token(jwt: str):
     try:
         # TODO: 毎回certificatesをフェッチしているようなのでそれをキャッシュする
         # ↓　Issueのリンク
@@ -43,10 +44,28 @@ async def verify_token(jwt: str):
     return id_info
 
 
-async def verify_user(request: Request):
+def verify_user(request: Request):
     """ 
-        ユーザーの認証を行う。 Depends()で使用することを想定している。
+        REST API呼び出し時のユーザーの認証を行う。 Depends()で使用することを想定している。
 
+        Args:
+            request (Request): FastAPIのRequestオブジェクト(自動で渡されるはず)
 
+        Returns:
+            UserModel: 認証されたユーザーのモデル
 
-                """
+        Raises:
+            ErrorResponse: 認証が失敗した場合に発生する例外
+    """
+    id_token = request.session.get("id_token")
+    if not id_token:
+        raise ErrorResponse(
+            status_code=401,
+            type="unauthorized",
+            title="Unauthorized",
+            detail="The user is not authenticated."
+        )
+    id_info = verify_token(id_token)
+    user_curd = UserCrud(UserModel)
+    user = user_curd.get_by_email(request.state.db, id_info["email"])
+    return user

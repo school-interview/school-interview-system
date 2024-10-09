@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import select
 from src.crud import UserCrud
-from src.models import IdInfo, UserModel, UserUpdate
+from src.models import IdInfo, User, UserModel, UserUpdate
 from sqlalchemy.orm import Session
 from typing import Tuple
 
@@ -20,7 +20,7 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
             email=id_info['email'],
             is_admin=False
         )
-        user_crud.update(db_session, db_obj=UserModel, obj_in=user_update)
+        user_crud.update(db_session, db_obj=user, obj_in=user_update)
     else:
         user = UserModel(
             id=uuid.uuid4(),
