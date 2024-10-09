@@ -19,3 +19,9 @@ class UserModel(EntityBaseModel):
     name: Mapped[str] = mapped_column(String(60))
     email: Mapped[str] = mapped_column(String(254))
     is_admin: Mapped[bool] = mapped_column(Boolean)
+
+
+class UserUpdate(BaseModel):
+    name: str
+    email: str
+    is_admin: bool

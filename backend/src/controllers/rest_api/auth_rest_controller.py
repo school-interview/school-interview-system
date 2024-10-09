@@ -56,6 +56,7 @@ class OAuthCallbackRestApiController(RestApiController):
         id_info = await verify_token(id_token)
         request.session['id_token'] = id_token
         request.session['refresh_token'] = refresh_token
+        login(session, id_info)
         return RedirectResponse(CLIENT_URL)
 
 
