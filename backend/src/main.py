@@ -52,9 +52,9 @@ app_fastapi.add_middleware(
 app_fastapi.add_middleware(
     SessionMiddleware,
     secret_key=SESSION_SECRET_KEY,
-    same_site="none",
+    # same_site="none",
     https_only=True,
-    domain="localhost:8000"
+    domain="localhost"
 )
 
 
