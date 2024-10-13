@@ -11,6 +11,7 @@ import logging
 from src.websocket_server import sio
 from src.models import ErrorResponse
 from starlette.middleware.sessions import SessionMiddleware
+from src.middlewares.reverse_proxy_middleware import ReverseProxyMiddleware
 import os
 
 logging.basicConfig(level=logging.INFO)
@@ -56,7 +57,7 @@ app_fastapi.add_middleware(
     https_only=True,
     domain="localhost"
 )
-
+app_fastapi.add_middleware(ReverseProxyMiddleware)
 
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 

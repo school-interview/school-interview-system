@@ -13,8 +13,10 @@ load_dotenv(".env.local")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
+CLINET_URL = os.getenv("CLIENT_URL")
 AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
+
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl=AUTHORIZATION_URL,
