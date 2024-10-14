@@ -52,6 +52,7 @@ def verify_user(request: Request, authorization: HTTPAuthorizationCredentials = 
 
         Args:
             request (Request): FastAPIのRequestオブジェクト(自動で渡されるはず)
+            authorization (HTTPAuthorizationCredentials): FastAPIのHTTPAuthorizationCredentialsオブジェクト。Bearerトークンを取得するために使用する。
 
         Returns:
             UserModel: 認証されたユーザーのモデル
