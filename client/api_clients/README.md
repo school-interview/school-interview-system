@@ -40,6 +40,12 @@ Please follow the [installation procedure](#installation--usage) and then run th
 ```dart
 import 'package:openapi/api.dart';
 
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 final interviewSessionId = interviewSessionId_example; // String | 
@@ -87,7 +93,11 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Authorization
 
-Endpoints do not require authorization.
+
+Authentication schemes defined for the API:
+### HTTPBearer
+
+- **Type**: HTTP Bearer authentication
 
 
 ## Author

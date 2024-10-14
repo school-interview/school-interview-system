@@ -24,6 +24,6 @@ from src.models.api_models.responses.error_response_model import ErrorResponse
 from src.models.api_models.responses.start_interview_response_model import StartInterviewResponse
 from src.models.api_models.responses.teacher_response_model import TeacherResponse
 from src.models.api_models.responses.teachers_list_response_model import TeachersListResponse
-from src.models.api_models.responses.oauth2_response_model import OAuth2Response
+from src.models.api_models.responses.token_pair_model import TokenPair
 from src.models.error_models.app_exception_model import AppException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
