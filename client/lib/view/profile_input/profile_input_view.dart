@@ -8,6 +8,8 @@ import 'package:client/notifier/profile_input_view/profile_input_view_notifier.d
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:html' as html;
+import 'dart:js' as js;
 
 /// 情報入力画面
 class ProfileInputView extends ConsumerStatefulWidget {
@@ -91,6 +93,23 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     }
                   },
                 ),
+                ElevatedButton(
+                  onPressed: () {
+                    // js.context
+                    //     .callMethod('open', ['http://localhost:8000/login']);
+                    html.WindowBase _popup = html.window.open(
+                        'http://localhost:8000/login',
+                        "ログイン",
+                        'left=100,top=100,width=800,height=600');
+
+                    // メッセージリスナーを設定
+                    html.window.onMessage.listen((html.MessageEvent event) {
+                      // 受け取ったメッセージを処理
+                      print('Received data: ${event.data}');
+                    });
+                  },
+                  child: const Text("ログイン"),
+                )
               ],
             ),
           ),
