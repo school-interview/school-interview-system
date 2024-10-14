@@ -6,5 +6,5 @@ from sqlalchemy.orm import Session
 
 class UserCrud(BaseCrud[UserModel, User, UserUpdate]):
 
-    def get_by_emmail(self, db_session: Session, email: str) -> UserModel:
+    def get_by_email(self, db_session: Session, email: str) -> UserModel:
         return db_session.query(UserModel).filter(UserModel.email == email).first()
