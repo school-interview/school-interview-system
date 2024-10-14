@@ -7,7 +7,6 @@ doc/HTTPValidationError.md
 doc/InterviewAnalytics.md
 doc/InterviewSession.md
 doc/InterviewSessionRequest.md
-doc/LoginRequest.md
 doc/SpeakToTeacherRequest.md
 doc/StartInterviewResponse.md
 doc/Teacher.md
@@ -31,7 +30,6 @@ lib/model/http_validation_error.dart
 lib/model/interview_analytics.dart
 lib/model/interview_session.dart
 lib/model/interview_session_request.dart
-lib/model/login_request.dart
 lib/model/speak_to_teacher_request.dart
 lib/model/start_interview_response.dart
 lib/model/teacher.dart

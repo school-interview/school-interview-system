@@ -63,7 +63,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**controllerInterviewInterviewSessionIdDelete**](doc//DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewInterviewSessionIdPost**](doc//DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewPost**](doc//DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
-*DefaultApi* | [**controllerLoginPut**](doc//DefaultApi.md#controllerloginput) | **PUT** /login | Controller
+*DefaultApi* | [**controllerLoginGet**](doc//DefaultApi.md#controllerloginget) | **GET** /login | Controller
+*DefaultApi* | [**controllerOauth2CallbackGet**](doc//DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 *DefaultApi* | [**controllerTeachersGet**](doc//DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 *DefaultApi* | [**controllerUsersGet**](doc//DefaultApi.md#controllerusersget) | **GET** /users | Controller
 
@@ -74,7 +75,6 @@ Class | Method | HTTP request | Description
  - [InterviewAnalytics](doc//InterviewAnalytics.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
- - [LoginRequest](doc//LoginRequest.md)
  - [SpeakToTeacherRequest](doc//SpeakToTeacherRequest.md)
  - [StartInterviewResponse](doc//StartInterviewResponse.md)
  - [Teacher](doc//Teacher.md)

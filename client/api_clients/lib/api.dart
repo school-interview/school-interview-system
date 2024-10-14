@@ -34,7 +34,6 @@ part 'model/http_validation_error.dart';
 part 'model/interview_analytics.dart';
 part 'model/interview_session.dart';
 part 'model/interview_session_request.dart';
-part 'model/login_request.dart';
 part 'model/speak_to_teacher_request.dart';
 part 'model/start_interview_response.dart';
 part 'model/teacher.dart';

@@ -13,7 +13,8 @@ Method | HTTP request | Description
 [**controllerInterviewInterviewSessionIdDelete**](DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 [**controllerInterviewInterviewSessionIdPost**](DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 [**controllerInterviewPost**](DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
-[**controllerLoginPut**](DefaultApi.md#controllerloginput) | **PUT** /login | Controller
+[**controllerLoginGet**](DefaultApi.md#controllerloginget) | **GET** /login | Controller
+[**controllerOauth2CallbackGet**](DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 [**controllerTeachersGet**](DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 [**controllerUsersGet**](DefaultApi.md#controllerusersget) | **GET** /users | Controller
 
@@ -184,8 +185,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **controllerLoginPut**
-> User controllerLoginPut(loginRequest)
+# **controllerLoginGet**
+> Object controllerLoginGet()
 
 Controller
 
@@ -194,25 +195,21 @@ Controller
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final loginRequest = LoginRequest(); // LoginRequest | 
 
 try {
-    final result = api_instance.controllerLoginPut(loginRequest);
+    final result = api_instance.controllerLoginGet();
     print(result);
 } catch (e) {
-    print('Exception when calling DefaultApi->controllerLoginPut: $e\n');
+    print('Exception when calling DefaultApi->controllerLoginGet: $e\n');
 }
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **loginRequest** | [**LoginRequest**](LoginRequest.md)|  | 
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**User**](User.md)
+[**Object**](Object.md)
 
 ### Authorization
 
@@ -220,7 +217,48 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerOauth2CallbackGet**
+> Object controllerOauth2CallbackGet(code)
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = DefaultApi();
+final code = code_example; // String | 
+
+try {
+    final result = api_instance.controllerOauth2CallbackGet(code);
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerOauth2CallbackGet: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **code** | **String**|  | 
+
+### Return type
+
+[**Object**](Object.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
