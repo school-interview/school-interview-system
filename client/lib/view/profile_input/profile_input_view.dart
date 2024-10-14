@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client/component/button_component.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/input_text_field.dart';
@@ -8,6 +10,7 @@ import 'package:client/notifier/profile_input_view/profile_input_view_notifier.d
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:html' as html;
 import 'dart:js' as js;
 
@@ -97,15 +100,26 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                   onPressed: () {
                     // js.context
                     //     .callMethod('open', ['http://localhost:8000/login']);
-                    html.WindowBase _popup = html.window.open(
+                    html.WindowBase popup = html.window.open(
                         'http://localhost:8000/login',
                         "ログイン",
                         'left=100,top=100,width=800,height=600');
-
-                    // メッセージリスナーを設定
-                    html.window.onMessage.listen((html.MessageEvent event) {
-                      // 受け取ったメッセージを処理
-                      print('Received data: ${event.data}');
+                    html.window.onMessage
+                        .listen((html.MessageEvent event) async {
+                      if (event.origin == 'http://localhost:8000') {
+                        // 信頼できるメッセージであれば処理
+                        Map<String, dynamic> tokenPair =
+                            json.decode(event.data);
+                        String? idToken = tokenPair['id_token'];
+                        String? refreshToken = tokenPair['refresh_token'];
+                        print(idToken);
+                        print(refreshToken);
+                        final localStorage =
+                            await SharedPreferences.getInstance();
+                        await localStorage.setString("idToken", idToken!);
+                        await localStorage.setString(
+                            "refreshToken", refreshToken!);
+                      }
                     });
                   },
                   child: const Text("ログイン"),
