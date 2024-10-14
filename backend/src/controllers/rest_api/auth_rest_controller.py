@@ -4,7 +4,7 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import RedirectResponse
 from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo
+from src.models import RestApiController, ErrorResponse, IdInfo, OAuth2Response
 from typing import Any, List
 from src.usecases.auth.login import login
 from sqlalchemy.orm import Session
@@ -55,7 +55,10 @@ class OAuthCallbackRestApiController(RestApiController):
         refresh_token = token_response_json["refresh_token"]
         id_info = verify_token(id_token)
         login(session, id_info)
-        return id_info
+        return OAuth2Response(
+            id_token=id_token,
+            refresh_token=refresh_token
+        )
 
 
 auth_rest_api_controllers: List[RestApiController] = [
