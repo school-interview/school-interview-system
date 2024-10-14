@@ -4,8 +4,10 @@ from fastapi import Depends, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2AuthorizationCodeBearer
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from src.database import session_factory
 from src.crud import UserCrud
 from src.models import ErrorResponse, IdInfo, UserModel
+from sqlalchemy.orm import Session
 
 
 load_dotenv(".env.local")
@@ -46,7 +48,7 @@ def verify_token(jwt: str):
     return id_info
 
 
-def verify_user(request: Request, authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+def verify_user(request: Request, db_session: Session = Depends(session_factory), authorization: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
     """ 
         REST API呼び出し時のユーザーの認証を行う。 Depends()で使用することを想定している。
 
@@ -70,5 +72,5 @@ def verify_user(request: Request, authorization: HTTPAuthorizationCredentials = 
         )
     id_info = verify_token(id_token)
     user_curd = UserCrud(UserModel)
-    user = user_curd.get_by_email(request.state.db, id_info["email"])
+    user = user_curd.get_by_email(db_session, id_info["email"])
     return user
