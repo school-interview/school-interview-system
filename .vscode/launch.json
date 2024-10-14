@@ -9,7 +9,7 @@
       "type": "dart",
       "request": "launch",
       "deviceId": "chrome",
-      "args": ["--web-hostname", "0.0.0.0", "--web-port", "8001"],
+      "args": ["--web-port", "8001"],
       "program": "client/lib/main.dart"
     },
     {
