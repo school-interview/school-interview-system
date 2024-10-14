@@ -49,13 +49,6 @@ app_fastapi.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app_fastapi.add_middleware(
-    SessionMiddleware,
-    secret_key=SESSION_SECRET_KEY,
-    # same_site="none",
-    https_only=True,
-    domain="localhost"
-)
 
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 
