@@ -2,8 +2,11 @@ from typing import Optional
 from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 from sqlalchemy import ForeignKey
-from src.models import InterviewSession, EntityBaseModel, UserModel, InterviewRecordModel
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+from src.models.db_models.base_model import EntityBaseModel
+from src.models.db_models.interview_record_model import InterviewRecordModel
+from src.models.db_models.interview_session_model import InterviewSession
+from src.models.db_models.student_model import StudentModel
 
 
 class InterviewAnalytics(BaseModel):
@@ -32,7 +35,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
     support_necessity_level: Mapped[float]
 
     @staticmethod
-    def create_from_interview_record(user: UserModel, interview_record: InterviewRecordModel):
+    def create_from_interview_record(student: StudentModel, interview_record: InterviewRecordModel):
         # 算出方法に関してはこちら。
         # https://www.notion.so/2024-09-17-104879aba7c6808cbcdfda7522e0d237
 
@@ -68,15 +71,15 @@ class InterviewAnalyticsModel(EntityBaseModel):
 
         def is_failed_to_move_to_next_grade():
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
-            if credits_to_be_earned_in_total < required_credits[user.semester]:
+            if credits_to_be_earned_in_total < required_credits[student.semester]:
                 return 100
             return 0
 
         def get_deviation_from_preferred_credit_level():
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
-            if credits_to_be_earned_in_total < preffered_credits[user.semester]:
-                deviation = (preffered_credits[user.semester] - credits_to_be_earned_in_total)/(
-                    preffered_credits[user.semester] - required_credits[user.semester])
+            if credits_to_be_earned_in_total < preffered_credits[student.semester]:
+                deviation = (preffered_credits[student.semester] - credits_to_be_earned_in_total)/(
+                    preffered_credits[student.semester] - required_credits[student.semester])
                 return deviation
             return 0
 
