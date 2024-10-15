@@ -1,52 +1,18 @@
 import os
-from fastapi import Depends, HTTPException, Query, Request
+from fastapi import Depends, HTTPException, Query, Request, Response
 from fastapi.security import OAuth2AuthorizationCodeBearer
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
+from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo
+from src.models import RestApiController, ErrorResponse, IdInfo, TokenPair
 from typing import Any, List
 from src.usecases.auth.login import login
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import httpx
-from google.oauth2 import id_token
-from google.auth.transport import requests
-
 
 load_dotenv(".env.local")
-
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI")
-AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth"
-TOKEN_URL = "https://oauth2.googleapis.com/token"
-
-oauth2_scheme = OAuth2AuthorizationCodeBearer(
-    authorizationUrl=AUTHORIZATION_URL,
-    tokenUrl=TOKEN_URL
-)
-
-
-async def verify_token(jwt: str):
-    try:
-        # TODO: 毎回certificatesをフェッチしているようなのでそれをキャッシュする
-        # ↓　Issueのリンク
-        # https://github.com/orgs/school-interview/projects/2/views/1?pane=issue&itemId=82535648&issue=school-interview%7Cschool-interview-system%7C123
-
-        # TODO: RefreshTokenを使ってIDトークンの再取得を行う
-        # ↓ 参考になるかも
-        # https://developers.google.com/identity/protocols/oauth2/web-server#python_8
-        id_info: IdInfo = id_token.verify_oauth2_token(
-            jwt, requests.Request(), CLIENT_ID
-        )
-    except ValueError:
-        raise ErrorResponse(
-            status_code=400,
-            type="invalid_token",
-            title="Invalid token",
-            detail="The token provided is invalid."
-        )
-    return id_info
+CLIENT_URL = os.getenv("CLIENT_URL")
 
 
 class LoginRestApiController(RestApiController):
@@ -87,13 +53,24 @@ class OAuthCallbackRestApiController(RestApiController):
             )
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
-        id_info = await verify_token(id_token)
-        request.session['id_token'] = id_token
-        request.session['refresh_token'] = refresh_token
-        return request.session['id_token']
+        id_info = verify_token(id_token)
+        login(session, id_info)
+        token_pair = TokenPair(
+            id_token=id_token, refresh_token=refresh_token)
+        response_body = f"""
+            <script type="text/javascript">
+                window.opener.postMessage(
+                    '{token_pair.model_dump_json()}', '{CLIENT_URL}');
+                window.close();
+            </script>
+        """
+
+        return Response(content=response_body, media_type="text/html")
 
 
 auth_rest_api_controllers: List[RestApiController] = [
     LoginRestApiController(),
     OAuthCallbackRestApiController()
+
+
 ]

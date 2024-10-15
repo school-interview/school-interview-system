@@ -40,6 +40,12 @@ Please follow the [installation procedure](#installation--usage) and then run th
 ```dart
 import 'package:openapi/api.dart';
 
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 final interviewSessionId = interviewSessionId_example; // String | 
@@ -63,7 +69,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**controllerInterviewInterviewSessionIdDelete**](doc//DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewInterviewSessionIdPost**](doc//DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewPost**](doc//DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
-*DefaultApi* | [**controllerLoginPut**](doc//DefaultApi.md#controllerloginput) | **PUT** /login | Controller
+*DefaultApi* | [**controllerLoginGet**](doc//DefaultApi.md#controllerloginget) | **GET** /login | Controller
+*DefaultApi* | [**controllerOauth2CallbackGet**](doc//DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 *DefaultApi* | [**controllerTeachersGet**](doc//DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 *DefaultApi* | [**controllerUsersGet**](doc//DefaultApi.md#controllerusersget) | **GET** /users | Controller
 
@@ -74,7 +81,6 @@ Class | Method | HTTP request | Description
  - [InterviewAnalytics](doc//InterviewAnalytics.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
- - [LoginRequest](doc//LoginRequest.md)
  - [SpeakToTeacherRequest](doc//SpeakToTeacherRequest.md)
  - [StartInterviewResponse](doc//StartInterviewResponse.md)
  - [Teacher](doc//Teacher.md)
@@ -87,7 +93,11 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Authorization
 
-Endpoints do not require authorization.
+
+Authentication schemes defined for the API:
+### HTTPBearer
+
+- **Type**: HTTP Bearer authentication
 
 
 ## Author

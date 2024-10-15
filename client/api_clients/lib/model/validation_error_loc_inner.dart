@@ -14,16 +14,16 @@ class ValidationErrorLocInner {
   /// Returns a new [ValidationErrorLocInner] instance.
   // ValidationErrorLocInner({
   // });
-  //
+
   // @override
   // bool operator ==(Object other) => identical(this, other) || other is ValidationErrorLocInner &&
-  //
+
   // @override
   // int get hashCode =>
-  // ignore: unnecessary_parenthesis
+  //   // ignore: unnecessary_parenthesis
 
-  @override
-  String toString() => 'ValidationErrorLocInner[]';
+  // @override
+  // String toString() => 'ValidationErrorLocInner[]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};

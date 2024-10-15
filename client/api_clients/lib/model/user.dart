@@ -15,50 +15,42 @@ class User {
   User({
     required this.id,
     required this.name,
-    required this.studentId,
-    required this.department,
-    required this.semester,
+    required this.email,
+    required this.isAdmin,
   });
 
   String id;
 
   String name;
 
-  String studentId;
+  String email;
 
-  String department;
-
-  /// Minimum value: 1
-  /// Maximum value: 8
-  int semester;
+  bool isAdmin;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is User &&
     other.id == id &&
     other.name == name &&
-    other.studentId == studentId &&
-    other.department == department &&
-    other.semester == semester;
+    other.email == email &&
+    other.isAdmin == isAdmin;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id.hashCode) +
     (name.hashCode) +
-    (studentId.hashCode) +
-    (department.hashCode) +
-    (semester.hashCode);
+    (email.hashCode) +
+    (isAdmin.hashCode);
 
   @override
-  String toString() => 'User[id=$id, name=$name, studentId=$studentId, department=$department, semester=$semester]';
+  String toString() => 'User[id=$id, name=$name, email=$email, isAdmin=$isAdmin]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
       json[r'name'] = this.name;
-      json[r'student_id'] = this.studentId;
-      json[r'department'] = this.department;
-      json[r'semester'] = this.semester;
+      json[r'email'] = this.email;
+      json[r'is_admin'] = this.isAdmin;
     return json;
   }
 
@@ -83,9 +75,8 @@ class User {
       return User(
         id: mapValueOfType<String>(json, r'id')!,
         name: mapValueOfType<String>(json, r'name')!,
-        studentId: mapValueOfType<String>(json, r'student_id')!,
-        department: mapValueOfType<String>(json, r'department')!,
-        semester: mapValueOfType<int>(json, r'semester')!,
+        email: mapValueOfType<String>(json, r'email')!,
+        isAdmin: mapValueOfType<bool>(json, r'is_admin')!,
       );
     }
     return null;
@@ -135,9 +126,8 @@ class User {
   static const requiredKeys = <String>{
     'id',
     'name',
-    'student_id',
-    'department',
-    'semester',
+    'email',
+    'is_admin',
   };
 }
 

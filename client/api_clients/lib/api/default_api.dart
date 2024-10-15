@@ -234,27 +234,73 @@ class DefaultApi {
   /// Controller
   ///
   /// Note: This method returns the HTTP [Response].
-  ///
-  /// Parameters:
-  ///
-  /// * [LoginRequest] loginRequest (required):
-  Future<Response> controllerLoginPutWithHttpInfo(LoginRequest loginRequest,) async {
+  Future<Response> controllerLoginGetWithHttpInfo() async {
     // ignore: prefer_const_declarations
     final path = r'/login';
 
     // ignore: prefer_final_locals
-    Object? postBody = loginRequest;
+    Object? postBody;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-    const contentTypes = <String>['application/json'];
+    const contentTypes = <String>[];
 
 
     return apiClient.invokeAPI(
       path,
-      'PUT',
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Controller
+  Future<Object?> controllerLoginGet() async {
+    final response = await controllerLoginGetWithHttpInfo();
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Object',) as Object;
+    
+    }
+    return null;
+  }
+
+  /// Controller
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [String] code (required):
+  Future<Response> controllerOauth2CallbackGetWithHttpInfo(String code,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/oauth2/callback';
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+      queryParams.addAll(_queryParams('', 'code', code));
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'GET',
       queryParams,
       postBody,
       headerParams,
@@ -267,9 +313,9 @@ class DefaultApi {
   ///
   /// Parameters:
   ///
-  /// * [LoginRequest] loginRequest (required):
-  Future<User?> controllerLoginPut(LoginRequest loginRequest,) async {
-    final response = await controllerLoginPutWithHttpInfo(loginRequest,);
+  /// * [String] code (required):
+  Future<Object?> controllerOauth2CallbackGet(String code,) async {
+    final response = await controllerOauth2CallbackGetWithHttpInfo(code,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -277,7 +323,7 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'User',) as User;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Object',) as Object;
     
     }
     return null;
