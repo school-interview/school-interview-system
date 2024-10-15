@@ -1,28 +1,32 @@
 import uuid
 from sqlalchemy import select
-from src.models import LoginRequest, UserModel
+from src.crud import UserCrud
+from src.models import IdInfo, User, UserModel, UserUpdate
 from sqlalchemy.orm import Session
 from typing import Tuple
 
 
-def login(db_session: Session, login_request: LoginRequest) -> UserModel:
-    user_query: Tuple = select(UserModel).where(
-        UserModel.student_id == login_request.student_id)
-    query_result = db_session.execute(user_query).first()
-    user: UserModel = query_result[0] if query_result else None
+def login(db_session: Session, id_info: IdInfo) -> UserModel:
+    """
+    This function is used to login a user.
+
+    `is_admin` flag is set to false temporarily.(I haven't implemented the admin feature yet)
+    """
+    user_crud = UserCrud(UserModel)
+    user = user_crud.get_by_emmail(db_session, id_info["email"])
     if user:
-        user.name = login_request.name
-        user.department = login_request.department
-        user.semester = login_request.semester
-        db_session.commit()
+        user_update = UserUpdate(
+            name=id_info['name'],
+            email=id_info['email'],
+            is_admin=False
+        )
+        user_crud.update(db_session, db_obj=user, obj_in=user_update)
     else:
         user = UserModel(
             id=uuid.uuid4(),
-            student_id=login_request.student_id,
-            name=login_request.name,
-            department=login_request.department,
-            semester=login_request.semester
+            name=id_info['name'],
+            email=id_info['email'],
+            is_admin=False
         )
-        db_session.add(user)
-        db_session.commit()
+        user_crud.create(db_session, obj_in=user)
     return user

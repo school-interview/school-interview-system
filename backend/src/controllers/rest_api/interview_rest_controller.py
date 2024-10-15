@@ -2,6 +2,7 @@ from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
+from src.controllers.rest_api.auth import verify_user
 from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel
 from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview
 from src.database import session_factory
@@ -13,9 +14,16 @@ class StartInterviewSessionRestApiController(RestApiController):
     path = "/interview"
     response_model = StartInterviewResponse
 
-    async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory)):
+    async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory), user_model=Depends(verify_user)):
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
+        if user_model.id != user_id:
+            raise ErrorResponse(
+                status_code=403,
+                type="forbidden",
+                title="Forbidden",
+                detail="You are not allowed to start an interview for another user."
+            )
         try:
             interview_session_model = start_interview(
                 db_session, user_id, teacher_id)
@@ -49,7 +57,7 @@ class SpeakToTeacherRestApiController(RestApiController):
     path = "/interview/{interview_session_id}"
     response_model = TeacherResponse
 
-    async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory)):
+    async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory), user_model=Depends(verify_user)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         message = data.message_from_student
         interview_query = db_session.query(InterviewSessionModel).where(
@@ -88,7 +96,7 @@ class FinishInterviewSessionRestApiController(RestApiController):
     path = "/interview/{interview_session_id}"
     response_model = None
 
-    async def controller(self, interview_session_id: str, db_session=Depends(session_factory)):
+    async def controller(self, interview_session_id: str, db_session=Depends(session_factory), user_model=Depends(verify_user)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         interview_query = db_session.query(InterviewSession).where(
             InterviewSession.id == interview_session_id)
@@ -111,7 +119,7 @@ class AnalyticsInterviewRestApiController(RestApiController):
     path = "/interview/{interview_session_id}/analytics"
     response_model = InterviewAnalytics
 
-    async def controller(self, interview_session_id: str, db_session=Depends(session_factory)):
+    async def controller(self, interview_session_id: str, db_session=Depends(session_factory), user_model=Depends(verify_user)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         interview_query = db_session.query(InterviewSessionModel).where(
             InterviewSessionModel.id == interview_session_id)

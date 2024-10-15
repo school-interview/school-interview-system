@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from typing import TypedDict
 
 
-class IdInfo(BaseModel):
+class IdInfo(TypedDict):
     iss: str
     azp: str
     aud: str

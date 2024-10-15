@@ -3,6 +3,7 @@ from typing import List
 from fastapi import Depends
 from pydantic import TypeAdapter
 from sqlalchemy.orm import Session
+from src.controllers.rest_api.auth import verify_user
 from src.database import session_factory
 from src.models.db_models.user_model import User, UserModel
 from src.models import RestApiController
@@ -13,7 +14,7 @@ class UsersRestApiController(RestApiController):
     path = "/users"
     response_model = List[User]
 
-    async def controller(self, db_session: Session = Depends(session_factory)):
+    async def controller(self, db_session: Session = Depends(session_factory), user_model=Depends(verify_user)):
         user_query = db_session.query(UserModel)
         users = [TypeAdapter(User).validate_python(
             user[0].__dict__) for user in db_session.execute(user_query).all()]

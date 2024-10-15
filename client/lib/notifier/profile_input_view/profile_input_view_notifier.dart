@@ -47,31 +47,31 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
   /// ユーザー情報登録APIを実行
   Future<void> putUserInfo() async {
     // 学生情報
-    final userInfo = LoginRequest(
-      studentId: state.studentId,
-      name: state.name,
-      department: state.department,
-      semester: state.semester,
-    );
-    try {
-      ApiResult<User> response = await _loginRepository.putUserInfo(userInfo);
-      switch (response.statusCode) {
-        case 200:
-          await _sharedPreferenceManager.setString(
-            PrefKeys.userId,
-            response.data!.id,
-          );
-          setResult(Result.success);
-          break;
-        default:
-          setResult(Result.fail);
-          break;
-      }
-      logger.t("responseData:${response.data}");
-    } on Exception catch (e) {
-      logger.e(e.toString());
-      setResult(Result.fail);
-      return;
-    }
+    // final userInfo = LoginRequest(
+    //   studentId: state.studentId,
+    //   name: state.name,
+    //   department: state.department,
+    //   semester: state.semester,
+    // );
+    // try {
+    //   ApiResult<User> response = await _loginRepository.putUserInfo(userInfo);
+    //   switch (response.statusCode) {
+    //     case 200:
+    //       await _sharedPreferenceManager.setString(
+    //         PrefKeys.userId,
+    //         response.data!.id,
+    //       );
+    //       setResult(Result.success);
+    //       break;
+    //     default:
+    //       setResult(Result.fail);
+    //       break;
+    //   }
+    //   logger.t("responseData:${response.data}");
+    // } on Exception catch (e) {
+    //   logger.e(e.toString());
+    //   setResult(Result.fail);
+    //   return;
+    // }
   }
 }
