@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import uuid4
-from src.models import InterviewAnalyticsModel, UserModel, InterviewRecordModel, InterviewSessionModel
+from src.models import InterviewAnalyticsModel, UserModel, InterviewRecordModel, InterviewSessionModel, StudentModel
 
 
 def create_student_1():
@@ -8,6 +8,12 @@ def create_student_1():
     user_model = UserModel(
         id=uuid4(),
         name="藤崎暖",
+        email="a1119331@kanazawa-it.ac.jp",
+        is_admin=False
+    )
+    student_model = StudentModel(
+        id=uuid4(),
+        user_id=user_model.id,
         student_id="1119059",
         department="情報工学部",
         semester=2
@@ -30,13 +36,13 @@ def create_student_1():
         concern=None,
         prefer_in_person_interview=False
     )
-    return user_model, interview_session, interview_record
+    return user_model, student_model, interview_session, interview_record
 
 
 def test_student1():
-    user, session, record = create_student_1()
+    _, student, _, record = create_student_1()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        user, record)
+        student, record)
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_preferred_credit_level == 0
     assert analytics.deviation_from_minimum_attendance_rate == 0
@@ -50,6 +56,12 @@ def create_student_2():
     user_model = UserModel(
         id=uuid4(),
         name="藤崎暖",
+        email="a1119331@kanazawa-it.ac.jp",
+        is_admin=False
+    )
+    student_model = StudentModel(
+        id=uuid4(),
+        user_id=user_model.id,
         student_id="1119059",
         department="情報工学部",
         semester=3
@@ -72,13 +84,13 @@ def create_student_2():
         concern=None,
         prefer_in_person_interview=False
     )
-    return user_model, interview_session, interview_record
+    return user_model, student_model, interview_session, interview_record
 
 
 def test_student2():
-    user, _, record = create_student_2()
+    _, setudent, _, record = create_student_2()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        user, record)
+        setudent, record)
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_minimum_attendance_rate == 0
     assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.45
@@ -92,6 +104,12 @@ def create_student_3():
     user_model = UserModel(
         id=uuid4(),
         name="藤崎暖",
+        email="a1119331@kanazawa-it.ac.jp",
+        is_admin=False
+    )
+    student_model = StudentModel(
+        id=uuid4(),
+        user_id=user_model.id,
         student_id="1119059",
         department="情報工学部",
         semester=4
@@ -114,13 +132,13 @@ def create_student_3():
         concern=None,
         prefer_in_person_interview=False
     )
-    return user_model, interview_session, interview_record
+    return user_model, student_model, interview_session, interview_record
 
 
 def test_student_3():
-    user, _, record = create_student_3()
+    _, student, _, record = create_student_3()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        user, record)
+        student, record)
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_minimum_attendance_rate == 0
     assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.91
@@ -130,10 +148,16 @@ def test_student_3():
 
 
 def create_student_4():
-    # 3年前期で行われた面談で、
+    # 3年前期で行われた面談で、GPAが低い学生
     user_model = UserModel(
         id=uuid4(),
         name="藤崎暖",
+        email="a1119331@kanazawa-it.ac.jp",
+        is_admin=False
+    )
+    student_model = StudentModel(
+        id=uuid4(),
+        user_id=user_model.id,
         student_id="1119059",
         department="情報工学部",
         semester=5
@@ -156,13 +180,13 @@ def create_student_4():
         concern=None,
         prefer_in_person_interview=False
     )
-    return user_model, interview_session, interview_record
+    return user_model, student_model, interview_session, interview_record
 
 
 def test_student_4():
-    user, _, record = create_student_4()
+    _, student, _, record = create_student_4()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        user, record)
+        student, record)
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_minimum_attendance_rate == 0
     assert round(analytics.deviation_from_preferred_credit_level, 2) == 1.0
