@@ -22,7 +22,7 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
         user_update = UserUpdate(
             name=id_info['name'],
             email=id_info['email'],
-            is_admin=False
+            is_admin=not _is_student_email(id_info['email'])
         )
         user_crud.update(db_session, db_obj=user, obj_in=user_update)
     else:
@@ -30,7 +30,7 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
             id=uuid.uuid4(),
             name=id_info['name'],
             email=id_info['email'],
-            is_admin=False
+            is_admin=not _is_student_email(id_info['email'])
         )
         user_crud.create(db_session, obj_in=user)
     return user
