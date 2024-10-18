@@ -13,6 +13,7 @@ import httpx
 
 load_dotenv(".env.local")
 CLIENT_URL = os.getenv("CLIENT_URL")
+CLIENT_ID = os.getenv("CLIENT_ID")
 
 
 class LoginRestApiController(RestApiController):
@@ -54,6 +55,16 @@ class OAuthCallbackRestApiController(RestApiController):
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
         id_info = verify_token(id_token)
+        # ↓ TODO:ここに書いてあるようなチェックを全て行うべき
+        # https://qiita.com/KWS_0901/items/c842644b0c65685b2526
+        if id_info.get('aud') != CLIENT_ID:
+            raise ErrorResponse(
+                status_code=400,
+                type="invalid_client_id",
+                title="Invalid client ID",
+                detail="The client ID provided is invalid"
+            )
+
         login(session, id_info)
         token_pair = TokenPair(
             id_token=id_token, refresh_token=refresh_token)
