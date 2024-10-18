@@ -21,4 +21,14 @@ class UsersRestApiController(RestApiController):
         return users
 
 
-user_rest_api_controllers: List[RestApiController] = [UsersRestApiController()]
+class MeRestApiController(RestApiController):
+    method = "GET"
+    path = "/me"
+    response_model = User
+
+    async def controller(self, user_model=Depends(verify_user)):
+        return TypeAdapter(User).validate_python(user_model.__dict__)
+
+
+user_rest_api_controllers: List[RestApiController] = [
+    UsersRestApiController(), MeRestApiController()]
