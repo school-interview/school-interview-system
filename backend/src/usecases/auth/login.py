@@ -1,9 +1,10 @@
 import uuid
 from sqlalchemy import select
 from src.crud import UserCrud
-from src.models import IdInfo, User, UserModel, UserUpdate
+from src.models import IdInfo, User, UserModel, UserUpdate, NotSchoolMemberException
 from sqlalchemy.orm import Session
 from typing import Tuple
+import re
 
 
 def login(db_session: Session, id_info: IdInfo) -> UserModel:
@@ -14,6 +15,9 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
     """
     user_crud = UserCrud(UserModel)
     user = user_crud.get_by_emmail(db_session, id_info["email"])
+    if not _is_school_member_email(id_info["email"]):
+        raise NotSchoolMemberException(
+            "You need to login with your school Google account.")
     if user:
         user_update = UserUpdate(
             name=id_info['name'],
@@ -30,3 +34,27 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
         )
         user_crud.create(db_session, obj_in=user)
     return user
+
+
+def _is_school_member_email(email: str):
+    """
+        Return whether the email is a member of the school.
+        Args:
+            email: str
+        Returns:
+
+        Raises:
+
+    """
+    kit_email_regex = r"^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.kanazawa-it.ac.jp$"
+    matcher = re.compile(kit_email_regex)
+    return bool(matcher.match(email))
+
+
+def _is_student_email(email: str):
+    """
+        Return whether the email is a student email.
+    """
+    student_email_regex = r"^[a-z]{1}[0-9]{7}@{1}[A-Za-z0-9_.-]{1,}\.kanazawa-it.ac.jp$"
+    matcher = re.compile(student_email_regex)
+    return bool(matcher.match(email))
