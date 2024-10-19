@@ -2,11 +2,13 @@ import os
 from fastapi import Depends, HTTPException, Query, Request, Response
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import HTMLResponse, RedirectResponse
+from pydantic import TypeAdapter
 from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo, TokenPair
-from typing import Any, List
+from src.models import RestApiController, ErrorResponse, IdInfo, LoginResult, User, StudentModel, AdminModel
+from typing import Any, List, Optional
 from src.usecases.auth.login import login
+from src.crud import AdminsCrud
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import httpx
@@ -54,13 +56,23 @@ class OAuthCallbackRestApiController(RestApiController):
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
         id_info = verify_token(id_token)
-        login(session, id_info)
-        token_pair = TokenPair(
-            id_token=id_token, refresh_token=refresh_token)
+        user_model = login(session, id_info)
+        student: Optional[StudentModel] = None
+        admin: Optional[AdminModel] = None
+        if user_model.is_admin:
+            admin_crud = AdminsCrud
+            pass
+        else:
+            pass
+        login_result = LoginResult(
+            id_token=id_token,
+            refresh_token=refresh_token,
+            user=user_model.convertToPydantic(User)
+        )
         response_body = f"""
             <script type="text/javascript">
                 window.opener.postMessage(
-                    '{token_pair.model_dump_json()}', '{CLIENT_URL}');
+                    '{login_result.model_dump_json()}', '{CLIENT_URL}');
                 window.close();
             </script>
         """

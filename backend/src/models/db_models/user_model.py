@@ -1,7 +1,7 @@
 from uuid import UUID
 from src.models import EntityBaseModel
 from sqlalchemy import Boolean, String
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel, Field
 
@@ -22,6 +22,6 @@ class UserModel(EntityBaseModel):
 
 
 class UserUpdate(BaseModel):
-    name: str
-    email: str
-    is_admin: bool
+    name: Optional[str]
+    email: Optional[str]
+    is_admin: Optional[bool]

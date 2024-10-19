@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy import select
-from src.crud import UserCrud
+from src.crud import UsersCrud
 from src.models import IdInfo, User, UserModel, UserUpdate
 from sqlalchemy.orm import Session
 from typing import Tuple
@@ -12,13 +12,12 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
 
     `is_admin` flag is set to false temporarily.(I haven't implemented the admin feature yet)
     """
-    user_crud = UserCrud(UserModel)
+    user_crud = UsersCrud(UserModel)
     user = user_crud.get_by_email(db_session, id_info["email"])
     if user:
         user_update = UserUpdate(
             name=id_info['name'],
             email=id_info['email'],
-            is_admin=False
         )
         user_crud.update(db_session, db_obj=user, obj_in=user_update)
     else:

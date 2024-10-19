@@ -30,3 +30,12 @@ class InterviewRecordModel(EntityBaseModel):
     attendance_rate: Mapped[Optional[float]]
     concern: Mapped[Optional[str]]
     prefer_in_person_interview: Mapped[Optional[bool]]
+
+
+class InterviewRecordUpdate(BaseModel):
+    total_earned_credits: Optional[int]
+    planned_credits: Optional[int]
+    gpa: Optional[float]
+    attendance_rate: Optional[float]
+    concern: Optional[str]
+    prefer_in_person_interview: Optional[bool]

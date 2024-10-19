@@ -21,3 +21,10 @@ class InterviewQuestionModel(EntityBaseModel):
     order: Mapped[int] = mapped_column(unique=True)
     prompt: Mapped[str] = mapped_column(String(200))
     description: Mapped[Optional[str]] = mapped_column(String(200))
+
+
+class InterviewQuestionUpdate(BaseModel):
+    question: Optional[str]
+    order: Optional[int]
+    prompt: Optional[str]
+    description: Optional[str]

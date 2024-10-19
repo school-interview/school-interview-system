@@ -18,3 +18,7 @@ class AdminModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
     user = relationship("UserModel", backref="admin")
+
+
+class AdminUpdate(BaseModel):
+    pass

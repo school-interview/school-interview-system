@@ -30,3 +30,11 @@ class InterviewSessionModel(EntityBaseModel):
     progress: Mapped[int] = mapped_column(
         ForeignKey("InterviewQuestions.order"))
     done: Mapped[bool]
+
+
+class InterviewSessionUpdate(BaseModel):
+    user_id: Optional[UUID]
+    teacher_id: Optional[UUID]
+    start_at: Optional[datetime]
+    progress: Optional[int]
+    done: Optional[bool]
