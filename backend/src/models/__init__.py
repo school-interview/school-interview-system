@@ -27,3 +27,5 @@ from src.models.api_models.responses.teachers_list_response_model import Teacher
 from src.models.api_models.responses.token_pair_model import TokenPair
 from src.models.error_models.app_exception_model import AppException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
+from src.models.error_models.not_school_member_exception_model import NotSchoolMemberException
+from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException

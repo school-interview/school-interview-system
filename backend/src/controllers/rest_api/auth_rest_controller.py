@@ -4,7 +4,7 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import HTMLResponse, RedirectResponse
 from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo, TokenPair
+from src.models import RestApiController, ErrorResponse, IdInfo, TokenPair, NotSchoolMemberException
 from typing import Any, List
 from src.usecases.auth.login import login
 from sqlalchemy.orm import Session
@@ -55,6 +55,18 @@ class OAuthCallbackRestApiController(RestApiController):
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
         id_info = verify_token(id_token)
+<<<<<<< HEAD
+        try:
+            login(session, id_info)
+        except NotSchoolMemberException:
+            raise ErrorResponse(
+                status_code=403,
+                type="not_school_member",
+                title="Not school member",
+                detail="You need to login with your school Google account"
+            )
+
+=======
         # ↓ TODO:ここに書いてあるようなチェックを全て行うべき
         # https://qiita.com/KWS_0901/items/c842644b0c65685b2526
         if id_info.get('aud') != CLIENT_ID:
@@ -66,6 +78,7 @@ class OAuthCallbackRestApiController(RestApiController):
             )
 
         login(session, id_info)
+>>>>>>> develop/auth
         token_pair = TokenPair(
             id_token=id_token, refresh_token=refresh_token)
         response_body = f"""
@@ -82,6 +95,4 @@ class OAuthCallbackRestApiController(RestApiController):
 auth_rest_api_controllers: List[RestApiController] = [
     LoginRestApiController(),
     OAuthCallbackRestApiController()
-
-
 ]
