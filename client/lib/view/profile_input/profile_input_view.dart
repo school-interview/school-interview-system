@@ -108,13 +108,16 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                         .listen((html.MessageEvent event) async {
                       if (event.origin == 'http://localhost:8000') {
                         // 信頼できるメッセージであれば処理
-                        Map<String, dynamic> tokenPair =
+                        Map<String, dynamic> loginResult =
                             json.decode(event.data);
-                        String? idToken = tokenPair['idToken'];
-                        String? refreshToken = tokenPair['refreshToken'];
+                        String? idToken = loginResult['idToken'];
+                        String? refreshToken = loginResult['refreshToken'];
+                        dynamic user = loginResult[
+                            'user']; //← LoginResult型に変換して使った方がいいかもです（たぶんこれはただのMapな気がする）
                         print(event.data);
                         print(idToken);
                         print(refreshToken);
+                        print(user);
                         final localStorage =
                             await SharedPreferences.getInstance();
                         await localStorage.setString("idToken", idToken!);
