@@ -70,6 +70,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**controllerInterviewInterviewSessionIdPost**](doc//DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewPost**](doc//DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
 *DefaultApi* | [**controllerLoginGet**](doc//DefaultApi.md#controllerloginget) | **GET** /login | Controller
+*DefaultApi* | [**controllerMeGet**](doc//DefaultApi.md#controllermeget) | **GET** /me | Controller
 *DefaultApi* | [**controllerOauth2CallbackGet**](doc//DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 *DefaultApi* | [**controllerTeachersGet**](doc//DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 *DefaultApi* | [**controllerUsersGet**](doc//DefaultApi.md#controllerusersget) | **GET** /users | Controller
@@ -77,12 +78,14 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Admin](doc//Admin.md)
  - [HTTPValidationError](doc//HTTPValidationError.md)
  - [InterviewAnalytics](doc//InterviewAnalytics.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
  - [SpeakToTeacherRequest](doc//SpeakToTeacherRequest.md)
  - [StartInterviewResponse](doc//StartInterviewResponse.md)
+ - [Student](doc//Student.md)
  - [Teacher](doc//Teacher.md)
  - [TeacherResponse](doc//TeacherResponse.md)
  - [TeachersListResponse](doc//TeachersListResponse.md)

@@ -17,6 +17,8 @@ class User {
     required this.name,
     required this.email,
     required this.isAdmin,
+    this.student,
+    this.admin,
   });
 
   String id;
@@ -27,12 +29,18 @@ class User {
 
   bool isAdmin;
 
+  Student? student;
+
+  Admin? admin;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is User &&
     other.id == id &&
     other.name == name &&
     other.email == email &&
-    other.isAdmin == isAdmin;
+    other.isAdmin == isAdmin &&
+    other.student == student &&
+    other.admin == admin;
 
   @override
   int get hashCode =>
@@ -40,17 +48,29 @@ class User {
     (id.hashCode) +
     (name.hashCode) +
     (email.hashCode) +
-    (isAdmin.hashCode);
+    (isAdmin.hashCode) +
+    (student == null ? 0 : student!.hashCode) +
+    (admin == null ? 0 : admin!.hashCode);
 
   @override
-  String toString() => 'User[id=$id, name=$name, email=$email, isAdmin=$isAdmin]';
+  String toString() => 'User[id=$id, name=$name, email=$email, isAdmin=$isAdmin, student=$student, admin=$admin]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
       json[r'name'] = this.name;
       json[r'email'] = this.email;
-      json[r'is_admin'] = this.isAdmin;
+      json[r'isAdmin'] = this.isAdmin;
+    if (this.student != null) {
+      json[r'student'] = this.student;
+    } else {
+      json[r'student'] = null;
+    }
+    if (this.admin != null) {
+      json[r'admin'] = this.admin;
+    } else {
+      json[r'admin'] = null;
+    }
     return json;
   }
 
@@ -76,7 +96,9 @@ class User {
         id: mapValueOfType<String>(json, r'id')!,
         name: mapValueOfType<String>(json, r'name')!,
         email: mapValueOfType<String>(json, r'email')!,
-        isAdmin: mapValueOfType<bool>(json, r'is_admin')!,
+        isAdmin: mapValueOfType<bool>(json, r'isAdmin')!,
+        student: Student.fromJson(json[r'student']),
+        admin: Admin.fromJson(json[r'admin']),
       );
     }
     return null;
@@ -127,7 +149,7 @@ class User {
     'id',
     'name',
     'email',
-    'is_admin',
+    'isAdmin',
   };
 }
 

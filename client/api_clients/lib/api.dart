@@ -30,12 +30,14 @@ part 'auth/http_bearer_auth.dart';
 
 part 'api/default_api.dart';
 
+part 'model/admin.dart';
 part 'model/http_validation_error.dart';
 part 'model/interview_analytics.dart';
 part 'model/interview_session.dart';
 part 'model/interview_session_request.dart';
 part 'model/speak_to_teacher_request.dart';
 part 'model/start_interview_response.dart';
+part 'model/student.dart';
 part 'model/teacher.dart';
 part 'model/teacher_response.dart';
 part 'model/teachers_list_response.dart';

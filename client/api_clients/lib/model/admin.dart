@@ -10,30 +10,52 @@
 
 part of openapi.api;
 
-class ValidationErrorLocInner {
-  /// Returns a new [ValidationErrorLocInner] instance.
-  ValidationErrorLocInner({
+class Admin {
+  /// Returns a new [Admin] instance.
+  Admin({
+    required this.id,
+    required this.userId,
+    required this.user,
   });
 
+  String id;
+
+  String userId;
+
+  User? user;
+
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ValidationErrorLocInner &&
+  bool operator ==(Object other) => identical(this, other) || other is Admin &&
+    other.id == id &&
+    other.userId == userId &&
+    other.user == user;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
+    (id.hashCode) +
+    (userId.hashCode) +
+    (user == null ? 0 : user!.hashCode);
 
   @override
-  String toString() => 'ValidationErrorLocInner[]';
+  String toString() => 'Admin[id=$id, userId=$userId, user=$user]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
+      json[r'id'] = this.id;
+      json[r'userId'] = this.userId;
+    if (this.user != null) {
+      json[r'user'] = this.user;
+    } else {
+      json[r'user'] = null;
+    }
     return json;
   }
 
-  /// Returns a new [ValidationErrorLocInner] instance and imports its values from
+  /// Returns a new [Admin] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
-  static ValidationErrorLocInner? fromJson(dynamic value) {
+  static Admin? fromJson(dynamic value) {
     if (value is Map) {
       final json = value.cast<String, dynamic>();
 
@@ -42,23 +64,26 @@ class ValidationErrorLocInner {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "ValidationErrorLocInner[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "ValidationErrorLocInner[$key]" has a null value in JSON.');
+          assert(json.containsKey(key), 'Required key "Admin[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Admin[$key]" has a null value in JSON.');
         });
         return true;
       }());
 
-      return ValidationErrorLocInner(
+      return Admin(
+        id: mapValueOfType<String>(json, r'id')!,
+        userId: mapValueOfType<String>(json, r'userId')!,
+        user: User.fromJson(json[r'user']),
       );
     }
     return null;
   }
 
-  static List<ValidationErrorLocInner> listFromJson(dynamic json, {bool growable = false,}) {
-    final result = <ValidationErrorLocInner>[];
+  static List<Admin> listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Admin>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
-        final value = ValidationErrorLocInner.fromJson(row);
+        final value = Admin.fromJson(row);
         if (value != null) {
           result.add(value);
         }
@@ -67,12 +92,12 @@ class ValidationErrorLocInner {
     return result.toList(growable: growable);
   }
 
-  static Map<String, ValidationErrorLocInner> mapFromJson(dynamic json) {
-    final map = <String, ValidationErrorLocInner>{};
+  static Map<String, Admin> mapFromJson(dynamic json) {
+    final map = <String, Admin>{};
     if (json is Map && json.isNotEmpty) {
       json = json.cast<String, dynamic>(); // ignore: parameter_assignments
       for (final entry in json.entries) {
-        final value = ValidationErrorLocInner.fromJson(entry.value);
+        final value = Admin.fromJson(entry.value);
         if (value != null) {
           map[entry.key] = value;
         }
@@ -81,14 +106,14 @@ class ValidationErrorLocInner {
     return map;
   }
 
-  // maps a json object with a list of ValidationErrorLocInner-objects as value to a dart map
-  static Map<String, List<ValidationErrorLocInner>> mapListFromJson(dynamic json, {bool growable = false,}) {
-    final map = <String, List<ValidationErrorLocInner>>{};
+  // maps a json object with a list of Admin-objects as value to a dart map
+  static Map<String, List<Admin>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Admin>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = ValidationErrorLocInner.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = Admin.listFromJson(entry.value, growable: growable,);
       }
     }
     return map;
@@ -96,6 +121,9 @@ class ValidationErrorLocInner {
 
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
+    'id',
+    'userId',
+    'user',
   };
 }
 
