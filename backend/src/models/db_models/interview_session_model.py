@@ -6,9 +6,10 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
 from pydantic import BaseModel, Field
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class InterviewSession(BaseModel):
+class InterviewSession(AppPydanticBaseModel):
     id: UUID
     user_id: UUID
     user: Optional[User] = Field(None)
@@ -32,9 +33,9 @@ class InterviewSessionModel(EntityBaseModel):
     done: Mapped[bool]
 
 
-class InterviewSessionUpdate(BaseModel):
-    user_id: Optional[UUID]
-    teacher_id: Optional[UUID]
-    start_at: Optional[datetime]
-    progress: Optional[int]
-    done: Optional[bool]
+class InterviewSessionUpdate(AppPydanticBaseModel):
+    user_id: UUID
+    teacher_id: UUID
+    start_at: datetime
+    progress: int
+    done: bool

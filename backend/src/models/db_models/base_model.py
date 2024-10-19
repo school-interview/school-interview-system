@@ -1,6 +1,7 @@
 from typing import Type, TypeVar
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, ConfigDict, TypeAdapter
 from sqlalchemy.orm import DeclarativeBase
+from pydantic.alias_generators import to_camel
 
 T = TypeVar('T')
 

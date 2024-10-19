@@ -19,7 +19,7 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
             name=id_info['name'],
             email=id_info['email'],
         )
-        user_crud.update(db_session, db_obj=user, obj_in=user_update)
+        user = user_crud.update(db_session, db_obj=user, obj_in=user_update)
     else:
         user = UserModel(
             id=uuid.uuid4(),
