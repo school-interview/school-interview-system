@@ -5,9 +5,10 @@ from sqlalchemy import ForeignKey
 from src.models import EntityBaseModel, User
 from pydantic import BaseModel
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class Admin(BaseModel):
+class Admin(AppPydanticBaseModel):
     id: UUID
     user_id: UUID
     user: Optional[User]

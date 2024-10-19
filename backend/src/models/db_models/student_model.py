@@ -1,12 +1,14 @@
 from uuid import UUID
-from src.models import EntityBaseModel, User
 from sqlalchemy import ForeignKey, String
 from typing import Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel, Field
+from src.models.db_models.base_model import EntityBaseModel
+from src.models.db_models.user_model import User
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class Student(BaseModel):
+class Student(AppPydanticBaseModel):
     id: UUID
     user_id: UUID
     user: Optional[User]
@@ -25,7 +27,7 @@ class StudentModel(EntityBaseModel):
     semester: Mapped[int]
 
 
-class StudentUpdate(BaseModel):
-    student_id: Optional[str]
-    department: Optional[str]
-    semester: Optional[int]
+class StudentUpdate(AppPydanticBaseModel):
+    student_id: str
+    department: str
+    semester: int

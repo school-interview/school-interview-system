@@ -5,9 +5,10 @@ from sqlalchemy import String, ForeignKey
 from typing import List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class WebsocketConnection(BaseModel):
+class WebsocketConnection(AppPydanticBaseModel):
     id: UUID
     socket_id: str
     user_id: UUID

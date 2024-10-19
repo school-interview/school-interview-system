@@ -110,8 +110,9 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                         // 信頼できるメッセージであれば処理
                         Map<String, dynamic> tokenPair =
                             json.decode(event.data);
-                        String? idToken = tokenPair['id_token'];
-                        String? refreshToken = tokenPair['refresh_token'];
+                        String? idToken = tokenPair['idToken'];
+                        String? refreshToken = tokenPair['refreshToken'];
+                        print(event.data);
                         print(idToken);
                         print(refreshToken);
                         final localStorage =

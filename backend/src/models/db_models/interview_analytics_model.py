@@ -1,15 +1,16 @@
 from typing import Optional
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
+from pydantic import Field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from src.models.db_models.base_model import EntityBaseModel
 from src.models.db_models.interview_record_model import InterviewRecordModel
 from src.models.db_models.interview_session_model import InterviewSession
 from src.models.db_models.student_model import StudentModel
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class InterviewAnalytics(BaseModel):
+class InterviewAnalytics(AppPydanticBaseModel):
     id: UUID
     session_id: UUID
     session: Optional[InterviewSession] = Field(None)
@@ -131,10 +132,10 @@ class InterviewAnalyticsModel(EntityBaseModel):
         )
 
 
-class InterviewAnalyticsUpdate(BaseModel):
-    fail_to_move_to_next_grade: Optional[bool]
-    deviation_from_preferred_credit_level: Optional[float]
-    deviation_from_minimum_attendance_rate: Optional[float]
-    high_attendance_low_gpa_rate: Optional[float]
-    low_atendance_and_low_gpa_rate: Optional[float]
-    support_necessity_level: Optional[float]
+class InterviewAnalyticsUpdate(AppPydanticBaseModel):
+    fail_to_move_to_next_grade: bool
+    deviation_from_preferred_credit_level: float
+    deviation_from_minimum_attendance_rate: float
+    high_attendance_low_gpa_rate: float
+    low_atendance_and_low_gpa_rate: float
+    support_necessity_level: float

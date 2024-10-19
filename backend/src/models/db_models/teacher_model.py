@@ -2,10 +2,10 @@ from uuid import UUID
 from src.models.db_models.base_model import EntityBaseModel
 from sqlalchemy import String
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from pydantic import BaseModel
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class Teacher(BaseModel):
+class Teacher(AppPydanticBaseModel):
     id: UUID
     name: str
     description: str
@@ -18,6 +18,6 @@ class TeacherModel(EntityBaseModel):
     description: Mapped[str] = mapped_column(String(100))
 
 
-class TeacherUpdate(BaseModel):
+class TeacherUpdate(AppPydanticBaseModel):
     name: str
     description: str
