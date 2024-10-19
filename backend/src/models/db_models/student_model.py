@@ -23,3 +23,9 @@ class StudentModel(EntityBaseModel):
     student_id: Mapped[str] = mapped_column(String(7))
     department: Mapped[str] = mapped_column(String(30))
     semester: Mapped[int]
+
+
+class StudentUpdate(BaseModel):
+    student_id: Optional[str]
+    department: Optional[str]
+    semester: Optional[int]

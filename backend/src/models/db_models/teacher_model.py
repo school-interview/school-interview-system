@@ -16,3 +16,8 @@ class TeacherModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
     description: Mapped[str] = mapped_column(String(100))
+
+
+class TeacherUpdate(BaseModel):
+    name: str
+    description: str

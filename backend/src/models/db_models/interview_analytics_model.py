@@ -129,3 +129,12 @@ class InterviewAnalyticsModel(EntityBaseModel):
             low_atendance_and_low_gpa_rate=low_atendance_and_low_gpa_rate,
             support_necessity_level=level
         )
+
+
+class InterviewAnalyticsUpdate(BaseModel):
+    fail_to_move_to_next_grade: Optional[bool]
+    deviation_from_preferred_credit_level: Optional[float]
+    deviation_from_minimum_attendance_rate: Optional[float]
+    high_attendance_low_gpa_rate: Optional[float]
+    low_atendance_and_low_gpa_rate: Optional[float]
+    support_necessity_level: Optional[float]

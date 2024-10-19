@@ -5,7 +5,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer, OAuth2Aut
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from src.database import session_factory
-from src.crud import UserCrud
+from src.crud import UsersCrud
 from src.models import ErrorResponse, IdInfo, UserModel
 from sqlalchemy.orm import Session
 
@@ -71,6 +71,6 @@ def verify_user(request: Request, db_session: Session = Depends(session_factory)
             detail="The user is not authenticated."
         )
     id_info = verify_token(id_token)
-    user_curd = UserCrud(UserModel)
+    user_curd = UsersCrud(UserModel)
     user = user_curd.get_by_email(db_session, id_info["email"])
     return user
