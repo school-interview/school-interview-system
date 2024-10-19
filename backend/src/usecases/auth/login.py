@@ -13,7 +13,7 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
     `is_admin` flag is set to false temporarily.(I haven't implemented the admin feature yet)
     """
     user_crud = UserCrud(UserModel)
-    user = user_crud.get_by_emmail(db_session, id_info["email"])
+    user = user_crud.get_by_email(db_session, id_info["email"])
     if user:
         user_update = UserUpdate(
             name=id_info['name'],
