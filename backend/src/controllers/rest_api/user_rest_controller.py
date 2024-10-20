@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from src.controllers.rest_api.auth import verify_admin, verify_user
 from src.database import session_factory
 from src.models import RestApiController, User, UserModel, Student, StudentModel, StudentUpdate, ErrorResponse
-from src.crud import StudentsCrud
+from src.crud import StudentsCrud, UsersCrud
 
 
 class UsersRestApiController(RestApiController):
@@ -20,6 +20,21 @@ class UsersRestApiController(RestApiController):
         users = [TypeAdapter(User).validate_python(
             user[0].__dict__) for user in db_session.execute(user_query).all()]
         return users
+
+
+class MeRestApiController(RestApiController):
+    method = "GET"
+    path = "/me"
+    response_model = User
+
+    async def controller(self, db_session: Session = Depends(session_factory), user_model: UserModel = Depends(verify_user)):
+        users_crud = UsersCrud(UserModel)
+        if user_model.is_admin:
+            user_model = users_crud.get_with_admin(db_session, user_model.id)
+            return user_model.convertToPydantic(User)
+        else:
+            user_model = users_crud.get_with_student(db_session, user_model.id)
+            return user_model.convertToPydantic(User)
 
 
 class UpdateStudentRestApiController(RestApiController):
@@ -43,4 +58,4 @@ class UpdateStudentRestApiController(RestApiController):
 
 
 user_rest_api_controllers: List[RestApiController] = [
-    UsersRestApiController(), UpdateStudentRestApiController()]
+    UsersRestApiController(), MeRestApiController(), UpdateStudentRestApiController()]
