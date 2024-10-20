@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import select
-from src.crud import UsersCrud
-from src.models import IdInfo, User, UserModel, UserUpdate, NotSchoolMemberException
+from src.crud import UsersCrud, StudentsCrud, AdminCrud
+from src.models import IdInfo, User, UserModel, UserUpdate, NotSchoolMemberException, StudentModel, AdminModel
 from sqlalchemy.orm import Session
 from typing import Tuple
 import re
@@ -14,26 +14,44 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
     `is_admin` flag is set to false temporarily.(I haven't implemented the admin feature yet)
     """
     user_crud = UsersCrud(UserModel)
-    user = user_crud.get_by_email(db_session, id_info["email"])
+    user_model = user_crud.get_by_email(db_session, id_info["email"])
     if not _is_school_member_email(id_info["email"]):
         raise NotSchoolMemberException(
             "You need to login with your school Google account.")
-    if user:
+    if user_model:
         user_update = UserUpdate(
             name=id_info['name'],
             email=id_info['email'],
             is_admin=not _is_student_email(id_info['email'])
         )
-        user = user_crud.update(db_session, db_obj=user, obj_in=user_update)
+        user_model = user_crud.update(
+            db_session, db_obj=user_model, obj_in=user_update)
     else:
-        user = UserModel(
+        user_model = UserModel(
             id=uuid.uuid4(),
             name=id_info['name'],
             email=id_info['email'],
             is_admin=not _is_student_email(id_info['email'])
         )
-        user_crud.create(db_session, obj_in=user)
-    return user
+        user_crud.create(db_session, obj_in=user_model)
+        if user_model.is_admin:
+            admins_crud = AdminCrud(AdminModel)
+            admin_model = AdminModel(
+                id=uuid.uuid4(),
+                user_id=user_model.id
+            )
+            admins_crud.crate(db_session, obj_in=admin_model)
+        else:
+            students_crud = StudentsCrud(StudentModel)
+            studnet_model = StudentModel(
+                id=uuid.uuid4(),
+                user_id=user_model.id,
+                student_id=None,
+                department=None,
+                semester=None
+            )
+            students_crud.create(db_session, obj_in=studnet_model)
+    return user_model
 
 
 def _is_school_member_email(email: str):
