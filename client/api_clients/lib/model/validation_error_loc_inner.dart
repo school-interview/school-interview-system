@@ -25,10 +25,10 @@ class ValidationErrorLocInner {
   // @override
   // String toString() => 'ValidationErrorLocInner[]';
 
-  Map<String, dynamic> toJson() {
-    final json = <String, dynamic>{};
-    return json;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final json = <String, dynamic>{};
+  //   return json;
+  // }
 
   /// Returns a new [ValidationErrorLocInner] instance and imports its values from
   /// [value] if it's a [Map], null otherwise.

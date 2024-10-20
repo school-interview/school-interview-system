@@ -2,11 +2,11 @@ from uuid import UUID
 from src.models.db_models.base_model import EntityBaseModel
 from typing import Optional
 from sqlalchemy import String
-from sqlalchemy.orm import mapped_column, Mapped, relationship
-from pydantic import BaseModel
+from sqlalchemy.orm import mapped_column, Mapped
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class InterviewQuestion(BaseModel):
+class InterviewQuestion(AppPydanticBaseModel):
     id: UUID
     question: str
     order: int
@@ -21,3 +21,10 @@ class InterviewQuestionModel(EntityBaseModel):
     order: Mapped[int] = mapped_column(unique=True)
     prompt: Mapped[str] = mapped_column(String(200))
     description: Mapped[Optional[str]] = mapped_column(String(200))
+
+
+class InterviewQuestionUpdate(AppPydanticBaseModel):
+    question: str
+    order: int
+    prompt: str
+    description: str
