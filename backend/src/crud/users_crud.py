@@ -11,7 +11,7 @@ class UsersCrud(BaseCrud[UserModel, User, UserUpdate]):
         return db_session.query(UserModel).filter(UserModel.email == email).first()
 
     def get_with_student(self, db_session: Session, id: UUID) -> UserModel:
-        return db_session.query(UserModel).filter(UserModel.id == id).join(StudentModel, UserModel.id == StudentModel.user_id, isouter=True).first()
+        return db_session.query(UserModel).filter(UserModel.id == id).join(StudentModel,  StudentModel.user_id == UserModel.id).first()
 
     def get_with_admin(self, db_session: Session, id: UUID) -> UserModel:
-        return db_session.query(UserModel).filter(UserModel.id == id).join(AdminModel, UserModel.id == AdminModel.user_id).first()
+        return db_session.query(UserModel).filter(UserModel.id == id).join(AdminModel, AdminModel.user_id == UserModel.id, isouter=True).first()

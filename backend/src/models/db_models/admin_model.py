@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
@@ -18,7 +18,7 @@ class AdminModel(EntityBaseModel):
     __tablename__ = "Admins"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
-    user = relationship("UserModel", backref="admin")
+    user: Mapped[Any] = relationship("UserModel", back_populates="admin")
 
 
 class AdminUpdate(BaseModel):

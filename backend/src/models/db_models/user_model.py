@@ -29,8 +29,10 @@ class UserModel(EntityBaseModel):
     name: Mapped[str] = mapped_column(String(60))
     email: Mapped[str] = mapped_column(String(254))
     is_admin: Mapped[bool] = mapped_column(Boolean)
-    student: Optional[Any] = None
-    admin: Optional[Any] = None
+    student: Mapped[Optional[Any]] = relationship(
+        "StudentModel", back_populates="user")
+    admin: Mapped[Optional[Any]] = relationship(
+        "AdminModel", back_populates="user")
 
 
 class UserUpdate(AppPydanticBaseModel):
