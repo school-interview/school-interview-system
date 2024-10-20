@@ -2,19 +2,19 @@ import os
 from fastapi import Depends, HTTPException, Query, Request, Response
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import HTMLResponse, RedirectResponse
-from pydantic import TypeAdapter
 from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo, LoginResult, User, StudentModel, AdminModel, UserModel
-from typing import Any, List, Optional
+from src.models import RestApiController, ErrorResponse, IdInfo,  NotSchoolMemberException, UserModel, LoginResult, User
+from src.crud import UsersCrud
+from typing import Any, List
 from src.usecases.auth.login import login
-from src.crud import UsersCrud, AdminCrud
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import httpx
 
 load_dotenv(".env.local")
 CLIENT_URL = os.getenv("CLIENT_URL")
+CLIENT_ID = os.getenv("CLIENT_ID")
 
 
 class LoginRestApiController(RestApiController):
@@ -56,6 +56,17 @@ class OAuthCallbackRestApiController(RestApiController):
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
         id_info = verify_token(id_token)
+        # ↓ TODO:ここに書いてあるようなチェックを全て行うべき
+        # https://qiita.com/KWS_0901/items/c842644b0c65685b2526
+        if id_info.get('aud') != CLIENT_ID:
+            raise ErrorResponse(
+                status_code=400,
+                type="invalid_client_id",
+                title="Invalid client ID",
+                detail="The client ID provided is invalid"
+            )
+
+        login(session, id_info)
         user_model: UserModel = login(session, id_info)
         user_crud = UsersCrud(UserModel)
         if user_model.is_admin:
@@ -76,6 +87,7 @@ class OAuthCallbackRestApiController(RestApiController):
             </script>
         """
 
+        return Response(content=response_body, media_type="text/html")
         return Response(content=response_body, media_type="text/html")
 
 
