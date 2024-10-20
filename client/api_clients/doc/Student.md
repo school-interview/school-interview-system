@@ -1,4 +1,4 @@
-# openapi.model.User
+# openapi.model.Student
 
 ## Load the model package
 ```dart
@@ -9,11 +9,11 @@ import 'package:openapi/api.dart';
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** |  | 
-**name** | **String** |  | 
-**email** | **String** |  | 
-**isAdmin** | **bool** |  | 
-**student** | [**Student**](Student.md) |  | [optional] 
-**admin** | [**Admin**](Admin.md) |  | [optional] 
+**userId** | **String** |  | 
+**user** | [**User**](User.md) |  | 
+**studentId** | **String** |  | 
+**department** | **String** |  | 
+**semester** | **int** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

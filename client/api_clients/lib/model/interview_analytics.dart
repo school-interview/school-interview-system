@@ -73,18 +73,18 @@ class InterviewAnalytics {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
-      json[r'session_id'] = this.sessionId;
+      json[r'sessionId'] = this.sessionId;
     if (this.session != null) {
       json[r'session'] = this.session;
     } else {
       json[r'session'] = null;
     }
-      json[r'fail_to_move_to_next_grade'] = this.failToMoveToNextGrade;
-      json[r'deviation_from_preferred_credit_level'] = this.deviationFromPreferredCreditLevel;
-      json[r'deviation_from_minimum_attendance_rate'] = this.deviationFromMinimumAttendanceRate;
-      json[r'high_attendance_low_gpa_rate'] = this.highAttendanceLowGpaRate;
-      json[r'low_atendance_and_low_gpa_rate'] = this.lowAtendanceAndLowGpaRate;
-      json[r'support_necessity_level'] = this.supportNecessityLevel;
+      json[r'failToMoveToNextGrade'] = this.failToMoveToNextGrade;
+      json[r'deviationFromPreferredCreditLevel'] = this.deviationFromPreferredCreditLevel;
+      json[r'deviationFromMinimumAttendanceRate'] = this.deviationFromMinimumAttendanceRate;
+      json[r'highAttendanceLowGpaRate'] = this.highAttendanceLowGpaRate;
+      json[r'lowAtendanceAndLowGpaRate'] = this.lowAtendanceAndLowGpaRate;
+      json[r'supportNecessityLevel'] = this.supportNecessityLevel;
     return json;
   }
 
@@ -108,14 +108,14 @@ class InterviewAnalytics {
 
       return InterviewAnalytics(
         id: mapValueOfType<String>(json, r'id')!,
-        sessionId: mapValueOfType<String>(json, r'session_id')!,
+        sessionId: mapValueOfType<String>(json, r'sessionId')!,
         session: InterviewSession.fromJson(json[r'session']),
-        failToMoveToNextGrade: mapValueOfType<bool>(json, r'fail_to_move_to_next_grade')!,
-        deviationFromPreferredCreditLevel: num.parse('${json[r'deviation_from_preferred_credit_level']}'),
-        deviationFromMinimumAttendanceRate: num.parse('${json[r'deviation_from_minimum_attendance_rate']}'),
-        highAttendanceLowGpaRate: num.parse('${json[r'high_attendance_low_gpa_rate']}'),
-        lowAtendanceAndLowGpaRate: num.parse('${json[r'low_atendance_and_low_gpa_rate']}'),
-        supportNecessityLevel: num.parse('${json[r'support_necessity_level']}'),
+        failToMoveToNextGrade: mapValueOfType<bool>(json, r'failToMoveToNextGrade')!,
+        deviationFromPreferredCreditLevel: num.parse('${json[r'deviationFromPreferredCreditLevel']}'),
+        deviationFromMinimumAttendanceRate: num.parse('${json[r'deviationFromMinimumAttendanceRate']}'),
+        highAttendanceLowGpaRate: num.parse('${json[r'highAttendanceLowGpaRate']}'),
+        lowAtendanceAndLowGpaRate: num.parse('${json[r'lowAtendanceAndLowGpaRate']}'),
+        supportNecessityLevel: num.parse('${json[r'supportNecessityLevel']}'),
       );
     }
     return null;
@@ -164,13 +164,13 @@ class InterviewAnalytics {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'id',
-    'session_id',
-    'fail_to_move_to_next_grade',
-    'deviation_from_preferred_credit_level',
-    'deviation_from_minimum_attendance_rate',
-    'high_attendance_low_gpa_rate',
-    'low_atendance_and_low_gpa_rate',
-    'support_necessity_level',
+    'sessionId',
+    'failToMoveToNextGrade',
+    'deviationFromPreferredCreditLevel',
+    'deviationFromMinimumAttendanceRate',
+    'highAttendanceLowGpaRate',
+    'lowAtendanceAndLowGpaRate',
+    'supportNecessityLevel',
   };
 }
 

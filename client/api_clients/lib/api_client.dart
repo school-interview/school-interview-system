@@ -182,6 +182,8 @@ class ApiClient {
           return valueString == 'true' || valueString == '1';
         case 'DateTime':
           return value is DateTime ? value : DateTime.tryParse(value);
+        case 'Admin':
+          return Admin.fromJson(value);
         case 'HTTPValidationError':
           return HTTPValidationError.fromJson(value);
         case 'InterviewAnalytics':
@@ -194,6 +196,8 @@ class ApiClient {
           return SpeakToTeacherRequest.fromJson(value);
         case 'StartInterviewResponse':
           return StartInterviewResponse.fromJson(value);
+        case 'Student':
+          return Student.fromJson(value);
         case 'Teacher':
           return Teacher.fromJson(value);
         case 'TeacherResponse':
