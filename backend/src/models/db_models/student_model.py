@@ -22,9 +22,9 @@ class StudentModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
     user = relationship("UserModel", backref="student")
-    student_id: Mapped[str] = mapped_column(String(7))
-    department: Mapped[str] = mapped_column(String(30))
-    semester: Mapped[int]
+    student_id: Mapped[Optional[str]] = mapped_column(String(7))
+    department: Mapped[Optional[str]] = mapped_column(String(30))
+    semester: Mapped[Optional[int]]
 
 
 class StudentUpdate(AppPydanticBaseModel):
