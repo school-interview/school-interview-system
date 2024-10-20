@@ -4,7 +4,7 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import HTMLResponse, RedirectResponse
 from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo,  NotSchoolMemberException, UserModel, LoginResult, User
+from src.models import RestApiController, ErrorResponse, IdInfo,  NotSchoolMemberException, UserModel, LoginResult, User, Admin, Student
 from src.crud import UsersCrud
 from typing import Any, List
 from src.usecases.auth.login import login
@@ -73,11 +73,14 @@ class OAuthCallbackRestApiController(RestApiController):
             user_model = user_crud.get_with_admin(session, user_model.id)
         else:
             user_model = user_crud.get_with_student(session, user_model.id)
-
+        model_class_mapping = {
+            "StudentModel": Student,
+            "AdminModel": Admin
+        }
         login_result = LoginResult(
             id_token=id_token,
             refresh_token=refresh_token,
-            user=user_model.convertToPydantic(User)
+            user=user_model.convertToPydantic(User, model_class_mapping)
         )
         response_body = f"""
             <script type="text/javascript">
@@ -87,7 +90,6 @@ class OAuthCallbackRestApiController(RestApiController):
             </script>
         """
 
-        return Response(content=response_body, media_type="text/html")
         return Response(content=response_body, media_type="text/html")
 
 

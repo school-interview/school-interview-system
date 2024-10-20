@@ -11,17 +11,17 @@ from src.models.app_pydantic_base_model import AppPydanticBaseModel
 class Student(AppPydanticBaseModel):
     id: UUID
     user_id: UUID
-    user: Optional[User]
-    student_id: str
-    department: str
-    semester: int = Field(ge=1, le=8)
+    user: Optional[User] = None
+    student_id: Optional[str]
+    department: Optional[str]
+    semester: Optional[int] = Field(ge=1, le=8)
 
 
 class StudentModel(EntityBaseModel):
     __tablename__ = "Students"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
-    user = relationship("UserModel", backref="student")
+    user: Mapped["User"] = relationship("UserModel", back_populates="student")
     student_id: Mapped[Optional[str]] = mapped_column(String(7))
     department: Mapped[Optional[str]] = mapped_column(String(30))
     semester: Mapped[Optional[int]]
