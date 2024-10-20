@@ -74,3 +74,13 @@ def verify_user(request: Request, db_session: Session = Depends(session_factory)
     user_curd = UsersCrud(UserModel)
     user = user_curd.get_by_email(db_session, id_info["email"])
     return user
+
+
+def verify_admin(db_session: Session = Depends(session_factory), user_model: UserModel = Depends(verify_user)):
+    if not user_model.is_admin:
+        raise ErrorResponse(
+            status_code=403,
+            type="not_admin",
+            title="Not an administrator",
+            detail="you need to be an administrator to access this resource.")
+    return user_model
