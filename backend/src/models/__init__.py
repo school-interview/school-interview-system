@@ -1,13 +1,13 @@
 from src.models.db_models.base_model import EntityBaseModel
 from src.models.db_models.user_model import User, UserModel, UserUpdate
 from src.models.db_models.connection_model import WebsocketConnection, WebsocketConnectionModel
-from src.models.db_models.teacher_model import Teacher, TeacherModel
-from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel
-from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel
-from src.models.db_models.interview_record_model import InterviewRecord, InterviewRecordModel
-from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel
-from src.models.db_models.admin_model import Admin, AdminModel
-from src.models.db_models.student_model import Student, StudentModel
+from src.models.db_models.teacher_model import Teacher, TeacherModel, TeacherUpdate
+from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel, InterviewSessionUpdate
+from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel, InterviewQuestionUpdate
+from src.models.db_models.interview_record_model import InterviewRecord, InterviewRecordModel, InterviewRecordUpdate
+from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel, InterviewAnalyticsUpdate
+from src.models.db_models.admin_model import Admin, AdminModel, AdminUpdate
+from src.models.db_models.student_model import Student, StudentModel, StudentUpdate
 from src.models.app_models.extraction_result_model import ExtractionResult
 from src.models.app_models.rest_api_controller_model import RestApiController, HttpMethod
 from src.models.app_models.websocket_controller_model import WebsocketController
@@ -25,6 +25,8 @@ from src.models.api_models.responses.error_response_model import ErrorResponse
 from src.models.api_models.responses.start_interview_response_model import StartInterviewResponse
 from src.models.api_models.responses.teacher_response_model import TeacherResponse
 from src.models.api_models.responses.teachers_list_response_model import TeachersListResponse
-from src.models.api_models.responses.token_pair_model import TokenPair
+from src.models.api_models.responses.login_result_response_model import LoginResult
 from src.models.error_models.app_exception_model import AppException
+from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
+from src.models.error_models.not_school_member_exception_model import NotSchoolMemberException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
