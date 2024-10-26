@@ -4,7 +4,8 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from fastapi.responses import HTMLResponse, RedirectResponse
 from src.controllers.rest_api.auth import AUTHORIZATION_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, verify_token
 from src.database import session_factory
-from src.models import RestApiController, ErrorResponse, IdInfo, TokenPair
+from src.models import RestApiController, ErrorResponse, IdInfo,  NotSchoolMemberException, UserModel, LoginResult, User, Admin, Student
+from src.crud import UsersCrud
 from typing import Any, List
 from src.usecases.auth.login import login
 from sqlalchemy.orm import Session
@@ -13,6 +14,7 @@ import httpx
 
 load_dotenv(".env.local")
 CLIENT_URL = os.getenv("CLIENT_URL")
+CLIENT_ID = os.getenv("CLIENT_ID")
 
 
 class LoginRestApiController(RestApiController):
@@ -54,13 +56,36 @@ class OAuthCallbackRestApiController(RestApiController):
         id_token = token_response_json["id_token"]
         refresh_token = token_response_json["refresh_token"]
         id_info = verify_token(id_token)
+        # ↓ TODO:ここに書いてあるようなチェックを全て行うべき
+        # https://qiita.com/KWS_0901/items/c842644b0c65685b2526
+        if id_info.get('aud') != CLIENT_ID:
+            raise ErrorResponse(
+                status_code=400,
+                type="invalid_client_id",
+                title="Invalid client ID",
+                detail="The client ID provided is invalid"
+            )
+
         login(session, id_info)
-        token_pair = TokenPair(
-            id_token=id_token, refresh_token=refresh_token)
+        user_model: UserModel = login(session, id_info)
+        user_crud = UsersCrud(UserModel)
+        if user_model.is_admin:
+            user_model = user_crud.get_with_admin(session, user_model.id)
+        else:
+            user_model = user_crud.get_with_student(session, user_model.id)
+        model_class_mapping = {
+            "StudentModel": Student,
+            "AdminModel": Admin
+        }
+        login_result = LoginResult(
+            id_token=id_token,
+            refresh_token=refresh_token,
+            user=user_model.convertToPydantic(User, model_class_mapping)
+        )
         response_body = f"""
             <script type="text/javascript">
                 window.opener.postMessage(
-                    '{token_pair.model_dump_json()}', '{CLIENT_URL}');
+                    '{login_result.model_dump_json(by_alias=True)}', '{CLIENT_URL}');
                 window.close();
             </script>
         """
@@ -71,6 +96,4 @@ class OAuthCallbackRestApiController(RestApiController):
 auth_rest_api_controllers: List[RestApiController] = [
     LoginRestApiController(),
     OAuthCallbackRestApiController()
-
-
 ]

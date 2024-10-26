@@ -4,9 +4,10 @@ from sqlalchemy import String, ForeignKey
 from typing import List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel
+from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
 
-class InterviewRecord(BaseModel):
+class InterviewRecord(AppPydanticBaseModel):
     id: UUID
     session_id: UUID
     total_earned_credits: Optional[int]
@@ -30,3 +31,12 @@ class InterviewRecordModel(EntityBaseModel):
     attendance_rate: Mapped[Optional[float]]
     concern: Mapped[Optional[str]]
     prefer_in_person_interview: Mapped[Optional[bool]]
+
+
+class InterviewRecordUpdate(AppPydanticBaseModel):
+    total_earned_credits: int
+    planned_credits: int
+    gpa: float
+    attendance_rate: float
+    concern: str
+    prefer_in_person_interview: bool

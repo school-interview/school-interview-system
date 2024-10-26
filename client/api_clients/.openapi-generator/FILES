@@ -2,6 +2,7 @@
 .travis.yml
 README.md
 analysis_options.yaml
+doc/Admin.md
 doc/DefaultApi.md
 doc/HTTPValidationError.md
 doc/InterviewAnalytics.md
@@ -9,6 +10,7 @@ doc/InterviewSession.md
 doc/InterviewSessionRequest.md
 doc/SpeakToTeacherRequest.md
 doc/StartInterviewResponse.md
+doc/Student.md
 doc/Teacher.md
 doc/TeacherResponse.md
 doc/TeachersListResponse.md
@@ -26,12 +28,14 @@ lib/auth/authentication.dart
 lib/auth/http_basic_auth.dart
 lib/auth/http_bearer_auth.dart
 lib/auth/oauth.dart
+lib/model/admin.dart
 lib/model/http_validation_error.dart
 lib/model/interview_analytics.dart
 lib/model/interview_session.dart
 lib/model/interview_session_request.dart
 lib/model/speak_to_teacher_request.dart
 lib/model/start_interview_response.dart
+lib/model/student.dart
 lib/model/teacher.dart
 lib/model/teacher_response.dart
 lib/model/teachers_list_response.dart
