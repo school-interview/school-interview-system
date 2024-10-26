@@ -153,6 +153,13 @@ class AnalyticsInterviewRestApiController(RestApiController):
             interview_analytics_dict)
         return interview_analytics
 
+# class AnalyticsReportsRestApiController(RestApiController):
+#     method = "GET"
+#     path = "/interviews/analytics"
+#     response_model = List[InterviewAnalytics]
+
+#     async def controller(self, db_session=Depends(session_factory), admin=Depends(veri)):
+
 
 interview_rest_api_controllers: List[RestApiController] = [StartInterviewSessionRestApiController(
 ), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController(), AnalyticsInterviewRestApiController()]
