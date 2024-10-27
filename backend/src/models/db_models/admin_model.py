@@ -3,7 +3,7 @@ from uuid import UUID
 
 from sqlalchemy import ForeignKey
 from src.models import EntityBaseModel, User
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
 
@@ -11,7 +11,7 @@ from src.models.app_pydantic_base_model import AppPydanticBaseModel
 class Admin(AppPydanticBaseModel):
     id: UUID
     user_id: UUID
-    user: Optional[User]
+    user: Optional[User] = Field(default=None)
 
 
 class AdminModel(EntityBaseModel):
