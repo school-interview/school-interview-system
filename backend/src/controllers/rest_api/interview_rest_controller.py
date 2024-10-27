@@ -159,7 +159,7 @@ class AnalyticsInterviewRestApiController(RestApiController):
 class InterviewReportsRestApiController(RestApiController):
     method = "GET"
     path = "/interview-reports"
-    response_model = List[InterviewAnalytics]
+    response_model = List[InterviewReport]
 
     async def controller(self, db_session=Depends(session_factory), admin=Depends(verify_admin)):
         reports: List[InterviewReport] = collect_interview_reports(db_session)
