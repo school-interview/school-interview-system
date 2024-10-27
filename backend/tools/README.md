@@ -17,3 +17,11 @@ python tools/switch_role.py
 切り替えるユーザーのロールを入力してください (admin/student):
 
 ```
+
+このツールを実行する前に DB サーバーが起動している必要があります。
+
+もし起動していない場合は以下のコマンドで起動しましょう。(DB だけ起動する)
+
+```
+docker compose --profile db up
+```
