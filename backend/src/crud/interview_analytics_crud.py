@@ -9,7 +9,7 @@ class InterviewAnalyticsCrud(BaseCrud[InterviewAnalyticsModel, InterviewAnalytic
     def get_multi_with_user_and_session(self, db_session: Session):
         return db_session.query(InterviewAnalyticsModel, InterviewSessionModel, UserModel
                                 ).join(
-            InterviewSessionModel, InterviewAnalyticsModel.interview_session_id == InterviewSessionModel.id
+            InterviewSessionModel, InterviewAnalyticsModel.session_id == InterviewSessionModel.id
         ).join(
             UserModel, InterviewSessionModel.user_id == UserModel.id
         ).all()
