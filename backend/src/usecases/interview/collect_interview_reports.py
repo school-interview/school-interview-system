@@ -13,9 +13,11 @@ def collect_interview_reports(db_session: Session) -> List[InterviewReport]:
     interview_reports = list(
         map(
             lambda row: InterviewReport(
-                user=row[2].convertToPydantic(User),
-                interview_session=row[1].convertToPydantic(InterviewSession),
-                analytics=row[0].convertToPydantic(InterviewAnalytics)
+                user=row[2].convertToPydantic(User, obj_history=set()),
+                interview_session=row[1].convertToPydantic(
+                    InterviewSession, obj_history=set()),
+                analytics=row[0].convertToPydantic(
+                    InterviewAnalytics, obj_history=set())
             ),
             rows
         )
