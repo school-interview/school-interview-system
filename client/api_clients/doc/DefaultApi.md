@@ -13,11 +13,13 @@ Method | HTTP request | Description
 [**controllerInterviewInterviewSessionIdDelete**](DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 [**controllerInterviewInterviewSessionIdPost**](DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 [**controllerInterviewPost**](DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
+[**controllerInterviewReportsGet**](DefaultApi.md#controllerinterviewreportsget) | **GET** /interview-reports | Controller
 [**controllerLoginGet**](DefaultApi.md#controllerloginget) | **GET** /login | Controller
 [**controllerMeGet**](DefaultApi.md#controllermeget) | **GET** /me | Controller
 [**controllerOauth2CallbackGet**](DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 [**controllerTeachersGet**](DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 [**controllerUsersGet**](DefaultApi.md#controllerusersget) | **GET** /users | Controller
+[**controllerUsersUserIdStudentPut**](DefaultApi.md#controllerusersuseridstudentput) | **PUT** /users/{user_id}/student | Controller
 
 
 # **controllerInterviewInterviewSessionIdAnalyticsGet**
@@ -206,6 +208,49 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerInterviewReportsGet**
+> List<InterviewReport> controllerInterviewReportsGet()
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = DefaultApi();
+
+try {
+    final result = api_instance.controllerInterviewReportsGet();
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerInterviewReportsGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List<InterviewReport>**](InterviewReport.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -407,6 +452,55 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerUsersUserIdStudentPut**
+> Student controllerUsersUserIdStudentPut(userId, studentUpdate)
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = DefaultApi();
+final userId = userId_example; // String | 
+final studentUpdate = StudentUpdate(); // StudentUpdate | 
+
+try {
+    final result = api_instance.controllerUsersUserIdStudentPut(userId, studentUpdate);
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerUsersUserIdStudentPut: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **studentUpdate** | [**StudentUpdate**](StudentUpdate.md)|  | 
+
+### Return type
+
+[**Student**](Student.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

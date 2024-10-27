@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** |  | 
 **userId** | **String** |  | 
-**user** | [**User**](User.md) |  | 
+**user** | [**User**](User.md) |  | [optional] 
 **studentId** | **String** |  | 
 **department** | **String** |  | 
 **semester** | **int** |  | 
