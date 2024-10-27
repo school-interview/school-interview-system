@@ -80,7 +80,8 @@ class OAuthCallbackRestApiController(RestApiController):
         login_result = LoginResult(
             id_token=id_token,
             refresh_token=refresh_token,
-            user=user_model.convertToPydantic(User, model_class_mapping)
+            user=user_model.convertToPydantic(
+                User, set(), model_class_mapping=model_class_mapping)
         )
         response_body = f"""
             <script type="text/javascript">

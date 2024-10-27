@@ -4,7 +4,7 @@ from src.models import InterviewSessionModel, InterviewRecordModel
 from src.usecases.interview.analyze_interview import analyze_interview
 
 
-def finish_interview(db_session: Session, interview_session: InterviewSessionModel, *, chat_history_store: dict = {}, interview_record: InterviewRecordModel):
+def finish_interview(db_session: Session, interview_session: InterviewSessionModel, *, chat_history_store: dict = {}, interview_record: InterviewRecordModel = None):
     """
         Args:
             db_session (Session): DB session
