@@ -16,7 +16,7 @@ class EntityBaseModel(DeclarativeBase):
         for key in keys:
             value = dict_to_convert[key]
             # 以前に登場したオブジェクトはNone。（循環参照を防ぐため）
-            if not (type(value) in primitives) and (id(value) in _obj_history):
+            if (type(value) not in primitives) and (id(value) in _obj_history):
                 dict_to_convert[key] = None
             elif issubclass(value.__class__, DeclarativeBase):
                 model: EntityBaseModel = dict_to_convert[key]

@@ -18,7 +18,8 @@ class AdminModel(EntityBaseModel):
     __tablename__ = "Admins"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
-    user: Mapped[Any] = relationship("UserModel", back_populates="admin")
+    user: Mapped[Optional[Any]] = relationship(
+        "UserModel", back_populates="admin")
 
 
 class AdminUpdate(BaseModel):

@@ -76,6 +76,14 @@ class OAuthCallbackRestApiController(RestApiController):
             "StudentModel": Student,
             "AdminModel": Admin
         }
+        print()
+        print()
+        print()
+        print("ここにadmin.userがあるのか。→", user_model.admin)
+        print()
+        print()
+        print()
+
         login_result = LoginResult(
             id_token=id_token,
             refresh_token=refresh_token,
