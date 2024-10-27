@@ -37,3 +37,5 @@ from src.models.error_models.app_exception_model import AppException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
 from src.models.error_models.not_school_member_exception_model import NotSchoolMemberException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
+from src.models.error_models.user_not_found_exception_model import UserNotFoundException
+from src.models.error_models.not_student_exception_model import NotStudentException

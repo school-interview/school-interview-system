@@ -13,3 +13,6 @@ class InterviewAnalyticsCrud(BaseCrud[InterviewAnalyticsModel, InterviewAnalytic
         ).join(
             UserModel, InterviewSessionModel.user_id == UserModel.id
         ).all()
+
+    def get_by_session_id(self, db_session: Session, session_id: str):
+        return db_session.query(InterviewAnalyticsModel).filter(InterviewAnalyticsModel.session_id == session_id).first()
