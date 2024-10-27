@@ -188,6 +188,8 @@ class ApiClient {
           return HTTPValidationError.fromJson(value);
         case 'InterviewAnalytics':
           return InterviewAnalytics.fromJson(value);
+        case 'InterviewReport':
+          return InterviewReport.fromJson(value);
         case 'InterviewSession':
           return InterviewSession.fromJson(value);
         case 'InterviewSessionRequest':
@@ -198,6 +200,8 @@ class ApiClient {
           return StartInterviewResponse.fromJson(value);
         case 'Student':
           return Student.fromJson(value);
+        case 'StudentUpdate':
+          return StudentUpdate.fromJson(value);
         case 'Teacher':
           return Teacher.fromJson(value);
         case 'TeacherResponse':

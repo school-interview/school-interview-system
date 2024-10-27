@@ -15,7 +15,7 @@ class Student {
   Student({
     required this.id,
     required this.userId,
-    required this.user,
+    this.user,
     required this.studentId,
     required this.department,
     required this.semester,
@@ -27,13 +27,13 @@ class Student {
 
   User? user;
 
-  String studentId;
+  String? studentId;
 
-  String department;
+  String? department;
 
   /// Minimum value: 1
   /// Maximum value: 8
-  int semester;
+  int? semester;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Student &&
@@ -50,9 +50,9 @@ class Student {
     (id.hashCode) +
     (userId.hashCode) +
     (user == null ? 0 : user!.hashCode) +
-    (studentId.hashCode) +
-    (department.hashCode) +
-    (semester.hashCode);
+    (studentId == null ? 0 : studentId!.hashCode) +
+    (department == null ? 0 : department!.hashCode) +
+    (semester == null ? 0 : semester!.hashCode);
 
   @override
   String toString() => 'Student[id=$id, userId=$userId, user=$user, studentId=$studentId, department=$department, semester=$semester]';
@@ -66,9 +66,21 @@ class Student {
     } else {
       json[r'user'] = null;
     }
+    if (this.studentId != null) {
       json[r'studentId'] = this.studentId;
+    } else {
+      json[r'studentId'] = null;
+    }
+    if (this.department != null) {
       json[r'department'] = this.department;
+    } else {
+      json[r'department'] = null;
+    }
+    if (this.semester != null) {
       json[r'semester'] = this.semester;
+    } else {
+      json[r'semester'] = null;
+    }
     return json;
   }
 
@@ -94,9 +106,9 @@ class Student {
         id: mapValueOfType<String>(json, r'id')!,
         userId: mapValueOfType<String>(json, r'userId')!,
         user: User.fromJson(json[r'user']),
-        studentId: mapValueOfType<String>(json, r'studentId')!,
-        department: mapValueOfType<String>(json, r'department')!,
-        semester: mapValueOfType<int>(json, r'semester')!,
+        studentId: mapValueOfType<String>(json, r'studentId'),
+        department: mapValueOfType<String>(json, r'department'),
+        semester: mapValueOfType<int>(json, r'semester'),
       );
     }
     return null;
@@ -146,7 +158,6 @@ class Student {
   static const requiredKeys = <String>{
     'id',
     'userId',
-    'user',
     'studentId',
     'department',
     'semester',
