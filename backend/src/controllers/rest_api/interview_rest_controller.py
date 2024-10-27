@@ -2,7 +2,7 @@ from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
-from src.controllers.rest_api.auth import verify_user
+from src.controllers.rest_api.auth import verify_user, verify_admin
 from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel
 from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview
 from src.database import session_factory
@@ -153,12 +153,14 @@ class AnalyticsInterviewRestApiController(RestApiController):
             interview_analytics_dict)
         return interview_analytics
 
-# class AnalyticsReportsRestApiController(RestApiController):
-#     method = "GET"
-#     path = "/interviews/analytics"
-#     response_model = List[InterviewAnalytics]
 
-#     async def controller(self, db_session=Depends(session_factory), admin=Depends(veri)):
+class InterviewReportsRestApiController(RestApiController):
+    method = "GET"
+    path = "/interview-reports"
+    response_model = List[InterviewAnalytics]
+
+    async def controller(self, db_session=Depends(session_factory), admin=Depends(verify_admin)):
+        pass
 
 
 interview_rest_api_controllers: List[RestApiController] = [StartInterviewSessionRestApiController(
