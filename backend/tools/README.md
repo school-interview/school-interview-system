@@ -25,3 +25,15 @@ python tools/switch_role.py
 ```
 docker compose --profile db up
 ```
+
+## 注意事項
+
+元々、管理者アカウントのユーザーが学生アカウントに切り替える場合は注意が必要です。
+
+面談システムのいくつかの機能は、面談開始時のプロフィール入力を済ませてあることを前提としています。(`StudentModel`の`student_id`や`department`,`semester`など)
+
+**これらの記録がないと誤作動を起こす可能性があるので、pgAdmin のようなツールを使って Students テーブルの該当ユーザーの`student_id`や`department`,`semester`などのフィールドを直接書き込んでください。**
+
+↑ 　これも switch_role.py で対応できるように今度修正しますね。（以下はその issue）
+
+https://github.com/orgs/school-interview/projects/2/views/1?pane=issue&itemId=84930990&issue=school-interview%7Cschool-interview-system%7C140
