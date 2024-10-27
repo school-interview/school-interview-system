@@ -165,4 +165,4 @@ class InterviewReportsRestApiController(RestApiController):
 
 
 interview_rest_api_controllers: List[RestApiController] = [StartInterviewSessionRestApiController(
-), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController(), AnalyticsInterviewRestApiController()]
+), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController(), AnalyticsInterviewRestApiController(), InterviewReportsRestApiController()]
