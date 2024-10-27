@@ -48,6 +48,7 @@ try:
     else:
         student_crud = StudentsCrud(StudentModel)
         student_model = student_crud.get_by_user_id(db_session, user_id)
+        # TODO: 学生モデルが存在していても、学籍番号やセミスター情報などが未登録の場合はプロンプトで入力させる。
         if not student_model:
             student_model = StudentModel(id=uuid4(), user_id=user_id)
             student_crud.create(db_session, obj_in=student_model)
