@@ -69,11 +69,13 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**controllerInterviewInterviewSessionIdDelete**](doc//DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewInterviewSessionIdPost**](doc//DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 *DefaultApi* | [**controllerInterviewPost**](doc//DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
+*DefaultApi* | [**controllerInterviewReportsGet**](doc//DefaultApi.md#controllerinterviewreportsget) | **GET** /interview-reports | Controller
 *DefaultApi* | [**controllerLoginGet**](doc//DefaultApi.md#controllerloginget) | **GET** /login | Controller
 *DefaultApi* | [**controllerMeGet**](doc//DefaultApi.md#controllermeget) | **GET** /me | Controller
 *DefaultApi* | [**controllerOauth2CallbackGet**](doc//DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 *DefaultApi* | [**controllerTeachersGet**](doc//DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 *DefaultApi* | [**controllerUsersGet**](doc//DefaultApi.md#controllerusersget) | **GET** /users | Controller
+*DefaultApi* | [**controllerUsersUserIdStudentPut**](doc//DefaultApi.md#controllerusersuseridstudentput) | **PUT** /users/{user_id}/student | Controller
 
 
 ## Documentation For Models
@@ -81,11 +83,13 @@ Class | Method | HTTP request | Description
  - [Admin](doc//Admin.md)
  - [HTTPValidationError](doc//HTTPValidationError.md)
  - [InterviewAnalytics](doc//InterviewAnalytics.md)
+ - [InterviewReport](doc//InterviewReport.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
  - [SpeakToTeacherRequest](doc//SpeakToTeacherRequest.md)
  - [StartInterviewResponse](doc//StartInterviewResponse.md)
  - [Student](doc//Student.md)
+ - [StudentUpdate](doc//StudentUpdate.md)
  - [Teacher](doc//Teacher.md)
  - [TeacherResponse](doc//TeacherResponse.md)
  - [TeachersListResponse](doc//TeachersListResponse.md)

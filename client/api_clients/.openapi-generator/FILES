@@ -6,11 +6,13 @@ doc/Admin.md
 doc/DefaultApi.md
 doc/HTTPValidationError.md
 doc/InterviewAnalytics.md
+doc/InterviewReport.md
 doc/InterviewSession.md
 doc/InterviewSessionRequest.md
 doc/SpeakToTeacherRequest.md
 doc/StartInterviewResponse.md
 doc/Student.md
+doc/StudentUpdate.md
 doc/Teacher.md
 doc/TeacherResponse.md
 doc/TeachersListResponse.md
@@ -31,11 +33,13 @@ lib/auth/oauth.dart
 lib/model/admin.dart
 lib/model/http_validation_error.dart
 lib/model/interview_analytics.dart
+lib/model/interview_report.dart
 lib/model/interview_session.dart
 lib/model/interview_session_request.dart
 lib/model/speak_to_teacher_request.dart
 lib/model/start_interview_response.dart
 lib/model/student.dart
+lib/model/student_update.dart
 lib/model/teacher.dart
 lib/model/teacher_response.dart
 lib/model/teachers_list_response.dart
@@ -43,3 +47,5 @@ lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
+test/interview_report_test.dart
+test/student_update_test.dart

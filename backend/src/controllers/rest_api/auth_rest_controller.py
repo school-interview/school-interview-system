@@ -66,7 +66,6 @@ class OAuthCallbackRestApiController(RestApiController):
                 detail="The client ID provided is invalid"
             )
 
-        login(session, id_info)
         user_model: UserModel = login(session, id_info)
         user_crud = UsersCrud(UserModel)
         if user_model.is_admin:
@@ -77,10 +76,12 @@ class OAuthCallbackRestApiController(RestApiController):
             "StudentModel": Student,
             "AdminModel": Admin
         }
+
         login_result = LoginResult(
             id_token=id_token,
             refresh_token=refresh_token,
-            user=user_model.convertToPydantic(User, model_class_mapping)
+            user=user_model.convertToPydantic(
+                User, set(), model_class_mapping=model_class_mapping)
         )
         response_body = f"""
             <script type="text/javascript">

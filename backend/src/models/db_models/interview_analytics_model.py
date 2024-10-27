@@ -79,6 +79,8 @@ class InterviewAnalyticsModel(EntityBaseModel):
         def get_deviation_from_preferred_credit_level():
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
             if credits_to_be_earned_in_total < preffered_credits[student.semester]:
+                if student.semester == 8:  # semesterが8の場合は124かどうかで判断
+                    return 0 if credits_to_be_earned_in_total < 124 else 1
                 deviation = (preffered_credits[student.semester] - credits_to_be_earned_in_total)/(
                     preffered_credits[student.semester] - required_credits[student.semester])
                 return deviation

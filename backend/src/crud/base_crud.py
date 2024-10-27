@@ -45,7 +45,6 @@ class BaseCrud(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self, db_session: Session, *, db_obj: ModelType, obj_in: UpdateSchemaType
     ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
-        print("あっぷでーてぃっど、", obj_data)
         update_data = obj_in.__dict__
         for field in obj_data:
             if field in update_data:

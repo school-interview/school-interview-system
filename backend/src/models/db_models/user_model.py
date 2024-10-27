@@ -38,3 +38,7 @@ class UserModel(EntityBaseModel):
 class UserUpdate(AppPydanticBaseModel):
     name: str
     email: str
+
+
+class UserRoleUpdate(AppPydanticBaseModel):
+    is_admin: bool

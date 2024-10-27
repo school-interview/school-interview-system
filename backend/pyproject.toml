@@ -30,6 +30,7 @@ sqlalchemy-utils = "^0.41.2"
 pytest = "^8.3.3"
 google-auth = "^2.35.0"
 itsdangerous = "^2.2.0"
+debugpy = "^1.8.7"
 
 
 [build-system]
