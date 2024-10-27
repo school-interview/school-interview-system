@@ -66,7 +66,6 @@ class OAuthCallbackRestApiController(RestApiController):
                 detail="The client ID provided is invalid"
             )
 
-        login(session, id_info)
         user_model: UserModel = login(session, id_info)
         user_crud = UsersCrud(UserModel)
         if user_model.is_admin:
