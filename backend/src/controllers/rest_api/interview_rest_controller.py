@@ -2,10 +2,11 @@ from typing import List, Optional
 import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
-from src.controllers.rest_api.auth import verify_user
-from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel
-from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview
+from src.controllers.rest_api.auth import verify_user, verify_admin
+from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel, InterviewReport
+from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview, collect_interview_reports
 from src.database import session_factory
+from src.crud import InterviewSessionsCrud
 from sqlalchemy.orm import Session
 
 
@@ -60,11 +61,9 @@ class SpeakToTeacherRestApiController(RestApiController):
     async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory), user_model=Depends(verify_user)):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         message = data.message_from_student
-        interview_query = db_session.query(InterviewSessionModel).where(
-            InterviewSessionModel.id == interview_session_id)
-        query_result: Optional[InterviewSessionModel] = db_session.execute(
-            interview_query).first()
-        interview_session_model = query_result[0] if query_result else None
+        interview_sessions_crud = InterviewSessionsCrud(InterviewSessionModel)
+        interview_session_model = interview_sessions_crud.get(
+            db_session, interview_session_id)
         if not interview_session_model:
             raise ErrorResponse(
                 status_code=404,
@@ -81,11 +80,14 @@ class SpeakToTeacherRestApiController(RestApiController):
             )
         message_from_teacher = speak_to_teacher(
             db_session, interview_session_model, message)
-
+        model_class_mapping = {
+            "TeacherModel": Teacher,
+            "UserModel": User
+        }
         teacher_response = TeacherResponse(
             message_from_teacher=message_from_teacher,
-            interview_session=TypeAdapter(
-                InterviewSession).validate_python(interview_session_model.__dict__)
+            interview_session=interview_session_model.convertToPydantic(
+                InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
         )
 
         return teacher_response
@@ -154,5 +156,15 @@ class AnalyticsInterviewRestApiController(RestApiController):
         return interview_analytics
 
 
+class InterviewReportsRestApiController(RestApiController):
+    method = "GET"
+    path = "/interview-reports"
+    response_model = List[InterviewReport]
+
+    async def controller(self, db_session=Depends(session_factory), admin=Depends(verify_admin)):
+        reports: List[InterviewReport] = collect_interview_reports(db_session)
+        return reports
+
+
 interview_rest_api_controllers: List[RestApiController] = [StartInterviewSessionRestApiController(
-), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController(), AnalyticsInterviewRestApiController()]
+), SpeakToTeacherRestApiController(), FinishInterviewSessionRestApiController(), AnalyticsInterviewRestApiController(), InterviewReportsRestApiController()]

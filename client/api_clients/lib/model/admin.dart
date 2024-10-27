@@ -15,7 +15,7 @@ class Admin {
   Admin({
     required this.id,
     required this.userId,
-    required this.user,
+    this.user,
   });
 
   String id;
@@ -123,7 +123,6 @@ class Admin {
   static const requiredKeys = <String>{
     'id',
     'userId',
-    'user',
   };
 }
 

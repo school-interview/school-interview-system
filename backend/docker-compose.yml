@@ -23,6 +23,15 @@ services:
       - db
     profiles:
       - backend
+  debug:
+    extends:
+      service: backend-app
+    environment:
+      - DEBUG=True
+    ports:
+      - 5678:5678
+    profiles:
+      - debug
   db:
     image: postgres:14
     container_name: school-interivew-postgres

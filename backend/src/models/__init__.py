@@ -1,5 +1,6 @@
+# DBモデル
 from src.models.db_models.base_model import EntityBaseModel
-from src.models.db_models.user_model import User, UserModel, UserUpdate
+from src.models.db_models.user_model import User, UserModel, UserUpdate, UserRoleUpdate
 from src.models.db_models.connection_model import WebsocketConnection, WebsocketConnectionModel
 from src.models.db_models.teacher_model import Teacher, TeacherModel, TeacherUpdate
 from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel, InterviewSessionUpdate
@@ -8,6 +9,8 @@ from src.models.db_models.interview_record_model import InterviewRecord, Intervi
 from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel, InterviewAnalyticsUpdate
 from src.models.db_models.admin_model import Admin, AdminModel, AdminUpdate
 from src.models.db_models.student_model import Student, StudentModel, StudentUpdate
+
+# バックエンドアプリで使うモデル
 from src.models.app_models.extraction_result_model import ExtractionResult
 from src.models.app_models.rest_api_controller_model import RestApiController, HttpMethod
 from src.models.app_models.websocket_controller_model import WebsocketController
@@ -17,6 +20,9 @@ from src.models.app_models.llm_structured_outputs.gpa_model import Gpa
 from src.models.app_models.llm_structured_outputs.prefer_in_person_model import PreferInPerson
 from src.models.app_models.llm_structured_outputs.school_credit_model import SchoolCredit
 from src.models.app_models.id_info_model import IdInfo
+from src.models.app_models.interview_report_model import InterviewReport
+
+# API リクエスト&レスポンスモデル
 from src.models.api_models.requests.interview_session_request_model import InterviewSessionRequest
 from src.models.api_models.requests.login_request_model import LoginRequest
 from src.models.api_models.requests.speak_to_teacher_request_model import SpeakToTeacherRequest
@@ -25,7 +31,11 @@ from src.models.api_models.responses.start_interview_response_model import Start
 from src.models.api_models.responses.teacher_response_model import TeacherResponse
 from src.models.api_models.responses.teachers_list_response_model import TeachersListResponse
 from src.models.api_models.responses.login_result_response_model import LoginResult
+
+# エラークラス
 from src.models.error_models.app_exception_model import AppException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
 from src.models.error_models.not_school_member_exception_model import NotSchoolMemberException
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
+from src.models.error_models.user_not_found_exception_model import UserNotFoundException
+from src.models.error_models.not_student_exception_model import NotStudentException
