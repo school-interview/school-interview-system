@@ -13,7 +13,7 @@ def analyze_interview(db_session: Session, interview_session: InterviewSessionMo
     """
     analytics_crud = InterviewAnalyticsCrud(InterviewAnalyticsModel)
     existing_interview_analytics = analytics_crud.get_by_session_id(
-        interview_session.id)
+        db_session, interview_session.id)
     if existing_interview_analytics:
         # すでにInterviewAnalyticsが存在している場合はそのまま返す。
         return existing_interview_analytics
@@ -26,5 +26,5 @@ def analyze_interview(db_session: Session, interview_session: InterviewSessionMo
         raise NotStudentException("User is not a student.")
     interview_analytics = InterviewAnalyticsModel.create_from_interview_record(
         user_model.student, interview_recrod)
-    analytics_crud.create(db_session, interview_analytics)
+    analytics_crud.create(db_session, obj_in=interview_analytics)
     return interview_analytics
