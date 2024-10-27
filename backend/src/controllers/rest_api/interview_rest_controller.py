@@ -3,8 +3,8 @@ import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
 from src.controllers.rest_api.auth import verify_user, verify_admin
-from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel
-from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview
+from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel, InterviewReport
+from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview, collect_interview_reports
 from src.database import session_factory
 from sqlalchemy.orm import Session
 
@@ -160,7 +160,8 @@ class InterviewReportsRestApiController(RestApiController):
     response_model = List[InterviewAnalytics]
 
     async def controller(self, db_session=Depends(session_factory), admin=Depends(verify_admin)):
-        pass
+        reports: List[InterviewReport] = collect_interview_reports(db_session)
+        return reports
 
 
 interview_rest_api_controllers: List[RestApiController] = [StartInterviewSessionRestApiController(
