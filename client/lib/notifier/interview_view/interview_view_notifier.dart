@@ -46,6 +46,12 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         state.copyWith(currentInterviewSessionId: currentInterviewSessionId);
   }
 
+  void _setInterviewAnalytics(InterviewAnalytics interviewAnalytics) {
+    state = state.copyWith(interviewAnalytics: interviewAnalytics);
+  }
+
+  void _setIsFinishInterview(bool isFinishInterview) => state = state.copyWith(isFinishInterview: isFinishInterview);
+
   final SpeechToText _speechToText = SpeechToText();
 
   final InterviewRepository _interviewRepository = InterviewRepositoryImpl();
@@ -93,18 +99,6 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     }
   }
 
-  /// マイクボタンタップ時のアクション
-  Future<void>? micButtonTapAction() async {
-    switch (state.whoTalking) {
-      case WhoTalking.user:
-        return _stopTalking();
-      case WhoTalking.avatar:
-        return;
-      case WhoTalking.none:
-        return _startTalking();
-    }
-  }
-
   /// ユーザーが話し始めたときの処理
   Future<void> _startTalking() async {
     setUserMessage("");
@@ -135,7 +129,6 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     required String currentInterviewSessionId,
     required String userSpeech,
   }) async {
-    logger.i("run speakToTeacher()");
     final speakToTeacherRequest =
         SpeakToTeacherRequest(messageFromStudent: userSpeech);
     try {
@@ -154,8 +147,14 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
             startFunc: () {
               _setWhoTalking(WhoTalking.avatar);
             },
-            endFunc: () {
+            endFunc: () async {
               _setWhoTalking(WhoTalking.none);
+              // 面談が終了した場合、要支援レベルを取得する
+              if (response.data!.interviewSession.done) {
+                await _getInterviewAnalytics(
+                    currentInterviewSessionId: state.currentInterviewSessionId);
+                _setIsFinishInterview(true);
+              }
             },
           );
           break;
@@ -167,6 +166,41 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     } on Exception catch (e) {
       logger.e(e.toString());
       return;
+    }
+  }
+
+  /// 要支援レベル取得API
+  Future<void> _getInterviewAnalytics({
+    required String currentInterviewSessionId,
+  }) async {
+    try {
+      ApiResult<InterviewAnalytics> response = await _interviewRepository
+          .getInterviewAnalytics(currentInterviewSessionId);
+      switch (response.statusCode) {
+        case 200:
+          _setInterviewAnalytics(response.data!);
+          break;
+        default:
+          // TODO 失敗時処理
+          break;
+      }
+      logger.t("responseData:${response.data}");
+      logger.t("interviewAnalytics:${state.interviewAnalytics}");
+    } on Exception catch (e) {
+      logger.e(e.toString());
+      return;
+    }
+  }
+
+  /// マイクボタンタップ時のアクション
+  Future<void>? micButtonTapAction() async {
+    switch (state.whoTalking) {
+      case WhoTalking.user:
+        return _stopTalking();
+      case WhoTalking.avatar:
+        return;
+      case WhoTalking.none:
+        return _startTalking();
     }
   }
 

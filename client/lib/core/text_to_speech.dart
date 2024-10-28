@@ -21,11 +21,13 @@ class TextToSpeech {
     required Function startFunc,
     required Function endFunc,
   }) async {
+    // アバターが話し始めたときの処理
     tts.setStartHandler(() {
       startFunc();
       logger.i("TTS STARTED");
     });
 
+    // アバターが話し終えたときの処理
     tts.setCompletionHandler(() {
       endFunc();
       logger.i("TTS COMPLETED");
