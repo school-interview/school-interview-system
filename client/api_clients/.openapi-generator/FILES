@@ -9,6 +9,7 @@ doc/InterviewAnalytics.md
 doc/InterviewReport.md
 doc/InterviewSession.md
 doc/InterviewSessionRequest.md
+doc/LoginResult.md
 doc/SpeakToTeacherRequest.md
 doc/StartInterviewResponse.md
 doc/Student.md
@@ -36,6 +37,7 @@ lib/model/interview_analytics.dart
 lib/model/interview_report.dart
 lib/model/interview_session.dart
 lib/model/interview_session_request.dart
+lib/model/login_result.dart
 lib/model/speak_to_teacher_request.dart
 lib/model/start_interview_response.dart
 lib/model/student.dart
@@ -47,5 +49,4 @@ lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
-test/interview_report_test.dart
-test/student_update_test.dart
+test/login_result_test.dart
