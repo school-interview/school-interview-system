@@ -34,7 +34,8 @@ class LoginRestApiController(RestApiController):
 class OAuthCallbackRestApiController(RestApiController):
     method = "GET"
     path = "/oauth2/callback"
-    response_model = Any
+    # レスポンスはHTML本文だが、OpenAPIのデータ型出力にLoginResultを含めるにはレスポンスかリクエストに含める必要があるためこう書いています。
+    response_model = LoginResult
 
     async def controller(self, code: str, request: Request, session: Session = Depends(session_factory)):
         async with httpx.AsyncClient() as client:
