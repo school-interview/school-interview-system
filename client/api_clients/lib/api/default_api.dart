@@ -405,7 +405,7 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] code (required):
-  Future<Object?> controllerOauth2CallbackGet(String code,) async {
+  Future<LoginResult?> controllerOauth2CallbackGet(String code,) async {
     final response = await controllerOauth2CallbackGetWithHttpInfo(code,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -414,7 +414,7 @@ class DefaultApi {
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
     if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Object',) as Object;
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'LoginResult',) as LoginResult;
     
     }
     return null;
