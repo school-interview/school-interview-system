@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// 永続化マネージャー
 class SharedPreferenceManager {
   Future<bool> setString(String key, String? value) async {
     try {
@@ -23,4 +24,6 @@ class SharedPreferenceManager {
 /// キーの一覧
 class PrefKeys {
   static const String userId = "userID";
+  static const String idToken = "idToken";
+  static const String refreshToken = "refreshToken";
 }
