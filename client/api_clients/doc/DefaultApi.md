@@ -336,7 +336,7 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **controllerOauth2CallbackGet**
-> Object controllerOauth2CallbackGet(code)
+> LoginResult controllerOauth2CallbackGet(code)
 
 Controller
 
@@ -363,7 +363,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Object**](Object.md)
+[**LoginResult**](LoginResult.md)
 
 ### Authorization
 
