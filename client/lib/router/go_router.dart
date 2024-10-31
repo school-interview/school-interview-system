@@ -1,15 +1,27 @@
 import 'package:client/view/avatar_select/avatar_select_view.dart';
 import 'package:client/view/interview/interview_view.dart';
 import 'package:client/view/interview_analytics/interview_analytics_view.dart';
+import 'package:client/view/login/login_view.dart';
 import 'package:client/view/profile_input/profile_input_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final goRouter = GoRouter(
   // アプリが起動した時
-  initialLocation: RouterPath.profileInputView,
+  initialLocation: RouterPath.loginView,
   // パスと画面の組み合わせ
   routes: [
+    // ログイン
+    GoRoute(
+      path: RouterPath.loginView,
+      name: RouterPath.loginView,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+          key: state.pageKey,
+          child: const LoginView(),
+        );
+      },
+    ),
     // 情報入力画面
     GoRoute(
       path: RouterPath.profileInputView,
@@ -69,6 +81,9 @@ final goRouter = GoRouter(
 
 /// 画面パス
 class RouterPath {
+  // ログイン画面
+  static const String loginView = "/login";
+
   // 情報入力画面
   static const String profileInputView = "/profile-input";
 
