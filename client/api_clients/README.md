@@ -86,6 +86,7 @@ Class | Method | HTTP request | Description
  - [InterviewReport](doc//InterviewReport.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
+ - [LoginResult](doc//LoginResult.md)
  - [SpeakToTeacherRequest](doc//SpeakToTeacherRequest.md)
  - [StartInterviewResponse](doc//StartInterviewResponse.md)
  - [Student](doc//Student.md)
