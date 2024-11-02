@@ -16,9 +16,9 @@ class Student {
     required this.id,
     required this.userId,
     this.user,
-    required this.studentId,
-    required this.department,
-    required this.semester,
+    this.studentId,
+    this.department,
+    this.semester,
   });
 
   String id;
@@ -158,9 +158,6 @@ class Student {
   static const requiredKeys = <String>{
     'id',
     'userId',
-    'studentId',
-    'department',
-    'semester',
   };
 }
 

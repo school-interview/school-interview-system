@@ -12,9 +12,9 @@ class Student(AppPydanticBaseModel):
     id: UUID
     user_id: UUID
     user: Optional[User] = None
-    student_id: Optional[str]
-    department: Optional[str]
-    semester: Optional[int] = Field(ge=1, le=8)
+    student_id: Optional[str] = Field(None)
+    department: Optional[str] = Field(None)
+    semester: Optional[int] = Field(None, ge=1, le=8)
 
 
 class StudentModel(EntityBaseModel):
