@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
 import 'package:client/infrastructure/shared_preference_manager.dart';
@@ -18,7 +20,7 @@ class LoginNotifier extends _$LoginNotifier {
   }
 
   /// 以下、setter
-  _setResult(Result result) => state.copyWith(result: result);
+  setResult(Result? result) => state.copyWith(result: result);
 
   _setIdToken(String idToken) => state.copyWith(idToken: idToken);
 
@@ -34,20 +36,21 @@ class LoginNotifier extends _$LoginNotifier {
   final SharedPreferenceManager _sharedPreferenceManager =
       SharedPreferenceManager();
 
-  /// ログイン時の処理
-  Future<void> getLoginToken() async {
+  /// ユーザー情報取得API
+  Future<void> getUserInfo() async {
+    logger.i("run getUserInfo()");
     try {
-      ApiResult<LoginResult> response = await _loginRepository.getLoginToken();
+      final idToken =
+          await _sharedPreferenceManager.getString(PrefKeys.idToken);
+      ApiResult<User> response =
+          await _loginRepository.getUserInfo(idToken ?? "");
       switch (response.statusCode) {
         case 200:
-          _setResult(Result.success);
-          _setIdToken(response.data!.idToken);
-          _setRefreshToken(response.data!.refreshToken);
-          _setUser(response.data!.user);
-          _setToken(idToken: state.idToken, refreshToken: state.refreshToken);
+          setResult(Result.success);
+          _setUser(response.data!);
           break;
         default:
-          _setResult(Result.fail);
+          setResult(Result.fail);
           break;
       }
       logger.t("responseData:${response.data}");
@@ -57,10 +60,22 @@ class LoginNotifier extends _$LoginNotifier {
     }
   }
 
-  /// トークンを保存する
+  /// ログイン時の処理
+  Future<void> login(dynamic data) async {
+    logger.i("run setLoginResultData()");
+    Map<String, dynamic> mapLoginResult = json.decode(data);
+    final result = LoginResult.fromJson(mapLoginResult);
+    print(result);
+    _setIdToken(result?.idToken ?? "");
+    _setRefreshToken(result?.refreshToken ?? "");
+    _setToken(idToken: result?.idToken, refreshToken: result?.refreshToken);
+    await getUserInfo();
+  }
+
+  /// トークンをローカルストレージに保存する
   Future<void> _setToken({
-    required String idToken,
-    required String refreshToken,
+    required String? idToken,
+    required String? refreshToken,
   }) async {
     await _sharedPreferenceManager.setString(PrefKeys.idToken, idToken);
     await _sharedPreferenceManager.setString(
