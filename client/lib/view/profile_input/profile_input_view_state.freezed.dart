@@ -31,9 +31,7 @@ mixin _$ProfileInputViewState {
   /// 学期（前学期か後学期）
   int get semester => throw _privateConstructorUsedError;
 
-  /// Create a copy of ProfileInputViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ProfileInputViewStateCopyWith<ProfileInputViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -63,8 +61,6 @@ class _$ProfileInputViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ProfileInputViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -125,8 +121,6 @@ class __$$ProfileInputViewStateImplCopyWithImpl<$Res>
       $Res Function(_$ProfileInputViewStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProfileInputViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -219,9 +213,7 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
   int get hashCode =>
       Object.hash(runtimeType, result, studentId, name, department, semester);
 
-  /// Create a copy of ProfileInputViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ProfileInputViewStateImplCopyWith<_$ProfileInputViewStateImpl>
@@ -237,30 +229,28 @@ abstract class _ProfileInputViewState implements ProfileInputViewState {
       final String department,
       final int semester}) = _$ProfileInputViewStateImpl;
 
-  /// API処理結果
   @override
+
+  /// API処理結果
   Result? get result;
+  @override
 
   /// 学籍番号
-  @override
   String get studentId;
+  @override
 
   /// 氏名
-  @override
   String get name;
+  @override
 
   /// 学科
-  @override
   String get department;
+  @override
 
   /// 学期（前学期か後学期）
-  @override
   int get semester;
-
-  /// Create a copy of ProfileInputViewState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ProfileInputViewStateImplCopyWith<_$ProfileInputViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
