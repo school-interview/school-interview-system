@@ -41,9 +41,7 @@ mixin _$InterviewViewState {
   /// 面談が終了したかどうかを判別する
   bool get isFinishInterview => throw _privateConstructorUsedError;
 
-  /// Create a copy of InterviewViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $InterviewViewStateCopyWith<InterviewViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -75,8 +73,6 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of InterviewViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -153,8 +149,6 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
       $Res Function(_$InterviewViewStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of InterviewViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -295,9 +289,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
       interviewAnalytics,
       isFinishInterview);
 
-  /// Create a copy of InterviewViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$InterviewViewStateImplCopyWith<_$InterviewViewStateImpl> get copyWith =>
@@ -316,42 +308,40 @@ abstract class _InterviewViewState implements InterviewViewState {
       final InterviewAnalytics? interviewAnalytics,
       final bool isFinishInterview}) = _$InterviewViewStateImpl;
 
-  /// API処理結果
   @override
+
+  /// API処理結果
   Result? get result;
+  @override
 
   /// ローディング中かどうかを判別する
-  @override
   bool get isLoading;
+  @override
 
   /// アバターのセリフ
-  @override
   String get avatarMessage;
+  @override
 
   /// ユーザーのセリフ
-  @override
   String get userMessage;
+  @override
 
   /// 誰が話しているかを判別する
-  @override
   WhoTalking get whoTalking;
+  @override
 
   /// 最新のinterviewSessionId
-  @override
   String get currentInterviewSessionId;
+  @override
 
   /// 面談結果
-  @override
   InterviewAnalytics? get interviewAnalytics;
+  @override
 
   /// 面談が終了したかどうかを判別する
-  @override
   bool get isFinishInterview;
-
-  /// Create a copy of InterviewViewState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$InterviewViewStateImplCopyWith<_$InterviewViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -19,9 +19,7 @@ mixin _$InterviewAnalyticsViewState {
   /// アニメーションが動いたかどうかを判別する
   bool get isAnimated => throw _privateConstructorUsedError;
 
-  /// Create a copy of InterviewAnalyticsViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $InterviewAnalyticsViewStateCopyWith<InterviewAnalyticsViewState>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -48,8 +46,6 @@ class _$InterviewAnalyticsViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of InterviewAnalyticsViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,8 +82,6 @@ class __$$InterviewAnalyticsViewStateImplCopyWithImpl<$Res>
       $Res Function(_$InterviewAnalyticsViewStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of InterviewAnalyticsViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,9 +124,7 @@ class _$InterviewAnalyticsViewStateImpl
   @override
   int get hashCode => Object.hash(runtimeType, isAnimated);
 
-  /// Create a copy of InterviewAnalyticsViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$InterviewAnalyticsViewStateImplCopyWith<_$InterviewAnalyticsViewStateImpl>
@@ -145,14 +137,12 @@ abstract class _InterviewAnalyticsViewState
   const factory _InterviewAnalyticsViewState({final bool isAnimated}) =
       _$InterviewAnalyticsViewStateImpl;
 
-  /// アニメーションが動いたかどうかを判別する
   @override
-  bool get isAnimated;
 
-  /// Create a copy of InterviewAnalyticsViewState
-  /// with the given fields replaced by the non-null parameter values.
+  /// アニメーションが動いたかどうかを判別する
+  bool get isAnimated;
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$InterviewAnalyticsViewStateImplCopyWith<_$InterviewAnalyticsViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

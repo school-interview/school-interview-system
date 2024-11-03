@@ -20,14 +20,14 @@ class LoginNotifier extends _$LoginNotifier {
   }
 
   /// 以下、setter
-  setResult(Result? result) => state.copyWith(result: result);
+  setResult(Result? result) => state = state.copyWith(result: result);
 
-  _setIdToken(String idToken) => state.copyWith(idToken: idToken);
+  _setIdToken(String idToken) => state = state.copyWith(idToken: idToken);
 
   _setRefreshToken(String refreshToken) =>
-      state.copyWith(refreshToken: refreshToken);
+      state = state.copyWith(refreshToken: refreshToken);
 
-  _setUser(User user) => state.copyWith(user: user);
+  _setIsAdmin(bool isAdmin) => state = state.copyWith(isAdmin: isAdmin);
 
   /// ログインリポジトリ
   final LoginRepository _loginRepository = LoginRepositoryImpl();
@@ -47,7 +47,7 @@ class LoginNotifier extends _$LoginNotifier {
       switch (response.statusCode) {
         case 200:
           setResult(Result.success);
-          _setUser(response.data!);
+          _setIsAdmin(response.data!.isAdmin);
           break;
         default:
           setResult(Result.fail);
@@ -62,10 +62,9 @@ class LoginNotifier extends _$LoginNotifier {
 
   /// ログイン時の処理
   Future<void> login(dynamic data) async {
-    logger.i("run setLoginResultData()");
+    logger.i("run login()");
     Map<String, dynamic> mapLoginResult = json.decode(data);
     final result = LoginResult.fromJson(mapLoginResult);
-    print(result);
     _setIdToken(result?.idToken ?? "");
     _setRefreshToken(result?.refreshToken ?? "");
     _setToken(idToken: result?.idToken, refreshToken: result?.refreshToken);

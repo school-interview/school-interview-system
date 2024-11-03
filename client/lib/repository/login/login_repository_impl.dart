@@ -10,7 +10,7 @@ class LoginRepositoryImpl extends LoginRepository {
   /// ユーザー情報取得API
   @override
   Future<ApiResult<User>> getUserInfo(String idToken) async {
-    logger.i("run sendLoginToken($idToken)");
+    logger.i("run getUserInfo()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
