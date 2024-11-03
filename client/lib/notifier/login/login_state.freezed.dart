@@ -25,12 +25,11 @@ mixin _$LoginState {
   /// リフレッシュトークン
   String get refreshToken => throw _privateConstructorUsedError;
 
-  /// ユーザーデータ
-  User? get user => throw _privateConstructorUsedError;
+  /// ユーザーが学生が教員か
+  /// true:教員 false:学生
+  bool get isAdmin => throw _privateConstructorUsedError;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -41,7 +40,8 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
-  $Res call({Result? result, String idToken, String refreshToken, User? user});
+  $Res call(
+      {Result? result, String idToken, String refreshToken, bool isAdmin});
 }
 
 /// @nodoc
@@ -54,15 +54,13 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? result = freezed,
     Object? idToken = null,
     Object? refreshToken = null,
-    Object? user = freezed,
+    Object? isAdmin = null,
   }) {
     return _then(_value.copyWith(
       result: freezed == result
@@ -77,10 +75,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User?,
+      isAdmin: null == isAdmin
+          ? _value.isAdmin
+          : isAdmin // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -93,7 +91,8 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       __$$LoginStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Result? result, String idToken, String refreshToken, User? user});
+  $Res call(
+      {Result? result, String idToken, String refreshToken, bool isAdmin});
 }
 
 /// @nodoc
@@ -104,15 +103,13 @@ class __$$LoginStateImplCopyWithImpl<$Res>
       _$LoginStateImpl _value, $Res Function(_$LoginStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? result = freezed,
     Object? idToken = null,
     Object? refreshToken = null,
-    Object? user = freezed,
+    Object? isAdmin = null,
   }) {
     return _then(_$LoginStateImpl(
       result: freezed == result
@@ -127,10 +124,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User?,
+      isAdmin: null == isAdmin
+          ? _value.isAdmin
+          : isAdmin // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -139,7 +136,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 
 class _$LoginStateImpl implements _LoginState {
   const _$LoginStateImpl(
-      {this.result, this.idToken = "", this.refreshToken = "", this.user});
+      {this.result,
+      this.idToken = "",
+      this.refreshToken = "",
+      this.isAdmin = false});
 
   /// API処理結果
   @override
@@ -155,13 +155,15 @@ class _$LoginStateImpl implements _LoginState {
   @JsonKey()
   final String refreshToken;
 
-  /// ユーザーデータ
+  /// ユーザーが学生が教員か
+  /// true:教員 false:学生
   @override
-  final User? user;
+  @JsonKey()
+  final bool isAdmin;
 
   @override
   String toString() {
-    return 'LoginState(result: $result, idToken: $idToken, refreshToken: $refreshToken, user: $user)';
+    return 'LoginState(result: $result, idToken: $idToken, refreshToken: $refreshToken, isAdmin: $isAdmin)';
   }
 
   @override
@@ -173,16 +175,14 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.idToken, idToken) || other.idToken == idToken) &&
             (identical(other.refreshToken, refreshToken) ||
                 other.refreshToken == refreshToken) &&
-            (identical(other.user, user) || other.user == user));
+            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, result, idToken, refreshToken, user);
+      Object.hash(runtimeType, result, idToken, refreshToken, isAdmin);
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
@@ -194,28 +194,27 @@ abstract class _LoginState implements LoginState {
       {final Result? result,
       final String idToken,
       final String refreshToken,
-      final User? user}) = _$LoginStateImpl;
+      final bool isAdmin}) = _$LoginStateImpl;
+
+  @override
 
   /// API処理結果
-  @override
   Result? get result;
+  @override
 
   /// IDトークン
-  @override
   String get idToken;
+  @override
 
   /// リフレッシュトークン
-  @override
   String get refreshToken;
-
-  /// ユーザーデータ
   @override
-  User? get user;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
+  /// ユーザーが学生が教員か
+  /// true:教員 false:学生
+  bool get isAdmin;
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

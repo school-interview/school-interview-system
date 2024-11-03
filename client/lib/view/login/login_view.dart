@@ -1,5 +1,6 @@
 import 'dart:html' as html;
 
+import 'package:client/app.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/result.dart';
@@ -48,7 +49,7 @@ class _LoginView extends ConsumerState<LoginView> {
                   'left=100,top=100,width=700,height=500');
               html.window.onMessage.listen(
                 (html.MessageEvent event) async {
-                  loginNotifier.login(event.data);
+                  await loginNotifier.login(event.data);
                 },
               );
             },
@@ -62,17 +63,21 @@ class _LoginView extends ConsumerState<LoginView> {
   ///
   /// [result] 処理結果
   void _handleResult(BuildContext context, Result? result) {
+    logger.i("_handleResult($result)");
     // final loginNotifier = ref.read(loginNotifierProvider.notifier);
     final loginState = ref.watch(loginNotifierProvider);
     switch (result) {
       case Result.success:
         // loginNotifier.setResult(null);
-        if (loginState.user?.isAdmin == true) {
+        if (loginState.isAdmin == true) {
           // 教員向け画面へ遷移する
           // TODO 教員向け画面を実装する
-        } else if (loginState.user?.isAdmin == false) {
+        } else if (loginState.isAdmin == false) {
           // 学生向け画面へ遷移する
           context.push(RouterPath.profileInputView);
+        } else {
+          // TODO 教員か学生かが不明である旨を知らせるアラート表示
+          logger.w("教員か学生かが不明です");
         }
         break;
       case Result.fail:
