@@ -49,7 +49,7 @@ class _LoginView extends ConsumerState<LoginView> {
                   'left=100,top=100,width=700,height=500');
               html.window.onMessage.listen(
                 (html.MessageEvent event) async {
-                  loginNotifier.login(event.data);
+                  await loginNotifier.login(event.data);
                 },
               );
             },
@@ -75,6 +75,9 @@ class _LoginView extends ConsumerState<LoginView> {
         } else if (loginState.isAdmin == false) {
           // 学生向け画面へ遷移する
           context.push(RouterPath.profileInputView);
+        } else {
+          // TODO 教員か学生かが不明である旨を知らせるアラート表示
+          logger.w("教員か学生かが不明です");
         }
         break;
       case Result.fail:
