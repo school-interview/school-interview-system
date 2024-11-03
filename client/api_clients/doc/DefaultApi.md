@@ -13,9 +13,13 @@ Method | HTTP request | Description
 [**controllerInterviewInterviewSessionIdDelete**](DefaultApi.md#controllerinterviewinterviewsessioniddelete) | **DELETE** /interview/{interview_session_id} | Controller
 [**controllerInterviewInterviewSessionIdPost**](DefaultApi.md#controllerinterviewinterviewsessionidpost) | **POST** /interview/{interview_session_id} | Controller
 [**controllerInterviewPost**](DefaultApi.md#controllerinterviewpost) | **POST** /interview | Controller
-[**controllerLoginPut**](DefaultApi.md#controllerloginput) | **PUT** /login | Controller
+[**controllerInterviewReportsGet**](DefaultApi.md#controllerinterviewreportsget) | **GET** /interview-reports | Controller
+[**controllerLoginGet**](DefaultApi.md#controllerloginget) | **GET** /login | Controller
+[**controllerMeGet**](DefaultApi.md#controllermeget) | **GET** /me | Controller
+[**controllerOauth2CallbackGet**](DefaultApi.md#controlleroauth2callbackget) | **GET** /oauth2/callback | Controller
 [**controllerTeachersGet**](DefaultApi.md#controllerteachersget) | **GET** /teachers | Controller
 [**controllerUsersGet**](DefaultApi.md#controllerusersget) | **GET** /users | Controller
+[**controllerUsersUserIdStudentPut**](DefaultApi.md#controllerusersuseridstudentput) | **PUT** /users/{user_id}/student | Controller
 
 
 # **controllerInterviewInterviewSessionIdAnalyticsGet**
@@ -26,6 +30,12 @@ Controller
 ### Example
 ```dart
 import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 final interviewSessionId = interviewSessionId_example; // String | 
@@ -50,7 +60,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[HTTPBearer](../README.md#HTTPBearer)
 
 ### HTTP request headers
 
@@ -67,6 +77,12 @@ Controller
 ### Example
 ```dart
 import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 final interviewSessionId = interviewSessionId_example; // String | 
@@ -91,7 +107,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[HTTPBearer](../README.md#HTTPBearer)
 
 ### HTTP request headers
 
@@ -108,6 +124,12 @@ Controller
 ### Example
 ```dart
 import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 final interviewSessionId = interviewSessionId_example; // String | 
@@ -134,7 +156,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[HTTPBearer](../README.md#HTTPBearer)
 
 ### HTTP request headers
 
@@ -151,6 +173,12 @@ Controller
 ### Example
 ```dart
 import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 final interviewSessionRequest = InterviewSessionRequest(); // InterviewSessionRequest | 
@@ -175,7 +203,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[HTTPBearer](../README.md#HTTPBearer)
 
 ### HTTP request headers
 
@@ -184,8 +212,51 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **controllerLoginPut**
-> User controllerLoginPut(loginRequest)
+# **controllerInterviewReportsGet**
+> List<InterviewReport> controllerInterviewReportsGet()
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = DefaultApi();
+
+try {
+    final result = api_instance.controllerInterviewReportsGet();
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerInterviewReportsGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List<InterviewReport>**](InterviewReport.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerLoginGet**
+> Object controllerLoginGet()
 
 Controller
 
@@ -194,25 +265,21 @@ Controller
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final loginRequest = LoginRequest(); // LoginRequest | 
 
 try {
-    final result = api_instance.controllerLoginPut(loginRequest);
+    final result = api_instance.controllerLoginGet();
     print(result);
 } catch (e) {
-    print('Exception when calling DefaultApi->controllerLoginPut: $e\n');
+    print('Exception when calling DefaultApi->controllerLoginGet: $e\n');
 }
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **loginRequest** | [**LoginRequest**](LoginRequest.md)|  | 
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**User**](User.md)
+[**Object**](Object.md)
 
 ### Authorization
 
@@ -220,7 +287,91 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerMeGet**
+> User controllerMeGet()
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = DefaultApi();
+
+try {
+    final result = api_instance.controllerMeGet();
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerMeGet: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**User**](User.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerOauth2CallbackGet**
+> LoginResult controllerOauth2CallbackGet(code)
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = DefaultApi();
+final code = code_example; // String | 
+
+try {
+    final result = api_instance.controllerOauth2CallbackGet(code);
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerOauth2CallbackGet: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **code** | **String**|  | 
+
+### Return type
+
+[**LoginResult**](LoginResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -270,6 +421,12 @@ Controller
 ### Example
 ```dart
 import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
 
 final api_instance = DefaultApi();
 
@@ -290,11 +447,60 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[HTTPBearer](../README.md#HTTPBearer)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **controllerUsersUserIdStudentPut**
+> Student controllerUsersUserIdStudentPut(userId, studentUpdate)
+
+Controller
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+// TODO Configure HTTP Bearer authorization: HTTPBearer
+// Case 1. Use String Token
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken('YOUR_ACCESS_TOKEN');
+// Case 2. Use Function which generate token.
+// String yourTokenGeneratorFunction() { ... }
+//defaultApiClient.getAuthentication<HttpBearerAuth>('HTTPBearer').setAccessToken(yourTokenGeneratorFunction);
+
+final api_instance = DefaultApi();
+final userId = userId_example; // String | 
+final studentUpdate = StudentUpdate(); // StudentUpdate | 
+
+try {
+    final result = api_instance.controllerUsersUserIdStudentPut(userId, studentUpdate);
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->controllerUsersUserIdStudentPut: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userId** | **String**|  | 
+ **studentUpdate** | [**StudentUpdate**](StudentUpdate.md)|  | 
+
+### Return type
+
+[**Student**](Student.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

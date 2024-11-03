@@ -1,8 +1,8 @@
 import 'package:client/repository/api_result.dart';
 import 'package:openapi/api.dart';
 
-/// ユーザー情報を登録するためのリポジトリ
+/// ログイン関連のリポジトリ
 abstract class LoginRepository {
-  /// ユーザー情報登録API
-  Future<ApiResult<User>> putUserInfo(LoginRequest loginRequest);
+  /// ユーザー情報取得API
+  Future<ApiResult<User>> getUserInfo(String idToken);
 }
