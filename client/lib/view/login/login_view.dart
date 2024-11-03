@@ -32,28 +32,51 @@ class _LoginView extends ConsumerState<LoginView> {
       backgroundColor: ColorDefinitions.primaryColor,
       appBar: CustomAppBar().startAppBar(context),
       body: Center(
-        child: SizedBox(
-          height: 60,
-          child: SignInButton(
-            padding: const EdgeInsets.all(16),
-            Buttons.google,
-            text: "Googleでログイン",
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            onPressed: () {
-              /// TODO iOSとAndroidでの実装
-              /// モバイルアプリではポップアップが表示されません
-              final loginNotifier = ref.read(loginNotifierProvider.notifier);
-              html.window.open(UriString.googleLoginPageUri, "ログイン",
-                  'left=100,top=100,width=700,height=500');
-              html.window.onMessage.listen(
-                (html.MessageEvent event) async {
-                  await loginNotifier.login(event.data);
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              child: SignInButton(
+                padding: const EdgeInsets.all(16),
+                Buttons.google,
+                text: "Googleでログイン",
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                onPressed: () {
+                  /// TODO iOSとAndroidでの実装
+                  /// モバイルアプリではポップアップが表示されません
+                  final loginNotifier =
+                      ref.read(loginNotifierProvider.notifier);
+                  html.window.open(UriString.googleLoginPageUri, "ログイン",
+                      'left=100,top=100,width=700,height=500');
+                  html.window.onMessage.listen(
+                    (html.MessageEvent event) async {
+                      await loginNotifier.login(event.data);
+                    },
+                  );
                 },
-              );
-            },
-          ),
+              ),
+            ),
+            const SizedBox(height: 48),
+
+            // アカウントについての注意書き
+            Container(
+              width: 300,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.red, width: 2),
+              ),
+              child: const Text(
+                "ログインには大学から付与されたアカウントを使用してください。大学のアカウント以外でログインした場合エラーが発生します。",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
