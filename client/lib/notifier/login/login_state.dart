@@ -1,6 +1,5 @@
 import 'package:client/constant/result.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:openapi/api.dart';
 
 part 'login_state.freezed.dart';
 
@@ -17,7 +16,8 @@ abstract class LoginState with _$LoginState {
     /// リフレッシュトークン
     @Default("") String refreshToken,
 
-    /// ユーザーデータ
-    User? user,
+    /// ユーザーが学生が教員か
+    /// true:教員 false:学生
+    @Default(false) bool isAdmin,
   }) = _LoginState;
 }
