@@ -8,6 +8,14 @@ For more infomatino on API, see [API Spec | 修学面談システム](https://sc
 
 ## Set Up
 
+### Generate self signed certificate
+
+```
+cd certificate
+chmod 744 generate.sh
+./generate.sh
+```
+
 ### Launch Server
 
 This project requires Docker.

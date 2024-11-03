@@ -4,18 +4,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.database import SessionMaker, connect_db
 from fastapi import FastAPI, Request
 import socketio
-import asyncio
 from contextlib import asynccontextmanager
 from src.controllers import rest_api_controllers
 from src.controllers import websocket_controllers
 import logging
 from src.websocket_server import sio
 from src.models import ErrorResponse
+from starlette.middleware.sessions import SessionMiddleware
+import os
 
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv(".env")
 load_dotenv(".env.local")
+
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 
 connect_db()
 
@@ -36,7 +39,6 @@ async def lifespan(app: FastAPI):
     for ws in websocket_controllers:
         sio.on(ws.event_name, ws.controller)
     yield
-
 
 app_fastapi = FastAPI(lifespan=lifespan)
 allowed_origins = "*"

@@ -229,20 +229,28 @@ class ApiClient {
           return valueString == 'true' || valueString == '1';
         case 'DateTime':
           return value is DateTime ? value : DateTime.tryParse(value);
+        case 'Admin':
+          return Admin.fromJson(value);
         case 'HTTPValidationError':
           return HTTPValidationError.fromJson(value);
         case 'InterviewAnalytics':
           return InterviewAnalytics.fromJson(value);
+        case 'InterviewReport':
+          return InterviewReport.fromJson(value);
         case 'InterviewSession':
           return InterviewSession.fromJson(value);
         case 'InterviewSessionRequest':
           return InterviewSessionRequest.fromJson(value);
-        case 'LoginRequest':
-          return LoginRequest.fromJson(value);
+        case 'LoginResult':
+          return LoginResult.fromJson(value);
         case 'SpeakToTeacherRequest':
           return SpeakToTeacherRequest.fromJson(value);
         case 'StartInterviewResponse':
           return StartInterviewResponse.fromJson(value);
+        case 'Student':
+          return Student.fromJson(value);
+        case 'StudentUpdate':
+          return StudentUpdate.fromJson(value);
         case 'Teacher':
           return Teacher.fromJson(value);
         case 'TeacherResponse':

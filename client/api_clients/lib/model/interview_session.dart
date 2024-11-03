@@ -68,19 +68,19 @@ class InterviewSession {
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
-      json[r'user_id'] = this.userId;
+      json[r'userId'] = this.userId;
     if (this.user != null) {
       json[r'user'] = this.user;
     } else {
       json[r'user'] = null;
     }
-      json[r'teacher_id'] = this.teacherId;
+      json[r'teacherId'] = this.teacherId;
     if (this.teacher != null) {
       json[r'teacher'] = this.teacher;
     } else {
       json[r'teacher'] = null;
     }
-      json[r'start_at'] = this.startAt.toUtc().toIso8601String();
+      json[r'startAt'] = this.startAt.toUtc().toIso8601String();
       json[r'progress'] = this.progress;
       json[r'done'] = this.done;
     return json;
@@ -106,11 +106,11 @@ class InterviewSession {
 
       return InterviewSession(
         id: mapValueOfType<String>(json, r'id')!,
-        userId: mapValueOfType<String>(json, r'user_id')!,
+        userId: mapValueOfType<String>(json, r'userId')!,
         user: User.fromJson(json[r'user']),
-        teacherId: mapValueOfType<String>(json, r'teacher_id')!,
+        teacherId: mapValueOfType<String>(json, r'teacherId')!,
         teacher: Teacher.fromJson(json[r'teacher']),
-        startAt: mapDateTime(json, r'start_at', r'')!,
+        startAt: mapDateTime(json, r'startAt', r'')!,
         progress: mapValueOfType<int>(json, r'progress')!,
         done: mapValueOfType<bool>(json, r'done')!,
       );
@@ -161,9 +161,9 @@ class InterviewSession {
   /// The list of required keys that must be present in a JSON.
   static const requiredKeys = <String>{
     'id',
-    'user_id',
-    'teacher_id',
-    'start_at',
+    'userId',
+    'teacherId',
+    'startAt',
     'progress',
     'done',
   };

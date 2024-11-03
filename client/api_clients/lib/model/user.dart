@@ -15,50 +15,62 @@ class User {
   User({
     required this.id,
     required this.name,
-    required this.studentId,
-    required this.department,
-    required this.semester,
+    required this.email,
+    required this.isAdmin,
+    this.student,
+    this.admin,
   });
 
   String id;
 
   String name;
 
-  String studentId;
+  String email;
 
-  String department;
+  bool isAdmin;
 
-  /// Minimum value: 1
-  /// Maximum value: 8
-  int semester;
+  Student? student;
+
+  Admin? admin;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is User &&
     other.id == id &&
     other.name == name &&
-    other.studentId == studentId &&
-    other.department == department &&
-    other.semester == semester;
+    other.email == email &&
+    other.isAdmin == isAdmin &&
+    other.student == student &&
+    other.admin == admin;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id.hashCode) +
     (name.hashCode) +
-    (studentId.hashCode) +
-    (department.hashCode) +
-    (semester.hashCode);
+    (email.hashCode) +
+    (isAdmin.hashCode) +
+    (student == null ? 0 : student!.hashCode) +
+    (admin == null ? 0 : admin!.hashCode);
 
   @override
-  String toString() => 'User[id=$id, name=$name, studentId=$studentId, department=$department, semester=$semester]';
+  String toString() => 'User[id=$id, name=$name, email=$email, isAdmin=$isAdmin, student=$student, admin=$admin]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
       json[r'name'] = this.name;
-      json[r'student_id'] = this.studentId;
-      json[r'department'] = this.department;
-      json[r'semester'] = this.semester;
+      json[r'email'] = this.email;
+      json[r'isAdmin'] = this.isAdmin;
+    if (this.student != null) {
+      json[r'student'] = this.student;
+    } else {
+      json[r'student'] = null;
+    }
+    if (this.admin != null) {
+      json[r'admin'] = this.admin;
+    } else {
+      json[r'admin'] = null;
+    }
     return json;
   }
 
@@ -83,9 +95,10 @@ class User {
       return User(
         id: mapValueOfType<String>(json, r'id')!,
         name: mapValueOfType<String>(json, r'name')!,
-        studentId: mapValueOfType<String>(json, r'student_id')!,
-        department: mapValueOfType<String>(json, r'department')!,
-        semester: mapValueOfType<int>(json, r'semester')!,
+        email: mapValueOfType<String>(json, r'email')!,
+        isAdmin: mapValueOfType<bool>(json, r'isAdmin')!,
+        student: Student.fromJson(json[r'student']),
+        admin: Admin.fromJson(json[r'admin']),
       );
     }
     return null;
@@ -135,9 +148,8 @@ class User {
   static const requiredKeys = <String>{
     'id',
     'name',
-    'student_id',
-    'department',
-    'semester',
+    'email',
+    'isAdmin',
   };
 }
 
