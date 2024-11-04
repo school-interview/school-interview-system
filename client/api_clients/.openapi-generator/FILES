@@ -7,6 +7,7 @@ doc/DefaultApi.md
 doc/HTTPValidationError.md
 doc/InterviewAnalytics.md
 doc/InterviewReport.md
+doc/InterviewReportsResponse.md
 doc/InterviewSession.md
 doc/InterviewSessionRequest.md
 doc/LoginResult.md
@@ -35,6 +36,7 @@ lib/model/admin.dart
 lib/model/http_validation_error.dart
 lib/model/interview_analytics.dart
 lib/model/interview_report.dart
+lib/model/interview_reports_response.dart
 lib/model/interview_session.dart
 lib/model/interview_session_request.dart
 lib/model/login_result.dart
@@ -49,3 +51,4 @@ lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
+test/interview_reports_response_test.dart
