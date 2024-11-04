@@ -13,12 +13,6 @@ class InterviewAnalyticsViewNotifier extends _$InterviewAnalyticsViewNotifier {
   void setIsAnimated(bool isAnimated) =>
       state = state.copyWith(isAnimated: isAnimated);
 
-  /// 要支援レベルの内訳の値を生成する
-  String getElementValue(num? factor, double parameter) {
-    final value = ((factor?.toDouble() ?? 0) * parameter).toStringAsFixed(1);
-    return value;
-  }
-
   /// 円グラフにセットするデータマップを作成する
   Map<String, double> createChartDataMap(
       List<double> values, bool isFullScore) {
