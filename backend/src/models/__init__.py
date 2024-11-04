@@ -31,6 +31,7 @@ from src.models.api_models.responses.start_interview_response_model import Start
 from src.models.api_models.responses.teacher_response_model import TeacherResponse
 from src.models.api_models.responses.teachers_list_response_model import TeachersListResponse
 from src.models.api_models.responses.login_result_response_model import LoginResult
+from src.models.api_models.responses.interview_reports_response_model import InterviewReportsResponse
 
 # エラークラス
 from src.models.error_models.app_exception_model import AppException
