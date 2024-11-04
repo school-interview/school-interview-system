@@ -84,6 +84,7 @@ Class | Method | HTTP request | Description
  - [HTTPValidationError](doc//HTTPValidationError.md)
  - [InterviewAnalytics](doc//InterviewAnalytics.md)
  - [InterviewReport](doc//InterviewReport.md)
+ - [InterviewReportsResponse](doc//InterviewReportsResponse.md)
  - [InterviewSession](doc//InterviewSession.md)
  - [InterviewSessionRequest](doc//InterviewSessionRequest.md)
  - [LoginResult](doc//LoginResult.md)
