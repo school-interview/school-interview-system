@@ -213,7 +213,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **controllerInterviewReportsGet**
-> List<InterviewReport> controllerInterviewReportsGet()
+> InterviewReportsResponse controllerInterviewReportsGet()
 
 Controller
 
@@ -242,7 +242,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**List<InterviewReport>**](InterviewReport.md)
+[**InterviewReportsResponse**](InterviewReportsResponse.md)
 
 ### Authorization
 
