@@ -1,9 +1,9 @@
 import 'dart:core';
 
 import 'package:client/constant/color.dart';
-import 'package:client/constant/support_necessity_level.dart';
 import 'package:client/notifier/interview_analytics_view/interview_analytics_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
+import 'package:client/ui_core/support_necessity_level.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -32,24 +32,17 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
   Widget build(BuildContext context) {
     final notifier = ref.read(interviewAnalyticsViewNotifierProvider.notifier);
     final interviewState = ref.watch(interviewViewNotifierProvider);
-    // 以下、各要支援レベルを構成する要素
-    const e1 = SupportLevel(element: SupportLevelEnum.attendanceRate);
-    const e2 = SupportLevel(element: SupportLevelEnum.credit);
-    const e3 = SupportLevel(element: SupportLevelEnum.highAttendanceLowGpa);
-    const e4 = SupportLevel(element: SupportLevelEnum.lowAttendanceAndLowGpa);
+    final analytics = interviewState.interviewAnalytics;
+
     // 以下、要支援レベルを構成する要素の値
-    var e1Value = notifier.getElementValue(
-        interviewState.interviewAnalytics?.deviationFromMinimumAttendanceRate,
-        e1.parameter);
-    var e2Value = notifier.getElementValue(
-        interviewState.interviewAnalytics?.deviationFromPreferredCreditLevel,
-        e2.parameter);
-    var e3Value = notifier.getElementValue(
-        interviewState.interviewAnalytics?.highAttendanceLowGpaRate,
-        e3.parameter);
-    var e4Value = notifier.getElementValue(
-        interviewState.interviewAnalytics?.lowAtendanceAndLowGpaRate,
-        e3.parameter);
+    var e1Value = SupportLevel.attendance
+        .getElementValue(analytics?.deviationFromMinimumAttendanceRate);
+    var e2Value = SupportLevel.credit
+        .getElementValue(analytics?.deviationFromPreferredCreditLevel);
+    var e3Value = SupportLevel.highAttendanceLowGpa
+        .getElementValue(analytics?.highAttendanceLowGpaRate);
+    var e4Value = SupportLevel.lowAttendanceLowGpa
+        .getElementValue(analytics?.lowAtendanceAndLowGpaRate);
 
     // 要支援レベルを構成する要素の値リスト
     List<double> valueList = [
@@ -137,28 +130,34 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                       : Column(
                           children: [
                             _supportNecessityLevelElement(
-                              description: e1.description,
-                              parameter: e1.parameter,
+                              description: SupportLevel.attendance.description,
+                              parameter: SupportLevel.attendance.parameter,
                               value: e1Value,
-                              chartColor: e1.chartColor,
+                              chartColor: SupportLevel.attendance.chartColor,
                             ),
                             _supportNecessityLevelElement(
-                              description: e2.description,
-                              parameter: e2.parameter,
+                              description: SupportLevel.credit.description,
+                              parameter: SupportLevel.credit.parameter,
                               value: e2Value,
-                              chartColor: e2.chartColor,
+                              chartColor: SupportLevel.credit.chartColor,
                             ),
                             _supportNecessityLevelElement(
-                              description: e3.description,
-                              parameter: e3.parameter,
+                              description:
+                                  SupportLevel.highAttendanceLowGpa.description,
+                              parameter:
+                                  SupportLevel.highAttendanceLowGpa.parameter,
                               value: e3Value,
-                              chartColor: e3.chartColor,
+                              chartColor:
+                                  SupportLevel.highAttendanceLowGpa.chartColor,
                             ),
                             _supportNecessityLevelElement(
-                              description: e4.description,
-                              parameter: e4.parameter,
+                              description:
+                                  SupportLevel.lowAttendanceLowGpa.description,
+                              parameter:
+                                  SupportLevel.lowAttendanceLowGpa.parameter,
                               value: e4Value,
-                              chartColor: e4.chartColor,
+                              chartColor:
+                                  SupportLevel.lowAttendanceLowGpa.chartColor,
                             ),
                           ],
                         ),
