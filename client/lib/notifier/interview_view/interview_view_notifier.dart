@@ -50,7 +50,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(interviewAnalytics: interviewAnalytics);
   }
 
-  void _setIsFinishInterview(bool isFinishInterview) => state = state.copyWith(isFinishInterview: isFinishInterview);
+  void _setIsFinishInterview(bool isFinishInterview) =>
+      state = state.copyWith(isFinishInterview: isFinishInterview);
 
   final SpeechToText _speechToText = SpeechToText();
 
@@ -67,10 +68,12 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     try {
       final userId =
           await _sharedPreferenceManager.getString(PrefKeys.userId) ?? "";
+      final idToken =
+          await _sharedPreferenceManager.getString(PrefKeys.idToken) ?? "";
       final requestId =
           InterviewSessionRequest(userId: userId, teacherId: teacherId);
-      ApiResult<StartInterviewResponse> response =
-          await _interviewRepository.postInterviewSessionRequest(requestId);
+      ApiResult<StartInterviewResponse> response = await _interviewRepository
+          .postInterviewSessionRequest(requestId, idToken);
       switch (response.statusCode) {
         case 200:
           setIsLoading(false);
@@ -132,10 +135,13 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     final speakToTeacherRequest =
         SpeakToTeacherRequest(messageFromStudent: userSpeech);
     try {
+      final idToken =
+          await _sharedPreferenceManager.getString(PrefKeys.idToken) ?? "";
       ApiResult<TeacherResponse> response =
           await _interviewRepository.getMessageFromTeacher(
         currentInterviewSessionId,
         speakToTeacherRequest,
+        idToken,
       );
       switch (response.statusCode) {
         case 200:
@@ -151,8 +157,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
               _setWhoTalking(WhoTalking.none);
               // 面談が終了した場合、要支援レベルを取得する
               if (response.data!.interviewSession.done) {
+                final idToken =
+                    await _sharedPreferenceManager.getString(PrefKeys.idToken);
                 await _getInterviewAnalytics(
-                    currentInterviewSessionId: state.currentInterviewSessionId);
+                    state.currentInterviewSessionId, idToken ?? "");
                 _setIsFinishInterview(true);
               }
             },
@@ -170,12 +178,13 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// 要支援レベル取得API
-  Future<void> _getInterviewAnalytics({
-    required String currentInterviewSessionId,
-  }) async {
+  Future<void> _getInterviewAnalytics(
+    String currentInterviewSessionId,
+    String idToken,
+  ) async {
     try {
       ApiResult<InterviewAnalytics> response = await _interviewRepository
-          .getInterviewAnalytics(currentInterviewSessionId);
+          .getInterviewAnalytics(currentInterviewSessionId, idToken);
       switch (response.statusCode) {
         case 200:
           _setInterviewAnalytics(response.data!);

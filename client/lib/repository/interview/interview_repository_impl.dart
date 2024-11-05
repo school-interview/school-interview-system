@@ -10,14 +10,14 @@ class InterviewRepositoryImpl extends InterviewRepository {
   /// 面談開始リクエスト送信API
   @override
   Future<ApiResult<StartInterviewResponse>> postInterviewSessionRequest(
-      InterviewSessionRequest interviewSessionRequest) async {
+      InterviewSessionRequest interviewSessionRequest, String idToken) async {
     logger.i("run postInterviewSessionRequest()");
     logger.t('interviewSessionRequest:$interviewSessionRequest');
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
-      final result = await api
-          .controllerInterviewPostWithHttpInfo(interviewSessionRequest);
+      final result = await api.controllerInterviewPostWithHttpInfo(
+          interviewSessionRequest, idToken);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
@@ -40,9 +40,11 @@ class InterviewRepositoryImpl extends InterviewRepository {
   Future<ApiResult<TeacherResponse>> getMessageFromTeacher(
     String interviewSessionId,
     SpeakToTeacherRequest speakToTeacherRequest,
+    String idToken,
   ) async {
     logger.i("run getMessageFromTeacher()");
-    logger.t("interviewSessionId:$interviewSessionId, speakToTeacherRequest:$speakToTeacherRequest");
+    logger.t(
+        "interviewSessionId:$interviewSessionId, speakToTeacherRequest:$speakToTeacherRequest");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
@@ -50,6 +52,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
           await api.controllerInterviewInterviewSessionIdPostWithHttpInfo(
         interviewSessionId,
         speakToTeacherRequest,
+        idToken,
       );
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
@@ -72,6 +75,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
   @override
   Future<ApiResult<InterviewAnalytics>> getInterviewAnalytics(
     String interviewSessionId,
+    String idToken,
   ) async {
     logger.i("run getInterviewAnalytics()");
     ApiClient apiClient = ApiClient();
@@ -79,7 +83,7 @@ class InterviewRepositoryImpl extends InterviewRepository {
     try {
       final result = await api
           .controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(
-              interviewSessionId);
+              interviewSessionId, idToken);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
