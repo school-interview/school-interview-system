@@ -78,14 +78,6 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     notifier.setStudentId(value);
                   },
                 ),
-                const SizedBox(height: 15),
-                buildInputTextField(
-                  labelText: "クラスー名列番号",
-                  hintText: "1EP1-01",
-                  onChanged: (value) {
-                    // TODO 名列番号の処理
-                  },
-                ),
                 const SizedBox(height: 30),
                 ButtonComponent().normalButton(
                   labelText: "次へ",
