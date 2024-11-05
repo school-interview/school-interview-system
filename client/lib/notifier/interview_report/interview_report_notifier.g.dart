@@ -7,7 +7,7 @@ part of 'interview_report_notifier.dart';
 // **************************************************************************
 
 String _$interviewReportNotifierHash() =>
-    r'a720a900fa185600ce4d49cd99360140baa5991f';
+    r'6d73b2cc6bfd6b65ffea0e50bae9d03e05673694';
 
 /// See also [InterviewReportNotifier].
 @ProviderFor(InterviewReportNotifier)

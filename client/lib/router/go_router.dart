@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final goRouter = GoRouter(
-  // アプリが起動した時
+  // 初期画面
   initialLocation: RouterPath.loginView,
   // パスと画面の組み合わせ
   routes: [
