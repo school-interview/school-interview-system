@@ -26,6 +26,7 @@ class DefaultApi {
   Future<Response>
       controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(
     String interviewSessionId,
+    String idToken,
   ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview/{interview_session_id}/analytics'
@@ -35,7 +36,7 @@ class DefaultApi {
     Object? postBody;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
@@ -58,10 +59,12 @@ class DefaultApi {
   /// * [String] interviewSessionId (required):
   Future<InterviewAnalytics?> controllerInterviewInterviewSessionIdAnalyticsGet(
     String interviewSessionId,
+    String idToken,
   ) async {
     final response =
         await controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(
       interviewSessionId,
+      idToken,
     );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -88,6 +91,7 @@ class DefaultApi {
   /// * [String] interviewSessionId (required):
   Future<Response> controllerInterviewInterviewSessionIdDeleteWithHttpInfo(
     String interviewSessionId,
+    String idToken,
   ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview/{interview_session_id}'
@@ -97,7 +101,7 @@ class DefaultApi {
     Object? postBody;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
@@ -120,10 +124,12 @@ class DefaultApi {
   /// * [String] interviewSessionId (required):
   Future<Object?> controllerInterviewInterviewSessionIdDelete(
     String interviewSessionId,
+    String idToken,
   ) async {
     final response =
         await controllerInterviewInterviewSessionIdDeleteWithHttpInfo(
       interviewSessionId,
+      idToken,
     );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -153,6 +159,7 @@ class DefaultApi {
   Future<Response> controllerInterviewInterviewSessionIdPostWithHttpInfo(
     String interviewSessionId,
     SpeakToTeacherRequest speakToTeacherRequest,
+    String idToken,
   ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview/{interview_session_id}'
@@ -162,7 +169,7 @@ class DefaultApi {
     Object? postBody = speakToTeacherRequest;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
@@ -188,11 +195,13 @@ class DefaultApi {
   Future<TeacherResponse?> controllerInterviewInterviewSessionIdPost(
     String interviewSessionId,
     SpeakToTeacherRequest speakToTeacherRequest,
+    String idToken,
   ) async {
     final response =
         await controllerInterviewInterviewSessionIdPostWithHttpInfo(
       interviewSessionId,
       speakToTeacherRequest,
+      idToken,
     );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -219,6 +228,7 @@ class DefaultApi {
   /// * [InterviewSessionRequest] interviewSessionRequest (required):
   Future<Response> controllerInterviewPostWithHttpInfo(
     InterviewSessionRequest interviewSessionRequest,
+    String idToken,
   ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview';
@@ -227,7 +237,7 @@ class DefaultApi {
     Object? postBody = interviewSessionRequest;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
@@ -250,9 +260,11 @@ class DefaultApi {
   /// * [InterviewSessionRequest] interviewSessionRequest (required):
   Future<StartInterviewResponse?> controllerInterviewPost(
     InterviewSessionRequest interviewSessionRequest,
+    String idToken,
   ) async {
     final response = await controllerInterviewPostWithHttpInfo(
       interviewSessionRequest,
+      idToken,
     );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -521,7 +533,7 @@ class DefaultApi {
   /// Controller
   ///
   /// Note: This method returns the HTTP [Response].
-  Future<Response> controllerUsersGetWithHttpInfo() async {
+  Future<Response> controllerUsersGetWithHttpInfo(String idToken) async {
     // ignore: prefer_const_declarations
     final path = r'/users';
 
@@ -529,7 +541,7 @@ class DefaultApi {
     Object? postBody;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
@@ -546,8 +558,8 @@ class DefaultApi {
   }
 
   /// Controller
-  Future<List<User>?> controllerUsersGet() async {
-    final response = await controllerUsersGetWithHttpInfo();
+  Future<List<User>?> controllerUsersGet(String idToken) async {
+    final response = await controllerUsersGetWithHttpInfo(idToken);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
@@ -577,6 +589,7 @@ class DefaultApi {
   Future<Response> controllerUsersUserIdStudentPutWithHttpInfo(
     String userId,
     StudentUpdate studentUpdate,
+    String idToken,
   ) async {
     // ignore: prefer_const_declarations
     final path = r'/users/{user_id}/student'.replaceAll('{user_id}', userId);
@@ -585,7 +598,7 @@ class DefaultApi {
     Object? postBody = studentUpdate;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
@@ -611,10 +624,12 @@ class DefaultApi {
   Future<Student?> controllerUsersUserIdStudentPut(
     String userId,
     StudentUpdate studentUpdate,
+    String idToken,
   ) async {
     final response = await controllerUsersUserIdStudentPutWithHttpInfo(
       userId,
       studentUpdate,
+      idToken,
     );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
