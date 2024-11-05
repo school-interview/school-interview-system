@@ -32,28 +32,51 @@ class _LoginView extends ConsumerState<LoginView> {
       backgroundColor: ColorDefinitions.primaryColor,
       appBar: CustomAppBar().startAppBar(context),
       body: Center(
-        child: SizedBox(
-          height: 60,
-          child: SignInButton(
-            padding: const EdgeInsets.all(16),
-            Buttons.google,
-            text: "Googleでログイン",
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            onPressed: () {
-              /// TODO iOSとAndroidでの実装
-              /// モバイルアプリではポップアップが表示されません
-              final loginNotifier = ref.read(loginNotifierProvider.notifier);
-              html.window.open(UriString.googleLoginPageUri, "ログイン",
-                  'left=100,top=100,width=700,height=500');
-              html.window.onMessage.listen(
-                (html.MessageEvent event) async {
-                  await loginNotifier.login(event.data);
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              child: SignInButton(
+                padding: const EdgeInsets.all(16),
+                Buttons.google,
+                text: "Googleでログイン",
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                onPressed: () {
+                  /// TODO iOSとAndroidでの実装
+                  /// モバイルアプリではポップアップが表示されません
+                  final loginNotifier =
+                      ref.read(loginNotifierProvider.notifier);
+                  html.window.open(UriString.googleLoginPageUri, "ログイン",
+                      'left=100,top=100,width=700,height=500');
+                  html.window.onMessage.listen(
+                    (html.MessageEvent event) async {
+                      await loginNotifier.login(event.data);
+                    },
+                  );
                 },
-              );
-            },
-          ),
+              ),
+            ),
+            const SizedBox(height: 48),
+
+            // アカウントについての注意書き
+            Container(
+              width: 300,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.red, width: 2),
+              ),
+              child: const Text(
+                "ログインには大学から付与されたアカウントを使用してください。大学のアカウント以外でログインした場合エラーが発生します。",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -64,23 +87,27 @@ class _LoginView extends ConsumerState<LoginView> {
   /// [result] 処理結果
   void _handleResult(BuildContext context, Result? result) {
     logger.i("_handleResult($result)");
-    // final loginNotifier = ref.read(loginNotifierProvider.notifier);
+    final loginNotifier = ref.read(loginNotifierProvider.notifier);
     final loginState = ref.watch(loginNotifierProvider);
     switch (result) {
       case Result.success:
-        // loginNotifier.setResult(null);
+        loginNotifier.setResult(null);
+        logger.d(loginState.isAdmin);
         if (loginState.isAdmin == true) {
           // 教員向け画面へ遷移する
-          // TODO 教員向け画面を実装する
+          context.push(RouterPath.resultManagementView);
+          break;
         } else if (loginState.isAdmin == false) {
           // 学生向け画面へ遷移する
           context.push(RouterPath.profileInputView);
+          break;
         } else {
           // TODO 教員か学生かが不明である旨を知らせるアラート表示
           logger.w("教員か学生かが不明です");
         }
         break;
       case Result.fail:
+        loginNotifier.setResult(null);
         // TODO API処理に失敗した際の処理を追加する（アラートを表示→再度API実行など）
         break;
       default:
