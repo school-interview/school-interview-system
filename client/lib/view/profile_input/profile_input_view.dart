@@ -4,6 +4,7 @@ import 'package:client/component/input_text_field.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
+import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,17 +24,40 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
   @override
   Widget build(BuildContext context) {
     final notifier = ref.read(profileInputViewNotifierProvider.notifier);
+    final loginState = ref.watch(loginNotifierProvider);
 
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
       appBar: CustomAppBar().startAppBar(context),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.only(top: 20),
-          child: Form(
-            key: formKey,
+      body: Container(
+        padding: const EdgeInsets.only(top: 20),
+        child: Form(
+          key: formKey,
+          child: Center(
             child: Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      loginState.user?.name ?? "",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      "さん",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15),
                 _buildSelectMajorPullDown(),
                 const SizedBox(height: 15),
                 _buildSelectSemesterPullDown(notifier),
@@ -52,29 +76,6 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                   },
                   onChanged: (value) {
                     notifier.setStudentId(value);
-                  },
-                ),
-                const SizedBox(height: 15),
-                buildInputTextField(
-                  labelText: "クラスー名列番号",
-                  hintText: "1EP1-01",
-                  onChanged: (value) {
-                    // TODO 名列番号の処理
-                  },
-                ),
-                const SizedBox(height: 15),
-                buildInputTextField(
-                  labelText: "氏名",
-                  hintText: "金工 太郎",
-                  validator: (value) {
-                    // ひらがな、カタカナ、漢字、アルファベット、"ー"、"・"のみ
-                    if (!RegExp(r'^[ぁ-んァ-ン一-龠a-zA-Zー・]+$').hasMatch(value)) {
-                      return '使用できない文字が含まれています。';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    notifier.setName(value);
                   },
                 ),
                 const SizedBox(height: 30),

@@ -29,6 +29,8 @@ class LoginNotifier extends _$LoginNotifier {
 
   _setIsAdmin(bool isAdmin) => state = state.copyWith(isAdmin: isAdmin);
 
+  _setUser(User? user) => state = state.copyWith(user: user);
+
   /// ログインリポジトリ
   final LoginRepository _loginRepository = LoginRepositoryImpl();
 
@@ -47,6 +49,7 @@ class LoginNotifier extends _$LoginNotifier {
       switch (response.statusCode) {
         case 200:
           _setIsAdmin(response.data!.isAdmin);
+          _setUser(response.data!);
           setResult(Result.success);
           break;
         default:

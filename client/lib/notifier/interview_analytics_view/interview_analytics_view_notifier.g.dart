@@ -7,7 +7,7 @@ part of 'interview_analytics_view_notifier.dart';
 // **************************************************************************
 
 String _$interviewAnalyticsViewNotifierHash() =>
-    r'f39a6aca9b051068cc5f017c4d71007aea970de2';
+    r'd28513602d57c64d02ed6958418fabcfe29892b1';
 
 /// See also [InterviewAnalyticsViewNotifier].
 @ProviderFor(InterviewAnalyticsViewNotifier)
