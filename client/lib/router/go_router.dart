@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 
 final goRouter = GoRouter(
   // アプリが起動した時
-  initialLocation: RouterPath.resultManagementView,
+  initialLocation: RouterPath.loginView,
   // パスと画面の組み合わせ
   routes: [
     // ログイン

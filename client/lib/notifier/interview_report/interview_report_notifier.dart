@@ -27,11 +27,11 @@ class InterviewReportNotifier extends _$InterviewReportNotifier {
       InterviewReportRepositoryImpl();
 
   /// ユーザー情報取得API
-  Future<void> getInterviewReport() async {
+  Future<void> getInterviewReport(String idToken) async {
     logger.i("run getInterviewReport()");
     try {
       ApiResult<InterviewReportsResponse> response =
-          await _interviewReportRepository.getInterviewReport();
+          await _interviewReportRepository.getInterviewReport(idToken);
       switch (response.statusCode) {
         case 200:
           _setInterviewReport(response.data!);

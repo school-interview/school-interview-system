@@ -273,7 +273,8 @@ class DefaultApi {
   /// Controller
   ///
   /// Note: This method returns the HTTP [Response].
-  Future<Response> controllerInterviewReportsGetWithHttpInfo() async {
+  Future<Response> controllerInterviewReportsGetWithHttpInfo(
+      String idToken) async {
     // ignore: prefer_const_declarations
     final path = r'/interview-reports';
 
@@ -281,7 +282,7 @@ class DefaultApi {
     Object? postBody;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
@@ -298,8 +299,9 @@ class DefaultApi {
   }
 
   /// Controller
-  Future<InterviewReportsResponse?> controllerInterviewReportsGet() async {
-    final response = await controllerInterviewReportsGetWithHttpInfo();
+  Future<InterviewReportsResponse?> controllerInterviewReportsGet(
+      String idToken) async {
+    final response = await controllerInterviewReportsGetWithHttpInfo(idToken);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
