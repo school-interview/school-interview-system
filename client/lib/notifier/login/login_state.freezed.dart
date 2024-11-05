@@ -29,6 +29,9 @@ mixin _$LoginState {
   /// true:教員 false:学生
   bool get isAdmin => throw _privateConstructorUsedError;
 
+  /// ユーザー情報
+  User? get user => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -41,7 +44,11 @@ abstract class $LoginStateCopyWith<$Res> {
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
   $Res call(
-      {Result? result, String idToken, String refreshToken, bool isAdmin});
+      {Result? result,
+      String idToken,
+      String refreshToken,
+      bool isAdmin,
+      User? user});
 }
 
 /// @nodoc
@@ -61,6 +68,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? idToken = null,
     Object? refreshToken = null,
     Object? isAdmin = null,
+    Object? user = freezed,
   }) {
     return _then(_value.copyWith(
       result: freezed == result
@@ -79,6 +87,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
               as bool,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
     ) as $Val);
   }
 }
@@ -92,7 +104,11 @@ abstract class _$$LoginStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Result? result, String idToken, String refreshToken, bool isAdmin});
+      {Result? result,
+      String idToken,
+      String refreshToken,
+      bool isAdmin,
+      User? user});
 }
 
 /// @nodoc
@@ -110,6 +126,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? idToken = null,
     Object? refreshToken = null,
     Object? isAdmin = null,
+    Object? user = freezed,
   }) {
     return _then(_$LoginStateImpl(
       result: freezed == result
@@ -128,6 +145,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
               as bool,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
     ));
   }
 }
@@ -139,7 +160,8 @@ class _$LoginStateImpl implements _LoginState {
       {this.result,
       this.idToken = "",
       this.refreshToken = "",
-      this.isAdmin = false});
+      this.isAdmin = false,
+      this.user});
 
   /// API処理結果
   @override
@@ -161,9 +183,13 @@ class _$LoginStateImpl implements _LoginState {
   @JsonKey()
   final bool isAdmin;
 
+  /// ユーザー情報
+  @override
+  final User? user;
+
   @override
   String toString() {
-    return 'LoginState(result: $result, idToken: $idToken, refreshToken: $refreshToken, isAdmin: $isAdmin)';
+    return 'LoginState(result: $result, idToken: $idToken, refreshToken: $refreshToken, isAdmin: $isAdmin, user: $user)';
   }
 
   @override
@@ -175,12 +201,13 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.idToken, idToken) || other.idToken == idToken) &&
             (identical(other.refreshToken, refreshToken) ||
                 other.refreshToken == refreshToken) &&
-            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin));
+            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin) &&
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, result, idToken, refreshToken, isAdmin);
+      Object.hash(runtimeType, result, idToken, refreshToken, isAdmin, user);
 
   @JsonKey(ignore: true)
   @override
@@ -194,7 +221,8 @@ abstract class _LoginState implements LoginState {
       {final Result? result,
       final String idToken,
       final String refreshToken,
-      final bool isAdmin}) = _$LoginStateImpl;
+      final bool isAdmin,
+      final User? user}) = _$LoginStateImpl;
 
   @override
 
@@ -213,6 +241,10 @@ abstract class _LoginState implements LoginState {
   /// ユーザーが学生が教員か
   /// true:教員 false:学生
   bool get isAdmin;
+  @override
+
+  /// ユーザー情報
+  User? get user;
   @override
   @JsonKey(ignore: true)
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
