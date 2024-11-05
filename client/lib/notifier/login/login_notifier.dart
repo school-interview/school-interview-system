@@ -46,8 +46,8 @@ class LoginNotifier extends _$LoginNotifier {
           await _loginRepository.getUserInfo(idToken ?? "");
       switch (response.statusCode) {
         case 200:
-          setResult(Result.success);
           _setIsAdmin(response.data!.isAdmin);
+          setResult(Result.success);
           break;
         default:
           setResult(Result.fail);

@@ -10,9 +10,9 @@
 
 part of openapi.api;
 
-
 class DefaultApi {
-  DefaultApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  DefaultApi([ApiClient? apiClient])
+      : apiClient = apiClient ?? defaultApiClient;
 
   final ApiClient apiClient;
 
@@ -23,10 +23,13 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] interviewSessionId (required):
-  Future<Response> controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(String interviewSessionId,) async {
+  Future<Response>
+      controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(
+    String interviewSessionId,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview/{interview_session_id}/analytics'
-      .replaceAll('{interview_session_id}', interviewSessionId);
+        .replaceAll('{interview_session_id}', interviewSessionId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -36,7 +39,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -54,17 +56,25 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] interviewSessionId (required):
-  Future<InterviewAnalytics?> controllerInterviewInterviewSessionIdAnalyticsGet(String interviewSessionId,) async {
-    final response = await controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(interviewSessionId,);
+  Future<InterviewAnalytics?> controllerInterviewInterviewSessionIdAnalyticsGet(
+    String interviewSessionId,
+  ) async {
+    final response =
+        await controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(
+      interviewSessionId,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'InterviewAnalytics',) as InterviewAnalytics;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'InterviewAnalytics',
+      ) as InterviewAnalytics;
     }
     return null;
   }
@@ -76,10 +86,12 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] interviewSessionId (required):
-  Future<Response> controllerInterviewInterviewSessionIdDeleteWithHttpInfo(String interviewSessionId,) async {
+  Future<Response> controllerInterviewInterviewSessionIdDeleteWithHttpInfo(
+    String interviewSessionId,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview/{interview_session_id}'
-      .replaceAll('{interview_session_id}', interviewSessionId);
+        .replaceAll('{interview_session_id}', interviewSessionId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -89,7 +101,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -107,17 +118,25 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] interviewSessionId (required):
-  Future<Object?> controllerInterviewInterviewSessionIdDelete(String interviewSessionId,) async {
-    final response = await controllerInterviewInterviewSessionIdDeleteWithHttpInfo(interviewSessionId,);
+  Future<Object?> controllerInterviewInterviewSessionIdDelete(
+    String interviewSessionId,
+  ) async {
+    final response =
+        await controllerInterviewInterviewSessionIdDeleteWithHttpInfo(
+      interviewSessionId,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Object',) as Object;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'Object',
+      ) as Object;
     }
     return null;
   }
@@ -131,10 +150,13 @@ class DefaultApi {
   /// * [String] interviewSessionId (required):
   ///
   /// * [SpeakToTeacherRequest] speakToTeacherRequest (required):
-  Future<Response> controllerInterviewInterviewSessionIdPostWithHttpInfo(String interviewSessionId, SpeakToTeacherRequest speakToTeacherRequest,) async {
+  Future<Response> controllerInterviewInterviewSessionIdPostWithHttpInfo(
+    String interviewSessionId,
+    SpeakToTeacherRequest speakToTeacherRequest,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview/{interview_session_id}'
-      .replaceAll('{interview_session_id}', interviewSessionId);
+        .replaceAll('{interview_session_id}', interviewSessionId);
 
     // ignore: prefer_final_locals
     Object? postBody = speakToTeacherRequest;
@@ -144,7 +166,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -164,17 +185,27 @@ class DefaultApi {
   /// * [String] interviewSessionId (required):
   ///
   /// * [SpeakToTeacherRequest] speakToTeacherRequest (required):
-  Future<TeacherResponse?> controllerInterviewInterviewSessionIdPost(String interviewSessionId, SpeakToTeacherRequest speakToTeacherRequest,) async {
-    final response = await controllerInterviewInterviewSessionIdPostWithHttpInfo(interviewSessionId, speakToTeacherRequest,);
+  Future<TeacherResponse?> controllerInterviewInterviewSessionIdPost(
+    String interviewSessionId,
+    SpeakToTeacherRequest speakToTeacherRequest,
+  ) async {
+    final response =
+        await controllerInterviewInterviewSessionIdPostWithHttpInfo(
+      interviewSessionId,
+      speakToTeacherRequest,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'TeacherResponse',) as TeacherResponse;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'TeacherResponse',
+      ) as TeacherResponse;
     }
     return null;
   }
@@ -186,7 +217,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [InterviewSessionRequest] interviewSessionRequest (required):
-  Future<Response> controllerInterviewPostWithHttpInfo(InterviewSessionRequest interviewSessionRequest,) async {
+  Future<Response> controllerInterviewPostWithHttpInfo(
+    InterviewSessionRequest interviewSessionRequest,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/interview';
 
@@ -199,7 +232,6 @@ class DefaultApi {
 
     const contentTypes = <String>['application/json'];
 
-
     return apiClient.invokeAPI(
       path,
       'POST',
@@ -216,17 +248,24 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [InterviewSessionRequest] interviewSessionRequest (required):
-  Future<StartInterviewResponse?> controllerInterviewPost(InterviewSessionRequest interviewSessionRequest,) async {
-    final response = await controllerInterviewPostWithHttpInfo(interviewSessionRequest,);
+  Future<StartInterviewResponse?> controllerInterviewPost(
+    InterviewSessionRequest interviewSessionRequest,
+  ) async {
+    final response = await controllerInterviewPostWithHttpInfo(
+      interviewSessionRequest,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'StartInterviewResponse',) as StartInterviewResponse;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'StartInterviewResponse',
+      ) as StartInterviewResponse;
     }
     return null;
   }
@@ -234,7 +273,8 @@ class DefaultApi {
   /// Controller
   ///
   /// Note: This method returns the HTTP [Response].
-  Future<Response> controllerInterviewReportsGetWithHttpInfo() async {
+  Future<Response> controllerInterviewReportsGetWithHttpInfo(
+      String idToken) async {
     // ignore: prefer_const_declarations
     final path = r'/interview-reports';
 
@@ -242,11 +282,10 @@ class DefaultApi {
     Object? postBody;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -260,17 +299,21 @@ class DefaultApi {
   }
 
   /// Controller
-  Future<InterviewReportsResponse?> controllerInterviewReportsGet() async {
-    final response = await controllerInterviewReportsGetWithHttpInfo();
+  Future<InterviewReportsResponse?> controllerInterviewReportsGet(
+      String idToken) async {
+    final response = await controllerInterviewReportsGetWithHttpInfo(idToken);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'InterviewReportsResponse',) as InterviewReportsResponse;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'InterviewReportsResponse',
+      ) as InterviewReportsResponse;
     }
     return null;
   }
@@ -290,7 +333,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -312,9 +354,12 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Object',) as Object;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'Object',
+      ) as Object;
     }
     return null;
   }
@@ -322,7 +367,7 @@ class DefaultApi {
   /// Controller
   ///
   /// Note: This method returns the HTTP [Response].
-  Future<Response> controllerMeGetWithHttpInfo() async {
+  Future<Response> controllerMeGetWithHttpInfo(String idToken) async {
     // ignore: prefer_const_declarations
     final path = r'/me';
 
@@ -330,11 +375,10 @@ class DefaultApi {
     Object? postBody;
 
     final queryParams = <QueryParam>[];
-    final headerParams = <String, String>{};
+    final headerParams = <String, String>{'Authorization': 'Bearer $idToken'};
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -348,17 +392,20 @@ class DefaultApi {
   }
 
   /// Controller
-  Future<User?> controllerMeGet() async {
-    final response = await controllerMeGetWithHttpInfo();
+  Future<User?> controllerMeGet(String idToken) async {
+    final response = await controllerMeGetWithHttpInfo(idToken);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'User',) as User;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'User',
+      ) as User;
     }
     return null;
   }
@@ -370,7 +417,9 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] code (required):
-  Future<Response> controllerOauth2CallbackGetWithHttpInfo(String code,) async {
+  Future<Response> controllerOauth2CallbackGetWithHttpInfo(
+    String code,
+  ) async {
     // ignore: prefer_const_declarations
     final path = r'/oauth2/callback';
 
@@ -381,10 +430,9 @@ class DefaultApi {
     final headerParams = <String, String>{};
     final formParams = <String, String>{};
 
-      queryParams.addAll(_queryParams('', 'code', code));
+    queryParams.addAll(_queryParams('', 'code', code));
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -402,17 +450,24 @@ class DefaultApi {
   /// Parameters:
   ///
   /// * [String] code (required):
-  Future<LoginResult?> controllerOauth2CallbackGet(String code,) async {
-    final response = await controllerOauth2CallbackGetWithHttpInfo(code,);
+  Future<LoginResult?> controllerOauth2CallbackGet(
+    String code,
+  ) async {
+    final response = await controllerOauth2CallbackGetWithHttpInfo(
+      code,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'LoginResult',) as LoginResult;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'LoginResult',
+      ) as LoginResult;
     }
     return null;
   }
@@ -432,7 +487,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -454,9 +508,12 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'TeachersListResponse',) as TeachersListResponse;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'TeachersListResponse',
+      ) as TeachersListResponse;
     }
     return null;
   }
@@ -476,7 +533,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>[];
-
 
     return apiClient.invokeAPI(
       path,
@@ -498,12 +554,13 @@ class DefaultApi {
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
       final responseBody = await _decodeBodyBytes(response);
-      return (await apiClient.deserializeAsync(responseBody, 'List<User>') as List)
-        .cast<User>()
-        .toList(growable: false);
-
+      return (await apiClient.deserializeAsync(responseBody, 'List<User>')
+              as List)
+          .cast<User>()
+          .toList(growable: false);
     }
     return null;
   }
@@ -517,10 +574,12 @@ class DefaultApi {
   /// * [String] userId (required):
   ///
   /// * [StudentUpdate] studentUpdate (required):
-  Future<Response> controllerUsersUserIdStudentPutWithHttpInfo(String userId, StudentUpdate studentUpdate,) async {
+  Future<Response> controllerUsersUserIdStudentPutWithHttpInfo(
+    String userId,
+    StudentUpdate studentUpdate,
+  ) async {
     // ignore: prefer_const_declarations
-    final path = r'/users/{user_id}/student'
-      .replaceAll('{user_id}', userId);
+    final path = r'/users/{user_id}/student'.replaceAll('{user_id}', userId);
 
     // ignore: prefer_final_locals
     Object? postBody = studentUpdate;
@@ -530,7 +589,6 @@ class DefaultApi {
     final formParams = <String, String>{};
 
     const contentTypes = <String>['application/json'];
-
 
     return apiClient.invokeAPI(
       path,
@@ -550,17 +608,26 @@ class DefaultApi {
   /// * [String] userId (required):
   ///
   /// * [StudentUpdate] studentUpdate (required):
-  Future<Student?> controllerUsersUserIdStudentPut(String userId, StudentUpdate studentUpdate,) async {
-    final response = await controllerUsersUserIdStudentPutWithHttpInfo(userId, studentUpdate,);
+  Future<Student?> controllerUsersUserIdStudentPut(
+    String userId,
+    StudentUpdate studentUpdate,
+  ) async {
+    final response = await controllerUsersUserIdStudentPutWithHttpInfo(
+      userId,
+      studentUpdate,
+    );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
     // When a remote server returns no body with a status of 204, we shall not decode it.
     // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
     // FormatException when trying to decode an empty string.
-    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
-      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Student',) as Student;
-    
+    if (response.body.isNotEmpty &&
+        response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(
+        await _decodeBodyBytes(response),
+        'Student',
+      ) as Student;
     }
     return null;
   }

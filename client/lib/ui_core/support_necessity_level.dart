@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:client/constant/enum/support_level_enum.dart';
+
 /// 要支援レベルの情報を取得するクラス
 class SupportLevel {
   const SupportLevel({
@@ -7,6 +9,15 @@ class SupportLevel {
   });
 
   final SupportLevelEnum element;
+
+  /// 各要支援レベルの構成要素
+  static const attendance =
+      SupportLevel(element: SupportLevelEnum.attendanceRate);
+  static const credit = SupportLevel(element: SupportLevelEnum.credit);
+  static const highAttendanceLowGpa =
+      SupportLevel(element: SupportLevelEnum.highAttendanceLowGpa);
+  static const lowAttendanceLowGpa =
+      SupportLevel(element: SupportLevelEnum.lowAttendanceAndLowGpa);
 
   /// 各内訳要素の説明文を取得する
   String get description {
@@ -36,6 +47,12 @@ class SupportLevel {
     }
   }
 
+  /// 要支援レベルの内訳の値を取得する
+  String getElementValue(num? factor) {
+    final value = ((factor?.toDouble() ?? 0) * parameter).toStringAsFixed(1);
+    return value;
+  }
+
   /// 各内訳要素のグラフに用いるカラーを取得する
   Color get chartColor {
     switch (element) {
@@ -49,16 +66,4 @@ class SupportLevel {
         return const Color(0xFFffeaa7);
     }
   }
-}
-
-/// 要支援レベルの構成要素
-enum SupportLevelEnum {
-  // 出席率が低い
-  attendanceRate,
-  // 単位数が少ない
-  credit,
-  // 高出席率と低GPA
-  highAttendanceLowGpa,
-  // 低出席率と低GPA
-  lowAttendanceAndLowGpa,
 }
