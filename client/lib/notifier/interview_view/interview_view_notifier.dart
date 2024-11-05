@@ -157,10 +157,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
               _setWhoTalking(WhoTalking.none);
               // 面談が終了した場合、要支援レベルを取得する
               if (response.data!.interviewSession.done) {
-                final idToken =
-                    await _sharedPreferenceManager.getString(PrefKeys.idToken);
-                await _getInterviewAnalytics(
-                    state.currentInterviewSessionId, idToken ?? "");
+                await _getInterviewAnalytics(state.currentInterviewSessionId);
                 _setIsFinishInterview(true);
               }
             },
@@ -180,9 +177,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   /// 要支援レベル取得API
   Future<void> _getInterviewAnalytics(
     String currentInterviewSessionId,
-    String idToken,
   ) async {
     try {
+      final idToken =
+          await _sharedPreferenceManager.getString(PrefKeys.idToken) ?? "";
       ApiResult<InterviewAnalytics> response = await _interviewRepository
           .getInterviewAnalytics(currentInterviewSessionId, idToken);
       switch (response.statusCode) {
