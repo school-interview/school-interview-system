@@ -9,12 +9,14 @@ import 'package:openapi/api.dart';
 class InterviewReportRepositoryImpl extends InterviewReportRepository {
   /// 面談結果取得API
   @override
-  Future<ApiResult<InterviewReportsResponse>> getInterviewReport() async {
+  Future<ApiResult<InterviewReportsResponse>> getInterviewReport(
+      String idToken) async {
     logger.i("run getInterviewReport()");
     ApiClient apiClient = ApiClient();
     final api = DefaultApi(apiClient);
     try {
-      final result = await api.controllerInterviewReportsGetWithHttpInfo();
+      final result =
+          await api.controllerInterviewReportsGetWithHttpInfo(idToken);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),

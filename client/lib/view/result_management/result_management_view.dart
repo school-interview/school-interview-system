@@ -1,6 +1,9 @@
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_report/interview_report_notifier.dart';
+import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/ui_core/result_management_table.dart';
+import 'package:client/ui_core/support_necessity_level.dart';
+import 'package:client/ui_core/support_necessity_level_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,9 +20,10 @@ class _ResultManagementView extends ConsumerState<ResultManagementView> {
   void initState() {
     super.initState();
     Future(() async {
+      final loginState = ref.watch(loginNotifierProvider);
       final interviewReportNotifier =
           ref.read(interviewReportNotifierProvider.notifier);
-      await interviewReportNotifier.getInterviewReport();
+      await interviewReportNotifier.getInterviewReport(loginState.idToken);
     });
   }
 
@@ -45,31 +49,22 @@ class _ResultManagementView extends ConsumerState<ResultManagementView> {
     final reports = interviewReportState.interviewReport?.reports ?? [];
 
     /// 表の値一覧
-    final values = List<DataRow>.generate(2, (int index) {
+    final values = List<DataRow>.generate(reports.length, (int index) {
       return DataRow(cells: [
-        // DataCell(Text(reports[index].user.name)),
-        // DataCell(Text(reports[index].user.student?.studentId ?? "")),
-        // DataCell(Text(reports[index].user.student?.department ?? "")),
-        // DataCell(Text(SupportNecessityLevelFormatter.failToMoveToNextGrade(
-        //     reports[index].analytics.failToMoveToNextGrade))),
-        // DataCell(Text(SupportLevel.attendance.getElementValue(
-        //     reports[index].analytics.deviationFromMinimumAttendanceRate))),
-        // DataCell(Text(SupportLevel.credit.getElementValue(
-        //     reports[index].analytics.deviationFromPreferredCreditLevel))),
-        // DataCell(Text(SupportLevel.highAttendanceLowGpa.getElementValue(
-        //     reports[index].analytics.highAttendanceLowGpaRate))),
-        // DataCell(Text(SupportLevel.lowAttendanceLowGpa.getElementValue(
-        //     reports[index].analytics.lowAtendanceAndLowGpaRate))),
-        // DataCell(Text("${reports[index].analytics.supportNecessityLevel}")),
-        DataCell(Flexible(child: Text("名前だよヨヨヨヨヨヨヨヨヨヨヨヨよよおy"))),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
-        DataCell(Text("名前")),
+        DataCell(Text(reports[index].user.name)),
+        DataCell(Text(reports[index].user.student?.studentId ?? "")),
+        DataCell(Text(reports[index].user.student?.department ?? "")),
+        DataCell(Text(SupportNecessityLevelFormatter.failToMoveToNextGrade(
+            reports[index].analytics.failToMoveToNextGrade))),
+        DataCell(Text(SupportLevel.attendance.getElementValue(
+            reports[index].analytics.deviationFromMinimumAttendanceRate))),
+        DataCell(Text(SupportLevel.credit.getElementValue(
+            reports[index].analytics.deviationFromPreferredCreditLevel))),
+        DataCell(Text(SupportLevel.highAttendanceLowGpa.getElementValue(
+            reports[index].analytics.highAttendanceLowGpaRate))),
+        DataCell(Text(SupportLevel.lowAttendanceLowGpa.getElementValue(
+            reports[index].analytics.lowAtendanceAndLowGpaRate))),
+        DataCell(Text("${reports[index].analytics.supportNecessityLevel}")),
       ]);
     }, growable: false);
 
