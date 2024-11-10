@@ -23,7 +23,8 @@ class InterviewSession(AppPydanticBaseModel):
 class InterviewSessionModel(EntityBaseModel):
     __tablename__ = "InterviewSessions"
     id: Mapped[UUID] = mapped_column(primary_key=True)
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("Users.id", ondelete="CASCADE"))
     user = relationship("UserModel", backref="interview_sessions")
     teacher_id: Mapped[UUID] = mapped_column(ForeignKey("Teachers.id"))
     teacher = relationship("TeacherModel", backref="interview_sessions")
