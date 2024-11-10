@@ -20,7 +20,8 @@ class Student(AppPydanticBaseModel):
 class StudentModel(EntityBaseModel):
     __tablename__ = "Students"
     id: Mapped[UUID] = mapped_column(primary_key=True)
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("Users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship("UserModel", back_populates="student")
     student_id: Mapped[Optional[str]] = mapped_column(String(7))
     department: Mapped[Optional[str]] = mapped_column(String(30))

@@ -22,7 +22,7 @@ class InterviewRecordModel(EntityBaseModel):
     __tablename__ = "InterviewRecords"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     session_id: Mapped[UUID] = mapped_column(
-        ForeignKey("InterviewSessions.id"))
+        ForeignKey("InterviewSessions.id", ondelete="CASCADE"))
     session = relationship("InterviewSessionModel",
                            backref="interview_records")
     total_earned_credits: Mapped[Optional[int]]

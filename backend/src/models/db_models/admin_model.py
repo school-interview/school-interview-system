@@ -17,7 +17,8 @@ class Admin(AppPydanticBaseModel):
 class AdminModel(EntityBaseModel):
     __tablename__ = "Admins"
     id: Mapped[UUID] = mapped_column(primary_key=True)
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("Users.id"))
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("Users.id", ondelete="CASCADE"))
     user: Mapped[Optional[Any]] = relationship(
         "UserModel", back_populates="admin")
 
