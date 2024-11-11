@@ -32,6 +32,7 @@ try:
     if user_model is None:
         print("ユーザーが見つかりませんでした")
         exit(1)
+    # TODO: relationship()のcascadeオプションを使わないと、ORMレベルで削除
     delete_user(db_session, user_id)
     print("ユーザーを削除しました")
 finally:
