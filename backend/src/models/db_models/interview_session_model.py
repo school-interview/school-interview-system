@@ -25,7 +25,8 @@ class InterviewSessionModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(
         ForeignKey("Users.id", ondelete="CASCADE"))
-    user = relationship("UserModel", backref="interview_sessions")
+    user = relationship(
+        "UserModel", backref="interview_sessions", cascade="all, delete")
     teacher_id: Mapped[UUID] = mapped_column(ForeignKey("Teachers.id"))
     teacher = relationship("TeacherModel", backref="interview_sessions")
     start_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))

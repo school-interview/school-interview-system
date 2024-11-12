@@ -22,7 +22,8 @@ class StudentModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(
         ForeignKey("Users.id", ondelete="CASCADE"))
-    user: Mapped["User"] = relationship("UserModel", back_populates="student")
+    user: Mapped["User"] = relationship(
+        "UserModel", back_populates="student", cascade="all, delete")
     student_id: Mapped[Optional[str]] = mapped_column(String(7))
     department: Mapped[Optional[str]] = mapped_column(String(30))
     semester: Mapped[Optional[int]]
