@@ -1,3 +1,4 @@
+import 'package:client/app.dart';
 import 'package:client/component/button_component.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/input_text_field.dart';
@@ -6,9 +7,11 @@ import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
 import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
+import 'package:client/router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:openapi/api.dart';
 
 /// 情報入力画面
 class ProfileInputView extends ConsumerStatefulWidget {
@@ -76,6 +79,8 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                   },
                   onChanged: (value) {
                     notifier.setStudentId(value);
+                    final state = ref.watch(profileInputViewNotifierProvider);
+                    logger.w(state.studentId);
                   },
                 ),
                 const SizedBox(height: 30),
@@ -84,10 +89,22 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                   onTapButton: () async {
                     if (formKey.currentState?.validate() ?? false) {
                       // バリデーションが成功した場合にのみ処理を行う
-                      await notifier.putUserInfo();
+                      /// TODO ユーザーデータや学生データの要素がnullのときに代わりの値を入れるようにしているが、エラーアラートを表示し、ログイン画面に戻す必要がある
+                      /// → 誤った学籍番号や学科などの情報で面談が進んでしまうため
+                      final state = ref.watch(profileInputViewNotifierProvider);
+                      final studentUpdate = StudentUpdate(
+                        studentId: state.studentId,
+                        department: state.department,
+                        semester: state.semester,
+                      );
+                      logger.d(studentUpdate);
+                      await notifier.putStudentInfo(
+                        loginState.user?.id ?? "",
+                        studentUpdate,
+                      );
                       // 非同期処理の後にウィジェットがまだ存在するかを確認
                       if (context.mounted) {
-                        context.push("/avatar-select");
+                        context.push(RouterPath.avatarSelectView);
                       }
                     }
                   },
@@ -141,6 +158,8 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         onChanged: (String? value) {
           if (value != null) {
             notifier.setDepartment(value);
+            final state = ref.watch(profileInputViewNotifierProvider);
+            logger.w(state.department);
           }
         },
       ),
@@ -188,6 +207,8 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
             for (var item in semesterSelects.entries) {
               if (item.value == value) {
                 viewModel.setSemester(item.key);
+                final state = ref.watch(profileInputViewNotifierProvider);
+                logger.w(state.semester);
                 return;
               }
             }
