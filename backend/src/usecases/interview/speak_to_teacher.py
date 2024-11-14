@@ -203,6 +203,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
 
 
 def extract_answer(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
+    use_local_llm = bool(int(os.getenv("USE_LOCAL_LLM")))
     current_question = questions[interview_session.progress]
     prompt_template = current_question.prompt + """
     Please extract structured data from the following [text]. If extraction is not possible, input 'None'.
@@ -218,11 +219,23 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
             content="Tips: Make sure to answer in the correct format."),
     ]
     prompt = ChatPromptTemplate(messages=prompt_msgs)
-    llm = ChatOpenAI(
-        temperature=0,
-        model_name="gpt-3.5-turbo",
-        openai_api_key=OPENAI_API_KEY
-    )
+    if use_local_llm:
+        model_name = "elyza/Llama-3-ELYZA-JP-8B"
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype="auto",
+            device_map="auto",
+        )
+        pipe = pipeline("text-generation", model=model,
+                        tokenizer=tokenizer, max_new_tokens=64)
+        llm = HuggingFacePipeline(pipe=pipe)
+    else:
+        llm = ChatOpenAI(
+            temperature=0,
+            model_name="gpt-3.5-turbo",
+            openai_api_key=OPENAI_API_KEY
+        )
 
     structured_output_class: Any = None
 
