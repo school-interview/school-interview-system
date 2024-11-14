@@ -7,5 +7,5 @@ COPY ./certificate ./certificate
 # RUN export SHELL="/bin/sh"
 RUN poetry install --no-root
 # RUN poetry shell
-CMD ["./launch-server-docker.ps1"]
+CMD ["launch-server-docker.ps1"]
 # CMD ["tail", "-F", "/dev/null"]
