@@ -3,7 +3,8 @@ import os
 from typing import Any, Dict, List, Optional
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from huggingface_hub import hf_hub_download
 from langchain_community.chat_models import ChatLlamaCpp
@@ -13,7 +14,6 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
@@ -22,7 +22,7 @@ from src.models import InterviewSessionModel, InterviewRecordModel, TeacherRespo
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
@@ -91,12 +91,16 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
 
 
 def generate_message_from_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_student: str, use_local_llm: bool = False):
-    CONTEXT_SIZE = 4096
-    LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
-    CHUNK_SIZE = 256
-    CHUNK_OVERLAP = 64
+    model_name = "elyza/Llama-3-ELYZA-JP-8B"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        torch_dtype="auto",
+        device_map="auto",
+    )
+    pipe = pipeline("text-generation", model=model,
+                    tokenizer=tokenizer, max_new_tokens=64)
     EMB_MODEL = "sentence-transformers/distiluse-base-multilingual-cased-v2"
-    COLLECTION_NAME = "langchain"
     global vectorstore
     if vectorstore is None:
         md_file = ''
@@ -147,14 +151,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
     current_question = get_questions(db_session)[interview_session.progress]
 
     if use_local_llm:
-        llm = ChatLlamaCpp(
-            model_path=LLM_FILE,
-            n_gpu_layers=128,
-            n_ctx=CONTEXT_SIZE,
-            f16_kv=True,
-            verbose=True,
-            seed=0
-        )
+        llm = HuggingFacePipeline(pipe=pipe)
 
         prompt_template = generate_prompt_template(current_question)
 
@@ -247,7 +244,6 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
     response = chain.invoke({"text": message_from_student},
                             config={"callbacks": [ConsoleCallbackHandler()]}).dict()
     retrievedValue = None
-    print("れすぽんす", response)
     match interview_session.progress:
         case 1:
             retrievedValue = response['credit']
