@@ -26,7 +26,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
     __tablename__ = "InterviewAnalytics"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     session_id: Mapped[UUID] = mapped_column(
-        ForeignKey("InterviewSessions.id"))
+        ForeignKey("InterviewSessions.id", ondelete="CASCADE"))
     session = relationship("InterviewSessionModel", backref="analytics")
     fail_to_move_to_next_grade: Mapped[bool]
     deviation_from_preferred_credit_level: Mapped[float]
