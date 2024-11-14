@@ -104,7 +104,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
     global vectorstore
     if vectorstore is None:
         md_file = ''
-        with open("pdf/markdown_output/campusguide.md") as f:
+        with open("pdf/markdown_output/campusguide-conversation.md") as f:
             md_file = f.read()
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000, chunk_overlap=200)
