@@ -7,6 +7,7 @@ services:
       - ./src:/app/src
       - ./test:/app/test
       - ./launch-server-docker.sh:/app/launch-server-docker.sh
+      - ./launch-server-docker.sh:/app/launch-server-docker.ps1
       - ./alembic.ini:/app/alembic.ini
       - ./migrations:/app/migrations
       - ./.env:/app/.env
