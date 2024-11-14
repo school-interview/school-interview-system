@@ -1,5 +1,6 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
+import 'package:client/constant/select_items.dart';
 import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/student/student_repository.dart';
@@ -17,25 +18,8 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
     return const ProfileInputViewState();
   }
 
-  void setResult(Result result) {
-    state = state.copyWith(result: result);
-  }
-
-  void setStudentId(String studentId) {
-    state = state.copyWith(studentId: studentId);
-  }
-
-  void setName(String name) {
-    state = state.copyWith(name: name);
-  }
-
-  void setDepartment(String department) {
-    state = state.copyWith(department: department);
-  }
-
-  void setSemester(int semester) {
-    state = state.copyWith(semester: semester);
-  }
+  /// 以下、setter
+  void setResult(Result result) => state = state.copyWith(result: result);
 
   /// 学生リポジトリ
   final StudentRepository _studentRepository = StudentRepositoryImpl();
@@ -73,5 +57,30 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
       setResult(Result.fail);
       return;
     }
+  }
+
+  /// ローカルに保存する
+  Future<void> saveStudentData(String key, String value) async {
+    await _sharedPreferenceManager.setString(key, value);
+  }
+
+  /// 学生更新情報を取得
+  Future<StudentUpdate> setStudentUpdate() async {
+    final studentId =
+        await _sharedPreferenceManager.getString(PrefKeys.studentId) ?? "";
+    final department =
+        await _sharedPreferenceManager.getString(PrefKeys.department) ?? "";
+    final semesterString =
+        await _sharedPreferenceManager.getString(PrefKeys.semester) ?? "";
+    var semester = 1;
+    const semesterSelect = SelectItems.semesters;
+    for (var item in semesterSelect.entries) {
+      if (item.value == semesterString) {
+        semester = item.key;
+      }
+    }
+    final studentUpdate = StudentUpdate(
+        studentId: studentId, department: department, semester: semester);
+    return studentUpdate;
   }
 }
