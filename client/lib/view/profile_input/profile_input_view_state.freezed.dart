@@ -19,18 +19,6 @@ mixin _$ProfileInputViewState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
-  /// 学籍番号
-  String get studentId => throw _privateConstructorUsedError;
-
-  /// 氏名
-  String get name => throw _privateConstructorUsedError;
-
-  /// 学科
-  String get department => throw _privateConstructorUsedError;
-
-  /// 学期（前学期か後学期）
-  int get semester => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
   $ProfileInputViewStateCopyWith<ProfileInputViewState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -42,12 +30,7 @@ abstract class $ProfileInputViewStateCopyWith<$Res> {
           $Res Function(ProfileInputViewState) then) =
       _$ProfileInputViewStateCopyWithImpl<$Res, ProfileInputViewState>;
   @useResult
-  $Res call(
-      {Result? result,
-      String studentId,
-      String name,
-      String department,
-      int semester});
+  $Res call({Result? result});
 }
 
 /// @nodoc
@@ -65,32 +48,12 @@ class _$ProfileInputViewStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? result = freezed,
-    Object? studentId = null,
-    Object? name = null,
-    Object? department = null,
-    Object? semester = null,
   }) {
     return _then(_value.copyWith(
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
-      studentId: null == studentId
-          ? _value.studentId
-          : studentId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      department: null == department
-          ? _value.department
-          : department // ignore: cast_nullable_to_non_nullable
-              as String,
-      semester: null == semester
-          ? _value.semester
-          : semester // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
   }
 }
@@ -104,12 +67,7 @@ abstract class _$$ProfileInputViewStateImplCopyWith<$Res>
       __$$ProfileInputViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Result? result,
-      String studentId,
-      String name,
-      String department,
-      int semester});
+  $Res call({Result? result});
 }
 
 /// @nodoc
@@ -125,32 +83,12 @@ class __$$ProfileInputViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? result = freezed,
-    Object? studentId = null,
-    Object? name = null,
-    Object? department = null,
-    Object? semester = null,
   }) {
     return _then(_$ProfileInputViewStateImpl(
       result: freezed == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
-      studentId: null == studentId
-          ? _value.studentId
-          : studentId // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      department: null == department
-          ? _value.department
-          : department // ignore: cast_nullable_to_non_nullable
-              as String,
-      semester: null == semester
-          ? _value.semester
-          : semester // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -158,40 +96,15 @@ class __$$ProfileInputViewStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
-  const _$ProfileInputViewStateImpl(
-      {this.result,
-      this.studentId = "",
-      this.name = "",
-      this.department = "",
-      this.semester = 1});
+  const _$ProfileInputViewStateImpl({this.result});
 
   /// API処理結果
   @override
   final Result? result;
 
-  /// 学籍番号
-  @override
-  @JsonKey()
-  final String studentId;
-
-  /// 氏名
-  @override
-  @JsonKey()
-  final String name;
-
-  /// 学科
-  @override
-  @JsonKey()
-  final String department;
-
-  /// 学期（前学期か後学期）
-  @override
-  @JsonKey()
-  final int semester;
-
   @override
   String toString() {
-    return 'ProfileInputViewState(result: $result, studentId: $studentId, name: $name, department: $department, semester: $semester)';
+    return 'ProfileInputViewState(result: $result)';
   }
 
   @override
@@ -199,19 +112,11 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ProfileInputViewStateImpl &&
-            (identical(other.result, result) || other.result == result) &&
-            (identical(other.studentId, studentId) ||
-                other.studentId == studentId) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.department, department) ||
-                other.department == department) &&
-            (identical(other.semester, semester) ||
-                other.semester == semester));
+            (identical(other.result, result) || other.result == result));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, result, studentId, name, department, semester);
+  int get hashCode => Object.hash(runtimeType, result);
 
   @JsonKey(ignore: true)
   @override
@@ -222,33 +127,13 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
 }
 
 abstract class _ProfileInputViewState implements ProfileInputViewState {
-  const factory _ProfileInputViewState(
-      {final Result? result,
-      final String studentId,
-      final String name,
-      final String department,
-      final int semester}) = _$ProfileInputViewStateImpl;
+  const factory _ProfileInputViewState({final Result? result}) =
+      _$ProfileInputViewStateImpl;
 
   @override
 
   /// API処理結果
   Result? get result;
-  @override
-
-  /// 学籍番号
-  String get studentId;
-  @override
-
-  /// 氏名
-  String get name;
-  @override
-
-  /// 学科
-  String get department;
-  @override
-
-  /// 学期（前学期か後学期）
-  int get semester;
   @override
   @JsonKey(ignore: true)
   _$$ProfileInputViewStateImplCopyWith<_$ProfileInputViewStateImpl>
