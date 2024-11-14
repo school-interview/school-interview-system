@@ -42,9 +42,7 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
       switch (response.statusCode) {
         case 200:
           await _sharedPreferenceManager.setString(
-            PrefKeys.userId,
-            response.data!.id,
-          );
+              PrefKeys.userId, response.data!.userId);
           setResult(Result.success);
           break;
         default:
