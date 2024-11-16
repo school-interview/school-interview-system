@@ -70,7 +70,10 @@ class LoginNotifier extends _$LoginNotifier {
     final result = LoginResult.fromJson(mapLoginResult);
     _setIdToken(result?.idToken ?? "");
     _setRefreshToken(result?.refreshToken ?? "");
-    _setToken(idToken: result?.idToken, refreshToken: result?.refreshToken);
+    _setToken(
+        idToken: result?.idToken,
+        refreshToken: result?.refreshToken,
+        userId: result?.user.id);
     await getUserInfo();
   }
 
@@ -78,9 +81,11 @@ class LoginNotifier extends _$LoginNotifier {
   Future<void> _setToken({
     required String? idToken,
     required String? refreshToken,
+    required String? userId,
   }) async {
     await _sharedPreferenceManager.setString(PrefKeys.idToken, idToken);
     await _sharedPreferenceManager.setString(
         PrefKeys.refreshToken, refreshToken);
+    await _sharedPreferenceManager.setString(PrefKeys.userId, userId);
   }
 }
