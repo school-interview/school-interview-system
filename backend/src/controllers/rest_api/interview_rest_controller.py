@@ -40,7 +40,7 @@ class StartInterviewSessionRestApiController(RestApiController):
             "TeacherModel": Teacher,
             "UserModel": User
         }
-        interview_session = interview_session_model.convertToPydantic(
+        interview_session = interview_session_model.convert_to_pydantic(
             InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
         question_query = db_session.query(InterviewQuestionModel).where(
             InterviewQuestionModel.order == 1)
@@ -86,7 +86,7 @@ class SpeakToTeacherRestApiController(RestApiController):
         }
         teacher_response = TeacherResponse(
             message_from_teacher=message_from_teacher,
-            interview_session=interview_session_model.convertToPydantic(
+            interview_session=interview_session_model.convert_to_pydantic(
                 InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
         )
 
