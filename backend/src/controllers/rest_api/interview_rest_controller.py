@@ -84,6 +84,8 @@ class SpeakToTeacherRestApiController(RestApiController):
             "TeacherModel": Teacher,
             "UserModel": User
         }
+        # TODO: speak_to_teacher内で参照されているはずなので、NoneにならないはずなのだがなぜかNoneになることがあるので、応急処置として参照。要修正。
+        interview_session_model.teacher
         teacher_response = TeacherResponse(
             message_from_teacher=message_from_teacher,
             interview_session=interview_session_model.convertToPydantic(
