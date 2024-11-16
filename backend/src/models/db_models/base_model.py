@@ -17,7 +17,7 @@ class EntityBaseModel(DeclarativeBase):
                 obj_history (Set): 循環参照チェック用のセット
                 model_class_mapping (Dict[str, BaseModel], optional): ネストされたモデルのクラスマッピング。デフォルトはNone。
         """
-        dict_to_convert = self.__dict__
+        dict_to_convert = self.convert_to_dict()
         obj_history.add(id(self))  # 循環参照チェック用
         keys = dict_to_convert.keys()
         for key in keys:
@@ -31,13 +31,13 @@ class EntityBaseModel(DeclarativeBase):
                     raise ValueError(
                         "model_class_mapping is required for nested models")
                 model_class = model_class_mapping[model.__class__.__name__]
-                pydantic_model: BaseModel = model.convertToPydantic(
+                pydantic_model: EntityBaseModel = model.convertToPydantic(
                     model_class, model_class_mapping=model_class_mapping, obj_history=obj_history)
-                dict_to_convert[key] = pydantic_model.__dict__
+                dict_to_convert[key] = pydantic_model.convert_to_dict()
             obj_history.add(id(value))
         return TypeAdapter(cls).validate_python(dict_to_convert)
 
-    def convert_to_dict(self):
+    def convert_to_dict(self) -> Dict:
         d = {}
         for column in self.__table__.columns:
             d[column.name] = getattr(self, column.name)
