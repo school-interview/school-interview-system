@@ -16,9 +16,9 @@ class UsersRestApiController(RestApiController):
     response_model = List[User]
 
     async def controller(self, db_session: Session = Depends(session_factory), user_model=Depends(verify_admin)):
-        user_query = db_session.query(UserModel)
-        users = [TypeAdapter(User).validate_python(
-            user[0].__dict__) for user in db_session.execute(user_query).all()]
+        users_crud = UsersCrud(UserModel)
+        users = [user.convert_to_dict()
+                 for user in users_crud.get_multi(db_session)]
         return users
 
 
