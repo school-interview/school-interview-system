@@ -36,3 +36,9 @@ class EntityBaseModel(DeclarativeBase):
                 dict_to_convert[key] = pydantic_model.__dict__
             obj_history.add(id(value))
         return TypeAdapter(cls).validate_python(dict_to_convert)
+
+    def convert_to_dict(self):
+        d = {}
+        for column in self.__table__.columns:
+            d[column.name] = getattr(self, column.name)
+        return d
