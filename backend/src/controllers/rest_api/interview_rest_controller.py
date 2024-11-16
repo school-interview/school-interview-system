@@ -84,8 +84,6 @@ class SpeakToTeacherRestApiController(RestApiController):
             "TeacherModel": Teacher,
             "UserModel": User
         }
-        # TODO: speak_to_teacher内で参照されているはずなので、NoneにならないはずなのだがなぜかNoneになることがあるので、応急処置として参照。要修正。
-        # interview_session_model.teacher
         teacher_response = TeacherResponse(
             message_from_teacher=message_from_teacher,
             interview_session=interview_session_model.convertToPydantic(
@@ -151,8 +149,7 @@ class AnalyticsInterviewRestApiController(RestApiController):
         interview_analytics_model: InterviewAnalyticsModel = analyze_interview(
             db_session, interview_session, interview_record)
 
-        interview_analytics_model.id  # 参照するまでマップされてなさそうな予感なので参照しておく。。。
-        interview_analytics_dict = interview_analytics_model.__dict__
+        interview_analytics_dict = interview_analytics_model.convert_to_dict()
         interview_analytics = TypeAdapter(InterviewAnalytics).validate_python(
             interview_analytics_dict)
         return interview_analytics

@@ -6,6 +6,7 @@ from fastapi import Depends
 from pydantic import TypeAdapter
 from src.database import session_factory
 from src.models import RestApiController, Teacher, TeacherModel, TeachersListResponse
+from src.crud import TeachersCrud
 
 
 class TeachersRestApiController(RestApiController):
@@ -14,9 +15,9 @@ class TeachersRestApiController(RestApiController):
     response_model = TeachersListResponse
 
     async def controller(self, db_session: Session = Depends(session_factory)):
-        teacher_query = db_session.query(TeacherModel)
-        teachers = [TypeAdapter(Teacher).validate_python(
-            teacher[0].__dict__) for teacher in db_session.execute(teacher_query).all()]
+        teachers_crud = TeachersCrud(TeacherModel)
+        teachers = [t.convert_to_dict()
+                    for t in teachers_crud.get_multi(db_session)]
         response = TeachersListResponse(teachers=teachers, count=len(teachers))
         return response
 
