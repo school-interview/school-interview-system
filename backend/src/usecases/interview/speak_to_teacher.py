@@ -45,7 +45,8 @@ def get_questions(session: Session):
     all_questions: List[InterviewQuestionModel] = session.execute(
         question_query).scalars().all()
     for question in all_questions:
-        questions[question.order] = question.convert_to_dict()
+        questions[question.order] = question
+        print(question.order, questions[question.order])
     return questions
 
 
