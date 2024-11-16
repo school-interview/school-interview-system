@@ -26,7 +26,7 @@ class StartInterviewSessionRestApiController(RestApiController):
                 detail="You are not allowed to start an interview for another user."
             )
         try:
-            interview_session_model = start_interview(
+            interview_session_model: InterviewSessionModel = start_interview(
                 db_session, user_id, teacher_id)
 
         except InterviewAlreadyStartedException:
@@ -36,12 +36,12 @@ class StartInterviewSessionRestApiController(RestApiController):
                 title="Interview already started.",
                 detail="You can only start one interview at a time. Please finish the current interview first."
             )
-        interview_session = TypeAdapter(
-            InterviewSession).validate_python(interview_session_model.__dict__)
-        interview_session.teacher = TypeAdapter(Teacher).validate_python(
-            interview_session_model.teacher.__dict__)
-        interview_session.user = TypeAdapter(User).validate_python(
-            interview_session_model.user.__dict__)
+        model_class_mapping = {
+            "TeacherModel": Teacher,
+            "UserModel": User
+        }
+        interview_session = interview_session_model.convertToPydantic(
+            InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
         question_query = db_session.query(InterviewQuestionModel).where(
             InterviewQuestionModel.order == 1)
         first_question: Optional[InterviewQuestionModel] = db_session.execute(
@@ -85,7 +85,7 @@ class SpeakToTeacherRestApiController(RestApiController):
             "UserModel": User
         }
         # TODO: speak_to_teacher内で参照されているはずなので、NoneにならないはずなのだがなぜかNoneになることがあるので、応急処置として参照。要修正。
-        interview_session_model.teacher
+        # interview_session_model.teacher
         teacher_response = TeacherResponse(
             message_from_teacher=message_from_teacher,
             interview_session=interview_session_model.convertToPydantic(
