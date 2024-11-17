@@ -81,7 +81,7 @@ class OAuthCallbackRestApiController(RestApiController):
         login_result = LoginResult(
             id_token=id_token,
             refresh_token=refresh_token,
-            user=user_model.convertToPydantic(
+            user=user_model.convert_to_pydantic(
                 User, set(), model_class_mapping=model_class_mapping)
         )
         response_body = f"""

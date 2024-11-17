@@ -45,8 +45,9 @@ def get_questions(session: Session):
     all_questions: List[InterviewQuestionModel] = session.execute(
         question_query).scalars().all()
     for question in all_questions:
-        questions[question.order] = TypeAdapter(
-            InterviewQuestion).validate_python(question.__dict__)
+        questions[question.order] = question.convert_to_pydantic(
+            InterviewQuestion, obj_history=set())
+        print(question.order, questions[question.order])
     return questions
 
 

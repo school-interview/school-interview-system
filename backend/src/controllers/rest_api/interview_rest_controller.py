@@ -26,7 +26,7 @@ class StartInterviewSessionRestApiController(RestApiController):
                 detail="You are not allowed to start an interview for another user."
             )
         try:
-            interview_session_model = start_interview(
+            interview_session_model: InterviewSessionModel = start_interview(
                 db_session, user_id, teacher_id)
 
         except InterviewAlreadyStartedException:
@@ -36,12 +36,12 @@ class StartInterviewSessionRestApiController(RestApiController):
                 title="Interview already started.",
                 detail="You can only start one interview at a time. Please finish the current interview first."
             )
-        interview_session = TypeAdapter(
-            InterviewSession).validate_python(interview_session_model.__dict__)
-        interview_session.teacher = TypeAdapter(Teacher).validate_python(
-            interview_session_model.teacher.__dict__)
-        interview_session.user = TypeAdapter(User).validate_python(
-            interview_session_model.user.__dict__)
+        model_class_mapping = {
+            "TeacherModel": Teacher,
+            "UserModel": User
+        }
+        interview_session = interview_session_model.convert_to_pydantic(
+            InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
         question_query = db_session.query(InterviewQuestionModel).where(
             InterviewQuestionModel.order == 1)
         first_question: Optional[InterviewQuestionModel] = db_session.execute(
@@ -86,7 +86,7 @@ class SpeakToTeacherRestApiController(RestApiController):
         }
         teacher_response = TeacherResponse(
             message_from_teacher=message_from_teacher,
-            interview_session=interview_session_model.convertToPydantic(
+            interview_session=interview_session_model.convert_to_pydantic(
                 InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
         )
 
@@ -149,8 +149,7 @@ class AnalyticsInterviewRestApiController(RestApiController):
         interview_analytics_model: InterviewAnalyticsModel = analyze_interview(
             db_session, interview_session, interview_record)
 
-        interview_analytics_model.id  # 参照するまでマップされてなさそうな予感なので参照しておく。。。
-        interview_analytics_dict = interview_analytics_model.__dict__
+        interview_analytics_dict = interview_analytics_model.convert_to_dict()
         interview_analytics = TypeAdapter(InterviewAnalytics).validate_python(
             interview_analytics_dict)
         return interview_analytics
