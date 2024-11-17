@@ -7,10 +7,9 @@ import 'package:client/constant/select_items.dart';
 import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
-import 'package:client/router/go_router.dart';
+import 'package:client/view/avatar_select/avatar_select_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 /// 情報入力画面
 class ProfileInputView extends ConsumerStatefulWidget {
@@ -98,7 +97,11 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                       );
                       // 非同期処理の後にウィジェットがまだ存在するかを確認
                       if (context.mounted) {
-                        context.push(RouterPath.avatarSelectView);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                            return const AvatarSelectView();
+                          }),
+                        );
                       }
                     }
                   },
