@@ -4,8 +4,10 @@ import 'package:client/component/input_text_field.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
+import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
+import 'package:client/router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +25,6 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.read(profileInputViewNotifierProvider.notifier);
     final loginState = ref.watch(loginNotifierProvider);
 
     return Scaffold(
@@ -60,7 +61,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                 const SizedBox(height: 15),
                 _buildSelectMajorPullDown(),
                 const SizedBox(height: 15),
-                _buildSelectSemesterPullDown(notifier),
+                _buildSelectSemesterPullDown(),
                 const SizedBox(height: 15),
                 buildInputTextField(
                   labelText: "学籍番号",
@@ -75,7 +76,9 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     return null;
                   },
                   onChanged: (value) {
-                    notifier.setStudentId(value);
+                    final notifier =
+                        ref.read(profileInputViewNotifierProvider.notifier);
+                    notifier.saveStudentData(PrefKeys.studentId, value);
                   },
                 ),
                 const SizedBox(height: 30),
@@ -84,10 +87,18 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                   onTapButton: () async {
                     if (formKey.currentState?.validate() ?? false) {
                       // バリデーションが成功した場合にのみ処理を行う
-                      await notifier.putUserInfo();
+                      /// TODO ユーザーデータや学生データの要素がnullのときに代わりの値を入れるようにしているが、エラーアラートを表示し、ログイン画面に戻す必要がある
+                      /// → 誤った学籍番号や学科などの情報で面談が進んでしまうため
+                      final notifier =
+                          ref.read(profileInputViewNotifierProvider.notifier);
+                      final studentUpdate = await notifier.setStudentUpdate();
+                      await notifier.putStudentInfo(
+                        loginState.user?.id ?? "",
+                        studentUpdate,
+                      );
                       // 非同期処理の後にウィジェットがまだ存在するかを確認
                       if (context.mounted) {
-                        context.push("/avatar-select");
+                        context.push(RouterPath.avatarSelectView);
                       }
                     }
                   },
@@ -102,8 +113,6 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
 
   /// 学科のプルダウンを作成するWidget
   Widget _buildSelectMajorPullDown() {
-    final notifier = ref.read(profileInputViewNotifierProvider.notifier);
-
     const majorSelects = SelectItems.majors;
     List<DropdownMenuItem<String>> pullDownItems = [];
     for (int i = 0; i < majorSelects.length; i++) {
@@ -140,7 +149,9 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
         },
         onChanged: (String? value) {
           if (value != null) {
-            notifier.setDepartment(value);
+            final notifier =
+                ref.read(profileInputViewNotifierProvider.notifier);
+            notifier.saveStudentData(PrefKeys.department, value);
           }
         },
       ),
@@ -148,7 +159,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
   }
 
   /// 学期のプルダウンを作成するWidget
-  Widget _buildSelectSemesterPullDown(ProfileInputViewNotifier viewModel) {
+  Widget _buildSelectSemesterPullDown() {
     const semesterSelects = SelectItems.semesters;
     List<DropdownMenuItem<String>> pullDownItems = [];
     semesterSelects.forEach((key, value) {
@@ -187,7 +198,9 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
           if (value != null) {
             for (var item in semesterSelects.entries) {
               if (item.value == value) {
-                viewModel.setSemester(item.key);
+                final notifier =
+                    ref.read(profileInputViewNotifierProvider.notifier);
+                notifier.saveStudentData(PrefKeys.semester, value);
                 return;
               }
             }
