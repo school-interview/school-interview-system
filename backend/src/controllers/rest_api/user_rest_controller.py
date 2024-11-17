@@ -16,9 +16,9 @@ class UsersRestApiController(RestApiController):
     response_model = List[User]
 
     async def controller(self, db_session: Session = Depends(session_factory), user_model=Depends(verify_admin)):
-        user_query = db_session.query(UserModel)
-        users = [TypeAdapter(User).validate_python(
-            user[0].__dict__) for user in db_session.execute(user_query).all()]
+        users_crud = UsersCrud(UserModel)
+        users = [user.convert_to_dict()
+                 for user in users_crud.get_multi(db_session)]
         return users
 
 
@@ -35,10 +35,10 @@ class MeRestApiController(RestApiController):
         }
         if user_model.is_admin:
             user_model = users_crud.get_with_admin(db_session, user_model.id)
-            return user_model.convertToPydantic(User, set(), model_class_mapping)
+            return user_model.convert_to_pydantic(User, set(), model_class_mapping)
         else:
             user_model = users_crud.get_with_student(db_session, user_model.id)
-            return user_model.convertToPydantic(User, set(), model_class_mapping)
+            return user_model.convert_to_pydantic(User, set(), model_class_mapping)
 
 
 class UpdateStudentRestApiController(RestApiController):
@@ -61,7 +61,7 @@ class UpdateStudentRestApiController(RestApiController):
         student_model = student_crud.get_by_user_id(db_session, user_model.id)
         student_model = student_crud.update(db_session, db_obj=student_model,
                                             obj_in=setudent_update)
-        return student_model.convertToPydantic(Student, set(), model_class_mapping)
+        return student_model.convert_to_pydantic(Student, set(), model_class_mapping)
 
 
 user_rest_api_controllers: List[RestApiController] = [
