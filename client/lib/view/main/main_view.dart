@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:client/generated/l10n.dart';
-import 'package:client/router/go_router.dart';
+import 'package:client/view/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,15 +15,11 @@ class MainView extends ConsumerStatefulWidget {
 }
 
 class _MainView extends ConsumerState<MainView> {
-  final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerDelegate: goRouter.routerDelegate,
-      routeInformationParser: goRouter.routeInformationParser,
-      routeInformationProvider: goRouter.routeInformationProvider,
-
+    return MaterialApp(
+      // 初期画面
+      home: const LoginView(),
       scrollBehavior: CustomScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,
