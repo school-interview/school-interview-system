@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
-from langchain.llms.huggingface_pipeline import HuggingFacePipeline
+from langchain_huggingface import HuggingFacePipeline
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from huggingface_hub import hf_hub_download
 from langchain_community.chat_models import ChatLlamaCpp
