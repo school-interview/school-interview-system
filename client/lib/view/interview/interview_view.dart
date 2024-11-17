@@ -6,10 +6,9 @@ import 'package:client/constant/color.dart';
 import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
-import 'package:client/router/go_router.dart';
+import 'package:client/view/interview_analytics/interview_analytics_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// 面談画面
@@ -35,9 +34,14 @@ class _InterviewView extends ConsumerState<InterviewView> {
   @override
   Widget build(BuildContext context) {
     ref.listen<bool>(
-        interviewViewNotifierProvider.select((value) => value.isFinishInterview), (_, next) {
+        interviewViewNotifierProvider
+            .select((value) => value.isFinishInterview), (_, next) {
       // 面談が終了したら画面遷移する
-      context.push(RouterPath.interviewAnalyticsView);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) {
+          return const InterviewAnalyticsView();
+        }),
+      );
     });
     final state = ref.watch(interviewViewNotifierProvider);
     return Scaffold(

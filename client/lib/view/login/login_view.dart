@@ -6,10 +6,10 @@ import 'package:client/constant/color.dart';
 import 'package:client/constant/result.dart';
 import 'package:client/constant/uri_string.dart';
 import 'package:client/notifier/login/login_notifier.dart';
-import 'package:client/router/go_router.dart';
+import 'package:client/view/profile_input/profile_input_view.dart';
+import 'package:client/view/result_management/result_management_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 /// ログイン画面
@@ -95,11 +95,19 @@ class _LoginView extends ConsumerState<LoginView> {
         logger.d(loginState.isAdmin);
         if (loginState.isAdmin == true) {
           // 教員向け画面へ遷移する
-          context.push(RouterPath.resultManagementView);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) {
+              return const ResultManagementView();
+            }),
+          );
           break;
         } else if (loginState.isAdmin == false) {
           // 学生向け画面へ遷移する
-          context.push(RouterPath.profileInputView);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) {
+              return const ProfileInputView();
+            }),
+          );
           break;
         } else {
           // TODO 教員か学生かが不明である旨を知らせるアラート表示
