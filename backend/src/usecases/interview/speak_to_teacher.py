@@ -56,7 +56,7 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
     if interview_session.done:
         raise Exception("The interview session is already done.")
     questions = get_questions(db_session)
-    extraction_result = extract_answer(
+    extraction_result = extract_value(
         interview_session, message_from_user, questions)
     if extraction_result.succeeded_to_extract:
         interview_record_query = db_session.query(InterviewRecordModel).where(
@@ -206,7 +206,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
         return response
 
 
-def extract_answer(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
+def extract_value(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
     current_question = questions[interview_session.progress]
     prompt_template = current_question.prompt + """
     Please extract structured data from the following [text]. If extraction is not possible, input 'None'.
@@ -248,7 +248,7 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
     response = chain.invoke({"text": message_from_student},
                             config={"callbacks": [ConsoleCallbackHandler()]}).dict()
     retrievedValue = None
-    print("れすぽんす", response)
+
     match interview_session.progress:
         case 1:
             retrievedValue = response['credit']
