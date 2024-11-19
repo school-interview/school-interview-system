@@ -150,7 +150,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
 ✅ 単位取得について
 次学期終了時点での予定単位取得数が推奨単位数に達していません。単位取得についての計画を立てることをお勧めします。
 """
-        if deviation_from_minimum_attendance_rate < 0:
+        if deviation_from_minimum_attendance_rate > 0:
             advise += """
 ✅ 出席率について
 出席率が66%を下回っています。もし出席し辛い事情がありましたら、担当教員に相談することができます。
