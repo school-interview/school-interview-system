@@ -22,6 +22,7 @@ class InterviewAnalytics {
     required this.highAttendanceLowGpaRate,
     required this.lowAtendanceAndLowGpaRate,
     required this.supportNecessityLevel,
+    this.advise,
   });
 
   String id;
@@ -42,6 +43,8 @@ class InterviewAnalytics {
 
   num supportNecessityLevel;
 
+  String? advise;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is InterviewAnalytics &&
     other.id == id &&
@@ -52,7 +55,8 @@ class InterviewAnalytics {
     other.deviationFromMinimumAttendanceRate == deviationFromMinimumAttendanceRate &&
     other.highAttendanceLowGpaRate == highAttendanceLowGpaRate &&
     other.lowAtendanceAndLowGpaRate == lowAtendanceAndLowGpaRate &&
-    other.supportNecessityLevel == supportNecessityLevel;
+    other.supportNecessityLevel == supportNecessityLevel &&
+    other.advise == advise;
 
   @override
   int get hashCode =>
@@ -65,10 +69,11 @@ class InterviewAnalytics {
     (deviationFromMinimumAttendanceRate.hashCode) +
     (highAttendanceLowGpaRate.hashCode) +
     (lowAtendanceAndLowGpaRate.hashCode) +
-    (supportNecessityLevel.hashCode);
+    (supportNecessityLevel.hashCode) +
+    (advise == null ? 0 : advise!.hashCode);
 
   @override
-  String toString() => 'InterviewAnalytics[id=$id, sessionId=$sessionId, session=$session, failToMoveToNextGrade=$failToMoveToNextGrade, deviationFromPreferredCreditLevel=$deviationFromPreferredCreditLevel, deviationFromMinimumAttendanceRate=$deviationFromMinimumAttendanceRate, highAttendanceLowGpaRate=$highAttendanceLowGpaRate, lowAtendanceAndLowGpaRate=$lowAtendanceAndLowGpaRate, supportNecessityLevel=$supportNecessityLevel]';
+  String toString() => 'InterviewAnalytics[id=$id, sessionId=$sessionId, session=$session, failToMoveToNextGrade=$failToMoveToNextGrade, deviationFromPreferredCreditLevel=$deviationFromPreferredCreditLevel, deviationFromMinimumAttendanceRate=$deviationFromMinimumAttendanceRate, highAttendanceLowGpaRate=$highAttendanceLowGpaRate, lowAtendanceAndLowGpaRate=$lowAtendanceAndLowGpaRate, supportNecessityLevel=$supportNecessityLevel, advise=$advise]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -85,6 +90,11 @@ class InterviewAnalytics {
       json[r'highAttendanceLowGpaRate'] = this.highAttendanceLowGpaRate;
       json[r'lowAtendanceAndLowGpaRate'] = this.lowAtendanceAndLowGpaRate;
       json[r'supportNecessityLevel'] = this.supportNecessityLevel;
+    if (this.advise != null) {
+      json[r'advise'] = this.advise;
+    } else {
+      json[r'advise'] = null;
+    }
     return json;
   }
 
@@ -116,6 +126,7 @@ class InterviewAnalytics {
         highAttendanceLowGpaRate: num.parse('${json[r'highAttendanceLowGpaRate']}'),
         lowAtendanceAndLowGpaRate: num.parse('${json[r'lowAtendanceAndLowGpaRate']}'),
         supportNecessityLevel: num.parse('${json[r'supportNecessityLevel']}'),
+        advise: mapValueOfType<String>(json, r'advise'),
       );
     }
     return null;
