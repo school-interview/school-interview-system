@@ -145,7 +145,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
 ✅ 進級について
 進級できない可能性があります。担当教員との面談をお勧めします。
 """
-        if deviation_from_preferred_credit_level < 1:
+        if deviation_from_preferred_credit_level > 0:
             advise += """
 ✅ 単位取得について
 次学期終了時点での予定単位取得数が推奨単位数に達していません。単位取得についての計画を立てることをお勧めします。
