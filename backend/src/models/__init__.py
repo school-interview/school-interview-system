@@ -9,6 +9,7 @@ from src.models.db_models.interview_record_model import InterviewRecord, Intervi
 from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel, InterviewAnalyticsUpdate
 from src.models.db_models.admin_model import Admin, AdminModel, AdminUpdate
 from src.models.db_models.student_model import Student, StudentModel, StudentUpdate
+from src.models.db_models.interview_question_group_model import InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionGroupUpdate
 
 # バックエンドアプリで使うモデル
 from src.models.app_models.extraction_result_model import ExtractionResult

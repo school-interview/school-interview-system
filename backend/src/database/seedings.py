@@ -1,13 +1,14 @@
 import uuid
 from sqlalchemy.orm import Session
-from src.models import TeacherModel, EntityBaseModel, InterviewQuestionModel
+from src.models import TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
 from typing import List, Type
 from sqlalchemy.orm import Session
 
 
 def seed_all(session: Session):
     seed_teachers(session)
-    seed_questions(session)
+    question_groups = seed_question_groups(session)
+    seed_questions(session, question_groups)
 
 
 def seed_teachers(session: Session):
@@ -26,48 +27,181 @@ def seed_teachers(session: Session):
     session.commit()
 
 
-def seed_questions(session: Session):
+def seed_question_groups(session: Session):
     row_count = get_number_of_rows(session, InterviewQuestionModel)
+
     if row_count > 0:
+        groups: List[InterviewQuestionGroupModel] = [
+            InterviewQuestionGroupModel(
+                id=uuid.uuid4(),
+                group_name="現状の取得単位数に関する質問",
+                order=1,
+                questions=[]
+            ),
+            InterviewQuestionGroupModel(
+                id=uuid.uuid4(),
+                group_name="今学期の取得予定単位数に関する質問",
+                order=2,
+                questions=[]
+            ),
+            InterviewQuestionGroupModel(
+                id=uuid.uuid4(),
+                group_name="累積GPAに関する質問",
+                order=3,
+                questions=[]
+            ),
+            InterviewQuestionGroupModel(
+                id=uuid.uuid4(),
+                group_name="出席率に関する質問",
+                order=4,
+                questions=[]
+            ),
+            InterviewQuestionGroupModel(
+                id=uuid.uuid4(),
+                group_name="学校生活で困っていることに関する質問",
+                order=5,
+                questions=[]
+            ),
+            InterviewQuestionGroupModel(
+                id=uuid.uuid4(),
+                group_name="教員との面談に関する質問",
+                order=6,
+                questions=[]
+            )
+        ]
+        session.add_all(groups)
+        session.commit()
+        return groups
+    else:
+        return []
+
+
+def seed_questions(session: Session, question_groups: List[InterviewQuestionGroupModel]):
+    question_row_count = get_number_of_rows(session, InterviewQuestionModel)
+    group_row_count = get_number_of_rows(session, InterviewQuestionGroupModel)
+
+    if group_row_count > 0 or question_row_count > 0:
         return
-    questions: List[InterviewQuestionModel] = [
+    questions: List[InterviewQuestionModel] = []
+    first_group_id = question_groups[0].id
+    questions.append(
         InterviewQuestionModel(
             id=uuid.uuid4(),
+            group_id=first_group_id,
             question="現状の取得単位数は？",
-            prompt="Please extract the number of credits from the following text. Extract only the numerical value.",
             order=1,
+            prompt="Please extract the number of credits from the following text. Extract only the numerical value.",
+            condition_target_operand_data_type="int",
+            condition_left_operand=None,
+            condition_left_operator=None,
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="前学期分までの取得単位数を答えてください。（例：私は〇〇単位取得しました。）",
+            extraction_data_type="int"
         ),
+    )
+    second_group_id = question_groups[1].id
+    questions.append(
         InterviewQuestionModel(
             id=uuid.uuid4(),
+            group_id=second_group_id,
             question="今学期の取得予定単位数は？",
+            order=1,
             prompt="Please extract the number of credits planned to be taken this semester from the following text. Extract only the numerical value.",
-            order=2,
-        ),
-        InterviewQuestionModel(
-            id=uuid.uuid4(),
-            question="累積GPAは?",
-            prompt="Please extract the cumulative GPA from the following text. Extract only the numerical value",
-            order=3,
-        ),
-        InterviewQuestionModel(
-            id=uuid.uuid4(),
-            question="出席率は？",
-            prompt="Please extract the attendance rate from the following text. Extract only the numerical value.",
-            order=4
-        ),
-        InterviewQuestionModel(
-            id=uuid.uuid4(),
-            question="学校生活で困っていることは？",
-            prompt="“Please extract the factors causing difficulties in school life from the following text. If no difficulties are observed, input 'None'.",
-            order=5
-        ),
-        InterviewQuestionModel(
-            id=uuid.uuid4(),
-            question="教員との面談を希望しますか？",
-            prompt="Please extract whether a meeting with the teacher is requested from the following text. Extract as `True` or `False`.",
-            order=6
+            condition_target_operand_data_type="int",
+            condition_left_operand=None,
+            condition_left_operator=None,
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="今学期の取得予定単位数を答えてください。（例：私は〇〇単位取得予定です。）",
+            extraction_data_type="int"
         )
-    ]
+    )
+    third_group_id = question_groups[2].id
+    questions.append(
+        InterviewQuestionModel(
+            id=uuid.uuid4(),
+            group_id=third_group_id,
+            question="累積GPAは?",
+            order=1,
+            prompt="Please extract the number of credits planned to be taken this semester from the following text. Extract only the numerical value.",
+            condition_target_operand_data_type="float",
+            condition_left_operand=None,
+            condition_left_operator=None,
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="累積GPAを答えてください。（例：私の累積GPAは〇〇.〇です。）",
+            extraction_data_type="float"
+        )
+    )
+    forth_group_id = question_groups[3].id
+    questions.append(
+        InterviewQuestionModel(
+            id=uuid.uuid4(),
+            group_id=forth_group_id,
+            question="出席率は？",
+            order=1,
+            prompt="Please extract the attendance rate from the following text. Extract only the numerical value.",
+            condition_target_operand_data_type="int",
+            condition_left_operand=None,
+            condition_left_operator=None,
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="出席率を答えてください。（例：私の出席率は〇〇%です。）",
+            extraction_data_type="int"
+        )
+    )
+    questions.append(
+        InterviewQuestionModel(
+            id=uuid.uuid4(),
+            group_id=forth_group_id,
+            question="出席率が低いですが、この出席率の理由は？",
+            order=2,
+            prompt="Please extract the factors causing low attendance rate from the following text.",
+            condition_target_operand_data_type="int",
+            condition_left_operand="80",
+            condition_left_operator=">",
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="出席率が低めな理由を答えてください。（例：私は〇〇という理由で出席率が低いです。）",
+            extraction_data_type="str"
+        )
+    )
+    fifth_group_id = question_groups[4].id
+    questions.append(
+        InterviewQuestionModel(
+            id=uuid.uuid4(),
+            group_id=fifth_group_id,
+            question="学校生活で困っていることは？",
+            order=1,
+            prompt="Please extract the factors causing difficulties in school life from the following text. If no difficulties are observed, input 'None'.",
+            condition_target_operand_data_type="str",
+            condition_left_operand=None,
+            condition_left_operator=None,
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="学校生活で困っていることがあれあお気軽にお話しください。特にない場合は「困っていることは特にありません」などとご回答ください。",
+            extraction_data_type="str",
+        )
+    )
+    sixth_group_id = question_groups[5].id
+    questions.append(
+        InterviewQuestionModel(
+            id=uuid.uuid4(),
+            group_id=sixth_group_id,
+            question="教員との面談を希望しますか？",
+            order=1,
+            prompt="Please extract whether a meeting with the teacher is requested from the following text. Extract as `True` or `False`.",
+            condition_target_operand_data_type="bool",
+            condition_left_operand=None,
+            condition_left_operator=None,
+            condition_right_operand=None,
+            condition_right_operator=None,
+            description="実際に対面で教員と面談を実施することが可能です。面談の実施の希望の有無をお答えください。（）",
+            extraction_data_type="bool"
+        )
+    )
+
     session.add_all(questions)
     session.commit()
 
