@@ -1864,6 +1864,20 @@ test = ["pytest (==8.3.3)", "pytest-sugar (==1.0.0)"]
 type = ["mypy (==1.11.2)"]
 
 [[package]]
+name = "mock-alchemy"
+version = "0.2.6"
+description = "SQLAlchemy mock helpers."
+optional = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "mock_alchemy-0.2.6-py3-none-any.whl", hash = "sha256:d5e17f2c92d0299d70cd9a0d3c8f96f759a81c285c76b03f4192451583bf865f"},
+    {file = "mock_alchemy-0.2.6.tar.gz", hash = "sha256:807cc2bd7f658fb98292900052eaa6eeb4a65b2d62364e639462480a275299ef"},
+]
+
+[package.dependencies]
+SQLAlchemy = ">=2.0.6,<3.0.0"
+
+[[package]]
 name = "monotonic"
 version = "1.6"
 description = "An implementation of time.monotonic() for Python 2 & < 3.3"
@@ -4810,4 +4824,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "5c553007a7dbfc87817203bb3fc8a9f29f62b30d7ebb58f887df4d194342cfe2"
+content-hash = "e6213cb5efc7b070f2444300f46401bc3530644fba02bf34455d9df25cfcd098"
