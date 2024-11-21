@@ -42,10 +42,7 @@ class StartInterviewSessionRestApiController(RestApiController):
         }
         interview_session = interview_session_model.convert_to_pydantic(
             InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
-        question_query = db_session.query(InterviewQuestionModel).where(
-            InterviewQuestionModel.order == 1)
-        first_question: Optional[InterviewQuestionModel] = db_session.execute(
-            question_query).first()[0]
+
         response = StartInterviewResponse(
             interview_session=interview_session,
             message_from_teacher=first_question.question

@@ -8,6 +8,7 @@ from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
 from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Concern, PreferInPerson, UserModel, ExtractionResult, TeacherModel, InterviewRecordModel, InterviewAlreadyStartedException, Teacher
+from src.crud import InterviewSessionsCrud
 
 
 def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
@@ -16,6 +17,7 @@ def start_interview(session: Session, user_id: UUID, teacher_id: UUID, delete_cu
     current_interview_rows: Optional[InterviewSessionModel] = session.execute(
         current_interview_query).first()
     current_interview = current_interview_rows[0] if current_interview_rows else None
+
     if current_interview and delete_current_interview:
         finish_interview(session, current_interview)
         session.commit()
