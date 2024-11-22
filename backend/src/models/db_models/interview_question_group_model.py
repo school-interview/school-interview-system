@@ -18,4 +18,5 @@ class InterviewQuestionGroupModel(EntityBaseModel):
     __tablename__ = "InterviewQuestionGroups"
     id: Mapped[UUID] = mapped_column(primary_key=True)
     group_name: Mapped[str] = mapped_column(String(100))
+    order: Mapped[int]
     questions: Mapped[List[InterviewQuestionModel]] = relationship()

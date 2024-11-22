@@ -8,7 +8,8 @@ from sqlalchemy.orm import Session
 def seed_all(session: Session):
     seed_teachers(session)
     question_groups = seed_question_groups(session)
-    seed_questions(session, question_groups)
+    if len(question_groups) > 0:
+        seed_questions(session, question_groups)
 
 
 def seed_teachers(session: Session):

@@ -40,6 +40,10 @@ class InterviewQuestionModel(EntityBaseModel):
     prompt: Mapped[str] = mapped_column(String(200))
     description: Mapped[Optional[str]] = mapped_column(String(200))
     extraction_data_type: Mapped[str] = mapped_column(String(5))
+    interview_sessions = relationship("InterviewSessionModel",
+                                      back_populates="current_question")
+    interview_records = relationship(
+        "InterviewRecordModel", back_populates="question")
 
 
 class InterviewQuestionUpdate(AppPydanticBaseModel):
