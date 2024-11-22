@@ -31,8 +31,8 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(interviewAnalyticsViewNotifierProvider);
     final analytics = widget.interviewAnalytics;
-
     // 以下、要支援レベルを構成する要素の値
     var e1Value = SupportLevel.attendance
         .getElementValue(analytics.deviationFromMinimumAttendanceRate);
@@ -107,19 +107,21 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description: SupportLevel.attendance.description,
                               parameter: SupportLevel.attendance.parameter,
                               value: e1Value,
                               chartColor: SupportLevel.attendance.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description: SupportLevel.credit.description,
                               parameter: SupportLevel.credit.parameter,
                               value: e2Value,
                               chartColor: SupportLevel.credit.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description:
                                   SupportLevel.highAttendanceLowGpa.description,
                               parameter:
@@ -127,8 +129,9 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                               value: e3Value,
                               chartColor:
                                   SupportLevel.highAttendanceLowGpa.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description:
                                   SupportLevel.lowAttendanceLowGpa.description,
                               parameter:
@@ -136,6 +139,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                               value: e4Value,
                               chartColor:
                                   SupportLevel.lowAttendanceLowGpa.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
                             const SizedBox(height: 14),
                             Card(
@@ -168,18 +172,32 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
       ),
     );
   }
+}
 
-  /// 要支援レベルの内訳を表示するWidget
-  ///
-  /// [parameter] 母数（その要素に割り振られているパラメータ）
-  /// [value] 実際の値
-  Widget _supportNecessityLevelElement({
-    required String description,
-    required double parameter,
-    required String value,
-    required Color chartColor,
-  }) {
-    final state = ref.watch(interviewAnalyticsViewNotifierProvider);
+/// 要支援レベルの内訳を表示するWidget
+///
+/// [description] その要支援レベル要素の説明文
+/// [parameter] 母数（その要素に割り振られているパラメータ）
+/// [value] 実際の値
+/// [chartColor] 棒グラフの色
+/// [isAnimated] アニメーション中かどうかのフラグ
+class _SupportNecessityLevelElement extends StatelessWidget {
+  const _SupportNecessityLevelElement({
+    required this.description,
+    required this.parameter,
+    required this.value,
+    required this.chartColor,
+    required this.isAnimated,
+  });
+
+  final String description;
+  final double parameter;
+  final String value;
+  final Color chartColor;
+  final bool isAnimated;
+
+  @override
+  Widget build(BuildContext context) {
     const double meterHeight = 20;
     const double meterRadius = 20;
     double meterWidth = MediaQuery.of(context).size.width * 0.6;
@@ -223,7 +241,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                     ),
                   ),
                   AnimatedContainer(
-                    width: state.isAnimated
+                    width: isAnimated
                         ? (meterWidth * double.parse(value)) / parameter
                         : 0,
                     height: meterHeight,
