@@ -51,4 +51,3 @@ lib/model/user.dart
 lib/model/validation_error.dart
 lib/model/validation_error_loc_inner.dart
 pubspec.yaml
-test/interview_reports_response_test.dart
