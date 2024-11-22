@@ -2,15 +2,16 @@ import 'dart:core';
 
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_analytics_view/interview_analytics_view_notifier.dart';
-import 'package:client/notifier/interview_view/interview_view_notifier.dart';
 import 'package:client/ui_core/support_necessity_level.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pie_chart/pie_chart.dart';
+import 'package:openapi/api.dart';
 
 /// 要支援レベル画面
 class InterviewAnalyticsView extends ConsumerStatefulWidget {
-  const InterviewAnalyticsView({super.key});
+  const InterviewAnalyticsView({super.key, required this.interviewAnalytics});
+
+  final InterviewAnalytics interviewAnalytics;
 
   @override
   ConsumerState<InterviewAnalyticsView> createState() =>
@@ -30,32 +31,17 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.read(interviewAnalyticsViewNotifierProvider.notifier);
-    final interviewState = ref.watch(interviewViewNotifierProvider);
-    final analytics = interviewState.interviewAnalytics;
-
+    final state = ref.watch(interviewAnalyticsViewNotifierProvider);
+    final analytics = widget.interviewAnalytics;
     // 以下、要支援レベルを構成する要素の値
     var e1Value = SupportLevel.attendance
-        .getElementValue(analytics?.deviationFromMinimumAttendanceRate);
+        .getElementValue(analytics.deviationFromMinimumAttendanceRate);
     var e2Value = SupportLevel.credit
-        .getElementValue(analytics?.deviationFromPreferredCreditLevel);
+        .getElementValue(analytics.deviationFromPreferredCreditLevel);
     var e3Value = SupportLevel.highAttendanceLowGpa
-        .getElementValue(analytics?.highAttendanceLowGpaRate);
+        .getElementValue(analytics.highAttendanceLowGpaRate);
     var e4Value = SupportLevel.lowAttendanceLowGpa
-        .getElementValue(analytics?.lowAtendanceAndLowGpaRate);
-
-    // 要支援レベルを構成する要素の値リスト
-    List<double> valueList = [
-      double.parse(e1Value),
-      double.parse(e2Value),
-      double.parse(e3Value),
-      double.parse(e4Value)
-    ];
-    // 円グラフに表示するデータ
-    final isFullScore =
-        interviewState.interviewAnalytics?.failToMoveToNextGrade ?? false;
-    Map<String, double> dataMap =
-        notifier.createChartDataMap(valueList, isFullScore);
+        .getElementValue(analytics.lowAtendanceAndLowGpaRate);
 
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
@@ -78,43 +64,37 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  Card(
-                    color: ColorDefinitions.primaryColor,
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 5),
-                        const Text(
-                          "要支援レベル",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
+                  if (analytics.advise != "") ...[
+                    Center(
+                      child: Card(
+                        color: ColorDefinitions.primaryColor,
+                        elevation: 5,
+                        child: Padding(
                           padding: const EdgeInsets.all(24),
-                          child: PieChart(
-                            dataMap: dataMap,
-                            centerWidget: _centerWidget(isFullScore),
-                            animationDuration:
-                                const Duration(milliseconds: 800),
-                            chartRadius: 140,
-                            initialAngleInDegree: 270,
-                            chartType: ChartType.ring,
-                            ringStrokeWidth: 32,
-                            legendOptions:
-                                const LegendOptions(showLegends: false),
-                            chartValuesOptions: const ChartValuesOptions(
-                              showChartValueBackground: true,
-                              showChartValues: true,
-                              showChartValuesOutside: true,
-                              decimalPlaces: 1,
-                            ),
-                            totalValue: 100,
-                            baseChartColor: Colors.grey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.smart_toy,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "AIアドバイス：",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text("${analytics.advise}"),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                   const SizedBox(height: 16),
                   const Text(
                     "要支援レベル内訳",
@@ -122,26 +102,29 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                   ),
 
                   /// 進級条件に満たない場合と満たす場合で表示する内容を変える
-                  isFullScore
+                  analytics.failToMoveToNextGrade
                       ? const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text("修得単位数が進級条件に満たないため、支援必須と判断されました。"),
                         )
                       : Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description: SupportLevel.attendance.description,
                               parameter: SupportLevel.attendance.parameter,
                               value: e1Value,
                               chartColor: SupportLevel.attendance.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description: SupportLevel.credit.description,
                               parameter: SupportLevel.credit.parameter,
                               value: e2Value,
                               chartColor: SupportLevel.credit.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description:
                                   SupportLevel.highAttendanceLowGpa.description,
                               parameter:
@@ -149,8 +132,9 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                               value: e3Value,
                               chartColor:
                                   SupportLevel.highAttendanceLowGpa.chartColor,
+                              isAnimated: state.isAnimated,
                             ),
-                            _supportNecessityLevelElement(
+                            _SupportNecessityLevelElement(
                               description:
                                   SupportLevel.lowAttendanceLowGpa.description,
                               parameter:
@@ -158,6 +142,28 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                               value: e4Value,
                               chartColor:
                                   SupportLevel.lowAttendanceLowGpa.chartColor,
+                              isAnimated: state.isAnimated,
+                            ),
+                            const SizedBox(height: 14),
+                            Card(
+                              color: ColorDefinitions.primaryColor,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "総合  ${analytics.supportNecessityLevel}",
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const Text(" /100"),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -169,45 +175,38 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
       ),
     );
   }
+}
 
-  /// 要支援レベル円グラフ中央に表示するWidget
-  Widget _centerWidget(bool isFullScore) {
-    final interviewState = ref.watch(interviewViewNotifierProvider);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          isFullScore
-              ? "100"
-              : "${interviewState.interviewAnalytics?.supportNecessityLevel.toDouble().toStringAsFixed(1) ?? 0}",
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Text(" /100"),
-      ],
-    );
-  }
+/// 要支援レベルの内訳を表示するWidget
+///
+/// [description] その要支援レベル要素の説明文
+/// [parameter] 母数（その要素に割り振られているパラメータ）
+/// [value] 実際の値
+/// [chartColor] 棒グラフの色
+/// [isAnimated] アニメーション中かどうかのフラグ
+class _SupportNecessityLevelElement extends StatelessWidget {
+  const _SupportNecessityLevelElement({
+    required this.description,
+    required this.parameter,
+    required this.value,
+    required this.chartColor,
+    required this.isAnimated,
+  });
 
-  /// 要支援レベルの内訳を表示するWidget
-  ///
-  /// [parameter] 母数（その要素に割り振られているパラメータ）
-  /// [value] 実際の値
-  Widget _supportNecessityLevelElement({
-    required String description,
-    required double parameter,
-    required String value,
-    required Color chartColor,
-  }) {
-    final state = ref.watch(interviewAnalyticsViewNotifierProvider);
+  final String description;
+  final double parameter;
+  final String value;
+  final Color chartColor;
+  final bool isAnimated;
+
+  @override
+  Widget build(BuildContext context) {
     const double meterHeight = 20;
     const double meterRadius = 20;
     double meterWidth = MediaQuery.of(context).size.width * 0.6;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -245,7 +244,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                     ),
                   ),
                   AnimatedContainer(
-                    width: state.isAnimated
+                    width: isAnimated
                         ? (meterWidth * double.parse(value)) / parameter
                         : 0,
                     height: meterHeight,
@@ -257,7 +256,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                   ),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(width: 10),
               Text(
                 value,
                 style:

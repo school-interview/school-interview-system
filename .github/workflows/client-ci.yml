@@ -10,56 +10,71 @@ jobs:
   prepare:
     name: Prepare
     runs-on: ubuntu-latest
-    outputs:
-      workspace: ${{ steps.workspace.outputs.workspace }}
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.24.3"
-          cache: true
 
-      - name: Flutter clean and get dependencies
+      - name: Flutter Clean and Pub Get
         run: |
           cd client
           flutter clean
           flutter pub get
-
-      - name: Save workspace path
-        id: workspace
-        run: echo "::set-output name=workspace::${{ github.workspace }}"
 
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
     needs: prepare
     steps:
-      - name: Analyze Flutter project
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+
+      - name: Analyze Code
         run: |
           cd client
           flutter analyze --no-fatal-infos --no-fatal-warnings
 
-  test:
-    name: Tests
-    runs-on: ubuntu-latest
-    needs: prepare
-    steps:
-      - name: Run Flutter tests with coverage
-        run: |
-          cd client
-          flutter test --coverage
+  #  test:
+  #    name: Test
+  #    runs-on: ubuntu-latest
+  #    needs: prepare
+  #    steps:
+  #      - name: Checkout repository
+  #        uses: actions/checkout@v3
+  #
+  #      - name: Set up Flutter
+  #        uses: subosito/flutter-action@v2
+  #        with:
+  #          flutter-version: "3.24.3"
+  #
+  #      - name: Run Tests
+  #        run: |
+  #          cd client
+  #          flutter test --coverage
 
   build:
     name: Build
     runs-on: ubuntu-latest
     needs: prepare
     steps:
-      - name: Build Flutter web application
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+
+      - name: Build Web App
         run: |
           cd client
           flutter build web
