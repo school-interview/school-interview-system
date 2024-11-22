@@ -36,12 +36,19 @@ class _InterviewView extends ConsumerState<InterviewView> {
     ref.listen<bool>(
         interviewViewNotifierProvider
             .select((value) => value.isFinishInterview), (_, next) {
-      // 面談が終了したら画面遷移する
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (BuildContext context) {
-          return const InterviewAnalyticsView();
-        }),
-      );
+      // 面談が終了、かつ面談結果データが存在していれば画面遷移する
+      final state = ref.watch(interviewViewNotifierProvider);
+      if (state.interviewAnalytics != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return InterviewAnalyticsView(
+                interviewAnalytics: state.interviewAnalytics!);
+          }),
+        );
+      } else {
+        /// TODO 面談結果nullだった場合の処理を実装
+        /// エラーダイアログを表示してログイン画面に戻る
+      }
     });
     final state = ref.watch(interviewViewNotifierProvider);
     return Scaffold(
