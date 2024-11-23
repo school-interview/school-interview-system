@@ -22,11 +22,6 @@ class LoginNotifier extends _$LoginNotifier {
   /// 以下、setter
   setResult(Result? result) => state = state.copyWith(result: result);
 
-  _setIdToken(String idToken) => state = state.copyWith(idToken: idToken);
-
-  _setRefreshToken(String refreshToken) =>
-      state = state.copyWith(refreshToken: refreshToken);
-
   _setIsAdmin(bool isAdmin) => state = state.copyWith(isAdmin: isAdmin);
 
   _setUser(User? user) => state = state.copyWith(user: user);
@@ -68,24 +63,10 @@ class LoginNotifier extends _$LoginNotifier {
     logger.i("run login()");
     Map<String, dynamic> mapLoginResult = json.decode(data);
     final result = LoginResult.fromJson(mapLoginResult);
-    _setIdToken(result?.idToken ?? "");
-    _setRefreshToken(result?.refreshToken ?? "");
-    _setToken(
-        idToken: result?.idToken,
-        refreshToken: result?.refreshToken,
-        userId: result?.user.id);
-    await getUserInfo();
-  }
-
-  /// トークンをローカルストレージに保存する
-  Future<void> _setToken({
-    required String? idToken,
-    required String? refreshToken,
-    required String? userId,
-  }) async {
-    await _sharedPreferenceManager.setString(PrefKeys.idToken, idToken);
+    await _sharedPreferenceManager.setString(PrefKeys.idToken, result?.idToken);
     await _sharedPreferenceManager.setString(
-        PrefKeys.refreshToken, refreshToken);
-    await _sharedPreferenceManager.setString(PrefKeys.userId, userId);
+        PrefKeys.refreshToken, result?.refreshToken);
+    await _sharedPreferenceManager.setString(PrefKeys.userId, result?.user.id);
+    await getUserInfo();
   }
 }

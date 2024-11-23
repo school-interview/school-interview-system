@@ -92,7 +92,6 @@ class _LoginView extends ConsumerState<LoginView> {
     switch (result) {
       case Result.success:
         loginNotifier.setResult(null);
-        logger.d(loginState.isAdmin);
         if (loginState.isAdmin == true) {
           // 教員向け画面へ遷移する
           Navigator.of(context).push(

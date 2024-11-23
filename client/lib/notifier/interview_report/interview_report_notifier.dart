@@ -1,5 +1,6 @@
 import 'package:client/app.dart';
 import 'package:client/constant/result.dart';
+import 'package:client/infrastructure/shared_preference_manager.dart';
 import 'package:client/notifier/interview_report/interview_report_state.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview_report/interview_report_repository.dart';
@@ -26,10 +27,16 @@ class InterviewReportNotifier extends _$InterviewReportNotifier {
   final InterviewReportRepository _interviewReportRepository =
       InterviewReportRepositoryImpl();
 
+  /// 永続化マネージャー
+  final SharedPreferenceManager _sharedPreferenceManager =
+      SharedPreferenceManager();
+
   /// ユーザー情報取得API
-  Future<void> getInterviewReport(String idToken) async {
+  Future<void> getInterviewReport() async {
     logger.i("run getInterviewReport()");
     try {
+      final idToken =
+          await _sharedPreferenceManager.getString(PrefKeys.idToken) ?? "";
       ApiResult<InterviewReportsResponse> response =
           await _interviewReportRepository.getInterviewReport(idToken);
       switch (response.statusCode) {

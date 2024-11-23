@@ -19,12 +19,6 @@ mixin _$LoginState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
-  /// IDトークン
-  String get idToken => throw _privateConstructorUsedError;
-
-  /// リフレッシュトークン
-  String get refreshToken => throw _privateConstructorUsedError;
-
   /// ユーザーが学生が教員か
   /// true:教員 false:学生
   bool get isAdmin => throw _privateConstructorUsedError;
@@ -43,12 +37,7 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
-  $Res call(
-      {Result? result,
-      String idToken,
-      String refreshToken,
-      bool isAdmin,
-      User? user});
+  $Res call({Result? result, bool isAdmin, User? user});
 }
 
 /// @nodoc
@@ -65,8 +54,6 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   @override
   $Res call({
     Object? result = freezed,
-    Object? idToken = null,
-    Object? refreshToken = null,
     Object? isAdmin = null,
     Object? user = freezed,
   }) {
@@ -75,14 +62,6 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
-      idToken: null == idToken
-          ? _value.idToken
-          : idToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      refreshToken: null == refreshToken
-          ? _value.refreshToken
-          : refreshToken // ignore: cast_nullable_to_non_nullable
-              as String,
       isAdmin: null == isAdmin
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
@@ -103,12 +82,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       __$$LoginStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Result? result,
-      String idToken,
-      String refreshToken,
-      bool isAdmin,
-      User? user});
+  $Res call({Result? result, bool isAdmin, User? user});
 }
 
 /// @nodoc
@@ -123,8 +97,6 @@ class __$$LoginStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? result = freezed,
-    Object? idToken = null,
-    Object? refreshToken = null,
     Object? isAdmin = null,
     Object? user = freezed,
   }) {
@@ -133,14 +105,6 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
-      idToken: null == idToken
-          ? _value.idToken
-          : idToken // ignore: cast_nullable_to_non_nullable
-              as String,
-      refreshToken: null == refreshToken
-          ? _value.refreshToken
-          : refreshToken // ignore: cast_nullable_to_non_nullable
-              as String,
       isAdmin: null == isAdmin
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
@@ -156,26 +120,11 @@ class __$$LoginStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoginStateImpl implements _LoginState {
-  const _$LoginStateImpl(
-      {this.result,
-      this.idToken = "",
-      this.refreshToken = "",
-      this.isAdmin = false,
-      this.user});
+  const _$LoginStateImpl({this.result, this.isAdmin = false, this.user});
 
   /// API処理結果
   @override
   final Result? result;
-
-  /// IDトークン
-  @override
-  @JsonKey()
-  final String idToken;
-
-  /// リフレッシュトークン
-  @override
-  @JsonKey()
-  final String refreshToken;
 
   /// ユーザーが学生が教員か
   /// true:教員 false:学生
@@ -189,7 +138,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(result: $result, idToken: $idToken, refreshToken: $refreshToken, isAdmin: $isAdmin, user: $user)';
+    return 'LoginState(result: $result, isAdmin: $isAdmin, user: $user)';
   }
 
   @override
@@ -198,16 +147,12 @@ class _$LoginStateImpl implements _LoginState {
         (other.runtimeType == runtimeType &&
             other is _$LoginStateImpl &&
             (identical(other.result, result) || other.result == result) &&
-            (identical(other.idToken, idToken) || other.idToken == idToken) &&
-            (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken) &&
             (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin) &&
             (identical(other.user, user) || other.user == user));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, result, idToken, refreshToken, isAdmin, user);
+  int get hashCode => Object.hash(runtimeType, result, isAdmin, user);
 
   @JsonKey(ignore: true)
   @override
@@ -219,8 +164,6 @@ class _$LoginStateImpl implements _LoginState {
 abstract class _LoginState implements LoginState {
   const factory _LoginState(
       {final Result? result,
-      final String idToken,
-      final String refreshToken,
       final bool isAdmin,
       final User? user}) = _$LoginStateImpl;
 
@@ -228,14 +171,6 @@ abstract class _LoginState implements LoginState {
 
   /// API処理結果
   Result? get result;
-  @override
-
-  /// IDトークン
-  String get idToken;
-  @override
-
-  /// リフレッシュトークン
-  String get refreshToken;
   @override
 
   /// ユーザーが学生が教員か
