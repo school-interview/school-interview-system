@@ -51,28 +51,49 @@ class _InterviewView extends ConsumerState<InterviewView> {
       }
     });
     final state = ref.watch(interviewViewNotifierProvider);
+    final screenHeight = MediaQuery.sizeOf(context).height;
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
       appBar: CustomAppBar().startAppBar(context),
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image:
+                  const AssetImage('assets/image/interview_background_img.png'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.white.withOpacity(0.1),
+                BlendMode.dstATop,
+              ),
+            ),
+          ),
           child: Stack(
             children: [
-              Image.asset('assets/image/sample_avatar.png'),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const SizedBox(height: 50),
-                  // アバターのセリフ
-                  _avatarChatBubble(state.avatarMessage),
-                  const SizedBox(height: 4),
-                  // ユーザーのセリフ
-                  _userChatBubble(state.userMessage),
-                  const SizedBox(height: 24),
-                  // マイクボタン
-                  _micButton()
-                ],
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  height: screenHeight * 0.5,
+                  child: Image.asset('assets/image/sample_avatar.png'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 50),
+                    // アバターのセリフ
+                    _avatarChatBubble(state.avatarMessage),
+                    const SizedBox(height: 4),
+                    // ユーザーのセリフ
+                    _userChatBubble(state.userMessage),
+                    const SizedBox(height: 24),
+                    // マイクボタン
+                    _micButton()
+                  ],
+                ),
               ),
             ],
           ),
