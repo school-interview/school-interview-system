@@ -86,10 +86,13 @@ class _InterviewView extends ConsumerState<InterviewView> {
                   children: [
                     const SizedBox(height: 50),
                     // アバターのセリフ
-                    _avatarChatBubble(state.avatarMessage),
+                    _AvatarChatBubble(
+                      text: state.avatarMessage,
+                      isLoading: state.isLoading,
+                    ),
                     const SizedBox(height: 4),
                     // ユーザーのセリフ
-                    _userChatBubble(state.userMessage),
+                    _UserChatBubble(text: state.userMessage),
                     const SizedBox(height: 24),
                     // マイクボタン
                     _micButton()
@@ -99,78 +102,6 @@ class _InterviewView extends ConsumerState<InterviewView> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  /// ユーザーチャットの吹き出しUIを生成するWidget
-  ///
-  /// [text] 話した内容を持つ
-  Widget _userChatBubble(String text) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.green[100],
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(0),
-            ),
-            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// アバターチャットの吹き出しUIを生成するWidget
-  ///
-  /// [text] 話した内容を持つ
-  Widget _avatarChatBubble(String text) {
-    final state = ref.watch(interviewViewNotifierProvider);
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(0),
-              topRight: Radius.circular(16),
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-            ),
-            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
-        child: state.isLoading
-            ? LoadingAnimationWidget.waveDots(
-                color: Colors.black87,
-                size: 16,
-              )
-            : DefaultTextStyle(
-                style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 16,
-                ),
-                child: AnimatedTextKit(
-                  isRepeatingAnimation: false,
-                  animatedTexts: [
-                    TyperAnimatedText(
-                      text,
-                      speed: const Duration(milliseconds: 100),
-                    ),
-                  ],
-                ),
-              ),
       ),
     );
   }
@@ -205,6 +136,88 @@ class _InterviewView extends ConsumerState<InterviewView> {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// ユーザーチャットの吹き出しUIを生成するWidget
+class _UserChatBubble extends StatelessWidget {
+  const _UserChatBubble({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.green[100],
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(16),
+              bottomRight: Radius.circular(0),
+            ),
+            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.black87,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// アバターチャットの吹き出しUIを生成するWidget
+class _AvatarChatBubble extends StatelessWidget {
+  const _AvatarChatBubble({required this.text, required this.isLoading});
+
+  final String text;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+            ),
+            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
+        child: isLoading
+            ? LoadingAnimationWidget.waveDots(
+                color: Colors.black87,
+                size: 16,
+              )
+            : DefaultTextStyle(
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16,
+                ),
+                child: AnimatedTextKit(
+                  isRepeatingAnimation: false,
+                  animatedTexts: [
+                    TyperAnimatedText(
+                      text,
+                      speed: const Duration(milliseconds: 100),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
