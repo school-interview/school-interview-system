@@ -11,12 +11,6 @@ abstract class LoginState with _$LoginState {
     /// API処理結果
     Result? result,
 
-    /// IDトークン
-    @Default("") String idToken,
-
-    /// リフレッシュトークン
-    @Default("") String refreshToken,
-
     /// ユーザーが学生が教員か
     /// true:教員 false:学生
     @Default(false) bool isAdmin,

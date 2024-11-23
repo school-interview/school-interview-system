@@ -1,6 +1,5 @@
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_report/interview_report_notifier.dart';
-import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/ui_core/result_management_table.dart';
 import 'package:client/ui_core/support_necessity_level.dart';
 import 'package:client/ui_core/support_necessity_level_formatter.dart';
@@ -20,10 +19,9 @@ class _ResultManagementView extends ConsumerState<ResultManagementView> {
   void initState() {
     super.initState();
     Future(() async {
-      final loginState = ref.watch(loginNotifierProvider);
       final interviewReportNotifier =
           ref.read(interviewReportNotifierProvider.notifier);
-      await interviewReportNotifier.getInterviewReport(loginState.idToken);
+      await interviewReportNotifier.getInterviewReport();
     });
   }
 
