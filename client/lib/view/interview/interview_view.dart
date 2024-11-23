@@ -6,6 +6,7 @@ import 'package:client/constant/color.dart';
 import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
+import 'package:client/ui_core/interview_mic_color.dart';
 import 'package:client/view/interview_analytics/interview_analytics_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -176,8 +177,8 @@ class _InterviewView extends ConsumerState<InterviewView> {
 
   /// マイクボタンを生成するWidget
   Widget _micButton() {
-    final notifier = ref.read(interviewViewNotifierProvider.notifier);
     final state = ref.watch(interviewViewNotifierProvider);
+    final interviewMic = InterviewMic(whoTalking: state.whoTalking);
     return Opacity(
       opacity: state.whoTalking == WhoTalking.avatar ? 0.5 : 1.0,
       child: Container(
@@ -185,7 +186,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
         height: 60,
         margin: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: notifier.micColor(state.whoTalking),
+          color: interviewMic.micColor,
           shape: BoxShape.circle,
         ),
         child: AvatarGlow(
@@ -194,11 +195,12 @@ class _InterviewView extends ConsumerState<InterviewView> {
           glowRadiusFactor: state.whoTalking == WhoTalking.user ? 0.7 : 0.0,
           child: IconButton(
             icon: Icon(
-              notifier.micIcon(state.whoTalking),
+              interviewMic.micIcon,
               color: Colors.white,
               size: state.whoTalking == WhoTalking.user ? 30 : 20,
             ),
             onPressed: () async {
+              final notifier = ref.read(interviewViewNotifierProvider.notifier);
               await notifier.micButtonTapAction();
             },
           ),

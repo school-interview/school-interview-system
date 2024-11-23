@@ -7,7 +7,6 @@ import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
 import 'package:client/repository/interview/interview_repository_impl.dart';
 import 'package:client/view/interview/interview_view_state.dart';
-import 'package:flutter/material.dart';
 import 'package:openapi/api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -208,34 +207,6 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         return;
       case WhoTalking.none:
         return _startTalking();
-    }
-  }
-
-  /// マイクボタンのカラー
-  Color? micColor(WhoTalking whoTalking) {
-    switch (whoTalking) {
-      case WhoTalking.user:
-        return Colors.red;
-      case WhoTalking.avatar:
-        return Colors.grey;
-      case WhoTalking.none:
-        return Colors.blue[200];
-      default:
-        return null;
-    }
-  }
-
-  /// マイクボタンのアイコン
-  IconData? micIcon(WhoTalking whoTalking) {
-    switch (whoTalking) {
-      case WhoTalking.user:
-        return Icons.stop;
-      case WhoTalking.avatar:
-        return Icons.mic_none;
-      case WhoTalking.none:
-        return Icons.mic;
-      default:
-        return null;
     }
   }
 }
