@@ -20,3 +20,8 @@ class InterviewQuestionGroupModel(EntityBaseModel):
     group_name: Mapped[str] = mapped_column(String(100))
     order: Mapped[int]
     questions: Mapped[List[InterviewQuestionModel]] = relationship()
+
+
+class InterviewQuestionGroupUpdate(AppPydanticBaseModel):
+    group_name: str
+    order: int

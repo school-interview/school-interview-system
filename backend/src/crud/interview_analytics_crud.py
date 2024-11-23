@@ -1,4 +1,3 @@
-from sqlalchemy import Tuple
 from src.crud.base_crud import BaseCrud
 from src.models import InterviewAnalyticsModel, InterviewAnalytics, InterviewAnalyticsUpdate, InterviewSessionModel, UserModel
 from sqlalchemy.orm import Session

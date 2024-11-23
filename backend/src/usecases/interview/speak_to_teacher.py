@@ -18,10 +18,10 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
 from pydantic import TypeAdapter
-from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Concern, PreferInPerson, ExtractionResult, TeacherModel
-from dotenv import load_dotenv
+from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
+from src.crud import InterviewQuestionsCrud
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -38,16 +38,14 @@ questions: Dict[int, InterviewQuestion] = {}
 vectorstore: Optional[Chroma] = None
 
 
-def get_questions(session: Session):
+def get_questions(db_session: Session):
     if len(questions.keys()) > 0:
         return questions
-    question_query = session.query(InterviewQuestionModel)
-    all_questions: List[InterviewQuestionModel] = session.execute(
-        question_query).scalars().all()
-    for question in all_questions:
-        questions[question.order] = question.convert_to_pydantic(
+    interview_questions_crud = InterviewQuestionsCrud(InterviewRecordModel)
+    questions = interview_questions_crud.get_multi(db_session=db_session)
+    for question in questions:
+        questions[question.id] = question.convert_to_pydantic(
             InterviewQuestion, obj_history=set())
-        print(question.order, questions[question.order])
     return questions
 
 
@@ -206,8 +204,12 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
         return response
 
 
-def extract_value(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
-    current_question = questions[interview_session.progress]
+def extract_value(
+    interview_session: InterviewSessionModel,
+    message_from_student: str,
+    questions: Dict[int, InterviewQuestion]
+):
+    current_question = questions[interview_session.current_question_id]
     prompt_template = current_question.prompt + """
     Please extract structured data from the following [text]. If extraction is not possible, input 'None'.
     [text]
@@ -230,41 +232,23 @@ def extract_value(interview_session: InterviewSessionModel, message_from_student
 
     structured_output_class: Any = None
 
-    match interview_session.progress:
-        case 1:
-            structured_output_class = SchoolCredit
-        case 2:
-            structured_output_class = SchoolCredit
-        case 3:
-            structured_output_class = Gpa
-        case 4:
-            structured_output_class = AttendanceRate
-        case 5:
-            structured_output_class = Concern
-        case 6:
-            structured_output_class = PreferInPerson
+    match current_question.extraction_data_type:
+        case 'bool':
+            structured_output_class = BoolExtraction
+        case 'int':
+            structured_output_class = IntExtraction
+        case 'float':
+            structured_output_class = FloatExtraction
+        case 'str':
+            structured_output_class = StrExtraction
 
     chain = prompt | llm.with_structured_output(structured_output_class)
     response = chain.invoke({"text": message_from_student},
                             config={"callbacks": [ConsoleCallbackHandler()]}).dict()
-    retrievedValue = None
-
-    match interview_session.progress:
-        case 1:
-            retrievedValue = response['credit']
-        case 2:
-            retrievedValue = response['credit']
-        case 3:
-            retrievedValue = response['gpa']
-        case 4:
-            retrievedValue = response['attendance_rate']
-        case 5:
-            retrievedValue = response["trouble"]
-        case 6:
-            retrievedValue = response["prefer_in_person"]
+    extracted_value = response['extracted_value']
 
     return ExtractionResult(
         interview_session=interview_session,
-        succeeded_to_extract=False if retrievedValue is None else True,
-        extracted_value=retrievedValue
+        succeeded_to_extract=False if extracted_value is None else True,
+        extracted_value=extracted_value
     )
