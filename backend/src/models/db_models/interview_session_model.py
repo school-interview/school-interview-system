@@ -44,6 +44,18 @@ class InterviewSessionModel(EntityBaseModel):
     done: Mapped[bool]
 
     def update_interview_progress(self, db_session: Session, extracted_value: Any, questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
+        """面談の質問を進行させます。
+
+        Args:
+            db_session (Session): DBセッション
+            extracted_value (Any): 抽出された値
+            questions_by_group (Dict[UUID, List[InterviewQuestionModel]]): キーがグループID、値が質問のリストの辞書
+        Returns:
+
+
+        Raises:
+            ValueError
+        """
         if not self.current_question:
             raise ValueError("The current question is not loaded.")
         if self.done:
