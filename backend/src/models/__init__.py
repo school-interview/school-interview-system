@@ -40,3 +40,4 @@ from src.models.error_models.not_school_member_exception_model import NotSchoolM
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
 from src.models.error_models.user_not_found_exception_model import UserNotFoundException
 from src.models.error_models.not_student_exception_model import NotStudentException
+from src.models.error_models.interview_has_already_ended_exception import InterviewHasAlreadyEndedException

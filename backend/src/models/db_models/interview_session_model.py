@@ -1,6 +1,6 @@
 from uuid import UUID
 from sqlalchemy import String, ForeignKey
-from typing import List, Optional
+from typing import Any, List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
@@ -10,6 +10,8 @@ from src.models.db_models.interview_question_model import InterviewQuestion, Int
 from src.models.db_models.teacher_model import Teacher
 from src.models.db_models.user_model import User
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
+from src.models.error_models.interview_has_already_ended_exception import InterviewHasAlreadyEndedException
+from sqlalchemy.orm import Session
 
 
 class InterviewSession(AppPydanticBaseModel):
@@ -39,6 +41,13 @@ class InterviewSessionModel(EntityBaseModel):
     current_question: Mapped[Optional[InterviewQuestionModel]] = relationship(
         "InterviewQuestionModel", back_populates="interview_sessions")
     done: Mapped[bool]
+
+    def update_interview_progress(self, db_session: Session, extracted_value: Any):
+        if not self.current_question:
+            raise ValueError("The current question is not loaded.")
+        if self.done:
+            raise InterviewHasAlreadyEndedException(
+                "This interview has already ended.")
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):

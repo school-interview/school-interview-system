@@ -59,7 +59,7 @@ class SpeakToTeacherRestApiController(RestApiController):
         interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
         message = data.message_from_student
         interview_sessions_crud = InterviewSessionsCrud(InterviewSessionModel)
-        interview_session_model = interview_sessions_crud.get(
+        interview_session_model = interview_sessions_crud.get_with_curernt_question(
             db_session, interview_session_id)
         if not interview_session_model:
             raise ErrorResponse(

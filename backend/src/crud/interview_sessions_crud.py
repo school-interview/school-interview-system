@@ -6,12 +6,11 @@ from sqlalchemy.dialects import sqlite
 
 
 class InterviewSessionsCrud(BaseCrud[InterviewSessionModel, InterviewSession, InterviewSessionUpdate]):
-    def get_with_curernt_question_by_user_id(self, db_session: Session, user_id: UUID):
-        query = db_session.query(
+    def get_with_curernt_question(self, db_session: Session, id: UUID):
+        return db_session.query(
             InterviewSessionModel
         ).options(
             joinedload(InterviewSessionModel.current_question, innerjoin=True)
         ).filter(
-            InterviewSessionModel.user_id == user_id
-        )
-        return query.first()
+            InterviewSessionModel.id == id
+        ).first()

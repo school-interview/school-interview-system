@@ -1,6 +1,7 @@
 
 import os
 from typing import Any, Dict, List, Optional
+from uuid import UUID
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
@@ -31,7 +32,8 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 chat_history_store = {}
 
 # 質問たちはそんなにないので、一度取得したらキャッシュしておく
-questions: Dict[int, InterviewQuestion] = {}
+questions: Dict[UUID, InterviewQuestion] = {}
+questions_by_group: Dict[UUID, List[InterviewQuestion]] = {}
 
 # RAGのベクトルストア。（念のためにグローバル変数としてメモリ上にキャッシュ）
 # TODO:　ファイルとかRedisとかに保存することを検討
@@ -39,6 +41,7 @@ vectorstore: Optional[Chroma] = None
 
 
 def get_questions(db_session: Session):
+    global questions
     if len(questions.keys()) > 0:
         return questions
     interview_questions_crud = InterviewQuestionsCrud(InterviewRecordModel)
@@ -143,7 +146,8 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
             template = common_inst + "学生の発言：{question}"
         return template
 
-    current_question = get_questions(db_session)[interview_session.progress]
+    current_question = get_questions(
+        db_session)[interview_session.current_question]
 
     if use_local_llm:
         llm = ChatLlamaCpp(
@@ -207,7 +211,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
 def extract_value(
     interview_session: InterviewSessionModel,
     message_from_student: str,
-    questions: Dict[int, InterviewQuestion]
+    questions: Dict[UUID, InterviewQuestion]
 ):
     current_question = questions[interview_session.current_question_id]
     prompt_template = current_question.prompt + """
@@ -248,6 +252,7 @@ def extract_value(
     extracted_value = response['extracted_value']
 
     return ExtractionResult(
+        question_id_before_update=current_question.id,
         interview_session=interview_session,
         succeeded_to_extract=False if extracted_value is None else True,
         extracted_value=extracted_value
