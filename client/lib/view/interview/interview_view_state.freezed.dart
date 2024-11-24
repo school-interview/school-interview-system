@@ -22,6 +22,9 @@ mixin _$InterviewViewState {
   /// ローディング中かどうかを判別する
   bool get isLoading => throw _privateConstructorUsedError;
 
+  /// チャットの履歴
+  List<ChatHistory> get chatHistories => throw _privateConstructorUsedError;
+
   /// アバターのセリフ
   String get avatarMessage => throw _privateConstructorUsedError;
 
@@ -55,6 +58,7 @@ abstract class $InterviewViewStateCopyWith<$Res> {
   $Res call(
       {Result? result,
       bool isLoading,
+      List<ChatHistory> chatHistories,
       String avatarMessage,
       String userMessage,
       WhoTalking whoTalking,
@@ -78,6 +82,7 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
   $Res call({
     Object? result = freezed,
     Object? isLoading = null,
+    Object? chatHistories = null,
     Object? avatarMessage = null,
     Object? userMessage = null,
     Object? whoTalking = null,
@@ -94,6 +99,10 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      chatHistories: null == chatHistories
+          ? _value.chatHistories
+          : chatHistories // ignore: cast_nullable_to_non_nullable
+              as List<ChatHistory>,
       avatarMessage: null == avatarMessage
           ? _value.avatarMessage
           : avatarMessage // ignore: cast_nullable_to_non_nullable
@@ -133,6 +142,7 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
   $Res call(
       {Result? result,
       bool isLoading,
+      List<ChatHistory> chatHistories,
       String avatarMessage,
       String userMessage,
       WhoTalking whoTalking,
@@ -154,6 +164,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? result = freezed,
     Object? isLoading = null,
+    Object? chatHistories = null,
     Object? avatarMessage = null,
     Object? userMessage = null,
     Object? whoTalking = null,
@@ -170,6 +181,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
+      chatHistories: null == chatHistories
+          ? _value._chatHistories
+          : chatHistories // ignore: cast_nullable_to_non_nullable
+              as List<ChatHistory>,
       avatarMessage: null == avatarMessage
           ? _value.avatarMessage
           : avatarMessage // ignore: cast_nullable_to_non_nullable
@@ -204,12 +219,14 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   const _$InterviewViewStateImpl(
       {this.result,
       this.isLoading = true,
+      final List<ChatHistory> chatHistories = const [],
       this.avatarMessage = "",
       this.userMessage = "",
       this.whoTalking = WhoTalking.none,
       this.currentInterviewSessionId = "",
       this.interviewAnalytics,
-      this.isFinishInterview = false});
+      this.isFinishInterview = false})
+      : _chatHistories = chatHistories;
 
   /// API処理結果
   @override
@@ -219,6 +236,18 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   @override
   @JsonKey()
   final bool isLoading;
+
+  /// チャットの履歴
+  final List<ChatHistory> _chatHistories;
+
+  /// チャットの履歴
+  @override
+  @JsonKey()
+  List<ChatHistory> get chatHistories {
+    if (_chatHistories is EqualUnmodifiableListView) return _chatHistories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_chatHistories);
+  }
 
   /// アバターのセリフ
   @override
@@ -251,7 +280,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
   @override
   String toString() {
-    return 'InterviewViewState(result: $result, isLoading: $isLoading, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId, interviewAnalytics: $interviewAnalytics, isFinishInterview: $isFinishInterview)';
+    return 'InterviewViewState(result: $result, isLoading: $isLoading, chatHistories: $chatHistories, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId, interviewAnalytics: $interviewAnalytics, isFinishInterview: $isFinishInterview)';
   }
 
   @override
@@ -262,6 +291,8 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
             (identical(other.result, result) || other.result == result) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            const DeepCollectionEquality()
+                .equals(other._chatHistories, _chatHistories) &&
             (identical(other.avatarMessage, avatarMessage) ||
                 other.avatarMessage == avatarMessage) &&
             (identical(other.userMessage, userMessage) ||
@@ -282,6 +313,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
       runtimeType,
       result,
       isLoading,
+      const DeepCollectionEquality().hash(_chatHistories),
       avatarMessage,
       userMessage,
       whoTalking,
@@ -301,6 +333,7 @@ abstract class _InterviewViewState implements InterviewViewState {
   const factory _InterviewViewState(
       {final Result? result,
       final bool isLoading,
+      final List<ChatHistory> chatHistories,
       final String avatarMessage,
       final String userMessage,
       final WhoTalking whoTalking,
@@ -316,6 +349,10 @@ abstract class _InterviewViewState implements InterviewViewState {
 
   /// ローディング中かどうかを判別する
   bool get isLoading;
+  @override
+
+  /// チャットの履歴
+  List<ChatHistory> get chatHistories;
   @override
 
   /// アバターのセリフ
