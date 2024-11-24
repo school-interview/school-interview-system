@@ -3,6 +3,7 @@ import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/constant/result.dart';
 import 'package:client/core/text_to_speech.dart';
 import 'package:client/infrastructure/shared_preference_manager.dart';
+import 'package:client/model/chat_history.dart';
 import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
 import 'package:client/repository/interview/interview_repository_impl.dart';
@@ -52,6 +53,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   void _setIsFinishInterview(bool isFinishInterview) =>
       state = state.copyWith(isFinishInterview: isFinishInterview);
 
+  /// チャット履歴のリストに新しいチャットを追加する
+  void _addChatHistories(ChatHistory chatHistory) => state =
+      state.copyWith(chatHistories: [...state.chatHistories, chatHistory]);
+
   final SpeechToText _speechToText = SpeechToText();
 
   final InterviewRepository _interviewRepository = InterviewRepositoryImpl();
@@ -99,43 +104,6 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       logger.e(e.toString());
       return;
     }
-  }
-
-  /// ユーザーが話し始めたときの処理
-  Future<void> _startTalking() async {
-    setUserMessage("");
-    _setWhoTalking(WhoTalking.user);
-    var available = await _speechToText.initialize();
-    if (available) {
-      _speechToText.listen(
-        onResult: (result) {
-          setUserMessage(result.recognizedWords);
-        },
-      );
-    }
-  }
-
-  /// ユーザーのセリフをリセットしたときの処理
-  Future<void> resetTalking() async {
-    await _speechToText.stop();
-    _setWhoTalking(WhoTalking.none);
-    // [startTalking] の [_speechToText.listen] が
-    // セリフリセット後にそれまで認識していたセリフを再セットしてしまう問題がありました
-    // 技術力不足のため、強制的に2秒ディレイさせることで解決しています
-    Future.delayed(const Duration(seconds: 2)).then((_) {
-      setUserMessage("");
-    });
-  }
-
-  /// ユーザーが話し終えたときの処理
-  Future<void> _stopTalking() async {
-    setIsLoading(true);
-    await _speechToText.stop();
-    _setWhoTalking(WhoTalking.avatar);
-    await _speakToTeacher(
-      currentInterviewSessionId: state.currentInterviewSessionId,
-      userSpeech: state.userMessage,
-    );
   }
 
   /// 教員メッセージ取得API
@@ -208,6 +176,46 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       logger.e(e.toString());
       return;
     }
+  }
+
+  /// ユーザーが話し始めたときの処理
+  Future<void> _startTalking() async {
+    setUserMessage("");
+    _setWhoTalking(WhoTalking.user);
+    var available = await _speechToText.initialize();
+    if (available) {
+      _speechToText.listen(
+        onResult: (result) {
+          setUserMessage(result.recognizedWords);
+        },
+      );
+    }
+  }
+
+  /// ユーザーのセリフをリセットしたときの処理
+  Future<void> resetTalking() async {
+    await _speechToText.stop();
+    _setWhoTalking(WhoTalking.none);
+    // [startTalking] の [_speechToText.listen] が
+    // セリフリセット後にそれまで認識していたセリフを再セットしてしまう問題がありました
+    // 技術力不足のため、強制的に2秒ディレイさせることで解決しています
+    Future.delayed(const Duration(seconds: 2)).then((_) {
+      setUserMessage("");
+    });
+  }
+
+  /// ユーザーが話し終えたときの処理
+  Future<void> _stopTalking() async {
+    setIsLoading(true);
+    await _speechToText.stop();
+    _setWhoTalking(WhoTalking.avatar);
+    _addChatHistories(ChatHistory(state.avatarMessage, true));
+    await _speakToTeacher(
+      currentInterviewSessionId: state.currentInterviewSessionId,
+      userSpeech: state.userMessage,
+    );
+    _addChatHistories(ChatHistory(state.userMessage, false));
+    setUserMessage("");
   }
 
   /// マイクボタンタップ時のアクション
