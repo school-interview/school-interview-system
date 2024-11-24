@@ -1,5 +1,8 @@
+import pytest
 from typing import List
 import uuid
+from mock_alchemy.mocking import UnifiedAlchemyMagicMock
+from sqlalchemy import create_engine
 from src.models import UserModel, StudentModel, Student, User, InterviewSessionModel, TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
 from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud
 from sqlalchemy.orm import Session
@@ -11,20 +14,22 @@ students_crud = StudentsCrud(StudentModel)
 interview_sessions_crud = InterviewSessionsCrud(InterviewSessionModel)
 teachers_crud = TeachersCrud(TeacherModel)
 
-seed_done = False
 
-
-def seed_all(db_session: Session):
-    global seed_done
-    if seed_done:
-        return
+@pytest.fixture(scope="module")
+def db_session():
+    engine = create_engine('sqlite:///:memory:', echo=True)
+    db_session = UnifiedAlchemyMagicMock()
+    engine.connect()
+    EntityBaseModel.metadata.create_all(engine)
     teachers = seed_teachers(db_session)
     users = seed_users(db_session)
     question_groups = seed_question_groups(db_session)
     questions = seed_questions(db_session, question_groups)
     seed_interview_sessions(
         db_session, users, teachers[0], questions)
-    seed_done = True
+    yield db_session
+    print("finalizing... DB connection")
+    db_session.close()
 
 
 def seed_teachers(db_session: Session):
