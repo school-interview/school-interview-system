@@ -115,10 +115,22 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     }
   }
 
+  /// ユーザーのセリフをリセットしたときの処理
+  Future<void> resetTalking() async {
+    await _speechToText.stop();
+    _setWhoTalking(WhoTalking.none);
+    // [startTalking] の [_speechToText.listen] が
+    // セリフリセット後にそれまで認識していたセリフを再セットしてしまう問題がありました
+    // 技術力不足のため、強制的に2秒ディレイさせることで解決しています
+    Future.delayed(const Duration(seconds: 2)).then((_) {
+      setUserMessage("");
+    });
+  }
+
   /// ユーザーが話し終えたときの処理
   Future<void> _stopTalking() async {
     setIsLoading(true);
-    _speechToText.stop();
+    await _speechToText.stop();
     _setWhoTalking(WhoTalking.avatar);
     await _speakToTeacher(
       currentInterviewSessionId: state.currentInterviewSessionId,

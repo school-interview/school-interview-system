@@ -71,6 +71,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
           ),
           child: Stack(
             children: [
+              // 面談アバター
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
@@ -83,8 +84,8 @@ class _InterviewView extends ConsumerState<InterviewView> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const SizedBox(height: 50),
                     // アバターのセリフ
                     _AvatarChatBubble(
                       text: state.avatarMessage,
@@ -93,9 +94,28 @@ class _InterviewView extends ConsumerState<InterviewView> {
                     const SizedBox(height: 4),
                     // ユーザーのセリフ
                     _UserChatBubble(text: state.userMessage),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 4),
+                    // セリフリセットボタン
+                    IconButton(
+                      // 教員が話しているときは非活性
+                      onPressed: state.whoTalking == WhoTalking.avatar
+                          ? null
+                          : () async {
+                              // ユーザのセリフをリセットする
+                              final notifier = ref.watch(
+                                  interviewViewNotifierProvider.notifier);
+                              await notifier.resetTalking();
+                            },
+                      icon: const Icon(Icons.refresh),
+                      style:
+                          IconButton.styleFrom(backgroundColor: Colors.white),
+                    ),
+                    const SizedBox(height: 4),
                     // マイクボタン
-                    _micButton()
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: _micButton(),
+                    ),
                   ],
                 ),
               ),
