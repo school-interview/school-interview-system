@@ -46,14 +46,16 @@ class InterviewQuestionModel(EntityBaseModel):
     interview_records = relationship(
         "InterviewRecordModel", back_populates="question")
 
-    def validate_answer(self, db_session: Session, value: Any):
+    def validate_answer(self, value: Any):
         """この質問に対して回答を試みます。
+
+        条件が指定されている質問の場合、条件に合致していないと回答が無効になります。
 
         Args:
             value (Any): 回答する値
 
         Returns:
-
+            bool: 回答が有効かどうか
         Raises:
 
         """

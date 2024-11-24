@@ -1,12 +1,13 @@
 from uuid import UUID
 from sqlalchemy import String, ForeignKey
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
 from pydantic import BaseModel, Field
 from src.models.db_models.base_model import EntityBaseModel
 from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel
+from src.models.db_models.interview_record_model import InterviewRecordModel
 from src.models.db_models.teacher_model import Teacher
 from src.models.db_models.user_model import User
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
@@ -42,12 +43,37 @@ class InterviewSessionModel(EntityBaseModel):
         "InterviewQuestionModel", back_populates="interview_sessions")
     done: Mapped[bool]
 
-    def update_interview_progress(self, db_session: Session, extracted_value: Any):
+    def update_interview_progress(self, db_session: Session, extracted_value: Any, questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
         if not self.current_question:
             raise ValueError("The current question is not loaded.")
         if self.done:
             raise InterviewHasAlreadyEndedException(
                 "This interview has already ended.")
+        if not self.current_question.validate_answer(db_session, extracted_value):
+            raise ValueError("The answer is invalid.")
+
+        questions_in_group = questions_by_group[self.current_question.group_id]
+        questions_in_group.sort(key=lambda q: q.order)  # 昇順にソート
+
+        current_question_index: Optional[int] = None
+        for i, q in enumerate(questions_in_group):
+            if q.id == self.current_question_id:
+                current_question_index = i
+                break
+
+        # TODO: InterviewRecordに記録する
+
+        if current_question_index is None:
+            raise ValueError("The current question is not in the group.")
+
+        if current_question_index == len(questions_in_group) - 1:
+            # QuestionGroup内の最後の質問だった場合
+            pass
+        else:
+            next_question = questions_in_group[current_question_index + 1]
+            self.current_question_id = next_question.id
+            db_session.add(self)
+            db_session.commit()
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):
