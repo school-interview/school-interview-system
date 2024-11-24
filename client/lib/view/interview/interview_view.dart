@@ -95,15 +95,25 @@ class _InterviewView extends ConsumerState<InterviewView> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          // チャット履歴を表示する
+                          for (var chat in state.chatHistories) ...[
+                            if (chat.isAdmin) ...[
+                              _AvatarChatBubble(
+                                text: chat.text,
+                                isLoading: false,
+                              ),
+                            ],
+                            if (!chat.isAdmin) ...[
+                              _UserChatBubble(text: chat.text),
+                            ],
+                          ],
                           // アバターのセリフ
                           _AvatarChatBubble(
                             text: state.avatarMessage,
                             isLoading: state.isLoading,
                           ),
-                          const SizedBox(height: 4),
                           // ユーザーのセリフ
                           _UserChatBubble(text: state.userMessage),
-                          const SizedBox(height: 4),
                           // セリフリセットボタン
                           IconButton(
                             // 教員が話しているときは非活性

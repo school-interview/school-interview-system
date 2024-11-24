@@ -1,5 +1,6 @@
 import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/constant/result.dart';
+import 'package:client/model/chat_history.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:openapi/api.dart';
 
@@ -14,6 +15,9 @@ abstract class InterviewViewState with _$InterviewViewState {
 
     /// ローディング中かどうかを判別する
     @Default(true) bool isLoading,
+
+    /// チャットの履歴
+    @Default([]) List<ChatHistory> chatHistories,
 
     /// アバターのセリフ
     @Default("") String avatarMessage,
