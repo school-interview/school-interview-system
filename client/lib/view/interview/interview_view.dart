@@ -80,44 +80,56 @@ class _InterviewView extends ConsumerState<InterviewView> {
                   child: Image.asset('assets/image/sample_avatar.png'),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // アバターのセリフ
-                    _AvatarChatBubble(
-                      text: state.avatarMessage,
-                      isLoading: state.isLoading,
+
+              // チャット部分
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: screenHeight * 0.4,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.only(bottom: 100),
+                  child: Scrollbar(
+                    child: SingleChildScrollView(
+                      reverse: true,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // アバターのセリフ
+                          _AvatarChatBubble(
+                            text: state.avatarMessage,
+                            isLoading: state.isLoading,
+                          ),
+                          const SizedBox(height: 4),
+                          // ユーザーのセリフ
+                          _UserChatBubble(text: state.userMessage),
+                          const SizedBox(height: 4),
+                          // セリフリセットボタン
+                          IconButton(
+                            // 教員が話しているときは非活性
+                            onPressed: state.whoTalking == WhoTalking.avatar
+                                ? null
+                                : () async {
+                                    // ユーザのセリフをリセットする
+                                    final notifier = ref.watch(
+                                        interviewViewNotifierProvider.notifier);
+                                    await notifier.resetTalking();
+                                  },
+                            icon: const Icon(Icons.refresh),
+                            style: IconButton.styleFrom(
+                                backgroundColor: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 4),
-                    // ユーザーのセリフ
-                    _UserChatBubble(text: state.userMessage),
-                    const SizedBox(height: 4),
-                    // セリフリセットボタン
-                    IconButton(
-                      // 教員が話しているときは非活性
-                      onPressed: state.whoTalking == WhoTalking.avatar
-                          ? null
-                          : () async {
-                              // ユーザのセリフをリセットする
-                              final notifier = ref.watch(
-                                  interviewViewNotifierProvider.notifier);
-                              await notifier.resetTalking();
-                            },
-                      icon: const Icon(Icons.refresh),
-                      style:
-                          IconButton.styleFrom(backgroundColor: Colors.white),
-                    ),
-                    const SizedBox(height: 4),
-                    // マイクボタン
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: _micButton(),
-                    ),
-                  ],
+                  ),
                 ),
+              ),
+
+              // マイクボタン
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: _micButton(),
               ),
             ],
           ),
@@ -135,7 +147,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
       child: Container(
         width: 60,
         height: 60,
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(40),
         decoration: BoxDecoration(
           color: interviewMic.micColor,
           shape: BoxShape.circle,
@@ -169,25 +181,29 @@ class _UserChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
     return Align(
       alignment: Alignment.centerRight,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.green[100],
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(0),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: screenWidth * 0.6),
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Colors.green[100],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(0),
+              ),
+              boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
             ),
-            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 16,
           ),
         ),
       ),
@@ -204,40 +220,44 @@ class _AvatarChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
     return Align(
       alignment: Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(0),
-              topRight: Radius.circular(16),
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-            ),
-            boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
-        child: isLoading
-            ? LoadingAnimationWidget.waveDots(
-                color: Colors.black87,
-                size: 16,
-              )
-            : DefaultTextStyle(
-                style: const TextStyle(
-                  color: Colors.black87,
-                  fontSize: 16,
-                ),
-                child: AnimatedTextKit(
-                  isRepeatingAnimation: false,
-                  animatedTexts: [
-                    TyperAnimatedText(
-                      text,
-                      speed: const Duration(milliseconds: 100),
-                    ),
-                  ],
-                ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: screenWidth * 0.6),
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(0),
+                topRight: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16),
               ),
+              boxShadow: BoxShadowStyle.chatBubbleShadowStyle()),
+          child: isLoading
+              ? LoadingAnimationWidget.waveDots(
+                  color: Colors.black87,
+                  size: 16,
+                )
+              : DefaultTextStyle(
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                  ),
+                  child: AnimatedTextKit(
+                    isRepeatingAnimation: false,
+                    animatedTexts: [
+                      TyperAnimatedText(
+                        text,
+                        speed: const Duration(milliseconds: 100),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
       ),
     );
   }
