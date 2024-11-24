@@ -1,7 +1,7 @@
 import uuid
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy import create_engine
-from backend.test.crud_tests.seeding_fixtures import db_session
+from test.crud_tests.seeding_fixtures import db_session
 from src.models import EntityBaseModel, InterviewSessionModel, UserModel, Student, StudentModel
 from src.crud import InterviewSessionsCrud, UsersCrud, StudentsCrud
 
