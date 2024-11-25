@@ -46,29 +46,31 @@ class InterviewQuestionModel(EntityBaseModel):
     interview_records = relationship(
         "InterviewRecordModel", back_populates="question")
 
-    def validate_answer(self, value: Any):
-        """この質問に対して回答を試みます。
+    def can_skip(self, previous_question_extracted_value: Any) -> bool:
+        """この質問をスキップできるかどうかを判定します。
 
-        条件が指定されている質問の場合、条件に合致していないと回答が無効になります。
+        面談の質問は前の質問の回答に基づいて次の質問に進むかどうかを判定するため、このメソッドでは前の質問の回答からこの質問をスキップするかどうかを判定します。
+
 
         Args:
             value (Any): 回答する値
 
         Returns:
-            bool: 回答が有効かどうか
+            bool: スキップできるかどうか
         Raises:
 
         """
-        is_valid = True
+        is_skippable = True
         if self.condition_left_operand and self.condition_left_operator:
-            is_valid = self.compare_value(
-                value, self.condition_left_operator, self.condition_left_operand, 'left')
+            # 条件に当てはまる場合はスキップさせたくないので not で反転させています。
+            is_skippable = not self.compare_value(
+                previous_question_extracted_value, self.condition_left_operator, self.condition_left_operand, 'left')
 
-        if is_valid and self.condition_right_operand and self.condition_right_operator:
-            is_valid = self.compare_value(
-                value, self.condition_right_operator, self.condition_right_operand, 'right')
+        if is_skippable and self.condition_right_operand and self.condition_right_operator:
+            is_skippable = not self.compare_value(
+                previous_question_extracted_value, self.condition_right_operator, self.condition_right_operand, 'right')
 
-        return is_valid
+        return is_skippable
 
     def compare_value(self, value: Any, operator: Literal['==', '>', '<', '>=', '<=', '!='], operand: str, operand_position: Literal['left', 'right']):
         """指定された値と演算子、オペランドで比較を行います。

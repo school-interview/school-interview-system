@@ -1,5 +1,4 @@
 from uuid import UUID
-from src.models.db_models.interview_session_model import InterviewSessionModel, InterviewSession
 from src.models import EntityBaseModel, User
 from sqlalchemy import String, ForeignKey
 from typing import Any, List, Optional
@@ -12,7 +11,7 @@ from pydantic import Field
 class InterviewRecord(AppPydanticBaseModel):
     id: UUID
     session_id: UUID
-    session: Optional[InterviewSession] = Field(None)
+    session: Optional[Any] = Field(None)
     question_id: UUID
     question: Optional[Any] = Field(None)
     extracted_data: str
@@ -23,8 +22,8 @@ class InterviewRecordModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     session_id: Mapped[UUID] = mapped_column(
         ForeignKey("InterviewSessions.id", ondelete="CASCADE"))
-    session: Mapped[Optional[InterviewSessionModel]] = relationship("InterviewSessionModel",
-                                                                    backref="interview_records")
+    session: Mapped[Optional[Any]] = relationship("InterviewSessionModel",
+                                                  backref="interview_records")
     question_id: Mapped[UUID] = mapped_column(
         ForeignKey("InterviewQuestions.id"))
     question: Mapped[Any] = relationship(
