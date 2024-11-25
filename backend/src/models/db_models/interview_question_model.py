@@ -84,7 +84,7 @@ class InterviewQuestionModel(EntityBaseModel):
         Raises:
             ValueError: 演算子が不正な場合
         """
-        match self.extraction_data_type:
+        match self.condition_target_operand_data_type:
             case 'bool':
                 operand = bool(operand)
             case 'int':
