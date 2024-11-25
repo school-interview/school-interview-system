@@ -43,28 +43,33 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
     var e4Value = SupportLevel.lowAttendanceLowGpa
         .getElementValue(analytics.lowAtendanceAndLowGpaRate);
 
-    return Scaffold(
-      backgroundColor: ColorDefinitions.primaryColor,
-      appBar: AppBar(
-        backgroundColor: ColorDefinitions.secondaryColor,
-        title: const Text("面談結果"),
-        titleTextStyle: const TextStyle(
-          color: ColorDefinitions.textColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
+    // Exception対策（なくても動作は問題ない）
+    final scrollController = ScrollController();
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: ColorDefinitions.primaryColor,
+        appBar: AppBar(
+          backgroundColor: ColorDefinitions.secondaryColor,
+          title: const Text("面談結果"),
+          titleTextStyle: const TextStyle(
+            color: ColorDefinitions.textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+          automaticallyImplyLeading: false,
         ),
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: Scrollbar(
+        body: SafeArea(
           child: SingleChildScrollView(
+            controller: scrollController,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  if (analytics.advise != "") ...[
+                  if (analytics.advise != "" && analytics.advise != null) ...[
                     Center(
                       child: Card(
                         color: ColorDefinitions.primaryColor,
@@ -105,8 +110,13 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                   analytics.failToMoveToNextGrade
                       ? const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Text("修得単位数が進級条件に満たないため、支援必須と判断されました。"),
-                        )
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("修得単位数が進級条件を満たしていないため、支援必須と判断されました。"),
+                              Text("教員から連絡があった場合、速やかに対応してください。")
+                            ],
+                          ))
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -144,23 +154,25 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                                   SupportLevel.lowAttendanceLowGpa.chartColor,
                               isAnimated: state.isAnimated,
                             ),
-                            const SizedBox(height: 14),
                             Card(
                               color: ColorDefinitions.primaryColor,
+                              margin: const EdgeInsets.symmetric(vertical: 15),
                               elevation: 5,
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "総合  ${analytics.supportNecessityLevel.toStringAsFixed(1)}",
+                                      analytics.supportNecessityLevel
+                                          .toStringAsFixed(1),
                                       style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    const Text(" /100"),
+                                    const SizedBox(width: 8),
+                                    const Text("/100"),
                                   ],
                                 ),
                               ),

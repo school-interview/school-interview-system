@@ -53,95 +53,99 @@ class _InterviewView extends ConsumerState<InterviewView> {
     });
     final state = ref.watch(interviewViewNotifierProvider);
     final screenHeight = MediaQuery.sizeOf(context).height;
-    return Scaffold(
-      backgroundColor: ColorDefinitions.primaryColor,
-      appBar: CustomAppBar().startAppBar(context),
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image:
-                  const AssetImage('assets/image/interview_background_img.png'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.1),
-                BlendMode.dstATop,
-              ),
-            ),
-          ),
-          child: Stack(
-            children: [
-              // 面談アバター
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  height: screenHeight * 0.5,
-                  child: Image.asset('assets/image/sample_avatar.png'),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: ColorDefinitions.primaryColor,
+        appBar: CustomAppBar().startAppBar(context),
+        body: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage(
+                    'assets/image/interview_background_img.png'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.white.withOpacity(0.1),
+                  BlendMode.dstATop,
                 ),
               ),
+            ),
+            child: Stack(
+              children: [
+                // 面談アバター
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    height: screenHeight * 0.5,
+                    child: Image.asset('assets/image/sample_avatar.png'),
+                  ),
+                ),
 
-              // チャット部分
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: screenHeight * 0.4,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  margin: const EdgeInsets.only(bottom: 100),
-                  child: Scrollbar(
-                    child: SingleChildScrollView(
-                      reverse: true,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          // チャット履歴を表示する
-                          for (var chat in state.chatHistories) ...[
-                            if (chat.isAdmin) ...[
-                              _AvatarChatBubble(
-                                text: chat.text,
-                                isLoading: false,
-                              ),
+                // チャット部分
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: screenHeight * 0.4,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.only(bottom: 100),
+                    child: Scrollbar(
+                      child: SingleChildScrollView(
+                        reverse: true,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            // チャット履歴を表示する
+                            for (var chat in state.chatHistories) ...[
+                              if (chat.isAdmin) ...[
+                                _AvatarChatBubble(
+                                  text: chat.text,
+                                  isLoading: false,
+                                ),
+                              ],
+                              if (!chat.isAdmin) ...[
+                                _UserChatBubble(text: chat.text),
+                              ],
                             ],
-                            if (!chat.isAdmin) ...[
-                              _UserChatBubble(text: chat.text),
-                            ],
+                            // アバターのセリフ
+                            _AvatarChatBubble(
+                              text: state.avatarMessage,
+                              isLoading: state.isLoading,
+                            ),
+                            // ユーザーのセリフ
+                            _UserChatBubble(text: state.userMessage),
+                            // セリフリセットボタン
+                            IconButton(
+                              // 教員が話しているときは非活性
+                              onPressed: state.whoTalking == WhoTalking.avatar
+                                  ? null
+                                  : () async {
+                                      // ユーザのセリフをリセットする
+                                      final notifier = ref.watch(
+                                          interviewViewNotifierProvider
+                                              .notifier);
+                                      await notifier.resetTalking();
+                                    },
+                              icon: const Icon(Icons.refresh),
+                              style: IconButton.styleFrom(
+                                  backgroundColor: Colors.white),
+                            ),
                           ],
-                          // アバターのセリフ
-                          _AvatarChatBubble(
-                            text: state.avatarMessage,
-                            isLoading: state.isLoading,
-                          ),
-                          // ユーザーのセリフ
-                          _UserChatBubble(text: state.userMessage),
-                          // セリフリセットボタン
-                          IconButton(
-                            // 教員が話しているときは非活性
-                            onPressed: state.whoTalking == WhoTalking.avatar
-                                ? null
-                                : () async {
-                                    // ユーザのセリフをリセットする
-                                    final notifier = ref.watch(
-                                        interviewViewNotifierProvider.notifier);
-                                    await notifier.resetTalking();
-                                  },
-                            icon: const Icon(Icons.refresh),
-                            style: IconButton.styleFrom(
-                                backgroundColor: Colors.white),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
 
-              // マイクボタン
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _micButton(),
-              ),
-            ],
+                // マイクボタン
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _micButton(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
