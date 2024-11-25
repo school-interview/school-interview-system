@@ -19,37 +19,20 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
 from pydantic import TypeAdapter
-from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
+from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, InterviewQuestionGroupModel, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-from src.crud import InterviewQuestionsCrud
+from src.crud import InterviewQuestionsCrud, InterviewQuestionGroupsCrud
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-
 # 会話の履歴を保持するためのdict（一旦メモリ上に保持）
 chat_history_store = {}
-
-# 質問たちはそんなにないので、一度取得したらキャッシュしておく
-questions: Dict[UUID, InterviewQuestion] = {}
-questions_by_group: Dict[UUID, List[InterviewQuestion]] = {}
 
 # RAGのベクトルストア。（念のためにグローバル変数としてメモリ上にキャッシュ）
 # TODO:　ファイルとかRedisとかに保存することを検討
 vectorstore: Optional[Chroma] = None
-
-
-def get_questions(db_session: Session):
-    global questions
-    if len(questions.keys()) > 0:
-        return questions
-    interview_questions_crud = InterviewQuestionsCrud(InterviewRecordModel)
-    questions = interview_questions_crud.get_multi(db_session=db_session)
-    for question in questions:
-        questions[question.id] = question.convert_to_pydantic(
-            InterviewQuestion, obj_history=set())
-    return questions
 
 
 def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str) -> str:
@@ -230,8 +213,8 @@ def extract_value(
     prompt = ChatPromptTemplate(messages=prompt_msgs)
     llm = ChatOpenAI(
         temperature=0,
-        model_name="gpt-3.5-turbo",
-        openai_api_key=OPENAI_API_KEY
+        model_name="gpt-3.5-turbo",  # type: ignore
+        openai_api_key=OPENAI_API_KEY  # type: ignore
     )
 
     structured_output_class: Any = None
@@ -247,9 +230,10 @@ def extract_value(
             structured_output_class = StrExtraction
 
     chain = prompt | llm.with_structured_output(structured_output_class)
-    response = chain.invoke({"text": message_from_student},
-                            config={"callbacks": [ConsoleCallbackHandler()]}).dict()
-    extracted_value = response['extracted_value']
+    output: Any = chain.invoke({"text": message_from_student},
+                               config={"callbacks": [ConsoleCallbackHandler()]})
+    output_dict = output.dict()
+    extracted_value = output_dict['extracted_value']
 
     return ExtractionResult(
         question_id_before_update=current_question.id,

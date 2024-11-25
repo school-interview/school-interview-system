@@ -7,6 +7,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 from src.models.db_models.base_model import EntityBaseModel
 from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel
+from src.models.db_models.interview_question_group_model import InterviewQuestionGroup
 from src.models.db_models.interview_record_model import InterviewRecordModel
 from src.models.db_models.teacher_model import Teacher
 from src.models.db_models.user_model import User
@@ -43,8 +44,10 @@ class InterviewSessionModel(EntityBaseModel):
         "InterviewQuestionModel", back_populates="interview_sessions")
     done: Mapped[bool]
 
-    def update_interview_progress(self, db_session: Session, extracted_value: Any, questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
+    def progress_interview(self, db_session: Session, extracted_value: Any, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]):
         """面談の質問を進行させます。
+
+        `src/usecases/interview/speak_to_teacher.py`から呼び出す事を想定しています。
 
         Args:
             db_session (Session): DBセッション
@@ -61,11 +64,14 @@ class InterviewSessionModel(EntityBaseModel):
         if self.done:
             raise InterviewHasAlreadyEndedException(
                 "This interview has already ended.")
-        if not self.current_question.validate_answer(db_session, extracted_value):
-            raise ValueError("The answer is invalid.")
+        if self.current_question.can_skip(extracted_value):
+            # 次に
+            pass
 
         questions_in_group = questions_by_group[self.current_question.group_id]
         questions_in_group.sort(key=lambda q: q.order)  # 昇順にソート
+
+        # TODO: InterviewRecordに記録する
 
         current_question_index: Optional[int] = None
         for i, q in enumerate(questions_in_group):
@@ -73,19 +79,57 @@ class InterviewSessionModel(EntityBaseModel):
                 current_question_index = i
                 break
 
-        # TODO: InterviewRecordに記録する
-
         if current_question_index is None:
             raise ValueError("The current question is not in the group.")
 
-        if current_question_index == len(questions_in_group) - 1:
-            # QuestionGroup内の最後の質問だった場合
-            pass
-        else:
-            next_question = questions_in_group[current_question_index + 1]
+        next_question: Optional[InterviewQuestion] = self._get_next_question(
+            interview_groups, questions_by_group)
+        if next_question:
             self.current_question_id = next_question.id
-            db_session.add(self)
-            db_session.commit()
+        else:
+            # 最後の質問だった場合
+            self.done = True
+
+        db_session.add(self)
+        db_session.commit()
+
+    def _get_next_question(self, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]) -> Optional[InterviewQuestion]:
+        """次の質問のInterviewQuestionを取得します。
+
+        Args:
+            questions_by_group (Dict[UUID, List[InterviewQuestionModel]]): キーがグループID、値が質問のリストの辞書
+
+        Returns:
+            UUID: 次の質問のID
+
+        Raises:
+            ValueError
+        """
+        if not self.current_question:
+            raise ValueError("The current question is not loaded.")
+        questions_in_group = questions_by_group[self.current_question.group_id]
+        if self.current_question.order == len(questions_in_group):
+            # QuestionGroup内の最後の質問だった場合
+            next_question_group_order = self.current_question.order + 1
+            if next_question_group_order >= len(interview_groups):
+                # 最後のQuestionGroupの最後のInterviewQuestionだった場合
+                return None
+
+            # 次のQuestionGroupの最初のInterviewQuestionを取得
+            next_question_group: Optional[InterviewQuestionGroup] = None
+            for group in interview_groups:
+                if group.order == next_question_group_order:
+                    next_question_group = group
+                    break
+
+            if not next_question_group:
+                raise ValueError("The next question group is not found.")
+
+            fist_question_in_group = questions_by_group[next_question_group.id][0]
+            return fist_question_in_group
+        else:
+            # 同じQuestionGroup内の次の質問を取得
+            return questions_in_group[self.current_question.order]
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):

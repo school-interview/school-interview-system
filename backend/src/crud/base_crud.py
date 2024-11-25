@@ -28,7 +28,10 @@ class BaseCrud(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     def get(self, db_session: Session, id: UUID) -> Optional[ModelType]:
-        return db_session.query(self.model).filter(self.model.id == id).first()
+        return (db_session.query(self.model)
+                .filter(self.model.id == id)  # type: ignore
+                .first()
+                )
 
     def get_multi(self, db_session: Session, *, skip=0, limit=100) -> List[ModelType]:
         return db_session.query(self.model).offset(skip).limit(limit).all()
@@ -54,8 +57,8 @@ class BaseCrud(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_session.refresh(db_obj)
         return db_obj
 
-    def remove(self, db_session: Session, *, id: UUID) -> ModelType:
-        obj = db_session.query(self.model).get(id)
+    def remove(self, db_session: Session, *, id: UUID) -> Optional[ModelType]:
+        obj: Optional[ModelType] = db_session.query(self.model).get(id)
         db_session.delete(obj)
         db_session.commit()
         return obj
