@@ -155,7 +155,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "総合  ${analytics.supportNecessityLevel}",
+                                      "総合  ${analytics.supportNecessityLevel.toStringAsFixed(1)}",
                                       style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
