@@ -29,6 +29,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   flutter_tts: ^4.0.2
   sign_in_button: ^3.2.0
+  flutter_html: ^3.0.0-beta.2
 
 dev_dependencies:
   flutter_test:
@@ -40,5 +41,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/image/
+    - assets/cautions.html
 flutter_intl:
   enabled: true

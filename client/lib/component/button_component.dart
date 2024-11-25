@@ -19,7 +19,13 @@ class ButtonComponent {
         foregroundColor: Colors.white,
         backgroundColor: ColorDefinitions.accentColor,
       ),
-      child: Text(labelText),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Text(
+          labelText,
+          style: const TextStyle(fontSize: 18),
+        ),
+      ),
     );
   }
 }
