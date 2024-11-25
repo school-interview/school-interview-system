@@ -26,87 +26,90 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
   Widget build(BuildContext context) {
     final loginState = ref.watch(loginNotifierProvider);
 
-    return Scaffold(
-      backgroundColor: ColorDefinitions.primaryColor,
-      appBar: CustomAppBar().startAppBar(context),
-      body: Container(
-        padding: const EdgeInsets.only(top: 20),
-        child: Form(
-          key: formKey,
-          child: Center(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      loginState.user?.name ?? "",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: ColorDefinitions.primaryColor,
+        appBar: CustomAppBar().startAppBar(context),
+        body: Container(
+          padding: const EdgeInsets.only(top: 20),
+          child: Form(
+            key: formKey,
+            child: Center(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        loginState.user?.name ?? "",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      "さん",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(width: 4),
+                      const Text(
+                        "さん",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                _buildSelectMajorPullDown(),
-                const SizedBox(height: 15),
-                _buildSelectSemesterPullDown(),
-                const SizedBox(height: 15),
-                buildInputTextField(
-                  labelText: "学籍番号",
-                  hintText: "1234567",
-                  limitText: 7,
-                  validator: (value) {
-                    if (!RegExp(r'^[0-9-]+$').hasMatch(value)) {
-                      return '数字のみを入力してください';
-                    } else if (value.length != 7) {
-                      return '7桁で入力してください';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    final notifier =
-                        ref.read(profileInputViewNotifierProvider.notifier);
-                    notifier.saveStudentData(PrefKeys.studentId, value);
-                  },
-                ),
-                const SizedBox(height: 30),
-                ButtonComponent().normalButton(
-                  labelText: "次へ",
-                  onTapButton: () async {
-                    if (formKey.currentState?.validate() ?? false) {
-                      // バリデーションが成功した場合にのみ処理を行う
-                      /// TODO ユーザーデータや学生データの要素がnullのときに代わりの値を入れるようにしているが、エラーアラートを表示し、ログイン画面に戻す必要がある
-                      /// → 誤った学籍番号や学科などの情報で面談が進んでしまうため
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  _buildSelectMajorPullDown(),
+                  const SizedBox(height: 15),
+                  _buildSelectSemesterPullDown(),
+                  const SizedBox(height: 15),
+                  buildInputTextField(
+                    labelText: "学籍番号",
+                    hintText: "1234567",
+                    limitText: 7,
+                    validator: (value) {
+                      if (!RegExp(r'^[0-9-]+$').hasMatch(value)) {
+                        return '数字のみを入力してください';
+                      } else if (value.length != 7) {
+                        return '7桁で入力してください';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
                       final notifier =
                           ref.read(profileInputViewNotifierProvider.notifier);
-                      final studentUpdate = await notifier.setStudentUpdate();
-                      await notifier.putStudentInfo(
-                        loginState.user?.id ?? "",
-                        studentUpdate,
-                      );
-                      // 非同期処理の後にウィジェットがまだ存在するかを確認
-                      if (context.mounted) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (BuildContext context) {
-                            return const AvatarSelectView();
-                          }),
+                      notifier.saveStudentData(PrefKeys.studentId, value);
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  ButtonComponent().normalButton(
+                    labelText: "次へ",
+                    onTapButton: () async {
+                      if (formKey.currentState?.validate() ?? false) {
+                        // バリデーションが成功した場合にのみ処理を行う
+                        /// TODO ユーザーデータや学生データの要素がnullのときに代わりの値を入れるようにしているが、エラーアラートを表示し、ログイン画面に戻す必要がある
+                        /// → 誤った学籍番号や学科などの情報で面談が進んでしまうため
+                        final notifier =
+                            ref.read(profileInputViewNotifierProvider.notifier);
+                        final studentUpdate = await notifier.setStudentUpdate();
+                        await notifier.putStudentInfo(
+                          loginState.user?.id ?? "",
+                          studentUpdate,
                         );
+                        // 非同期処理の後にウィジェットがまだ存在するかを確認
+                        if (context.mounted) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return const AvatarSelectView();
+                            }),
+                          );
+                        }
                       }
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

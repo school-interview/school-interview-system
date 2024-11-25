@@ -56,39 +56,41 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   Widget _avatarList() {
     final state = ref.watch(avatarSelectViewNotifierProvider);
     final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
-    return Scrollbar(
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: GridView.builder(
-            itemCount: state.teacherCount,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              mainAxisExtent: 180,
-            ),
-            itemBuilder: (context, index) {
-              return _avatarSelectBox(
-                avatarName: state.teacherList[index].name,
-                onTapSelectBox: () {
-                  // セレクトボックスをタップした時の処理
-                  notifier.setSelectedTeacherId(state.teacherList[index].id);
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) => _avatarDialog(
-                      avatarName: state.teacherList[index].name,
-                      image: "https://cdn2.thecatapi.com/images/adb.jpg",
-                      selectedTeacherId: state.teacherList[index].id,
-                    ),
-                  );
-                },
-              );
-            },
+    // Exception対策（なくても動作は問題ない）
+    final scrollController = ScrollController();
+
+    return SingleChildScrollView(
+      controller: scrollController,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: GridView.builder(
+          itemCount: state.teacherCount,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            mainAxisExtent: 180,
           ),
+          itemBuilder: (context, index) {
+            return _avatarSelectBox(
+              avatarName: state.teacherList[index].name,
+              onTapSelectBox: () {
+                // セレクトボックスをタップした時の処理
+                notifier.setSelectedTeacherId(state.teacherList[index].id);
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) => _avatarDialog(
+                    avatarName: state.teacherList[index].name,
+                    image: "https://cdn2.thecatapi.com/images/adb.jpg",
+                    selectedTeacherId: state.teacherList[index].id,
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );
