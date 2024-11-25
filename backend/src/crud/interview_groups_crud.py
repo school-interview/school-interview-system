@@ -4,6 +4,10 @@ from src.models import InterviewQuestionGroup, InterviewQuestionGroupModel, Inte
 from sqlalchemy.orm import selectinload
 
 
-class InterviewGroupsCrud(BaseCrud[InterviewQuestionGroupModel, InterviewQuestionGroup, InterviewQuestionGroupUpdate]):
+class InterviewQuestionGroupsCrud(BaseCrud[InterviewQuestionGroupModel, InterviewQuestionGroup, InterviewQuestionGroupUpdate]):
     def get_multi_with_questions(self, db_session: Session):
-        return db_session.query(InterviewQuestionGroupModel).options(selectinload(InterviewQuestionGroupModel.questions)).all()
+        return (db_session.query(InterviewQuestionGroupModel)
+                .order_by(InterviewQuestionGroupModel.order)
+                .options(selectinload(InterviewQuestionGroupModel.questions))
+                .all()
+                )
