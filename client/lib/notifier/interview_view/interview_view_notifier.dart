@@ -127,20 +127,9 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           setIsLoading(false);
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
-          TextToSpeech.speak(
-            response.data!.messageFromTeacher,
-            startFunc: () {
-              _setWhoTalking(WhoTalking.avatar);
-            },
-            endFunc: () async {
-              _setWhoTalking(WhoTalking.none);
-              // 面談が終了した場合、要支援レベルを取得する
-              if (response.data!.interviewSession.done) {
-                await _getInterviewAnalytics(state.currentInterviewSessionId);
-                _setIsFinishInterview(true);
-              }
-            },
-          );
+          _avatarTaking(
+              message: response.data!.messageFromTeacher,
+              isFinish: response.data!.interviewSession.done);
           break;
         default:
           setAvatarMessage("エラーが発生しました");
@@ -214,19 +203,46 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       currentInterviewSessionId: state.currentInterviewSessionId,
       userSpeech: state.userMessage,
     );
-    _addChatHistories(ChatHistory(state.userMessage, false));
-    setUserMessage("");
+  }
+
+  /// アバターが話す処理
+  void _avatarTaking({
+    required String message,
+    required bool isFinish,
+  }) {
+    TextToSpeech.speak(
+      message,
+      startFunc: () {
+        _setWhoTalking(WhoTalking.avatar);
+        if (!isFinish) {
+          // 面談が終了していない場合、チャット履歴を更新してユーザーのセリフをリセットする
+          // 技術力不足により、強制的に1秒ディレイしています
+          Future.delayed(const Duration(seconds: 1)).then((_) {
+            _addChatHistories(ChatHistory(state.userMessage, false));
+            setUserMessage("");
+          });
+        }
+      },
+      endFunc: () async {
+        _setWhoTalking(WhoTalking.none);
+        // 面談が終了した場合、要支援レベルを取得する
+        if (isFinish) {
+          await _getInterviewAnalytics(state.currentInterviewSessionId);
+          _setIsFinishInterview(true);
+        }
+      },
+    );
   }
 
   /// マイクボタンタップ時のアクション
   Future<void>? micButtonTapAction() async {
     switch (state.whoTalking) {
       case WhoTalking.user:
-        return _stopTalking();
+        return await _stopTalking();
       case WhoTalking.avatar:
         return;
       case WhoTalking.none:
-        return _startTalking();
+        return await _startTalking();
     }
   }
 }
