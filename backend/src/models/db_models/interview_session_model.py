@@ -1,4 +1,5 @@
 from uuid import UUID
+from uuid import uuid4
 from sqlalchemy import String, ForeignKey
 from typing import Any, Dict, List, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
@@ -65,33 +66,21 @@ class InterviewSessionModel(EntityBaseModel):
             raise InterviewHasAlreadyEndedException(
                 "This interview has already ended.")
         if self.current_question.can_skip(extracted_value):
-            # 次に
-            pass
+            self._move_on_next_question(
+                db_session, interview_groups, questions_by_group)
+            return
 
-        questions_in_group = questions_by_group[self.current_question.group_id]
-        questions_in_group.sort(key=lambda q: q.order)  # 昇順にソート
+        # InterviewRecordに記録する
+        interview_record = InterviewRecordModel(
+            id=uuid4(),
+            session_id=self.id,
+            question_id=self.current_question.id,
+            extracted_value=str(extracted_value)
+        )
+        db_session.add(interview_record)
 
-        # TODO: InterviewRecordに記録する
-
-        current_question_index: Optional[int] = None
-        for i, q in enumerate(questions_in_group):
-            if q.id == self.current_question_id:
-                current_question_index = i
-                break
-
-        if current_question_index is None:
-            raise ValueError("The current question is not in the group.")
-
-        next_question: Optional[InterviewQuestion] = self._get_next_question(
-            interview_groups, questions_by_group)
-        if next_question:
-            self.current_question_id = next_question.id
-        else:
-            # 最後の質問だった場合
-            self.done = True
-
-        db_session.add(self)
-        db_session.commit()
+        self._move_on_next_question(
+            db_session, interview_groups, questions_by_group)
 
     def _get_next_question(self, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]) -> Optional[InterviewQuestion]:
         """次の質問のInterviewQuestionを取得します。
@@ -130,6 +119,29 @@ class InterviewSessionModel(EntityBaseModel):
         else:
             # 同じQuestionGroup内の次の質問を取得
             return questions_in_group[self.current_question.order]
+
+    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]):
+        """このInterviewSessionの現在の質問を次に進めます。
+
+        Args:
+            db_session (Session): DBセッション
+            interview_groups (List[InterviewQuestionGroup]): InterviewQuestionGroupのリスト
+            questions_by_group (Dict[UUID, List[InterviewQuestionModel]]): キーがグループID、値がInterviewQuestionのリストの辞書
+
+        Returns:
+
+        Raises:
+        """
+        next_question: Optional[InterviewQuestion] = self._get_next_question(
+            interview_groups, questions_by_group)
+        if next_question:
+            self.current_question_id = next_question.id
+        else:
+            # 最後の質問だった場合
+            self.done = True
+
+        db_session.add(self)
+        db_session.commit()
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):
