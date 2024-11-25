@@ -43,63 +43,66 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
     var e4Value = SupportLevel.lowAttendanceLowGpa
         .getElementValue(analytics.lowAtendanceAndLowGpaRate);
 
-    return Scaffold(
-      backgroundColor: ColorDefinitions.primaryColor,
-      appBar: AppBar(
-        backgroundColor: ColorDefinitions.secondaryColor,
-        title: const Text("面談結果"),
-        titleTextStyle: const TextStyle(
-          color: ColorDefinitions.textColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: ColorDefinitions.primaryColor,
+        appBar: AppBar(
+          backgroundColor: ColorDefinitions.secondaryColor,
+          title: const Text("面談結果"),
+          titleTextStyle: const TextStyle(
+            color: ColorDefinitions.textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+          automaticallyImplyLeading: false,
         ),
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: Scrollbar(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  if (analytics.advise != "") ...[
-                    Center(
-                      child: Card(
-                        color: ColorDefinitions.primaryColor,
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Row(
-                                children: [
-                                  Icon(
-                                    Icons.smart_toy,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    "AIアドバイス：",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text("${analytics.advise}"),
-                            ],
+        body: SafeArea(
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    if (analytics.advise != "" && analytics.advise != null) ...[
+                      Center(
+                        child: Card(
+                          color: ColorDefinitions.primaryColor,
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.smart_toy,
+                                    ),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      "AIアドバイス：",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text("${analytics.advise}"),
+                              ],
+                            ),
                           ),
                         ),
                       ),
+                    ],
+                    const SizedBox(height: 16),
+                    const Text(
+                      "要支援レベル内訳",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ],
-                  const SizedBox(height: 16),
-                  const Text(
-                    "要支援レベル内訳",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
 
                   /// 進級条件に満たない場合と満たす場合で表示する内容を変える
                   analytics.failToMoveToNextGrade
