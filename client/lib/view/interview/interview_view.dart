@@ -4,7 +4,6 @@ import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/enum/who_talking.dart';
-import 'package:client/notifier/avatar_select_view/avatar_select_view_notifier.dart';
 import 'package:client/notifier/interview_view/interview_view_notifier.dart';
 import 'package:client/ui_core/interview_mic_color.dart';
 import 'package:client/view/interview_analytics/interview_analytics_view.dart';
@@ -14,7 +13,9 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// 面談画面
 class InterviewView extends ConsumerStatefulWidget {
-  const InterviewView({super.key});
+  const InterviewView({super.key, required this.teacherId});
+
+  final String teacherId;
 
   @override
   ConsumerState<InterviewView> createState() => _InterviewView();
@@ -26,9 +27,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
     super.initState();
     Future(() async {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      final teacherId = ref.watch(avatarSelectViewNotifierProvider
-          .select((value) => value.selectedTeacherId));
-      await notifier.startInterview(teacherId: teacherId);
+      await notifier.teacherFirstMessage(widget.teacherId);
     });
   }
 
@@ -53,6 +52,8 @@ class _InterviewView extends ConsumerState<InterviewView> {
     });
     final state = ref.watch(interviewViewNotifierProvider);
     final screenHeight = MediaQuery.sizeOf(context).height;
+    // Exception対策（なくても動作は問題ない）
+    final scrollController = ScrollController();
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -91,7 +92,9 @@ class _InterviewView extends ConsumerState<InterviewView> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     margin: const EdgeInsets.only(bottom: 100),
                     child: Scrollbar(
+                      controller: scrollController,
                       child: SingleChildScrollView(
+                        controller: scrollController,
                         reverse: true,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,

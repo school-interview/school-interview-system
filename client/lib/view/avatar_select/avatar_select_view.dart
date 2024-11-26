@@ -1,5 +1,4 @@
 import 'package:client/component/button_component.dart';
-import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/generated/l10n.dart';
@@ -31,12 +30,19 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(avatarSelectViewNotifierProvider);
-    final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
     // Exception対策（なくても動作は問題ない）
     final scrollController = ScrollController();
     return Scaffold(
       backgroundColor: ColorDefinitions.primaryColor,
-      appBar: CustomAppBar().startAppBar(context),
+      appBar: AppBar(
+        backgroundColor: ColorDefinitions.secondaryColor,
+        title: Text(S.of(context).startAppBarTitle),
+        titleTextStyle: const TextStyle(
+          color: ColorDefinitions.textColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+        ),
+      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(top: 20),
@@ -73,8 +79,6 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                           // 注意書きを取得
                           String cautionContent = await rootBundle
                               .loadString('assets/cautions.html');
-                          // セレクトボックスをタップした時の処理
-                          notifier.setSelectedTeacherId(teacher.id);
                           if (context.mounted) {
                             showDialog(
                               context: context,
@@ -83,12 +87,7 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                                 avatarName: teacher.name,
                                 imageString: 'assets/image/sample_avatar.png',
                                 cautionContent: cautionContent,
-                                onTapped: () {
-                                  final notifier = ref.read(
-                                      avatarSelectViewNotifierProvider
-                                          .notifier);
-                                  notifier.setSelectedTeacherId(teacher.id);
-                                },
+                                teacherId: teacher.id,
                               ),
                             );
                           }
@@ -156,13 +155,13 @@ class _AvatarDialog extends StatelessWidget {
     required this.avatarName,
     required this.imageString,
     required this.cautionContent,
-    required this.onTapped,
+    required this.teacherId,
   });
 
   final String avatarName;
   final String imageString;
   final String cautionContent;
-  final Function onTapped;
+  final String teacherId;
 
   @override
   Widget build(BuildContext context) {
@@ -213,11 +212,10 @@ class _AvatarDialog extends StatelessWidget {
                 child: ButtonComponent().normalButton(
                   labelText: "面談を開始する",
                   onTapButton: () {
-                    onTapped;
                     // 面談画面へ遷移
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (BuildContext context) {
-                        return const InterviewView();
+                        return InterviewView(teacherId: teacherId);
                       }),
                     );
                   },

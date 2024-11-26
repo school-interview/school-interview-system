@@ -7,7 +7,7 @@ part of 'avatar_select_view_notifier.dart';
 // **************************************************************************
 
 String _$avatarSelectViewNotifierHash() =>
-    r'499e8993c60ca5d834280a54e2b243eda73b7921';
+    r'60612b3a7b7ef5715df3372b2535d72781757ed8';
 
 /// See also [AvatarSelectViewNotifier].
 @ProviderFor(AvatarSelectViewNotifier)

@@ -218,9 +218,9 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
 class _$InterviewViewStateImpl implements _InterviewViewState {
   const _$InterviewViewStateImpl(
       {this.result,
-      this.isLoading = true,
+      this.isLoading = false,
       final List<ChatHistory> chatHistories = const [],
-      this.avatarMessage = "",
+      this.avatarMessage = "こんにちは。これから面談を始めます。",
       this.userMessage = "",
       this.whoTalking = WhoTalking.none,
       this.currentInterviewSessionId = "",

@@ -14,13 +14,13 @@ abstract class InterviewViewState with _$InterviewViewState {
     Result? result,
 
     /// ローディング中かどうかを判別する
-    @Default(true) bool isLoading,
+    @Default(false) bool isLoading,
 
     /// チャットの履歴
     @Default([]) List<ChatHistory> chatHistories,
 
     /// アバターのセリフ
-    @Default("") String avatarMessage,
+    @Default("こんにちは。これから面談を始めます。") String avatarMessage,
 
     /// ユーザーのセリフ
     @Default("") String userMessage,

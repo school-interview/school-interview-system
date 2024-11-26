@@ -29,10 +29,6 @@ class AvatarSelectViewNotifier extends _$AvatarSelectViewNotifier {
     state = state.copyWith(teacherCount: teacherCount);
   }
 
-  void setSelectedTeacherId(String selectedTeacherId) {
-    state = state.copyWith(selectedTeacherId: selectedTeacherId);
-  }
-
   /// 教員リスト取得API
   Future<void> getTeacherList() async {
     try {
