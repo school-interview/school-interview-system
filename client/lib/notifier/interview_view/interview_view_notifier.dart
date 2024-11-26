@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:client/app.dart';
 import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/constant/result.dart';
@@ -8,6 +9,7 @@ import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
 import 'package:client/repository/interview/interview_repository_impl.dart';
 import 'package:client/view/interview/interview_view_state.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:openapi/api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -63,6 +65,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
 
   final SharedPreferenceManager _sharedPreferenceManager =
       SharedPreferenceManager();
+
+  late CameraController _cameraController;
 
   /// 面談を開始する
   Future<void> _startInterview({
@@ -167,8 +171,18 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// 初回処理
-  Future<void> teacherFirstMessage(String teacherId) async {
+  Future<void> init(String teacherId) async {
+    final cameras = await availableCameras();
+    _cameraController = CameraController(cameras.first, ResolutionPreset.max);
+    await _cameraController.initialize();
+    await _cameraController.startVideoRecording();
+    await _teacherFirstMessage(teacherId);
+  }
+
+  /// アバターの最初のセリフを発言する
+  Future<void> _teacherFirstMessage(String teacherId) async {
     await TextToSpeech.speak(
+      // stateにあらかじめ初めのセリフをDefaultでセットしておく
       state.avatarMessage,
       startFunc: () {
         _setWhoTalking(WhoTalking.avatar);
@@ -176,6 +190,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       endFunc: () async {
         _addChatHistories(ChatHistory(state.avatarMessage, true));
         setIsLoading(true);
+        // 面談を始める
         await _startInterview(teacherId: teacherId);
       },
     );
@@ -242,10 +257,23 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         // 面談が終了した場合、要支援レベルを取得する
         if (isFinish) {
           await _getInterviewAnalytics(state.currentInterviewSessionId);
+          // 撮影した動画を保存する
+          await _stopRecordingAndSaveVideo();
+          await _cameraController.dispose();
           _setIsFinishInterview(true);
         }
       },
     );
+  }
+
+  /// 録画を停止し、撮影した動画を保存する
+  Future<void> _stopRecordingAndSaveVideo() async {
+    final video = await _cameraController.stopVideoRecording();
+    final byte = await video.readAsBytes();
+    await FileSaver.instance.saveFile(
+        name: "${DateTime.now().millisecondsSinceEpoch}",
+        bytes: byte,
+        mimeType: MimeType.mp4Video);
   }
 
   /// マイクボタンタップ時のアクション

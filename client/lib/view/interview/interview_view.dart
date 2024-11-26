@@ -27,7 +27,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
     super.initState();
     Future(() async {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      await notifier.teacherFirstMessage(widget.teacherId);
+      await notifier.init(widget.teacherId);
     });
   }
 
