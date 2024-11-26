@@ -64,9 +64,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   final SharedPreferenceManager _sharedPreferenceManager =
       SharedPreferenceManager();
 
-  /// 初回処理
   /// 面談を開始する
-  Future<void> startInterview({
+  Future<void> _startInterview({
     required String teacherId,
   }) async {
     try {
@@ -165,6 +164,21 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       logger.e(e.toString());
       return;
     }
+  }
+
+  /// 初回処理
+  Future<void> teacherFirstMessage(String teacherId) async {
+    await TextToSpeech.speak(
+      state.avatarMessage,
+      startFunc: () {
+        _setWhoTalking(WhoTalking.avatar);
+      },
+      endFunc: () async {
+        _addChatHistories(ChatHistory(state.avatarMessage, true));
+        setIsLoading(true);
+        await _startInterview(teacherId: teacherId);
+      },
+    );
   }
 
   /// ユーザーが話し始めたときの処理

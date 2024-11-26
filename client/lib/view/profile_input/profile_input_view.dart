@@ -5,15 +5,16 @@ import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/constant/select_items.dart';
 import 'package:client/infrastructure/shared_preference_manager.dart';
-import 'package:client/notifier/login/login_notifier.dart';
 import 'package:client/notifier/profile_input_view/profile_input_view_notifier.dart';
 import 'package:client/view/avatar_select/avatar_select_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// 情報入力画面
+/// プロフィール入力画面
 class ProfileInputView extends ConsumerStatefulWidget {
-  const ProfileInputView({super.key});
+  const ProfileInputView({super.key, required this.name});
+
+  final String name;
 
   @override
   ConsumerState<ProfileInputView> createState() => _ProfileInputView();
@@ -24,8 +25,6 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
 
   @override
   Widget build(BuildContext context) {
-    final loginState = ref.watch(loginNotifierProvider);
-
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -43,7 +42,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        loginState.user?.name ?? "",
+                        widget.name,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -93,10 +92,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                         final notifier =
                             ref.read(profileInputViewNotifierProvider.notifier);
                         final studentUpdate = await notifier.setStudentUpdate();
-                        await notifier.putStudentInfo(
-                          loginState.user?.id ?? "",
-                          studentUpdate,
-                        );
+                        await notifier.putStudentInfo(studentUpdate);
                         // 非同期処理の後にウィジェットがまだ存在するかを確認
                         if (context.mounted) {
                           Navigator.of(context).push(

@@ -60,21 +60,11 @@ class S {
     );
   }
 
-  /// `アバターを選択してください。`
+  /// `面談相手となるアバターを選択してください。`
   String get avatarSelectDescription {
     return Intl.message(
-      'アバターを選択してください。',
+      '面談相手となるアバターを選択してください。',
       name: 'avatarSelectDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `こちらのアバターと面談を開始しますか？`
-  String get avatarDialogDescription {
-    return Intl.message(
-      'こちらのアバターと面談を開始しますか？',
-      name: 'avatarDialogDescription',
       desc: '',
       args: [],
     );

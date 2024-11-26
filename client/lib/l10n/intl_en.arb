@@ -1,5 +1,4 @@
 {
   "startAppBarTitle": "学生面談(工学部)",
-  "avatarSelectDescription": "アバターを選択してください。",
-  "avatarDialogDescription": "こちらのアバターと面談を開始しますか？"
+  "avatarSelectDescription": "面談相手となるアバターを選択してください。"
 }

@@ -101,12 +101,17 @@ class _LoginView extends ConsumerState<LoginView> {
           );
           break;
         } else if (loginState.isAdmin == false) {
+          final state = ref.watch(loginNotifierProvider);
           // 学生向け画面へ遷移する
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) {
-              return const ProfileInputView();
-            }),
-          );
+          if (state.user != null) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (BuildContext context) {
+                return ProfileInputView(name: state.user!.name);
+              }),
+            );
+          } else {
+            // TODO ユーザ情報がnullのときはダイアログを表示してログイン画面へ
+          }
           break;
         } else {
           // TODO 教員か学生かが不明である旨を知らせるアラート表示

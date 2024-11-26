@@ -29,9 +29,10 @@ class ProfileInputViewNotifier extends _$ProfileInputViewNotifier {
       SharedPreferenceManager();
 
   /// ユーザー情報登録APIを実行
-  Future<void> putStudentInfo(
-      String userId, StudentUpdate studentUpdate) async {
+  Future<void> putStudentInfo(StudentUpdate studentUpdate) async {
     try {
+      final userId =
+          await _sharedPreferenceManager.getString(PrefKeys.userId) ?? "";
       final idToken =
           await _sharedPreferenceManager.getString(PrefKeys.idToken) ?? "";
       ApiResult<Student> response = await _studentRepository.putStudentInfo(
