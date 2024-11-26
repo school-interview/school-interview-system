@@ -19,17 +19,31 @@ class SupportLevel {
   static const lowAttendanceLowGpa =
       SupportLevel(element: SupportLevelEnum.lowAttendanceAndLowGpa);
 
+  /// 各内訳要素のラベルを取得する
+  String get label {
+    switch (element) {
+      case SupportLevelEnum.attendanceRate:
+        return "出席率が66%以上である";
+      case SupportLevelEnum.credit:
+        return "修得単位数が推奨数以上である";
+      case SupportLevelEnum.highAttendanceLowGpa:
+        return "I.GPAが高い（出席率が高い）";
+      case SupportLevelEnum.lowAttendanceAndLowGpa:
+        return "II.GPAが高い（出席率が低い）";
+    }
+  }
+
   /// 各内訳要素の説明文を取得する
   String get description {
     switch (element) {
       case SupportLevelEnum.attendanceRate:
-        return "出席率が66%を下回る";
+        return "出席率が66%を下回る場合に減点されます。";
       case SupportLevelEnum.credit:
-        return "修得単位数が推奨数を下回る";
+        return "修得単位数が推奨数を下回る場合に減点されます。";
       case SupportLevelEnum.highAttendanceLowGpa:
-        return "出席率が高く、GPAが低い";
+        return "出席率が80%以上で、かつGPAが2.0より低い場合に減点されます。";
       case SupportLevelEnum.lowAttendanceAndLowGpa:
-        return "出席率が低く、GPAが低い";
+        return "出席率が80%を下回り、かつGPAが2.0より低い場合に減点されます。";
     }
   }
 
@@ -50,6 +64,13 @@ class SupportLevel {
   /// 要支援レベルの内訳の値を取得する
   String getElementValue(num? factor) {
     final value = ((factor?.toDouble() ?? 0) * parameter).toStringAsFixed(1);
+    return value;
+  }
+
+  /// 総合点の内訳の値を取得する
+  String getPointElementValue(num? factor) {
+    final value =
+        (parameter - (factor?.toDouble() ?? 0) * parameter).toStringAsFixed(1);
     return value;
   }
 
