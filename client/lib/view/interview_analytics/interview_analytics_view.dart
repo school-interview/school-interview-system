@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:client/component/button_component.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_analytics_view/interview_analytics_view_notifier.dart';
 import 'package:client/ui_core/support_necessity_level.dart';
@@ -66,7 +67,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 8),
                   if (analytics.advise != "" && analytics.advise != null) ...[
@@ -108,7 +109,8 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("修得単位数が進級条件を満たしていないため、支援必須と判断されました。"),
-                            Text("教員から連絡があった場合、速やかに対応してください。")
+                            Text("教員から連絡があった場合、速やかに対応してください。"),
+                            SizedBox(height: 10),
                           ],
                         )
                       : Column(
@@ -186,6 +188,17 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                             ),
                           ],
                         ),
+                  const Text("以上で面談は終了です。"),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: ButtonComponent().normalButton(
+                      labelText: "ログイン画面へ戻る",
+                      onTapButton: () {
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
