@@ -15,7 +15,7 @@ class StartInterviewSessionRestApiController(RestApiController):
     path = "/interview"
     response_model = StartInterviewResponse
 
-    async def controller(self, data: InterviewSessionRequest, db_session=Depends(session_factory), user_model=Depends(verify_user)):
+    async def controller(self, data: InterviewSessionRequest, db_session: Session = Depends(session_factory), user_model=Depends(verify_user)):
         user_id = uuid.UUID(data.user_id)
         teacher_id = uuid.UUID(data.teacher_id)
         if user_model.id != user_id:
@@ -27,7 +27,10 @@ class StartInterviewSessionRestApiController(RestApiController):
             )
         try:
             interview_session_model: InterviewSessionModel = start_interview(
-                db_session, user_id, teacher_id)
+                db_session,
+                user_id,
+                teacher_id
+            )
 
         except InterviewAlreadyStartedException:
             raise ErrorResponse(
@@ -144,7 +147,7 @@ class AnalyticsInterviewRestApiController(RestApiController):
         query_result = db_session.execute(interview_record_query).first()
         interview_record = query_result[0] if query_result else None
         interview_analytics_model: InterviewAnalyticsModel = analyze_interview(
-            db_session, interview_session, interview_record)
+            db_session, interview_session)
 
         interview_analytics_dict = interview_analytics_model.convert_to_dict()
         interview_analytics = TypeAdapter(InterviewAnalytics).validate_python(

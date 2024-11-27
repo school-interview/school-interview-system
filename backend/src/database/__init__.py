@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from src.database.seedings import seed_all
@@ -5,7 +6,7 @@ from dotenv import load_dotenv
 from os import environ
 from src.models import EntityBaseModel
 
-SessionMaker: sessionmaker = None
+SessionMaker: Optional[sessionmaker] = None
 
 load_dotenv(".env")
 
@@ -26,7 +27,9 @@ def connect_db():
 
 
 def session_factory():
-    session = SessionMaker()
+    if SessionMaker is None:
+        raise ValueError("SessionMaker is not initialized.")
+    session: Session = SessionMaker()
     try:
         yield session
     finally:
