@@ -22,7 +22,6 @@ from pydantic import TypeAdapter
 from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, InterviewQuestionGroupModel, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-from src.crud import InterviewQuestionsCrud, InterviewQuestionGroupsCrud
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
