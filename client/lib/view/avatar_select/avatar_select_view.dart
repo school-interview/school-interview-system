@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:client/component/button_component.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
@@ -211,13 +212,23 @@ class _AvatarDialog extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: ButtonComponent().normalButton(
                   labelText: "面談を開始する",
-                  onTapButton: () {
+                  onTapButton: () async {
+                    late CameraController cameraController;
+                    final cameras = await availableCameras();
+                    cameraController =
+                        CameraController(cameras.first, ResolutionPreset.max);
+                    await cameraController.initialize();
+
                     // 面談画面へ遷移
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (BuildContext context) {
-                        return InterviewView(teacherId: teacherId);
-                      }),
-                    );
+                    if (context.mounted) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (BuildContext context) {
+                          return InterviewView(
+                              cameraController: cameraController,
+                              teacherId: teacherId);
+                        }),
+                      );
+                    }
                   },
                 ),
               ),

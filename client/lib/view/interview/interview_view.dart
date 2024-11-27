@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:camera/camera.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
@@ -13,8 +14,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// 面談画面
 class InterviewView extends ConsumerStatefulWidget {
-  const InterviewView({super.key, required this.teacherId});
+  const InterviewView(
+      {super.key, required this.cameraController, required this.teacherId});
 
+  final CameraController cameraController;
   final String teacherId;
 
   @override
@@ -27,7 +30,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
     super.initState();
     Future(() async {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      await notifier.init(widget.teacherId);
+      await notifier.init(widget.cameraController, widget.teacherId);
     });
   }
 
@@ -181,7 +184,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
             ),
             onPressed: () async {
               final notifier = ref.read(interviewViewNotifierProvider.notifier);
-              await notifier.micButtonTapAction();
+              await notifier.micButtonTapAction(widget.cameraController);
             },
           ),
         ),
