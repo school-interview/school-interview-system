@@ -75,7 +75,6 @@ def test_get_next_question(data_for_test):
         if next_question_id is None:
             assert next_question is None
         else:
-            print(next_question and next_question.question)
             if next_question is None:
                 raise ValueError("The next question is not found.")
             assert (

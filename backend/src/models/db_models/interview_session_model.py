@@ -109,7 +109,7 @@ class InterviewSessionModel(EntityBaseModel):
             if next_question_group_order is None:
                 raise ValueError("Couldn't find next questoin group order.")
 
-            if next_question_group_order >= len(interview_groups):
+            if next_question_group_order > len(interview_groups):
                 # 最後のQuestionGroupの最後のInterviewQuestionだった場合
                 return None
 
