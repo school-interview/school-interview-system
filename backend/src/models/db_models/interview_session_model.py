@@ -123,6 +123,8 @@ class InterviewSessionModel(EntityBaseModel):
     def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]):
         """このInterviewSessionの現在の質問を次に進めます。
 
+        (progress_interview()から呼び出される事を想定しています。)
+
         Args:
             db_session (Session): DBセッション
             interview_groups (List[InterviewQuestionGroup]): InterviewQuestionGroupのリスト
