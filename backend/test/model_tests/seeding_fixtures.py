@@ -5,7 +5,7 @@ from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy import create_engine, text
 from src.models import UserModel, StudentModel, Student, User, InterviewSessionModel, TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
 from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 import random
 from datetime import datetime
 
@@ -32,12 +32,8 @@ def db_session_module_scoped():
 
 
 def create_db_session():
-    engine = create_engine('sqlite:///:memory:', echo=True)
     db_session = UnifiedAlchemyMagicMock()
-    engine.connect()
-    query_for_foreign_key = text("PRAGMA foreign_keys = true")
-    db_session.execute(query_for_foreign_key)
-    EntityBaseModel.metadata.create_all(engine)
+    EntityBaseModel.metadata.create_all(db_session)
     teachers = seed_teachers(db_session)
     users = seed_users(db_session)
     question_groups = seed_question_groups(db_session)
@@ -273,7 +269,6 @@ def create_student_user(db_session: Session, semester: int):
         user_id=user_id,
         student_id=student_number,
         department="情報工学部",
-        semester=semester,
     )
     users_crud.create(db_session=db_session,
                       obj_in=user_model)

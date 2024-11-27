@@ -1,5 +1,5 @@
 import pytest
-from typing import List
+from typing import Any, List
 import uuid
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy import create_engine, text
@@ -17,13 +17,7 @@ teachers_crud = TeachersCrud(TeacherModel)
 
 @pytest.fixture(scope="module")
 def db_session():
-    engine = create_engine('sqlite:///:memory:', echo=True)
-    SessionMaker = sessionmaker(bind=engine)
-    db_session = SessionMaker()
-    connection = engine.connect()
-    query_for_foreign_key = text("PRAGMA foreign_keys = ON;")
-    connection.execute(query_for_foreign_key)
-    EntityBaseModel.metadata.create_all(engine)
+    db_session = UnifiedAlchemyMagicMock()
     teachers = seed_teachers(db_session)
     users = seed_users(db_session)
     question_groups = seed_question_groups(db_session)
@@ -242,7 +236,7 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
 
 # utils...
 
-def get_number_of_rows(session: Session, model: EntityBaseModel) -> int:
+def get_number_of_rows(session: Session, model: Any) -> int:
     return session.query(model).count()
 
 
