@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:client/app.dart';
 import 'package:client/component/button_component.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
@@ -183,22 +184,53 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                         ref.read(avatarSelectViewNotifierProvider.notifier);
                     notifier.setIsLoading(true);
                     // カメラとマイクを初期化（使用許可をとる）
-                    final cameras = await availableCameras();
-                    CameraController cameraController =
-                        CameraController(cameras.first, ResolutionPreset.max);
-                    await cameraController.initialize();
+                    try {
+                      final cameras = await availableCameras();
+                      CameraController cameraController =
+                          CameraController(cameras.first, ResolutionPreset.max);
+                      await cameraController.initialize();
+                      // 面談画面へ遷移
+                      if (mounted) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                            return InterviewView(
+                                cameraController: cameraController,
+                                teacherId: teacherId);
+                          }),
+                        );
+                      }
+                    } catch (e) {
+                      logger.e("failed camera initialize:$e");
+                      if (mounted) {
+                        showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: const Text("カメラ、もしくはマイクが使用できません。"),
+                                content: const Text(
+                                    "お使いのブラウザの設定を見直してどちらも使用が許可されていることを確認してください。"),
+                                actions: [
+                                  TextButton(
+                                      child: const Text('ログインに戻る',
+                                          style: TextStyle(color: Colors.blue)),
+                                      onPressed: () {
+                                        Navigator.popUntil(
+                                            context, (route) => route.isFirst);
+                                      }),
+                                  TextButton(
+                                      child: const Text('はい',
+                                          style: TextStyle(color: Colors.blue)),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                ],
+                              );
+                            });
+                      }
+                    }
                     // インジケーターを非表示
                     notifier.setIsLoading(false);
-                    // 面談画面へ遷移
-                    if (mounted) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (BuildContext context) {
-                          return InterviewView(
-                              cameraController: cameraController,
-                              teacherId: teacherId);
-                        }),
-                      );
-                    }
                   },
                 ),
               ),
