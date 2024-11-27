@@ -1,3 +1,4 @@
+from uuid import UUID
 from src.crud.base_crud import BaseCrud
 from src.models import InterviewAnalyticsModel, InterviewAnalytics, InterviewAnalyticsUpdate, InterviewSessionModel, UserModel
 from sqlalchemy.orm import Session
@@ -13,5 +14,5 @@ class InterviewAnalyticsCrud(BaseCrud[InterviewAnalyticsModel, InterviewAnalytic
             UserModel, InterviewSessionModel.user_id == UserModel.id
         ).all()
 
-    def get_by_session_id(self, db_session: Session, session_id: str):
+    def get_by_session_id(self, db_session: Session, session_id: UUID):
         return db_session.query(InterviewAnalyticsModel).filter(InterviewAnalyticsModel.session_id == session_id).first()

@@ -6,7 +6,7 @@ from uuid import UUID
 
 
 class InterviewQuestionsCrud(BaseCrud[InterviewQuestionModel, InterviewQuestion, InterviewQuestionUpdate]):
-    _interview_questions_cache: List[InterviewQuestion] = []
+    _interview_questions_dict_cache: Dict[UUID, InterviewQuestion] = {}
 
     def get_multi_by_group_id(self, db_session: Session, group_id: UUID):
         return (db_session.query(InterviewQuestionModel)

@@ -1,15 +1,68 @@
-from datetime import datetime
-from typing import Optional
+from typing import Dict, List, Optional, TypedDict
 from uuid import UUID, uuid4
 from pydantic import Field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+from src.models.db_models.interview_question_model import InterviewQuestion
+from src.models.db_models.interview_question_group_model import InterviewQuestionGroup
 from src.models.db_models.base_model import EntityBaseModel
-from src.models.db_models.interview_record_model import InterviewRecordModel
+from src.models.db_models.interview_record_model import InterviewRecordModel, InterviewRecord
 from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel
 from src.models.db_models.student_model import StudentModel
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
-from sqlalchemy import DateTime
+
+
+class InterviewExtractedValueDict(TypedDict):
+    planned_credits: int
+    total_earned_credits: int
+    attendance_rate: float
+    gpa: float
+
+
+def interview_extracted_value_dict_factory(interview_records: List[InterviewRecordModel], groups: List[InterviewQuestionGroup]) -> InterviewExtractedValueDict:
+    # TODO: InterviewRecordにhuman readableなID（'planned_credits'など）を追加するアプローチにしたい。
+    order_key_mapping = {
+        "1-1": "planned_credits",
+        "2-1": "total_earned_credits",
+        "3-1": "attendance_rate",
+        "4-1": "gpa"
+    }
+    extracted_value_dict: InterviewExtractedValueDict = {
+        'attendance_rate': 0,
+        'gpa': 0,
+        'planned_credits': 0,
+        'total_earned_credits': 0
+    }
+    question_id_to_order: Dict[UUID, str] = {}
+    question_id_to_question: Dict[UUID, InterviewQuestion] = {}
+    for group in groups:
+        if group.questions is None:
+            raise ValueError(
+                "Coundn't load questions in InterviewQuestionGroup.")
+        for question in group.questions:
+            question_id_to_order[question.id] = f"{
+                group.order}-{question.order}"
+            question_id_to_question[question.id] = question
+
+    for record in interview_records:
+        order = question_id_to_order[record.question_id]
+        if order not in order_key_mapping:
+            continue
+        key = order_key_mapping[order]
+        question = question_id_to_question[record.question_id]
+        match question.extraction_data_type:
+            case "int":
+                extracted_value_dict[key] = int(record.extracted_data)
+            case "float":
+                extracted_value_dict[key] = float(record.extracted_data)
+            case "str":
+                extracted_value_dict[key] = record.extracted_data
+            case "bool":
+                extracted_value_dict[key] = bool(record.extracted_data)
+            case _:
+                raise ValueError(
+                    "Invalid extraction data type in InterviewQuestion.")
+    return extracted_value_dict
 
 
 class InterviewAnalytics(AppPydanticBaseModel):
@@ -22,9 +75,6 @@ class InterviewAnalytics(AppPydanticBaseModel):
     high_attendance_low_gpa_rate: float
     low_atendance_and_low_gpa_rate: float
     support_necessity_level: float
-    advise: Optional[str] = Field(None)
-    start_at: datetime
-    end_at: datetime
 
 
 class InterviewAnalyticsModel(EntityBaseModel):
@@ -39,12 +89,9 @@ class InterviewAnalyticsModel(EntityBaseModel):
     high_attendance_low_gpa_rate: Mapped[float]
     low_atendance_and_low_gpa_rate: Mapped[float]
     support_necessity_level: Mapped[float]
-    advise: Mapped[Optional[str]]
-    start_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
-    end_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
 
     @staticmethod
-    def create_from_interview_record(student: StudentModel, interview_record: InterviewRecordModel, start_at: datetime):
+    def interview_analytics_factory(interview_session: InterviewSessionModel, student: StudentModel, extracted_value_dict: InterviewExtractedValueDict):
         # 算出方法に関してはこちら。
         # https://www.notion.so/2024-09-17-104879aba7c6808cbcdfda7522e0d237
 
@@ -71,20 +118,24 @@ class InterviewAnalyticsModel(EntityBaseModel):
             8: 124,  # 4年後期
         }
 
-        planned_credits = interview_record.planned_credits
-        total_earned_credits = interview_record.total_earned_credits
-        attendance_rate = interview_record.attendance_rate
-        gpa = interview_record.gpa
+        planned_credits = extracted_value_dict['planned_credits']
+        total_earned_credits = extracted_value_dict['total_earned_credits']
+        attendance_rate = extracted_value_dict['attendance_rate']
+        gpa = extracted_value_dict['gpa']
 
         level = 0
 
         def is_failed_to_move_to_next_grade():
+            if student.semester is None:
+                raise ValueError("semester doesn't exist in student model.")
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
             if credits_to_be_earned_in_total < required_credits[student.semester]:
                 return 100
             return 0
 
         def get_deviation_from_preferred_credit_level():
+            if student.semester is None:
+                raise ValueError("semester doesn't exist in student model.")
             credits_to_be_earned_in_total = planned_credits + total_earned_credits
             if credits_to_be_earned_in_total < preffered_credits[student.semester]:
                 if student.semester == 8:  # semesterが8の場合は124かどうかで判断
@@ -132,62 +183,14 @@ class InterviewAnalyticsModel(EntityBaseModel):
             level = 100
         return InterviewAnalyticsModel(
             id=uuid4(),
-            session_id=interview_record.session_id,
+            session_id=interview_session.id,
             fail_to_move_to_next_grade=failed_to_move_to_next_grade,
             deviation_from_preferred_credit_level=deviation_from_preferred_credit_level,
             deviation_from_minimum_attendance_rate=deviation_from_minimum_attendance_rate,
             high_attendance_low_gpa_rate=high_attendance_low_gpa_rate,
             low_atendance_and_low_gpa_rate=low_atendance_and_low_gpa_rate,
-            support_necessity_level=level,
-            advise=InterviewAnalyticsModel.generate_advise(failed_to_move_to_next_grade, deviation_from_preferred_credit_level,
-                                                           deviation_from_minimum_attendance_rate, high_attendance_low_gpa_rate, low_atendance_and_low_gpa_rate),
-            start_at=start_at,
-            end_at=datetime.now()
+            support_necessity_level=level
         )
-
-    @staticmethod
-    def generate_advise(fail_to_move_to_next_grade: bool, deviation_from_preferred_credit_level: float, deviation_from_minimum_attendance_rate: float, high_attendance_low_gpa_rate: float, low_atendance_and_low_gpa_rate: float):
-        advise = ""
-        if fail_to_move_to_next_grade:
-            advise += """
-✅ 進級について
-進級できない可能性があります。担当教員との面談をお勧めします。
-"""
-        if deviation_from_preferred_credit_level > 0:
-            advise += """
-✅ 単位取得について
-次学期終了時点での予定単位取得数が推奨単位数に達していません。単位取得についての計画を立てることをお勧めします。
-"""
-        if deviation_from_minimum_attendance_rate > 0:
-            advise += """
-✅ 出席率について
-出席率が66%を下回っています。もし出席し辛い事情がありましたら、担当教員に相談することができます。
-"""
-        if high_attendance_low_gpa_rate > 0:
-            advise += """
-✅ 成績向上にむけて
-大学の施設を活用することをおすすめします！
-・数理工教育研究センター 
-数学、物理、化学などの学習に役立つ施設です。
-
-・基礎英語教育センター（EEC） （23号館2・3階）
-英語力向上に役に立ちます。
-
-"""
-        if low_atendance_and_low_gpa_rate > 0:
-            advise += """
-✅ 出席率と成績向上にむけて
-出席し辛い事情がありましたら、担当教員に相談することができます。
-
-また成績向上のために、大学の施設を活用することをおすすめします！
-・数理工教育研究センター 
-数学、物理、化学などの学習に役立つ施設です。
-
-・基礎英語教育センター（EEC） （23号館2・3階）
-英語力向上に役に立ちます。
-
-"""
-        return advise
 
 
 class InterviewAnalyticsUpdate(AppPydanticBaseModel):

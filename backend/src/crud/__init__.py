@@ -7,3 +7,4 @@ from src.crud.interview_questions_crud import InterviewQuestionsCrud
 from src.crud.students_crud import StudentsCrud
 from src.crud.teachers_crud import TeachersCrud
 from src.crud.interview_groups_crud import InterviewQuestionGroupsCrud
+from src.crud.interview_record_crud import InterviewRecordsCrud
