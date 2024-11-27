@@ -14,7 +14,7 @@ class EntityBaseModel(DeclarativeBase):
             cls: Type[T],
             obj_history: Set,
             model_class_mapping: Optional[Dict] = None
-    ) -> BaseModel:
+    ) -> T:
         """
         SQLAlchemyモデルをPydanticモデルに変換するメソッドです。
             Args:
@@ -41,7 +41,10 @@ class EntityBaseModel(DeclarativeBase):
                 # dict_to_convert[key] = pydantic_model.convert_to_dict()
                 dict_to_convert[key] = pydantic_model
             obj_history.add(id(value))
-        return TypeAdapter(cls).validate_python(dict_to_convert)
+        return (
+            TypeAdapter(cls)
+            .validate_python(dict_to_convert)  # type: ignore
+        )
 
     def convert_to_dict(self) -> Dict[str, Any]:
         d = {}

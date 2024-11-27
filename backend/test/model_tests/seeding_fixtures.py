@@ -3,9 +3,9 @@ from typing import Any, List
 import uuid
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy import create_engine, text
-from src.models import UserModel, StudentModel, Student, User, InterviewSessionModel, TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
+from src.models import UserModel, StudentModel, InterviewSessionModel, TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
 from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 import random
 from datetime import datetime
 
