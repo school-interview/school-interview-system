@@ -2,10 +2,10 @@ import pytest
 from typing import List
 import uuid
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from src.models import UserModel, StudentModel, Student, User, InterviewSessionModel, TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
 from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 import random
 from datetime import datetime
 
@@ -18,8 +18,11 @@ teachers_crud = TeachersCrud(TeacherModel)
 @pytest.fixture(scope="module")
 def db_session():
     engine = create_engine('sqlite:///:memory:', echo=True)
-    db_session = UnifiedAlchemyMagicMock()
-    engine.connect()
+    SessionMaker = sessionmaker(bind=engine)
+    db_session = SessionMaker()
+    connection = engine.connect()
+    query_for_foreign_key = text("PRAGMA foreign_keys = ON;")
+    connection.execute(query_for_foreign_key)
     EntityBaseModel.metadata.create_all(engine)
     teachers = seed_teachers(db_session)
     users = seed_users(db_session)
