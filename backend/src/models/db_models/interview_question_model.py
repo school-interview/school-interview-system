@@ -31,7 +31,7 @@ class InterviewQuestionModel(EntityBaseModel):
     group_id: Mapped[UUID] = mapped_column(
         ForeignKey("InterviewQuestionGroups.id", ondelete="CASCADE"))
     question: Mapped[str] = mapped_column(String(100))
-    order: Mapped[int] = mapped_column(unique=True)
+    order: Mapped[int] = mapped_column()
     condition_target_operand_data_type: Mapped[Optional[str]] = mapped_column(
         String(5))
     condition_left_operand: Mapped[Optional[str]] = mapped_column(String(10))

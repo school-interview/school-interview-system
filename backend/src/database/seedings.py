@@ -29,60 +29,50 @@ def seed_teachers(session: Session):
 
 
 def seed_question_groups(session: Session):
-    row_count = get_number_of_rows(session, InterviewQuestionModel)
-
-    if row_count > 0:
-        groups: List[InterviewQuestionGroupModel] = [
-            InterviewQuestionGroupModel(
-                id=uuid.uuid4(),
-                group_name="現状の取得単位数に関する質問",
-                order=1,
-                questions=[]
-            ),
-            InterviewQuestionGroupModel(
-                id=uuid.uuid4(),
-                group_name="今学期の取得予定単位数に関する質問",
-                order=2,
-                questions=[]
-            ),
-            InterviewQuestionGroupModel(
-                id=uuid.uuid4(),
-                group_name="累積GPAに関する質問",
-                order=3,
-                questions=[]
-            ),
-            InterviewQuestionGroupModel(
-                id=uuid.uuid4(),
-                group_name="出席率に関する質問",
-                order=4,
-                questions=[]
-            ),
-            InterviewQuestionGroupModel(
-                id=uuid.uuid4(),
-                group_name="学校生活で困っていることに関する質問",
-                order=5,
-                questions=[]
-            ),
-            InterviewQuestionGroupModel(
-                id=uuid.uuid4(),
-                group_name="教員との面談に関する質問",
-                order=6,
-                questions=[]
-            )
-        ]
-        session.add_all(groups)
-        session.commit()
-        return groups
-    else:
-        return []
+    groups: List[InterviewQuestionGroupModel] = [
+        InterviewQuestionGroupModel(
+            id=uuid.uuid4(),
+            group_name="現状の取得単位数に関する質問",
+            order=1,
+            questions=[]
+        ),
+        InterviewQuestionGroupModel(
+            id=uuid.uuid4(),
+            group_name="今学期の取得予定単位数に関する質問",
+            order=2,
+            questions=[]
+        ),
+        InterviewQuestionGroupModel(
+            id=uuid.uuid4(),
+            group_name="累積GPAに関する質問",
+            order=3,
+            questions=[]
+        ),
+        InterviewQuestionGroupModel(
+            id=uuid.uuid4(),
+            group_name="出席率に関する質問",
+            order=4,
+            questions=[]
+        ),
+        InterviewQuestionGroupModel(
+            id=uuid.uuid4(),
+            group_name="学校生活で困っていることに関する質問",
+            order=5,
+            questions=[]
+        ),
+        InterviewQuestionGroupModel(
+            id=uuid.uuid4(),
+            group_name="教員との面談に関する質問",
+            order=6,
+            questions=[]
+        )
+    ]
+    session.add_all(groups)
+    session.commit()
+    return groups
 
 
 def seed_questions(session: Session, question_groups: List[InterviewQuestionGroupModel]):
-    question_row_count = get_number_of_rows(session, InterviewQuestionModel)
-    group_row_count = get_number_of_rows(session, InterviewQuestionGroupModel)
-
-    if group_row_count > 0 or question_row_count > 0:
-        return
     questions: List[InterviewQuestionModel] = []
     first_group_id = question_groups[0].id
     questions.append(
@@ -205,6 +195,7 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
 
     session.add_all(questions)
     session.commit()
+    return questions
 
 
 def get_number_of_rows(session: Session, model: Type[EntityBaseModel]) -> int:
