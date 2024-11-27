@@ -4,12 +4,11 @@ from src.models import InterviewAnalyticsModel, UserModel, StudentModel, AdminMo
 from src.crud import InterviewAnalyticsCrud, UsersCrud, StudentsCrud
 
 
-def analyze_interview(db_session: Session, interview_session: InterviewSessionModel, interview_recrod: InterviewRecordModel):
+def analyze_interview(db_session: Session, interview_session: InterviewSessionModel):
     """
     Args:
         db_session (Session): DB session
         interview_session (InterviewSessionModel): 
-        interview_recrod (InterviewRecordModel):
     """
     analytics_crud = InterviewAnalyticsCrud(InterviewAnalyticsModel)
     existing_interview_analytics = analytics_crud.get_by_session_id(

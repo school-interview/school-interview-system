@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 from src.crud.base_crud import BaseCrud
 from src.models import InterviewQuestionModel, InterviewQuestion, InterviewQuestionUpdate
 from sqlalchemy.orm import Session
@@ -14,3 +14,11 @@ class InterviewQuestionsCrud(BaseCrud[InterviewQuestionModel, InterviewQuestion,
                 .order_by(InterviewQuestionModel.order)
                 .all()
                 )
+
+    def get_multi_in_dict(self, db_session: Session):
+        if len(self._interview_questions_dict_cache.keys()) == 0:
+            questions = self.get_multi(db_session)
+            for q in questions:
+                self._interview_questions_dict_cache[q.id] = q.convert_to_pydantic(
+                    InterviewQuestion, obj_history=set())
+        return self._interview_questions_dict_cache
