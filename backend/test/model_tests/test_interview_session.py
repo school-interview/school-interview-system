@@ -55,6 +55,9 @@ def data_for_test(db_session):
 
 
 def test_get_next_question(data_for_test):
+    """
+          次の質問の判定ロジックのテスト
+    """
     db_session, question_groups, questions, questions_by_group, interview_sessions, questions_by_id = data_for_test
     target_interivew_session = interview_sessions[0]
     group_2_id = question_groups[1].id
