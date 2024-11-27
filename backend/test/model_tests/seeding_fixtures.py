@@ -1,10 +1,11 @@
 import pytest
-from typing import Any, List
+from typing import Any, List, Dict
 import uuid
+from uuid import UUID
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy import create_engine, text
-from src.models import UserModel, StudentModel, InterviewSessionModel, TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
-from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud
+from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud, InterviewQuestionGroupsCrud, InterviewQuestionsCrud
+from src.models import EntityBaseModel, UserModel, StudentModel, InterviewSessionModel, TeacherModel, InterviewQuestion, InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionModel
 from sqlalchemy.orm import Session
 import random
 from datetime import datetime
@@ -13,6 +14,9 @@ users_crud = UsersCrud(UserModel)
 students_crud = StudentsCrud(StudentModel)
 interview_sessions_crud = InterviewSessionsCrud(InterviewSessionModel)
 teachers_crud = TeachersCrud(TeacherModel)
+interview_question_groups_crud = InterviewQuestionGroupsCrud(
+    InterviewQuestionGroupModel)
+interview_questions_crud = InterviewQuestionsCrud(InterviewQuestionModel)
 
 
 @pytest.fixture

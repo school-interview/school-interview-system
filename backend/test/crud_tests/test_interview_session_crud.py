@@ -25,12 +25,16 @@ def test_get_multi_interview_session(db_session):
 def test_get_multi_with_current_question(db_session):
     users = users_crud.get_multi(db_session)
     first_user = users[0]
+    # mockの場合UUIDがstrになってしまうので変換。UUIDはstrを受け付けないのでエラーが出るがランタイム時はstrなので一旦ignore
     interview_session = interview_sessions_crud.get_with_curernt_question(
-        db_session, UUID(first_user.id))
+        db_session, UUID(first_user.id))  # type: ignore
     current_question = interview_questons_crud.get(
-        db_session, UUID(interview_session.current_question_id))
+        db_session,
+        UUID(interview_session.current_question_id)  # type: ignore
+    )
     assert first_user
     assert interview_session
     assert interview_session.user_id == first_user.id
-    assert current_question.id == UUID(interview_session.current_question_id)
+    assert current_question.id == UUID(  # type: ignore
+        interview_session.current_question_id)  # type: ignore
     # assert interview_session.current_question

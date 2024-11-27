@@ -1,5 +1,6 @@
 from uuid import UUID
 from typing import Any, List, Optional
+from pydantic import Field
 from sqlalchemy import String
 from src.models.db_models.base_model import EntityBaseModel
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
@@ -11,7 +12,7 @@ class InterviewQuestionGroup(AppPydanticBaseModel):
     id: UUID
     group_name: str
     order: int
-    questions: List[InterviewQuestion]
+    questions: Optional[List[InterviewQuestion]] = Field(None)
 
 
 class InterviewQuestionGroupModel(EntityBaseModel):

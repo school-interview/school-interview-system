@@ -99,7 +99,16 @@ class InterviewSessionModel(EntityBaseModel):
         questions_in_group = questions_by_group[self.current_question.group_id]
         if self.current_question.order == len(questions_in_group):
             # QuestionGroup内の最後の質問だった場合
-            next_question_group_order = self.current_question.order + 1
+            next_question_group_order = None
+            for group in interview_groups:
+                questions = questions_by_group[group.id]
+                for q in questions:
+                    if q.id == self.current_question.id:
+                        next_question_group_order = group.order + 1
+                        break
+            if next_question_group_order is None:
+                raise ValueError("Couldn't find next questoin group order.")
+
             if next_question_group_order >= len(interview_groups):
                 # 最後のQuestionGroupの最後のInterviewQuestionだった場合
                 return None
