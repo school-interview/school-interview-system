@@ -1,4 +1,4 @@
-from typing import List, Optional, Generic, TypeVar, Type
+from typing import List, Optional, Generic, TypeVar, Type, Union
 from uuid import UUID
 from src.models import EntityBaseModel
 from fastapi.encoders import jsonable_encoder
@@ -36,7 +36,7 @@ class BaseCrud(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get_multi(self, db_session: Session, *, skip=0, limit=100) -> List[ModelType]:
         return db_session.query(self.model).offset(skip).limit(limit).all()
 
-    def create(self, db_session: Session, *, obj_in: CreateSchemaType) -> ModelType:
+    def create(self, db_session: Session, *, obj_in: Union[ModelType, CreateSchemaType]) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)
         db_session.add(db_obj)
