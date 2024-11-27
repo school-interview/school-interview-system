@@ -1,7 +1,7 @@
 from typing import Dict, List
 from uuid import UUID
 import pytest
-from test.model_tests.seeding_fixtures import db_session
+from test.model_tests.seeding_fixtures import db_session_module_scoped
 from src.models import InterviewQuestionModel, InterviewQuestionGroupModel
 from src.crud import InterviewQuestionsCrud,  InterviewQuestionGroupsCrud
 
@@ -11,10 +11,10 @@ interview_questions_crud = InterviewQuestionsCrud(InterviewQuestionModel)
 
 
 @pytest.fixture(scope="module")
-def groups_and_questions(db_session):
+def groups_and_questions(db_session_module_scoped):
     question_groups = interview_question_groups_crud.get_multi_with_questions(
-        db_session)
-    questions = interview_questions_crud.get_multi(db_session)
+        db_session_module_scoped)
+    questions = interview_questions_crud.get_multi(db_session_module_scoped)
     questions_by_group: Dict[UUID, List[InterviewQuestionModel]] = {}
     for group in question_groups:
         for question in questions:
