@@ -44,128 +44,91 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
           fontSize: 24,
         ),
       ),
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.only(top: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                  S.of(context).avatarSelectDescription,
-                  style: const TextStyle(color: ColorDefinitions.textColor),
-                ),
-                const SizedBox(height: 16),
+      body: Stack(children: [
+        IgnorePointer(
+          ignoring: state.isLoading,
+          child: Opacity(
+            opacity: state.isLoading ? 0.1 : 1.0,
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.only(top: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        S.of(context).avatarSelectDescription,
+                        style:
+                            const TextStyle(color: ColorDefinitions.textColor),
+                      ),
+                      const SizedBox(height: 16),
 
-                /// アバター一覧を生成する
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: GridView.builder(
-                    controller: scrollController,
-                    itemCount: state.teacherCount,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      mainAxisExtent: 180,
-                    ),
-                    itemBuilder: (context, index) {
-                      final teacher = state.teacherList[index];
-                      return _AvatarSelectBox(
-                        avatarName: teacher.name,
-                        onTapSelectBox: () async {
-                          // 注意書きを取得
-                          String cautionContent = await rootBundle
-                              .loadString('assets/cautions.html');
-                          if (context.mounted) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) => _AvatarDialog(
-                                avatarName: teacher.name,
-                                imageString: 'assets/image/sample_avatar.png',
-                                cautionContent: cautionContent,
-                                teacherId: teacher.id,
-                              ),
+                      /// アバター一覧を生成する
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: GridView.builder(
+                          controller: scrollController,
+                          itemCount: state.teacherCount,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                            mainAxisExtent: 180,
+                          ),
+                          itemBuilder: (context, index) {
+                            final teacher = state.teacherList[index];
+                            return _AvatarSelectBox(
+                              avatarName: teacher.name,
+                              onTapSelectBox: () async {
+                                // 注意書きを取得
+                                String cautionContent = await rootBundle
+                                    .loadString('assets/cautions.html');
+                                if (context.mounted) {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) =>
+                                        _avatarDialog(
+                                      avatarName: teacher.name,
+                                      imageString:
+                                          'assets/image/sample_avatar.png',
+                                      cautionContent: cautionContent,
+                                      teacherId: teacher.id,
+                                    ),
+                                  );
+                                }
+                              },
                             );
-                          }
-                        },
-                      );
-                    },
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        if (state.isLoading)
+          const Align(
+            child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation(ColorDefinitions.accentColor)),
+          ),
+      ]),
     );
   }
-}
 
-/// アバターセレクトボックスを生成するWidget
-class _AvatarSelectBox extends StatelessWidget {
-  const _AvatarSelectBox({
-    required this.avatarName,
-    required this.onTapSelectBox,
-  });
-
-  final String avatarName;
-  final Function() onTapSelectBox;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: BoxShadowStyle.boxShadowStyle(),
-      ),
-      child: Material(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        color: Colors.white,
-        child: InkWell(
-          onTap: onTapSelectBox,
-          // リップルエフェクトの角を丸くするためにcustomBorderセット。
-          customBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 100,
-                child: Image.asset("assets/image/sample_avatar.png"),
-              ),
-              const SizedBox(height: 8),
-              Text(avatarName),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// アバター選択時に表示するダイアログ
-class _AvatarDialog extends StatelessWidget {
-  const _AvatarDialog({
-    required this.avatarName,
-    required this.imageString,
-    required this.cautionContent,
-    required this.teacherId,
-  });
-
-  final String avatarName;
-  final String imageString;
-  final String cautionContent;
-  final String teacherId;
-
-  @override
-  Widget build(BuildContext context) {
+  /// アバター選択時に表示するダイアログ
+  Widget _avatarDialog({
+    required String avatarName,
+    required String imageString,
+    required String cautionContent,
+    required String teacherId,
+  }) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     // Exception対策（なくても動作は問題ない）
     final scrollController = ScrollController();
@@ -213,14 +176,21 @@ class _AvatarDialog extends StatelessWidget {
                 child: ButtonComponent().normalButton(
                   labelText: "面談を開始する",
                   onTapButton: () async {
-                    late CameraController cameraController;
+                    // ダイアログを閉じる
+                    Navigator.of(context).pop();
+                    // インジケーターを表示
+                    final notifier =
+                        ref.read(avatarSelectViewNotifierProvider.notifier);
+                    notifier.setIsLoading(true);
+                    // カメラとマイクを初期化（使用許可をとる）
                     final cameras = await availableCameras();
-                    cameraController =
+                    CameraController cameraController =
                         CameraController(cameras.first, ResolutionPreset.max);
                     await cameraController.initialize();
-
+                    // インジケーターを非表示
+                    notifier.setIsLoading(false);
                     // 面談画面へ遷移
-                    if (context.mounted) {
+                    if (mounted) {
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (BuildContext context) {
                           return InterviewView(
@@ -233,6 +203,50 @@ class _AvatarDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// アバターセレクトボックスを生成するWidget
+class _AvatarSelectBox extends StatelessWidget {
+  const _AvatarSelectBox({
+    required this.avatarName,
+    required this.onTapSelectBox,
+  });
+
+  final String avatarName;
+  final Function() onTapSelectBox;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: BoxShadowStyle.boxShadowStyle(),
+      ),
+      child: Material(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        color: Colors.white,
+        child: InkWell(
+          onTap: onTapSelectBox,
+          // リップルエフェクトの角を丸くするためにcustomBorderセット。
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Image.asset("assets/image/sample_avatar.png"),
+              ),
+              const SizedBox(height: 8),
+              Text(avatarName),
             ],
           ),
         ),

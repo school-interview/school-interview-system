@@ -19,6 +19,9 @@ mixin _$AvatarSelectViewState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
+  /// 読み込み中フラグ
+  bool get isLoading => throw _privateConstructorUsedError;
+
   /// 教員リスト取得APIレスポンス
   List<Teacher> get teacherList => throw _privateConstructorUsedError;
   int get teacherCount => throw _privateConstructorUsedError;
@@ -34,7 +37,11 @@ abstract class $AvatarSelectViewStateCopyWith<$Res> {
           $Res Function(AvatarSelectViewState) then) =
       _$AvatarSelectViewStateCopyWithImpl<$Res, AvatarSelectViewState>;
   @useResult
-  $Res call({Result? result, List<Teacher> teacherList, int teacherCount});
+  $Res call(
+      {Result? result,
+      bool isLoading,
+      List<Teacher> teacherList,
+      int teacherCount});
 }
 
 /// @nodoc
@@ -52,6 +59,7 @@ class _$AvatarSelectViewStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? result = freezed,
+    Object? isLoading = null,
     Object? teacherList = null,
     Object? teacherCount = null,
   }) {
@@ -60,6 +68,10 @@ class _$AvatarSelectViewStateCopyWithImpl<$Res,
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       teacherList: null == teacherList
           ? _value.teacherList
           : teacherList // ignore: cast_nullable_to_non_nullable
@@ -81,7 +93,11 @@ abstract class _$$AvatarSelectViewStateImplCopyWith<$Res>
       __$$AvatarSelectViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Result? result, List<Teacher> teacherList, int teacherCount});
+  $Res call(
+      {Result? result,
+      bool isLoading,
+      List<Teacher> teacherList,
+      int teacherCount});
 }
 
 /// @nodoc
@@ -97,6 +113,7 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? result = freezed,
+    Object? isLoading = null,
     Object? teacherList = null,
     Object? teacherCount = null,
   }) {
@@ -105,6 +122,10 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       teacherList: null == teacherList
           ? _value._teacherList
           : teacherList // ignore: cast_nullable_to_non_nullable
@@ -122,6 +143,7 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
 class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   const _$AvatarSelectViewStateImpl(
       {this.result,
+      this.isLoading = false,
       final List<Teacher> teacherList = const [],
       this.teacherCount = 0})
       : _teacherList = teacherList;
@@ -129,6 +151,11 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   /// API処理結果
   @override
   final Result? result;
+
+  /// 読み込み中フラグ
+  @override
+  @JsonKey()
+  final bool isLoading;
 
   /// 教員リスト取得APIレスポンス
   final List<Teacher> _teacherList;
@@ -148,7 +175,7 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
 
   @override
   String toString() {
-    return 'AvatarSelectViewState(result: $result, teacherList: $teacherList, teacherCount: $teacherCount)';
+    return 'AvatarSelectViewState(result: $result, isLoading: $isLoading, teacherList: $teacherList, teacherCount: $teacherCount)';
   }
 
   @override
@@ -157,6 +184,8 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
         (other.runtimeType == runtimeType &&
             other is _$AvatarSelectViewStateImpl &&
             (identical(other.result, result) || other.result == result) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
             const DeepCollectionEquality()
                 .equals(other._teacherList, _teacherList) &&
             (identical(other.teacherCount, teacherCount) ||
@@ -164,7 +193,7 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, result,
+  int get hashCode => Object.hash(runtimeType, result, isLoading,
       const DeepCollectionEquality().hash(_teacherList), teacherCount);
 
   @JsonKey(ignore: true)
@@ -178,6 +207,7 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
 abstract class _AvatarSelectViewState implements AvatarSelectViewState {
   const factory _AvatarSelectViewState(
       {final Result? result,
+      final bool isLoading,
       final List<Teacher> teacherList,
       final int teacherCount}) = _$AvatarSelectViewStateImpl;
 
@@ -185,6 +215,10 @@ abstract class _AvatarSelectViewState implements AvatarSelectViewState {
 
   /// API処理結果
   Result? get result;
+  @override
+
+  /// 読み込み中フラグ
+  bool get isLoading;
   @override
 
   /// 教員リスト取得APIレスポンス
