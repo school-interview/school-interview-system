@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  awesome_dialog:
+    dependency: "direct main"
+    description:
+      name: awesome_dialog
+      sha256: "41c41ae4b30b5c7f26bb3d9f9c87010ed1cab0bb4d4ac0cc513e5799c37e9d82"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -740,6 +748,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  rive:
+    dependency: transitive
+    description:
+      name: rive
+      sha256: fb18e38f9de28261e6f4a2d097dff419b4b741b13999fc6c2fd459481a0bbc6f
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.18"
+  rive_common:
+    dependency: transitive
+    description:
+      name: rive_common
+      sha256: "031b29f7b1fc2732d06f60d053e0d7fbe0358fa19e991a91fa3991aa2760b240"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.13"
   riverpod:
     dependency: transitive
     description:

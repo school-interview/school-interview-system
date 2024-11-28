@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:client/app.dart';
 import 'package:client/component/button_component.dart';
@@ -202,31 +203,22 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                     } catch (e) {
                       logger.e("failed camera initialize:$e");
                       if (mounted) {
-                        showDialog(
+                        AwesomeDialog(
                             context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                backgroundColor: Colors.white,
-                                title: const Text("カメラ、もしくはマイクが使用できません。"),
-                                content: const Text(
-                                    "お使いのブラウザの設定を見直してどちらも使用が許可されていることを確認してください。"),
-                                actions: [
-                                  TextButton(
-                                      child: const Text('ログインに戻る',
-                                          style: TextStyle(color: Colors.blue)),
-                                      onPressed: () {
-                                        Navigator.popUntil(
-                                            context, (route) => route.isFirst);
-                                      }),
-                                  TextButton(
-                                      child: const Text('はい',
-                                          style: TextStyle(color: Colors.blue)),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      }),
-                                ],
-                              );
-                            });
+                            dialogType: DialogType.warning,
+                            animType: AnimType.topSlide,
+                            dialogBackgroundColor: Colors.white,
+                            title: "カメラ、もしくはマイクが使用できません。",
+                            desc: "お使いのブラウザの設定を見直してどちらも使用が許可されていることを確認してください。",
+                            btnCancelText: "ログインに戻る",
+                            btnCancelOnPress: () {
+                              Navigator.popUntil(
+                                  context, (route) => route.isFirst);
+                            },
+                            btnOkText: "確認",
+                            btnOkOnPress: () {
+                              null;
+                            }).show();
                       }
                     }
                     // インジケーターを非表示
