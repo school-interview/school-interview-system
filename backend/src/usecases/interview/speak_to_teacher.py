@@ -22,7 +22,7 @@ from pydantic import TypeAdapter
 from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, InterviewQuestionGroupModel, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-from src.crud import InterviewQuestionGroupsCrud, InterviewQuestionsCrud
+from src.crud import InterviewQuestionGroupsCrud, InterviewQuestionsCrud, InterviewRecordsCrud
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
@@ -36,6 +36,7 @@ vectorstore: Optional[Chroma] = None
 interview_question_groups_crud = InterviewQuestionGroupsCrud(
     InterviewQuestionGroupModel)
 interview_questions_crud = InterviewQuestionsCrud(InterviewQuestionModel)
+interview_records_crud = InterviewRecordsCrud(InterviewRecordModel)
 
 
 def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str) -> str:
@@ -50,12 +51,14 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
     extraction_result = extract_value(
         interview_session, message_from_user, questions_dict)
     if extraction_result.succeeded_to_extract:
-        interview_groups = interview_question_groups_crud.get_multi_with_questions_from_cache(
+        interview_groups = interview_question_groups_crud.get_multi_with_questions(
             db_session)
         questions_by_group = interview_question_groups_crud.get_questions_by_group(
             db_session)
+        interview_records = interview_records_crud.get_records_by_session_id(
+            db_session, interview_session.id)
         interview_session.progress_interview(
-            db_session, extraction_result.extracted_value, interview_groups, questions_by_group)
+            db_session, extraction_result.extracted_value, interview_groups, questions_by_group, interview_records)
         if interview_session.done:
             finish_interview(db_session, interview_session,
                              chat_history_store=chat_history_store)

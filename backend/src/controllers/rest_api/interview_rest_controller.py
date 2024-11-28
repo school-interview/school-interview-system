@@ -3,7 +3,7 @@ import uuid
 from fastapi import Depends, HTTPException
 from pydantic import TypeAdapter
 from src.controllers.rest_api.auth import verify_user, verify_admin
-from src.models import User, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel, InterviewReport, InterviewReportsResponse, InterviewSessionNotFoundException
+from src.models import User, InterviewQuestion, RestApiController, InterviewSessionRequest, SpeakToTeacherRequest, InterviewSession, InterviewSessionModel, TeacherResponse, Teacher, StartInterviewResponse, InterviewQuestionModel, InterviewAlreadyStartedException, ErrorResponse, TeacherModel, UserModel, InterviewRecordModel, InterviewAnalytics, InterviewAnalyticsModel, InterviewReport, InterviewReportsResponse, InterviewSessionNotFoundException
 from src.usecases import start_interview, speak_to_teacher, finish_interview, analyze_interview, collect_interview_reports
 from src.database import session_factory
 from src.crud import InterviewSessionsCrud
@@ -51,15 +51,15 @@ class StartInterviewSessionRestApiController(RestApiController):
             )
         model_class_mapping = {
             "TeacherModel": Teacher,
-            "UserModel": User
+            "UserModel": User,
+            "InterviewQuestionModel": InterviewQuestion
         }
         interview_session = interview_session_model.convert_to_pydantic(
             InterviewSession, obj_history=set(), model_class_mapping=model_class_mapping)
-        if interview_session.current_question is None:
-            raise ValueError("Coudn't load current question.")
+
         response = StartInterviewResponse(
             interview_session=interview_session,
-            message_from_teacher=interview_session.current_question.question
+            message_from_teacher=interview_session_model.current_question.question
         )
         return response
 

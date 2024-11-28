@@ -3,7 +3,7 @@ from uuid import UUID
 from src.crud.base_crud import BaseCrud
 from sqlalchemy.orm import Session
 from src.models import InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionGroupUpdate, InterviewQuestion
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 
 
 class InterviewQuestionGroupsCrud(BaseCrud[InterviewQuestionGroupModel, InterviewQuestionGroup, InterviewQuestionGroupUpdate]):
@@ -15,7 +15,7 @@ class InterviewQuestionGroupsCrud(BaseCrud[InterviewQuestionGroupModel, Intervie
     def get_multi_with_questions(self, db_session: Session):
         return (db_session.query(InterviewQuestionGroupModel)
                 .order_by(InterviewQuestionGroupModel.order)
-                .options(selectinload(InterviewQuestionGroupModel.questions))
+                .options(joinedload(InterviewQuestionGroupModel.questions, innerjoin=False))
                 .all()
                 )
 
@@ -36,11 +36,8 @@ class InterviewQuestionGroupsCrud(BaseCrud[InterviewQuestionGroupModel, Intervie
         return self._interview_groups_cache
 
     def get_questions_by_group(self, db_session: Session):
-        if len(self._interivew_questions_by_group_cache.keys()) == 0:
-            groups = self.get_multi_with_questions_from_cache(db_session)
-            for group in groups:
-                if group.questions is None:
-                    raise ValueError(
-                        "Coundn't load questions in InterviewQuestionGroup.")
-                self._interivew_questions_by_group_cache[group.id] = group.questions
-        return self._interivew_questions_by_group_cache
+        question_dict = {}
+        groups = self.get_multi_with_questions(db_session)
+        for group in groups:
+            question_dict[group.id] = group.questions
+        return question_dict

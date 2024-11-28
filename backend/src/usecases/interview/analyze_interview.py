@@ -28,7 +28,7 @@ def analyze_interview(db_session: Session, interview_session: InterviewSessionMo
         raise NotStudentException("User is not a student.")
     if user_model.student is None:
         raise ValueError("Couldn't load student data.")
-    groups = groups_crud.get_multi_with_questions_from_cache(db_session)
+    groups = groups_crud.get_multi_with_questions(db_session)
     records = records_crud.get_records_by_session_id(
         db_session, interview_session.id)
     interview_extracted_value_dict = interview_extracted_value_dict_factory(

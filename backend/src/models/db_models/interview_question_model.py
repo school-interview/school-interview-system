@@ -30,6 +30,8 @@ class InterviewQuestionModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     group_id: Mapped[UUID] = mapped_column(
         ForeignKey("InterviewQuestionGroups.id", ondelete="CASCADE"))
+    group: Mapped[Any] = relationship("InterviewQuestionGroupModel",
+                                      back_populates="questions")
     question: Mapped[str] = mapped_column(String(100))
     order: Mapped[int] = mapped_column()
     condition_target_operand_data_type: Mapped[Optional[str]] = mapped_column(
@@ -45,6 +47,9 @@ class InterviewQuestionModel(EntityBaseModel):
                                       back_populates="current_question")
     interview_records = relationship(
         "InterviewRecordModel", back_populates="question")
+
+    def has_condition(self):
+        return (self.condition_left_operand and self.condition_left_operator) or (self.condition_right_operand and self.condition_right_operator)
 
     def can_skip(self, previous_question_extracted_value: Any) -> bool:
         """この質問をスキップできるかどうかを判定します。

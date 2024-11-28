@@ -7,8 +7,8 @@ from sqlalchemy import DateTime
 from datetime import datetime
 from pydantic import BaseModel, Field
 from src.models.db_models.base_model import EntityBaseModel
-from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel
-from src.models.db_models.interview_question_group_model import InterviewQuestionGroup
+from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel,  InterviewQuestionModel
+from src.models.db_models.interview_question_group_model import InterviewQuestionGroup, InterviewQuestionGroupModel
 from src.models.db_models.interview_record_model import InterviewRecordModel
 from src.models.db_models.teacher_model import Teacher
 from src.models.db_models.user_model import User
@@ -45,7 +45,7 @@ class InterviewSessionModel(EntityBaseModel):
         "InterviewQuestionModel", back_populates="interview_sessions")
     done: Mapped[bool]
 
-    def progress_interview(self, db_session: Session, extracted_value: Any, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]):
+    def progress_interview(self, db_session: Session, extracted_value: Any, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]], records: List[InterviewRecordModel]):
         """面談の質問を進行させます。
 
         `src/usecases/interview/speak_to_teacher.py`から呼び出す事を想定しています。
@@ -65,9 +65,14 @@ class InterviewSessionModel(EntityBaseModel):
         if self.done:
             raise InterviewHasAlreadyEndedException(
                 "This interview has already ended.")
-        if self.current_question.can_skip(extracted_value):
-            self._move_on_next_question(
-                db_session, interview_groups, questions_by_group)
+
+        if self.current_question.has_condition():
+            previous_value = self._get_previous_extracted_value(
+                interview_groups, questions_by_group, records)
+            if self.current_question.can_skip(extracted_value):
+                self._move_on_next_question(
+                    db_session, interview_groups, questions_by_group)
+            # aaaa
             return
 
         # InterviewRecordに記録する
@@ -75,10 +80,10 @@ class InterviewSessionModel(EntityBaseModel):
             id=uuid4(),
             session_id=self.id,
             question_id=self.current_question.id,
-            extracted_value=str(extracted_value)
+            extracted_data=str(extracted_value)
         )
         db_session.add(interview_record)
-
+        db_session.commit()
         self._move_on_next_question(
             db_session, interview_groups, questions_by_group)
 
@@ -123,13 +128,18 @@ class InterviewSessionModel(EntityBaseModel):
             if not next_question_group:
                 raise ValueError("The next question group is not found.")
 
-            fist_question_in_group = questions_by_group[next_question_group.id][0]
+            questions_in_next_group = questions_by_group[next_question_group.id]
+            questions_in_next_group.sort(key=lambda q: q.order)
+
+            fist_question_in_group = questions_in_next_group[0]
+
             return fist_question_in_group
         else:
             # 同じQuestionGroup内の次の質問を取得
+            questions_in_group.sort(key=lambda q: q.order)
             return questions_in_group[self.current_question.order]
 
-    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]):
+    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
         """このInterviewSessionの現在の質問を次に進めます。
 
         (progress_interview()から呼び出される事を想定しています。)
@@ -153,6 +163,25 @@ class InterviewSessionModel(EntityBaseModel):
 
         db_session.add(self)
         db_session.commit()
+
+    def _get_previous_extracted_value(
+        self,
+        interview_groups: List[InterviewQuestionGroupModel],
+        questions_by_group: Dict[UUID, List[InterviewQuestionModel]],
+        records: List[InterviewRecordModel]
+    ):
+        previous_question: Optional[InterviewQuestionModel] = None
+        for g in interview_groups:
+            for q in questions_by_group[g.id]:
+                if q.id == self.current_question_id:
+                    break
+                previous_question = q
+        if previous_question is None:
+            return None
+        for r in records:
+            if r.session_id == self.id and r.question_id == previous_question.id:
+                return r.extracted_data
+        return None
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):

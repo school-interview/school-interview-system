@@ -20,7 +20,8 @@ class InterviewQuestionGroupModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     group_name: Mapped[str] = mapped_column(String(100))
     order: Mapped[int]
-    questions: Mapped[List[InterviewQuestionModel]] = relationship()
+    questions: Mapped[List[InterviewQuestionModel]] = relationship(
+        "InterviewQuestionModel", back_populates="group")
 
 
 class InterviewQuestionGroupUpdate(AppPydanticBaseModel):

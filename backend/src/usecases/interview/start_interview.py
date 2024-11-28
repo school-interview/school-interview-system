@@ -7,8 +7,8 @@ from typing import Optional
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, UserModel, ExtractionResult, TeacherModel, InterviewRecordModel, InterviewAlreadyStartedException, Teacher
-from src.crud import InterviewSessionsCrud
+from src.models import InterviewSessionModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, UserModel, ExtractionResult, TeacherModel, InterviewRecordModel, InterviewAlreadyStartedException, Teacher, InterviewQuestionGroupModel
+from src.crud import InterviewQuestionGroupsCrud
 
 
 def start_interview(db_session: Session, user_id: UUID, teacher_id: UUID, delete_current_interview: bool = True):
@@ -23,26 +23,18 @@ def start_interview(db_session: Session, user_id: UUID, teacher_id: UUID, delete
         db_session.commit()
     elif current_interview:
         raise InterviewAlreadyStartedException(user_id)
+
+    groups_crud = InterviewQuestionGroupsCrud(InterviewQuestionGroupModel)
+    groups = groups_crud.get_multi_with_questions(db_session)
     interview_session = InterviewSessionModel(
         id=uuid4(),
         user_id=user_id,
         teacher_id=teacher_id,
         start_at=datetime.now(),
-        progress=1,
+        current_question_id=groups[0].questions[0].id,
         done=False
     )
-    interview_record = InterviewRecordModel(
-        id=uuid4(),
-        session_id=interview_session.id,
-        total_earned_credits=None,
-        planned_credits=None,
-        gpa=None,
-        attendance_rate=None,
-        concern=None,
-        prefer_in_person_interview=None
-    )
     db_session.add(interview_session)
-    db_session.add(interview_record)
     db_session.commit()
     current_interview_query = (
         db_session.query(InterviewSessionModel)

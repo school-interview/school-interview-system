@@ -29,6 +29,9 @@ def seed_teachers(session: Session):
 
 
 def seed_question_groups(session: Session):
+    row_count = get_number_of_rows(session, InterviewQuestionGroupModel)
+    if row_count > 0:
+        return []
     groups: List[InterviewQuestionGroupModel] = [
         InterviewQuestionGroupModel(
             id=uuid.uuid4(),
