@@ -1,5 +1,6 @@
 from typing import Dict, List, Optional, TypedDict
 from uuid import UUID, uuid4
+from datetime import datetime
 from pydantic import Field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
@@ -10,6 +11,7 @@ from src.models.db_models.interview_record_model import InterviewRecordModel, In
 from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel
 from src.models.db_models.student_model import StudentModel
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
+from sqlalchemy import DateTime
 
 
 class InterviewExtractedValueDict(TypedDict):
@@ -75,6 +77,9 @@ class InterviewAnalytics(AppPydanticBaseModel):
     high_attendance_low_gpa_rate: float
     low_atendance_and_low_gpa_rate: float
     support_necessity_level: float
+    advise: Optional[str] = Field(None)
+    start_at: datetime
+    end_at: datetime
 
 
 class InterviewAnalyticsModel(EntityBaseModel):
@@ -89,6 +94,9 @@ class InterviewAnalyticsModel(EntityBaseModel):
     high_attendance_low_gpa_rate: Mapped[float]
     low_atendance_and_low_gpa_rate: Mapped[float]
     support_necessity_level: Mapped[float]
+    advise: Mapped[Optional[str]]
+    start_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
+    end_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
 
     @staticmethod
     def interview_analytics_factory(interview_session: InterviewSessionModel, student: StudentModel, extracted_value_dict: InterviewExtractedValueDict):
@@ -189,8 +197,56 @@ class InterviewAnalyticsModel(EntityBaseModel):
             deviation_from_minimum_attendance_rate=deviation_from_minimum_attendance_rate,
             high_attendance_low_gpa_rate=high_attendance_low_gpa_rate,
             low_atendance_and_low_gpa_rate=low_atendance_and_low_gpa_rate,
-            support_necessity_level=level
+            support_necessity_level=level,
+            advise=InterviewAnalyticsModel.generate_advise(failed_to_move_to_next_grade, deviation_from_preferred_credit_level,
+                                                           deviation_from_minimum_attendance_rate, high_attendance_low_gpa_rate, low_atendance_and_low_gpa_rate),
+            start_at=interview_session.start_at,
+            end_at=datetime.now()
         )
+
+    @staticmethod
+    def generate_advise(fail_to_move_to_next_grade: bool, deviation_from_preferred_credit_level: float, deviation_from_minimum_attendance_rate: float, high_attendance_low_gpa_rate: float, low_atendance_and_low_gpa_rate: float):
+        advise = ""
+        if fail_to_move_to_next_grade:
+            advise += """
+✅ 進級について
+進級できない可能性があります。担当教員との面談をお勧めします。
+"""
+        if deviation_from_preferred_credit_level > 0:
+            advise += """
+✅ 単位取得について
+次学期終了時点での予定単位取得数が推奨単位数に達していません。単位取得についての計画を立てることをお勧めします。
+"""
+        if deviation_from_minimum_attendance_rate > 0:
+            advise += """
+✅ 出席率について
+出席率が66%を下回っています。もし出席し辛い事情がありましたら、担当教員に相談することができます。
+"""
+        if high_attendance_low_gpa_rate > 0:
+            advise += """
+✅ 成績向上にむけて
+大学の施設を活用することをおすすめします！
+・数理工教育研究センター 
+数学、物理、化学などの学習に役立つ施設です。
+
+・基礎英語教育センター（EEC） （23号館2・3階）
+英語力向上に役に立ちます。
+
+"""
+        if low_atendance_and_low_gpa_rate > 0:
+            advise += """
+✅ 出席率と成績向上にむけて
+出席し辛い事情がありましたら、担当教員に相談することができます。
+
+また成績向上のために、大学の施設を活用することをおすすめします！
+・数理工教育研究センター 
+数学、物理、化学などの学習に役立つ施設です。
+
+・基礎英語教育センター（EEC） （23号館2・3階）
+英語力向上に役に立ちます。
+
+"""
+        return advise
 
 
 class InterviewAnalyticsUpdate(AppPydanticBaseModel):
