@@ -69,7 +69,7 @@ class _ProfileInputView extends ConsumerState<ProfileInputView> {
                     limitText: 7,
                     validator: (value) {
                       if (!RegExp(r'^[0-9-]+$').hasMatch(value)) {
-                        return '数字のみを入力してください';
+                        return '半角の数字のみを入力してください';
                       } else if (value.length != 7) {
                         return '7桁で入力してください';
                       }

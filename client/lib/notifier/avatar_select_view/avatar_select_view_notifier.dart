@@ -17,17 +17,16 @@ class AvatarSelectViewNotifier extends _$AvatarSelectViewNotifier {
 
   final _teacherRepository = TeacherRepositoryImpl();
 
-  void _setResult(Result result) {
-    state = state.copyWith(result: result);
-  }
+  void _setResult(Result result) => state = state.copyWith(result: result);
 
-  void _setTeacherList(List<Teacher> teacherList) {
-    state = state.copyWith(teacherList: teacherList);
-  }
+  void setIsLoading(bool isLoading) =>
+      state = state.copyWith(isLoading: isLoading);
 
-  void _setTeacherCount(int teacherCount) {
-    state = state.copyWith(teacherCount: teacherCount);
-  }
+  void _setTeacherList(List<Teacher> teacherList) =>
+      state = state.copyWith(teacherList: teacherList);
+
+  void _setTeacherCount(int teacherCount) =>
+      state = state.copyWith(teacherCount: teacherCount);
 
   /// 教員リスト取得API
   Future<void> getTeacherList() async {

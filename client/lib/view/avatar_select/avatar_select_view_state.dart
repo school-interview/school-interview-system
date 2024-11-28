@@ -11,6 +11,9 @@ abstract class AvatarSelectViewState with _$AvatarSelectViewState {
     /// API処理結果
     Result? result,
 
+    /// 読み込み中フラグ
+    @Default(false) bool isLoading,
+
     /// 教員リスト取得APIレスポンス
     @Default([]) List<Teacher> teacherList,
     @Default(0) int teacherCount,

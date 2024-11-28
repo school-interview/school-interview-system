@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:client/app.dart';
 import 'package:client/constant/enum/who_talking.dart';
 import 'package:client/constant/result.dart';
@@ -8,6 +9,7 @@ import 'package:client/repository/api_result.dart';
 import 'package:client/repository/interview/interview_repository.dart';
 import 'package:client/repository/interview/interview_repository_impl.dart';
 import 'package:client/view/interview/interview_view_state.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:openapi/api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -106,7 +108,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// 教員メッセージ取得API
-  Future<void> _speakToTeacher({
+  Future<void> _speakToTeacher(
+    CameraController cameraController, {
     required String currentInterviewSessionId,
     required String userSpeech,
   }) async {
@@ -126,7 +129,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           setIsLoading(false);
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
-          _avatarTaking(
+          _avatarTaking(cameraController,
               message: response.data!.messageFromTeacher,
               isFinish: response.data!.interviewSession.done);
           break;
@@ -167,8 +170,15 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// 初回処理
-  Future<void> teacherFirstMessage(String teacherId) async {
+  Future<void> init(CameraController cameraController, String teacherId) async {
+    await cameraController.startVideoRecording();
+    await _teacherFirstMessage(teacherId);
+  }
+
+  /// アバターの最初のセリフを発言する
+  Future<void> _teacherFirstMessage(String teacherId) async {
     await TextToSpeech.speak(
+      // stateにあらかじめ初めのセリフをDefaultでセットしておく
       state.avatarMessage,
       startFunc: () {
         _setWhoTalking(WhoTalking.avatar);
@@ -176,6 +186,7 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
       endFunc: () async {
         _addChatHistories(ChatHistory(state.avatarMessage, true));
         setIsLoading(true);
+        // 面談を始める
         await _startInterview(teacherId: teacherId);
       },
     );
@@ -208,19 +219,21 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// ユーザーが話し終えたときの処理
-  Future<void> _stopTalking() async {
+  Future<void> _stopTalking(CameraController cameraController) async {
     setIsLoading(true);
     await _speechToText.stop();
     _setWhoTalking(WhoTalking.avatar);
     _addChatHistories(ChatHistory(state.avatarMessage, true));
     await _speakToTeacher(
+      cameraController,
       currentInterviewSessionId: state.currentInterviewSessionId,
       userSpeech: state.userMessage,
     );
   }
 
   /// アバターが話す処理
-  void _avatarTaking({
+  void _avatarTaking(
+    CameraController cameraController, {
     required String message,
     required bool isFinish,
   }) {
@@ -242,17 +255,31 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         // 面談が終了した場合、要支援レベルを取得する
         if (isFinish) {
           await _getInterviewAnalytics(state.currentInterviewSessionId);
+          // 撮影した動画を保存する
+          await _stopRecordingAndSaveVideo(cameraController);
+          await cameraController.dispose();
           _setIsFinishInterview(true);
         }
       },
     );
   }
 
+  /// 録画を停止し、撮影した動画を保存する
+  Future<void> _stopRecordingAndSaveVideo(
+      CameraController cameraController) async {
+    final video = await cameraController.stopVideoRecording();
+    final byte = await video.readAsBytes();
+    await FileSaver.instance.saveFile(
+        name: "${DateTime.now().millisecondsSinceEpoch}",
+        bytes: byte,
+        mimeType: MimeType.mp4Video);
+  }
+
   /// マイクボタンタップ時のアクション
-  Future<void>? micButtonTapAction() async {
+  Future<void>? micButtonTapAction(CameraController cameraController) async {
     switch (state.whoTalking) {
       case WhoTalking.user:
-        return await _stopTalking();
+        return await _stopTalking(cameraController);
       case WhoTalking.avatar:
         return;
       case WhoTalking.none:
