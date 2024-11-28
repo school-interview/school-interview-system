@@ -23,8 +23,6 @@ class InterviewAnalytics {
     required this.lowAtendanceAndLowGpaRate,
     required this.supportNecessityLevel,
     this.advise,
-    required this.startAt,
-    required this.endAt,
   });
 
   String id;
@@ -47,10 +45,6 @@ class InterviewAnalytics {
 
   String? advise;
 
-  DateTime startAt;
-
-  DateTime endAt;
-
   @override
   bool operator ==(Object other) => identical(this, other) || other is InterviewAnalytics &&
     other.id == id &&
@@ -62,9 +56,7 @@ class InterviewAnalytics {
     other.highAttendanceLowGpaRate == highAttendanceLowGpaRate &&
     other.lowAtendanceAndLowGpaRate == lowAtendanceAndLowGpaRate &&
     other.supportNecessityLevel == supportNecessityLevel &&
-    other.advise == advise &&
-    other.startAt == startAt &&
-    other.endAt == endAt;
+    other.advise == advise;
 
   @override
   int get hashCode =>
@@ -78,12 +70,10 @@ class InterviewAnalytics {
     (highAttendanceLowGpaRate.hashCode) +
     (lowAtendanceAndLowGpaRate.hashCode) +
     (supportNecessityLevel.hashCode) +
-    (advise == null ? 0 : advise!.hashCode) +
-    (startAt.hashCode) +
-    (endAt.hashCode);
+    (advise == null ? 0 : advise!.hashCode);
 
   @override
-  String toString() => 'InterviewAnalytics[id=$id, sessionId=$sessionId, session=$session, failToMoveToNextGrade=$failToMoveToNextGrade, deviationFromPreferredCreditLevel=$deviationFromPreferredCreditLevel, deviationFromMinimumAttendanceRate=$deviationFromMinimumAttendanceRate, highAttendanceLowGpaRate=$highAttendanceLowGpaRate, lowAtendanceAndLowGpaRate=$lowAtendanceAndLowGpaRate, supportNecessityLevel=$supportNecessityLevel, advise=$advise, startAt=$startAt, endAt=$endAt]';
+  String toString() => 'InterviewAnalytics[id=$id, sessionId=$sessionId, session=$session, failToMoveToNextGrade=$failToMoveToNextGrade, deviationFromPreferredCreditLevel=$deviationFromPreferredCreditLevel, deviationFromMinimumAttendanceRate=$deviationFromMinimumAttendanceRate, highAttendanceLowGpaRate=$highAttendanceLowGpaRate, lowAtendanceAndLowGpaRate=$lowAtendanceAndLowGpaRate, supportNecessityLevel=$supportNecessityLevel, advise=$advise]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -105,8 +95,6 @@ class InterviewAnalytics {
     } else {
       json[r'advise'] = null;
     }
-      json[r'startAt'] = this.startAt.toUtc().toIso8601String();
-      json[r'endAt'] = this.endAt.toUtc().toIso8601String();
     return json;
   }
 
@@ -139,8 +127,6 @@ class InterviewAnalytics {
         lowAtendanceAndLowGpaRate: num.parse('${json[r'lowAtendanceAndLowGpaRate']}'),
         supportNecessityLevel: num.parse('${json[r'supportNecessityLevel']}'),
         advise: mapValueOfType<String>(json, r'advise'),
-        startAt: mapDateTime(json, r'startAt', r'')!,
-        endAt: mapDateTime(json, r'endAt', r'')!,
       );
     }
     return null;
@@ -196,8 +182,6 @@ class InterviewAnalytics {
     'highAttendanceLowGpaRate',
     'lowAtendanceAndLowGpaRate',
     'supportNecessityLevel',
-    'startAt',
-    'endAt',
   };
 }
 
