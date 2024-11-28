@@ -44,7 +44,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
     end_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
 
     @staticmethod
-    def create_from_interview_record(student: StudentModel, interview_session: InterviewSessionModel, interview_record: InterviewRecordModel):
+    def create_from_interview_record(student: StudentModel, interview_record: InterviewRecordModel, start_at: datetime):
         # 算出方法に関してはこちら。
         # https://www.notion.so/2024-09-17-104879aba7c6808cbcdfda7522e0d237
 
@@ -141,7 +141,7 @@ class InterviewAnalyticsModel(EntityBaseModel):
             support_necessity_level=level,
             advise=InterviewAnalyticsModel.generate_advise(failed_to_move_to_next_grade, deviation_from_preferred_credit_level,
                                                            deviation_from_minimum_attendance_rate, high_attendance_low_gpa_rate, low_atendance_and_low_gpa_rate),
-            start_at=interview_session.start_at,
+            start_at=start_at,
             end_at=datetime.now()
         )
 
