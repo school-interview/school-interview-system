@@ -139,7 +139,7 @@ class InterviewSessionModel(EntityBaseModel):
             questions_in_group.sort(key=lambda q: q.order)
             return questions_in_group[self.current_question.order]
 
-    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
+    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
         """このInterviewSessionの現在の質問を次に進めます。
 
         (progress_interview()から呼び出される事を想定しています。)
