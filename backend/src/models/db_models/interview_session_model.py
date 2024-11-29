@@ -87,7 +87,7 @@ class InterviewSessionModel(EntityBaseModel):
         self._move_on_next_question(
             db_session, interview_groups, questions_by_group)
 
-    def _get_next_question(self, interview_groups: List[InterviewQuestionGroup], questions_by_group: Dict[UUID, List[InterviewQuestion]]) -> Optional[InterviewQuestion]:
+    def _get_next_question(self, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]) -> Optional[InterviewQuestionModel]:
         """次の質問のInterviewQuestionを取得します。
 
         Args:
@@ -153,7 +153,7 @@ class InterviewSessionModel(EntityBaseModel):
 
         Raises:
         """
-        next_question: Optional[InterviewQuestion] = self._get_next_question(
+        next_question: Optional[InterviewQuestionModel] = self._get_next_question(
             interview_groups, questions_by_group)
         if next_question:
             self.current_question_id = next_question.id
