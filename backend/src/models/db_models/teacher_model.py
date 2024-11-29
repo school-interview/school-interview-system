@@ -9,6 +9,7 @@ class Teacher(AppPydanticBaseModel):
     id: UUID
     name: str
     description: str
+    image_url: str
 
 
 class TeacherModel(EntityBaseModel):
@@ -16,6 +17,7 @@ class TeacherModel(EntityBaseModel):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
     description: Mapped[str] = mapped_column(String(100))
+    image_url: Mapped[str] = mapped_column(String(100))
 
 
 class TeacherUpdate(AppPydanticBaseModel):

@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy.orm import Session
 from src.models import TeacherModel, EntityBaseModel, InterviewQuestionModel
-from typing import List
+from typing import List, Type
 from sqlalchemy.orm import Session
 
 
@@ -17,8 +17,9 @@ def seed_teachers(session: Session):
     teachers: List[TeacherModel] = [
         TeacherModel(
             id=uuid.uuid4(),
-            name="Teacher 1",
-            description="1人目の先生です。"
+            name="サンプル講師",
+            description="サンプルのイラストの講師です。",
+            image_url="/static/teacher1.png"
         )
     ]
     session.add_all(teachers)
@@ -71,5 +72,5 @@ def seed_questions(session: Session):
     session.commit()
 
 
-def get_number_of_rows(session: Session, model: EntityBaseModel) -> int:
+def get_number_of_rows(session: Session, model: Type[EntityBaseModel]) -> int:
     return session.query(model).count()

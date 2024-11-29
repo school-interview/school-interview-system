@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from src.database import SessionMaker, connect_db
 from fastapi import FastAPI, Request
 import socketio
@@ -49,6 +50,8 @@ app_fastapi.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app_fastapi.mount(
+    "/static", StaticFiles(directory="src/static"), name="static")
 
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 
