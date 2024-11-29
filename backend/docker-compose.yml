@@ -18,7 +18,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       PYTHONPATH: "$PYTHONPATH:/app/src"
-      DATABASE_URL: "postgresql://user:postgres@db:5432/school-interview-time"
+      DATABASE_URL: "postgresql://user:postgres@db:5432/school-interview"
     depends_on:
       - db
     profiles:
