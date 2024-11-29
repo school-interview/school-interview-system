@@ -44,6 +44,7 @@ The directory structure is as follows.
 |----------------|----------------------|
 | backend        | Back-end source code |
 | client         | Client Source code   |
+| docs           | document             |
 | open-api       | Open API generator   |
 
 ## List of technologies used
