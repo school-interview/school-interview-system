@@ -11,10 +11,17 @@ class LoginRepositoryImpl extends LoginRepository {
   @override
   Future<ApiResult<User>> getUserInfo(String idToken) async {
     logger.i("run getUserInfo()");
-    ApiClient apiClient = ApiClient();
+
+    // ヘッダーにトークンを入れる
+    final auth = HttpBearerAuth();
+    auth.accessToken = idToken;
+    await auth.applyToParams([], {});
+
+    ApiClient apiClient =
+        ApiClient(basePath: apiBasePath, authentication: auth);
     final api = DefaultApi(apiClient);
     try {
-      final result = await api.controllerMeGetWithHttpInfo(idToken);
+      final result = await api.controllerMeGetWithHttpInfo();
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
