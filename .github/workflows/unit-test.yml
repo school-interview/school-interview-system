@@ -2,6 +2,7 @@ name: UnitTest
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
+    paths: ["backend/**"]
 
 jobs:
   unit-test:
@@ -23,14 +24,6 @@ jobs:
           key: venv-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
           restore-keys: |
             venv-${{ runner.os }}-
-      # - name: restore poetry cache
-      #   id: cache-poetry
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /home/runner/.local/bin/poetry
-      #     key: poetry-${{ runner.os }}-${{ hashFiles('backend/pyproject.toml') }}
-      #     restore-keys: |
-      #       poetry-${{ runner.os }}-
       - name: install poetry
         # if: steps.cache-poetry.outputs.cache-hit == 'false'
         uses: snok/install-poetry@v1
