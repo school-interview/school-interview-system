@@ -16,6 +16,7 @@ class Teacher {
     required this.id,
     required this.name,
     required this.description,
+    required this.imageUrl,
   });
 
   String id;
@@ -24,27 +25,32 @@ class Teacher {
 
   String description;
 
+  String imageUrl;
+
   @override
   bool operator ==(Object other) => identical(this, other) || other is Teacher &&
     other.id == id &&
     other.name == name &&
-    other.description == description;
+    other.description == description &&
+    other.imageUrl == imageUrl;
 
   @override
   int get hashCode =>
     // ignore: unnecessary_parenthesis
     (id.hashCode) +
     (name.hashCode) +
-    (description.hashCode);
+    (description.hashCode) +
+    (imageUrl.hashCode);
 
   @override
-  String toString() => 'Teacher[id=$id, name=$name, description=$description]';
+  String toString() => 'Teacher[id=$id, name=$name, description=$description, imageUrl=$imageUrl]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'id'] = this.id;
       json[r'name'] = this.name;
       json[r'description'] = this.description;
+      json[r'imageUrl'] = this.imageUrl;
     return json;
   }
 
@@ -70,6 +76,7 @@ class Teacher {
         id: mapValueOfType<String>(json, r'id')!,
         name: mapValueOfType<String>(json, r'name')!,
         description: mapValueOfType<String>(json, r'description')!,
+        imageUrl: mapValueOfType<String>(json, r'imageUrl')!,
       );
     }
     return null;
@@ -120,6 +127,7 @@ class Teacher {
     'id',
     'name',
     'description',
+    'imageUrl',
   };
 }
 
