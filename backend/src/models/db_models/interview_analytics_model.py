@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 from pydantic import Field
@@ -5,9 +6,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from src.models.db_models.base_model import EntityBaseModel
 from src.models.db_models.interview_record_model import InterviewRecordModel
-from src.models.db_models.interview_session_model import InterviewSession
+from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel
 from src.models.db_models.student_model import StudentModel
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
+from sqlalchemy import DateTime
 
 
 class InterviewAnalytics(AppPydanticBaseModel):
@@ -21,6 +23,8 @@ class InterviewAnalytics(AppPydanticBaseModel):
     low_atendance_and_low_gpa_rate: float
     support_necessity_level: float
     advise: Optional[str] = Field(None)
+    start_at: datetime
+    end_at: datetime
 
 
 class InterviewAnalyticsModel(EntityBaseModel):
@@ -36,9 +40,11 @@ class InterviewAnalyticsModel(EntityBaseModel):
     low_atendance_and_low_gpa_rate: Mapped[float]
     support_necessity_level: Mapped[float]
     advise: Mapped[Optional[str]]
+    start_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
+    end_at: Mapped[datetime] = mapped_column(type_=DateTime(timezone=True))
 
     @staticmethod
-    def create_from_interview_record(student: StudentModel, interview_record: InterviewRecordModel):
+    def create_from_interview_record(student: StudentModel, interview_record: InterviewRecordModel, start_at: datetime):
         # 算出方法に関してはこちら。
         # https://www.notion.so/2024-09-17-104879aba7c6808cbcdfda7522e0d237
 
@@ -134,7 +140,9 @@ class InterviewAnalyticsModel(EntityBaseModel):
             low_atendance_and_low_gpa_rate=low_atendance_and_low_gpa_rate,
             support_necessity_level=level,
             advise=InterviewAnalyticsModel.generate_advise(failed_to_move_to_next_grade, deviation_from_preferred_credit_level,
-                                                           deviation_from_minimum_attendance_rate, high_attendance_low_gpa_rate, low_atendance_and_low_gpa_rate)
+                                                           deviation_from_minimum_attendance_rate, high_attendance_low_gpa_rate, low_atendance_and_low_gpa_rate),
+            start_at=start_at,
+            end_at=datetime.now()
         )
 
     @staticmethod

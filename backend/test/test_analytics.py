@@ -42,7 +42,7 @@ def create_student_1():
 def test_student1():
     _, student, _, record = create_student_1()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        student, record)
+        student, record, datetime.now())
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_preferred_credit_level == 0
     assert analytics.deviation_from_minimum_attendance_rate == 0
@@ -90,7 +90,7 @@ def create_student_2():
 def test_student2():
     _, setudent, _, record = create_student_2()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        setudent, record)
+        setudent, record, datetime.now())
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_minimum_attendance_rate == 0
     assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.45
@@ -138,7 +138,7 @@ def create_student_3():
 def test_student_3():
     _, student, _, record = create_student_3()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        student, record)
+        student, record, datetime.now())
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_minimum_attendance_rate == 0
     assert round(analytics.deviation_from_preferred_credit_level, 2) == 0.91
@@ -186,7 +186,7 @@ def create_student_4():
 def test_student_4():
     _, student, _, record = create_student_4()
     analytics = InterviewAnalyticsModel.create_from_interview_record(
-        student, record)
+        student, record, datetime.now())
     assert analytics.fail_to_move_to_next_grade == False
     assert analytics.deviation_from_minimum_attendance_rate == 0
     assert round(analytics.deviation_from_preferred_credit_level, 2) == 1.0

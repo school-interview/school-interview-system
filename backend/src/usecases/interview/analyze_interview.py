@@ -25,6 +25,6 @@ def analyze_interview(db_session: Session, interview_session: InterviewSessionMo
     if user_model.is_admin:
         raise NotStudentException("User is not a student.")
     interview_analytics = InterviewAnalyticsModel.create_from_interview_record(
-        user_model.student, interview_recrod)
+        user_model.student, interview_recrod, interview_session.start_at)
     analytics_crud.create(db_session, obj_in=interview_analytics)
     return interview_analytics
