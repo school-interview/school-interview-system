@@ -26,7 +26,7 @@ abstract class InterviewViewState with _$InterviewViewState {
     @Default("") String userMessage,
 
     /// 誰が話しているかを判別する
-    @Default(WhoTalking.none) WhoTalking whoTalking,
+    @Default(WhoTalking.avatar) WhoTalking whoTalking,
 
     /// 最新のinterviewSessionId
     @Default("") String currentInterviewSessionId,
