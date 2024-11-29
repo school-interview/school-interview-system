@@ -1,0 +1,26 @@
+related/backend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "backend/**"
+related/client:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "client/**"
+related/github:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+related/documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "**/*.md"
+type/feature:
+  - head-branch:
+      - "feature/*"
+type/bug:
+  - head-branch:
+      - "fix/*"
+type/improvement:
+  - head-branch:
+      - "improvement/*"
