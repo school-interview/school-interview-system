@@ -11,7 +11,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
   @override
   Future<ApiResult<TeachersListResponse>> getTeacherList() async {
     logger.i("run getTeacherList()");
-    ApiClient apiClient = ApiClient();
+    ApiClient apiClient = ApiClient(basePath: apiBasePath);
     final api = DefaultApi(apiClient);
     try {
       final result = await api.controllerTeachersGetWithHttpInfo();

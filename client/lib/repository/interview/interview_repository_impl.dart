@@ -13,11 +13,18 @@ class InterviewRepositoryImpl extends InterviewRepository {
       InterviewSessionRequest interviewSessionRequest, String idToken) async {
     logger.i("run postInterviewSessionRequest()");
     logger.t('interviewSessionRequest:$interviewSessionRequest');
-    ApiClient apiClient = ApiClient();
+
+    // ヘッダーにトークンを入れる
+    final auth = HttpBearerAuth();
+    auth.accessToken = idToken;
+    await auth.applyToParams([], {});
+
+    ApiClient apiClient =
+        ApiClient(basePath: apiBasePath, authentication: auth);
     final api = DefaultApi(apiClient);
     try {
-      final result = await api.controllerInterviewPostWithHttpInfo(
-          interviewSessionRequest, idToken);
+      final result = await api
+          .controllerInterviewPostWithHttpInfo(interviewSessionRequest);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
@@ -45,15 +52,19 @@ class InterviewRepositoryImpl extends InterviewRepository {
     logger.i("run getMessageFromTeacher()");
     logger.t(
         "interviewSessionId:$interviewSessionId, speakToTeacherRequest:$speakToTeacherRequest");
-    ApiClient apiClient = ApiClient();
+
+    // ヘッダーにトークンを入れる
+    final auth = HttpBearerAuth();
+    auth.accessToken = idToken;
+    await auth.applyToParams([], {});
+
+    ApiClient apiClient =
+        ApiClient(basePath: apiBasePath, authentication: auth);
     final api = DefaultApi(apiClient);
     try {
       final result =
           await api.controllerInterviewInterviewSessionIdPostWithHttpInfo(
-        interviewSessionId,
-        speakToTeacherRequest,
-        idToken,
-      );
+              interviewSessionId, speakToTeacherRequest);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
@@ -78,12 +89,19 @@ class InterviewRepositoryImpl extends InterviewRepository {
     String idToken,
   ) async {
     logger.i("run getInterviewAnalytics()");
-    ApiClient apiClient = ApiClient();
+
+    // ヘッダーにトークンを入れる
+    final auth = HttpBearerAuth();
+    auth.accessToken = idToken;
+    await auth.applyToParams([], {});
+
+    ApiClient apiClient =
+        ApiClient(basePath: apiBasePath, authentication: auth);
     final api = DefaultApi(apiClient);
     try {
       final result = await api
           .controllerInterviewInterviewSessionIdAnalyticsGetWithHttpInfo(
-              interviewSessionId, idToken);
+              interviewSessionId);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),

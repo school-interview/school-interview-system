@@ -15,14 +15,18 @@ class StudentRepositoryImpl extends StudentRepository {
     String idToken,
   ) async {
     logger.i("run putStudentInfo()");
-    ApiClient apiClient = ApiClient();
+
+    // ヘッダーにトークンを入れる
+    final auth = HttpBearerAuth();
+    auth.accessToken = idToken;
+    await auth.applyToParams([], {});
+
+    ApiClient apiClient =
+        ApiClient(basePath: apiBasePath, authentication: auth);
     final api = DefaultApi(apiClient);
     try {
       final result = await api.controllerUsersUserIdStudentPutWithHttpInfo(
-        userId,
-        studentUpdate,
-        idToken,
-      );
+          userId, studentUpdate);
       if (result.isSuccess()) {
         final body = await apiClient.deserializeAsync(
           utf8.decode(result.bodyBytes),
