@@ -159,11 +159,11 @@ class InterviewSessionModel(EntityBaseModel):
         previous_value = self._get_previous_extracted_value(
             interview_groups, questions_by_group, records)
 
-        while next_question and previous_value and next_question.has_condition() and next_question.can_skip(previous_value):
+        if next_question and previous_value and next_question.has_condition() and next_question.can_skip(previous_value):
+            # TODO: この実装だと1個次の質問しかスキップできないため、複数先の質問をスキップできるようにする。（2024/11/30現段階では要件にないため問題ない。）
             next_question = self._get_next_question(
                 interview_groups, questions_by_group)
-            previous_value = self._get_previous_extracted_value(
-                interview_groups, questions_by_group, records)
+
         if next_question:
             self.current_question_id = next_question.id
             self.current_question = next_question
