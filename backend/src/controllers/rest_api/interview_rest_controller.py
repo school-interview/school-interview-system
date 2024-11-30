@@ -70,11 +70,11 @@ class SpeakToTeacherRestApiController(RestApiController):
     response_model = TeacherResponse
 
     async def controller(self, data: SpeakToTeacherRequest, interview_session_id: str, db_session=Depends(session_factory), user_model=Depends(verify_user)):
-        interview_session_id: uuid.UUID = uuid.UUID(interview_session_id)
+        session_id: uuid.UUID = uuid.UUID(interview_session_id)
         message = data.message_from_student
         interview_sessions_crud = InterviewSessionsCrud(InterviewSessionModel)
         interview_session_model = interview_sessions_crud.get_with_curernt_question(
-            db_session, interview_session_id)
+            db_session, session_id)
         if not interview_session_model:
             raise ErrorResponse(
                 status_code=404,

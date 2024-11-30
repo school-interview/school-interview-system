@@ -49,6 +49,14 @@ class InterviewQuestionModel(EntityBaseModel):
         "InterviewRecordModel", back_populates="question")
 
     def has_condition(self):
+        """この質問が発動条件を持っているかどうかを判定します。
+
+         Args:
+         Returns:
+             bool: 発動条件を持っているかどうか
+         Raises:
+
+         """
         return (self.condition_left_operand and self.condition_left_operator) or (self.condition_right_operand and self.condition_right_operator)
 
     def can_skip(self, previous_question_extracted_value: Any) -> bool:
@@ -71,13 +79,13 @@ class InterviewQuestionModel(EntityBaseModel):
             is_skippable = not self.compare_value(
                 previous_question_extracted_value, self.condition_left_operator, self.condition_left_operand, 'left')
 
-        if is_skippable and self.condition_right_operand and self.condition_right_operator:
+        if not is_skippable and self.condition_right_operand and self.condition_right_operator:
             is_skippable = not self.compare_value(
                 previous_question_extracted_value, self.condition_right_operator, self.condition_right_operand, 'right')
 
         return is_skippable
 
-    def compare_value(self, value: Any, operator: Literal['==', '>', '<', '>=', '<=', '!='], operand: str, operand_position: Literal['left', 'right']):
+    def compare_value(self, value: Any, operator: str, operand: str, operand_position: Literal['left', 'right']):
         """指定された値と演算子、オペランドで比較を行います。
 
         Args:
@@ -91,15 +99,17 @@ class InterviewQuestionModel(EntityBaseModel):
         Raises:
             ValueError: 演算子が不正な場合
         """
+
+        if operator not in ['==', '>', '<', '>=', '<=', '!=']:
+            raise ValueError("Invalid operator.")
+
         match self.condition_target_operand_data_type:
             case 'bool':
-                operand = bool(operand)
+                operand = bool(operand)  # type: ignore
             case 'int':
-                operand = int(operand)
+                operand = int(operand)  # type: ignore
             case 'float':
-                operand = float(operand)
-            case 'str':
-                operand = str(operand)
+                operand = float(operand)  # type: ignore
 
         is_operand_left = operand_position == 'left'
 

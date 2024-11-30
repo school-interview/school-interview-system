@@ -118,7 +118,7 @@ class InterviewSessionModel(EntityBaseModel):
                 return None
 
             # 次のQuestionGroupの最初のInterviewQuestionを取得
-            next_question_group: Optional[InterviewQuestionGroup] = None
+            next_question_group: Optional[InterviewQuestionGroupModel] = None
             for group in interview_groups:
                 if group.order == next_question_group_order:
                     next_question_group = group
@@ -162,6 +162,7 @@ class InterviewSessionModel(EntityBaseModel):
 
         db_session.add(self)
         db_session.commit()
+        return next_question
 
     def _get_previous_extracted_value(
         self,
@@ -169,6 +170,17 @@ class InterviewSessionModel(EntityBaseModel):
         questions_by_group: Dict[UUID, List[InterviewQuestionModel]],
         records: List[InterviewRecordModel]
     ):
+        """前の質問の抽出された値を取得します。
+        Args:
+            db_session (Session): DBセッション
+            interview_groups (List[InterviewQuestionGroup]): InterviewQuestionGroupのリスト
+            questions_by_group (Dict[UUID, List[InterviewQuestionModel]]): キーがグループID、値がInterviewQuestionのリストの辞書
+            records (List[InterviewRecordModel]): InterviewRecordのリスト
+
+        Returns:
+            Optional[str]: 前の質問の抽出された値
+        Raises:
+        """
         previous_question: Optional[InterviewQuestionModel] = None
         for g in interview_groups:
             for q in questions_by_group[g.id]:
