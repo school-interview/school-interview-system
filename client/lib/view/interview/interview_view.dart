@@ -76,79 +76,84 @@ class _InterviewView extends ConsumerState<InterviewView> {
               ),
             ),
             child: Stack(
+              alignment: Alignment.center,
               children: [
-                // 面談アバター
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    height: screenHeight * 0.5,
-                    child: Image.asset('assets/image/sample_avatar.png'),
-                  ),
+                Column(
+                  children: [
+                    // 面談アバター
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      height: screenHeight * 0.5,
+                      child: Image.asset('assets/image/sample_avatar.png'),
+                    ),
+
+                    const Spacer(),
+
+                    // マイクボタン
+                    _micButton(),
+                  ],
                 ),
 
                 // チャット部分
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: screenHeight * 0.4,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    margin: const EdgeInsets.only(bottom: 100),
-                    child: Scrollbar(
+                Container(
+                  height: screenHeight * 0.4,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.only(bottom: 40),
+                  child: Scrollbar(
+                    controller: scrollController,
+                    child: SingleChildScrollView(
                       controller: scrollController,
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        reverse: true,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            // チャット履歴を表示する
-                            for (var chat in state.chatHistories) ...[
-                              if (chat.isAdmin) ...[
-                                _AvatarChatBubble(
-                                  text: chat.text,
-                                  isLoading: false,
-                                ),
-                              ],
-                              if (!chat.isAdmin) ...[
-                                _UserChatBubble(text: chat.text),
-                              ],
+                      reverse: true,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // チャット履歴を表示する
+                          for (var chat in state.chatHistories) ...[
+                            if (chat.isAdmin) ...[
+                              _AvatarChatBubble(
+                                text: chat.text,
+                                isLoading: false,
+                              ),
                             ],
-                            // アバターのセリフ
-                            _AvatarChatBubble(
-                              text: state.avatarMessage,
-                              isLoading: state.isLoading,
-                            ),
-                            // ユーザーのセリフ
-                            _UserChatBubble(text: state.userMessage),
-                            // セリフリセットボタン
-                            IconButton(
-                              // 教員が話しているときは非活性
-                              onPressed: state.whoTalking == WhoTalking.avatar
-                                  ? null
-                                  : () async {
-                                      // ユーザのセリフをリセットする
-                                      final notifier = ref.watch(
-                                          interviewViewNotifierProvider
-                                              .notifier);
-                                      await notifier.resetTalking();
-                                    },
-                              icon: const Icon(Icons.refresh),
-                              style: IconButton.styleFrom(
-                                  backgroundColor: Colors.white),
-                            ),
+                            if (!chat.isAdmin) ...[
+                              _UserChatBubble(text: chat.text),
+                            ],
                           ],
-                        ),
+                          // アバターのセリフ
+                          _AvatarChatBubble(
+                            text: state.avatarMessage,
+                            isLoading: state.isLoading,
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // セリフリセットボタン
+                              IconButton(
+                                // 教員が話しているときは非活性
+                                onPressed: state.whoTalking == WhoTalking.avatar
+                                    ? null
+                                    : () async {
+                                        // ユーザのセリフをリセットする
+                                        final notifier = ref.watch(
+                                            interviewViewNotifierProvider
+                                                .notifier);
+                                        await notifier.resetTalking();
+                                      },
+                                icon: const Icon(Icons.refresh),
+                                style: IconButton.styleFrom(
+                                    backgroundColor: Colors.white),
+                              ),
+
+                              const SizedBox(width: 10),
+                              // ユーザーのセリフ
+                              _UserChatBubble(text: state.userMessage),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-
-                // マイクボタン
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: _micButton(),
                 ),
               ],
             ),

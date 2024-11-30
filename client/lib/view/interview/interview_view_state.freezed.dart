@@ -222,7 +222,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
       final List<ChatHistory> chatHistories = const [],
       this.avatarMessage = "こんにちは。これから面談を始めます。",
       this.userMessage = "",
-      this.whoTalking = WhoTalking.none,
+      this.whoTalking = WhoTalking.avatar,
       this.currentInterviewSessionId = "",
       this.interviewAnalytics,
       this.isFinishInterview = false})
