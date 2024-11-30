@@ -69,11 +69,10 @@ class InterviewSessionModel(EntityBaseModel):
         if self.current_question.has_condition():
             previous_value = self._get_previous_extracted_value(
                 interview_groups, questions_by_group, records)
-            if self.current_question.can_skip(extracted_value):
+            if previous_value is not None and self.current_question.can_skip(previous_value):
                 self._move_on_next_question(
                     db_session, interview_groups, questions_by_group)
-            # aaaa
-            return
+                return
 
         # InterviewRecordに記録する
         interview_record = InterviewRecordModel(
