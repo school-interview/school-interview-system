@@ -252,6 +252,17 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
     return questions
 
 
+def seed_interview_records(session: Session, questions: List[InterviewQuestionModel]):
+    for q in questions:
+        record = InterviewRecordModel(
+            id=uuid.uuid4(),
+            session_id=uuid.uuid4(),
+            question_id=q.id,
+            extracted_data="1"
+        )
+        session.add(record)
+
+
 # utils...
 
 def get_number_of_rows(session: Session, model: Any) -> int:

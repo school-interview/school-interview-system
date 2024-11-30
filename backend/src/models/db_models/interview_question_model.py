@@ -105,10 +105,13 @@ class InterviewQuestionModel(EntityBaseModel):
 
         match self.condition_target_operand_data_type:
             case 'bool':
+                value = bool(value)
                 operand = bool(operand)  # type: ignore
             case 'int':
+                value = int(value)
                 operand = int(operand)  # type: ignore
             case 'float':
+                value = float(value)
                 operand = float(operand)  # type: ignore
 
         is_operand_left = operand_position == 'left'
