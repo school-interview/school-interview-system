@@ -66,13 +66,13 @@ class InterviewSessionModel(EntityBaseModel):
             raise InterviewHasAlreadyEndedException(
                 "This interview has already ended.")
 
-        if self.current_question.has_condition():
-            previous_value = self._get_previous_extracted_value(
-                interview_groups, questions_by_group, records)
-            if previous_value is not None and self.current_question.can_skip(previous_value):
-                self._move_on_next_question(
-                    db_session, interview_groups, questions_by_group)
-                return
+        # if self.current_question.has_condition():
+        #     previous_value = self._get_previous_extracted_value(
+        #         interview_groups, questions_by_group, records)
+        #     if previous_value is not None and self.current_question.can_skip(previous_value):
+        #         self._move_on_next_question(
+        #             db_session, interview_groups, questions_by_group)
+        #         return
 
         # InterviewRecordに記録する
         interview_record = InterviewRecordModel(
@@ -84,7 +84,7 @@ class InterviewSessionModel(EntityBaseModel):
         db_session.add(interview_record)
         db_session.commit()
         self._move_on_next_question(
-            db_session, interview_groups, questions_by_group)
+            db_session, interview_groups, questions_by_group, records)
 
     def _get_next_question(self, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]) -> Optional[InterviewQuestionModel]:
         """次の質問のInterviewQuestionを取得します。
@@ -138,7 +138,7 @@ class InterviewSessionModel(EntityBaseModel):
             questions_in_group.sort(key=lambda q: q.order)
             return questions_in_group[self.current_question.order]
 
-    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]):
+    def _move_on_next_question(self, db_session: Session, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]], records: List[InterviewRecordModel]):
         """このInterviewSessionの現在の質問を次に進めます。
 
         (progress_interview()から呼び出される事を想定しています。)
@@ -152,10 +152,21 @@ class InterviewSessionModel(EntityBaseModel):
 
         Raises:
         """
+
         next_question: Optional[InterviewQuestionModel] = self._get_next_question(
             interview_groups, questions_by_group)
+
+        previous_value = self._get_previous_extracted_value(
+            interview_groups, questions_by_group, records)
+
+        while next_question and previous_value and next_question.has_condition() and next_question.can_skip(previous_value):
+            next_question = self._get_next_question(
+                interview_groups, questions_by_group)
+            previous_value = self._get_previous_extracted_value(
+                interview_groups, questions_by_group, records)
         if next_question:
             self.current_question_id = next_question.id
+            self.current_question = next_question
         else:
             # 最後の質問だった場合
             self.done = True
