@@ -83,6 +83,7 @@ Class | Method | HTTP request | Description
  - [Admin](doc//Admin.md)
  - [HTTPValidationError](doc//HTTPValidationError.md)
  - [InterviewAnalytics](doc//InterviewAnalytics.md)
+ - [InterviewQuestion](doc//InterviewQuestion.md)
  - [InterviewReport](doc//InterviewReport.md)
  - [InterviewReportsResponse](doc//InterviewReportsResponse.md)
  - [InterviewSession](doc//InterviewSession.md)

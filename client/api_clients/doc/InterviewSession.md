@@ -14,7 +14,8 @@ Name | Type | Description | Notes
 **teacherId** | **String** |  | 
 **teacher** | [**Teacher**](Teacher.md) |  | [optional] 
 **startAt** | [**DateTime**](DateTime.md) |  | 
-**progress** | **int** |  | 
+**currentQuestionId** | **String** |  | 
+**currentQuestion** | [**InterviewQuestion**](InterviewQuestion.md) |  | [optional] 
 **done** | **bool** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

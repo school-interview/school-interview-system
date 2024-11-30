@@ -19,7 +19,8 @@ class InterviewSession {
     required this.teacherId,
     this.teacher,
     required this.startAt,
-    required this.progress,
+    required this.currentQuestionId,
+    this.currentQuestion,
     required this.done,
   });
 
@@ -35,7 +36,9 @@ class InterviewSession {
 
   DateTime startAt;
 
-  int progress;
+  String currentQuestionId;
+
+  InterviewQuestion? currentQuestion;
 
   bool done;
 
@@ -47,7 +50,8 @@ class InterviewSession {
     other.teacherId == teacherId &&
     other.teacher == teacher &&
     other.startAt == startAt &&
-    other.progress == progress &&
+    other.currentQuestionId == currentQuestionId &&
+    other.currentQuestion == currentQuestion &&
     other.done == done;
 
   @override
@@ -59,11 +63,12 @@ class InterviewSession {
     (teacherId.hashCode) +
     (teacher == null ? 0 : teacher!.hashCode) +
     (startAt.hashCode) +
-    (progress.hashCode) +
+    (currentQuestionId.hashCode) +
+    (currentQuestion == null ? 0 : currentQuestion!.hashCode) +
     (done.hashCode);
 
   @override
-  String toString() => 'InterviewSession[id=$id, userId=$userId, user=$user, teacherId=$teacherId, teacher=$teacher, startAt=$startAt, progress=$progress, done=$done]';
+  String toString() => 'InterviewSession[id=$id, userId=$userId, user=$user, teacherId=$teacherId, teacher=$teacher, startAt=$startAt, currentQuestionId=$currentQuestionId, currentQuestion=$currentQuestion, done=$done]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -81,7 +86,12 @@ class InterviewSession {
       json[r'teacher'] = null;
     }
       json[r'startAt'] = this.startAt.toUtc().toIso8601String();
-      json[r'progress'] = this.progress;
+      json[r'currentQuestionId'] = this.currentQuestionId;
+    if (this.currentQuestion != null) {
+      json[r'currentQuestion'] = this.currentQuestion;
+    } else {
+      json[r'currentQuestion'] = null;
+    }
       json[r'done'] = this.done;
     return json;
   }
@@ -111,7 +121,8 @@ class InterviewSession {
         teacherId: mapValueOfType<String>(json, r'teacherId')!,
         teacher: Teacher.fromJson(json[r'teacher']),
         startAt: mapDateTime(json, r'startAt', r'')!,
-        progress: mapValueOfType<int>(json, r'progress')!,
+        currentQuestionId: mapValueOfType<String>(json, r'currentQuestionId')!,
+        currentQuestion: InterviewQuestion.fromJson(json[r'currentQuestion']),
         done: mapValueOfType<bool>(json, r'done')!,
       );
     }
@@ -164,7 +175,7 @@ class InterviewSession {
     'userId',
     'teacherId',
     'startAt',
-    'progress',
+    'currentQuestionId',
     'done',
   };
 }
