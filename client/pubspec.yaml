@@ -33,6 +33,7 @@ dependencies:
   camera: ^0.11.0+2
   file_saver: ^0.2.14
   awesome_dialog: ^3.2.1
+  flutter_unity_widget: ^2022.2.1
 
 dev_dependencies:
   flutter_test:

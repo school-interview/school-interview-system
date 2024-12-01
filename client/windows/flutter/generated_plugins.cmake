@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   file_saver
   flutter_tts
+  flutter_unity_widget
   rive_common
 )
 
