@@ -12,8 +12,6 @@ class InterviewQuestion(AppPydanticBaseModel):
     question: str
     order: int
     group_id: UUID
-    condition_target_operand_data_type: Optional[Literal['int',
-                                                         'float', 'str', 'bool']]
     condition_left_operand: Optional[str]
     condition_left_operator: Optional[Literal['==',
                                               '>', '<', '>=', '<=', '!=']]
@@ -34,8 +32,6 @@ class InterviewQuestionModel(EntityBaseModel):
                                       back_populates="questions")
     question: Mapped[str] = mapped_column(String(100))
     order: Mapped[int] = mapped_column()
-    condition_target_operand_data_type: Mapped[Optional[str]] = mapped_column(
-        String(5))
     condition_left_operand: Mapped[Optional[str]] = mapped_column(String(10))
     condition_left_operator: Mapped[Optional[str]] = mapped_column(String(2))
     condition_right_operand: Mapped[Optional[str]] = mapped_column(String(10))
@@ -59,7 +55,7 @@ class InterviewQuestionModel(EntityBaseModel):
          """
         return (self.condition_left_operand and self.condition_left_operator) or (self.condition_right_operand and self.condition_right_operator)
 
-    def can_skip(self, previous_question_extracted_value: Any) -> bool:
+    def can_skip(self, previous_question_extracted_value: Any, previous_question_extracted_value_type: str) -> bool:
         """この質問をスキップできるかどうかを判定します。
 
         面談の質問は前の質問の回答に基づいて次の質問に進むかどうかを判定するため、このメソッドでは前の質問の回答からこの質問をスキップするかどうかを判定します。
@@ -77,15 +73,15 @@ class InterviewQuestionModel(EntityBaseModel):
         if self.condition_left_operand and self.condition_left_operator:
             # 条件に当てはまる場合はスキップさせたくないので not で反転させています。
             is_skippable = not self.compare_value(
-                previous_question_extracted_value, self.condition_left_operator, self.condition_left_operand, 'left')
+                previous_question_extracted_value, previous_question_extracted_value_type, self.condition_left_operator, self.condition_left_operand, 'left')
 
         if not is_skippable and self.condition_right_operand and self.condition_right_operator:
             is_skippable = not self.compare_value(
-                previous_question_extracted_value, self.condition_right_operator, self.condition_right_operand, 'right')
+                previous_question_extracted_value, previous_question_extracted_value_type, self.condition_right_operator, self.condition_right_operand, 'right')
 
         return is_skippable
 
-    def compare_value(self, value: Any, operator: str, operand: str, operand_position: Literal['left', 'right']):
+    def compare_value(self, value: Any, value_type: str, operator: str, operand: str, operand_position: Literal['left', 'right']):
         """指定された値と演算子、オペランドで比較を行います。
 
         Args:
@@ -103,7 +99,7 @@ class InterviewQuestionModel(EntityBaseModel):
         if operator not in ['==', '>', '<', '>=', '<=', '!=']:
             raise ValueError("Invalid operator.")
 
-        match self.condition_target_operand_data_type:
+        match value_type:
             case 'bool':
                 value = bool(value)
                 operand = bool(operand)  # type: ignore

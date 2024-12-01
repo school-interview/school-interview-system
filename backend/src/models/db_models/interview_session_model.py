@@ -1,7 +1,7 @@
 from uuid import UUID
 from uuid import uuid4
 from sqlalchemy import String, ForeignKey
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import DateTime
 from datetime import datetime
@@ -80,10 +80,10 @@ class InterviewSessionModel(EntityBaseModel):
         )
         db_session.add(interview_record)
         db_session.commit()
-        previous_value = self._get_previous_extracted_value(
+        (previous_value, previous_value_type) = self._get_previous_extracted_value(
             interview_groups, questions_by_group, records)
         self._move_on_next_question(
-            db_session, interview_groups, questions_by_group, previous_value)
+            db_session, interview_groups, questions_by_group, previous_value, previous_value_type)
 
     def _get_next_question(self, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]) -> Optional[InterviewQuestionModel]:
         """次の質問のInterviewQuestionを取得します。
@@ -140,7 +140,9 @@ class InterviewSessionModel(EntityBaseModel):
     def _move_on_next_question(self, db_session: Session,
                                interview_groups: List[InterviewQuestionGroupModel],
                                questions_by_group: Dict[UUID, List[InterviewQuestionModel]],
-                               previous_extracted_value: Optional[str]):
+                               previous_extracted_value: Optional[str],
+                               previous_extracted_value_type: Optional[str]
+                               ):
         """このInterviewSessionの現在の質問を次に進めます。
 
         (progress_interview()から呼び出される事を想定しています。)
@@ -156,7 +158,9 @@ class InterviewSessionModel(EntityBaseModel):
         """
 
         next_question: Optional[InterviewQuestionModel] = self._get_next_question(
-            interview_groups, questions_by_group)
+            interview_groups,
+            questions_by_group
+        )
 
         if next_question:
             self.current_question_id = next_question.id
@@ -165,10 +169,19 @@ class InterviewSessionModel(EntityBaseModel):
             # 最後の質問だった場合
             self.done = True
 
-        if next_question and previous_extracted_value and next_question.has_condition() and next_question.can_skip(previous_extracted_value):
+        if (
+            next_question and
+            previous_extracted_value and
+            previous_extracted_value_type and
+            next_question.has_condition() and
+            next_question.can_skip(
+                previous_extracted_value, previous_extracted_value_type
+            )
+        ):
             # TODO: この実装だと1個次の質問しかスキップできないため、複数先の質問をスキップできるようにする。（2024/11/30現段階では要件にないため問題ない。）
             next_question = self._get_next_question(
-                interview_groups, questions_by_group)
+                interview_groups, questions_by_group
+            )
 
         db_session.add(self)
         db_session.commit()
@@ -179,7 +192,7 @@ class InterviewSessionModel(EntityBaseModel):
         interview_groups: List[InterviewQuestionGroupModel],
         questions_by_group: Dict[UUID, List[InterviewQuestionModel]],
         records: List[InterviewRecordModel]
-    ):
+    ) -> Tuple[Optional[str], Optional[str]]:
         """前の質問の抽出された値を取得します。
         Args:
             db_session (Session): DBセッション
@@ -188,7 +201,7 @@ class InterviewSessionModel(EntityBaseModel):
             records (List[InterviewRecordModel]): InterviewRecordのリスト
 
         Returns:
-            Optional[str]: 前の質問の抽出された値
+            (Optional[str], Optional[str]): 前の質問の抽出された値, 前の質問の抽出された値のデータ型
         Raises:
         """
         previous_question: Optional[InterviewQuestionModel] = None
@@ -206,11 +219,11 @@ class InterviewSessionModel(EntityBaseModel):
             if previous_question_found:
                 break
         if previous_question is None:
-            return None
+            return (None, None)
         for r in records:
             if r.session_id == self.id and r.question_id == previous_question.id:
-                return r.extracted_data
-        return None
+                return (r.extracted_data, previous_question.extraction_data_type)
+        return (None, None)
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):
