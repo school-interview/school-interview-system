@@ -1,6 +1,7 @@
 
 import os
 from typing import Any, Dict, List, Optional
+from uuid import UUID
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
@@ -18,80 +19,64 @@ from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
 from pydantic import TypeAdapter
-from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, SchoolCredit, Gpa, AttendanceRate, Concern, PreferInPerson, ExtractionResult, TeacherModel
-from dotenv import load_dotenv
+from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, InterviewQuestionGroupModel, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
-
+from src.crud import InterviewQuestionGroupsCrud, InterviewQuestionsCrud, InterviewRecordsCrud
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-
 # 会話の履歴を保持するためのdict（一旦メモリ上に保持）
 chat_history_store = {}
-
-# 質問たちはそんなにないので、一度取得したらキャッシュしておく
-questions: Dict[int, InterviewQuestion] = {}
 
 # RAGのベクトルストア。（念のためにグローバル変数としてメモリ上にキャッシュ）
 # TODO:　ファイルとかRedisとかに保存することを検討
 vectorstore: Optional[Chroma] = None
 
-
-def get_questions(session: Session):
-    if len(questions.keys()) > 0:
-        return questions
-    question_query = session.query(InterviewQuestionModel)
-    all_questions: List[InterviewQuestionModel] = session.execute(
-        question_query).scalars().all()
-    for question in all_questions:
-        questions[question.order] = question.convert_to_pydantic(
-            InterviewQuestion, obj_history=set())
-        print(question.order, questions[question.order])
-    return questions
+interview_question_groups_crud = InterviewQuestionGroupsCrud(
+    InterviewQuestionGroupModel)
+interview_questions_crud = InterviewQuestionsCrud(InterviewQuestionModel)
+interview_records_crud = InterviewRecordsCrud(InterviewRecordModel)
 
 
 def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str) -> str:
-    use_local_llm = bool(int(os.getenv("USE_LOCAL_LLM")))
+    USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM")
+    if USE_LOCAL_LLM is None:
+        raise Exception(
+            "could not load USE_LOCAL_LLM. It's likely because .env file doesn't exist.")
+    use_local_llm = bool(int(USE_LOCAL_LLM))
     if interview_session.done:
         raise Exception("The interview session is already done.")
-    questions = get_questions(db_session)
-    extraction_result = extract_answer(
-        interview_session, message_from_user, questions)
+    questions_dict = interview_questions_crud.get_multi_in_dict(db_session)
+    extraction_result = extract_value(
+        interview_session, message_from_user, questions_dict)
     if extraction_result.succeeded_to_extract:
-        interview_record_query = db_session.query(InterviewRecordModel).where(
-            InterviewRecordModel.session_id == interview_session.id)
-        interview_records = db_session.execute(interview_record_query).first()
-        if not interview_records:
-            raise Exception("The interview record is not found.")
-        interview_record: InterviewRecordModel = interview_records[0]
-        match interview_session.progress:
-            case 1:
-                interview_record.total_earned_credits = extraction_result.extracted_value
-            case 2:
-                interview_record.planned_credits = extraction_result.extracted_value
-            case 3:
-                interview_record.gpa = extraction_result.extracted_value
-            case 4:
-                interview_record.attendance_rate = extraction_result.extracted_value
-            case 5:
-                interview_record.concern = extraction_result.extracted_value
-            case 6:
-                interview_record.prefer_in_person_interview = extraction_result.extracted_value
-        interview_session.progress += 1
-        if interview_session.progress > 6:
-            interview_session.progress = 6
+        interview_groups = interview_question_groups_crud.get_multi_with_questions(
+            db_session)
+        questions_by_group = interview_question_groups_crud.get_questions_by_group(
+            db_session)
+        interview_records = interview_records_crud.get_records_by_session_id(
+            db_session, interview_session.id)
+        interview_session.progress_interview(
+            db_session, extraction_result.extracted_value, interview_groups, questions_by_group, interview_records)
+        if interview_session.done:
             finish_interview(db_session, interview_session,
-                             chat_history_store=chat_history_store, interview_record=interview_record)
+                             chat_history_store=chat_history_store)
             # TODO: この返答雑すぎるので、もう少し工夫する。（ここもLLM使って生成したい）
             return "面談はこれで終了です。ありがとうございました。"
         db_session.commit()
     message_from_teacher = generate_message_from_teacher(
-        db_session, interview_session, message_from_user, use_local_llm)
+        db_session, interview_session, questions_dict, message_from_user, use_local_llm)
     return message_from_teacher
 
 
-def generate_message_from_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_student: str, use_local_llm: bool = False):
+def generate_message_from_teacher(
+        db_session: Session,
+        interview_session: InterviewSessionModel,
+        questions_dict: Dict[UUID, InterviewQuestion],
+        message_from_student: str,
+        use_local_llm: bool = False
+):
     CONTEXT_SIZE = 4096
     LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
     CHUNK_SIZE = 256
@@ -145,7 +130,9 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
             template = common_inst + "学生の発言：{question}"
         return template
 
-    current_question = get_questions(db_session)[interview_session.progress]
+    current_question = questions_dict[interview_session.current_question_id]
+    if current_question is None:
+        raise ValueError("The current question is not loaded.")
 
     if use_local_llm:
         llm = ChatLlamaCpp(
@@ -155,7 +142,7 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
             f16_kv=True,
             verbose=True,
             seed=0
-        )
+        )  # type: ignore
 
         prompt_template = generate_prompt_template(current_question)
 
@@ -206,8 +193,12 @@ def generate_message_from_teacher(db_session: Session, interview_session: Interv
         return response
 
 
-def extract_answer(interview_session: InterviewSessionModel, message_from_student: str, questions: Dict[int, InterviewQuestion]):
-    current_question = questions[interview_session.progress]
+def extract_value(
+    interview_session: InterviewSessionModel,
+    message_from_student: str,
+    questions_dict: Dict[UUID, InterviewQuestion]
+):
+    current_question = questions_dict[interview_session.current_question_id]
     prompt_template = current_question.prompt + """
     Please extract structured data from the following [text]. If extraction is not possible, input 'None'.
     [text]
@@ -224,47 +215,31 @@ def extract_answer(interview_session: InterviewSessionModel, message_from_studen
     prompt = ChatPromptTemplate(messages=prompt_msgs)
     llm = ChatOpenAI(
         temperature=0,
-        model_name="gpt-3.5-turbo",
-        openai_api_key=OPENAI_API_KEY
+        model_name="gpt-3.5-turbo",  # type: ignore
+        openai_api_key=OPENAI_API_KEY  # type: ignore
     )
 
     structured_output_class: Any = None
 
-    match interview_session.progress:
-        case 1:
-            structured_output_class = SchoolCredit
-        case 2:
-            structured_output_class = SchoolCredit
-        case 3:
-            structured_output_class = Gpa
-        case 4:
-            structured_output_class = AttendanceRate
-        case 5:
-            structured_output_class = Concern
-        case 6:
-            structured_output_class = PreferInPerson
+    match current_question.extraction_data_type:
+        case 'bool':
+            structured_output_class = BoolExtraction
+        case 'int':
+            structured_output_class = IntExtraction
+        case 'float':
+            structured_output_class = FloatExtraction
+        case 'str':
+            structured_output_class = StrExtraction
 
     chain = prompt | llm.with_structured_output(structured_output_class)
-    response = chain.invoke({"text": message_from_student},
-                            config={"callbacks": [ConsoleCallbackHandler()]}).dict()
-    retrievedValue = None
-    print("れすぽんす", response)
-    match interview_session.progress:
-        case 1:
-            retrievedValue = response['credit']
-        case 2:
-            retrievedValue = response['credit']
-        case 3:
-            retrievedValue = response['gpa']
-        case 4:
-            retrievedValue = response['attendance_rate']
-        case 5:
-            retrievedValue = response["trouble"]
-        case 6:
-            retrievedValue = response["prefer_in_person"]
+    output: Any = chain.invoke({"text": message_from_student},
+                               config={"callbacks": [ConsoleCallbackHandler()]})
+    output_dict = output.dict()
+    extracted_value = output_dict['extracted_value']
 
     return ExtractionResult(
+        question_id_before_update=current_question.id,
         interview_session=interview_session,
-        succeeded_to_extract=False if retrievedValue is None else True,
-        extracted_value=retrievedValue
+        succeeded_to_extract=False if extracted_value is None else True,
+        extracted_value=extracted_value
     )

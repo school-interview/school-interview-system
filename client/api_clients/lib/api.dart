@@ -33,6 +33,7 @@ part 'api/default_api.dart';
 part 'model/admin.dart';
 part 'model/http_validation_error.dart';
 part 'model/interview_analytics.dart';
+part 'model/interview_question.dart';
 part 'model/interview_report.dart';
 part 'model/interview_reports_response.dart';
 part 'model/interview_session.dart';

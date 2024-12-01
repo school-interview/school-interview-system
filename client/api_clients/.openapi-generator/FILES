@@ -6,6 +6,7 @@ doc/Admin.md
 doc/DefaultApi.md
 doc/HTTPValidationError.md
 doc/InterviewAnalytics.md
+doc/InterviewQuestion.md
 doc/InterviewReport.md
 doc/InterviewReportsResponse.md
 doc/InterviewSession.md
@@ -35,6 +36,7 @@ lib/auth/oauth.dart
 lib/model/admin.dart
 lib/model/http_validation_error.dart
 lib/model/interview_analytics.dart
+lib/model/interview_question.dart
 lib/model/interview_report.dart
 lib/model/interview_reports_response.dart
 lib/model/interview_session.dart

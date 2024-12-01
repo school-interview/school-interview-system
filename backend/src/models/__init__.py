@@ -6,19 +6,19 @@ from src.models.db_models.teacher_model import Teacher, TeacherModel, TeacherUpd
 from src.models.db_models.interview_session_model import InterviewSession, InterviewSessionModel, InterviewSessionUpdate
 from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel, InterviewQuestionUpdate
 from src.models.db_models.interview_record_model import InterviewRecord, InterviewRecordModel, InterviewRecordUpdate
-from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel, InterviewAnalyticsUpdate
+from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel, InterviewAnalyticsUpdate, InterviewExtractedValueDict, interview_extracted_value_dict_factory
 from src.models.db_models.admin_model import Admin, AdminModel, AdminUpdate
 from src.models.db_models.student_model import Student, StudentModel, StudentUpdate
+from src.models.db_models.interview_question_group_model import InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionGroupUpdate
 
 # バックエンドアプリで使うモデル
 from src.models.app_models.extraction_result_model import ExtractionResult
 from src.models.app_models.rest_api_controller_model import RestApiController, HttpMethod
 from src.models.app_models.websocket_controller_model import WebsocketController
-from src.models.app_models.llm_structured_outputs.attendance_rate_model import AttendanceRate
-from src.models.app_models.llm_structured_outputs.concern_model import Concern
-from src.models.app_models.llm_structured_outputs.gpa_model import Gpa
-from src.models.app_models.llm_structured_outputs.prefer_in_person_model import PreferInPerson
-from src.models.app_models.llm_structured_outputs.school_credit_model import SchoolCredit
+from src.models.app_models.llm_structured_outputs.bool_extraction import BoolExtraction
+from src.models.app_models.llm_structured_outputs.float_extraction import FloatExtraction
+from src.models.app_models.llm_structured_outputs.int_extraction import IntExtraction
+from src.models.app_models.llm_structured_outputs.str_extraction import StrExtraction
 from src.models.app_models.id_info_model import IdInfo
 from src.models.app_models.interview_report_model import InterviewReport
 
@@ -40,3 +40,5 @@ from src.models.error_models.not_school_member_exception_model import NotSchoolM
 from src.models.error_models.interview_already_started_exception_model import InterviewAlreadyStartedException
 from src.models.error_models.user_not_found_exception_model import UserNotFoundException
 from src.models.error_models.not_student_exception_model import NotStudentException
+from src.models.error_models.interview_has_already_ended_exception import InterviewHasAlreadyEndedException
+from src.models.error_models.interview_session_not_found_exception import InterviewSessionNotFoundException

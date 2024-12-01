@@ -1,4 +1,4 @@
-from typing import List, Optional, Generic, TypeVar, Type
+from typing import List, Optional, Generic, TypeVar, Type, Union
 from uuid import UUID
 from src.models import EntityBaseModel
 from fastapi.encoders import jsonable_encoder
@@ -28,12 +28,15 @@ class BaseCrud(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     def get(self, db_session: Session, id: UUID) -> Optional[ModelType]:
-        return db_session.query(self.model).filter(self.model.id == id).first()
+        return (db_session.query(self.model)
+                .filter(self.model.id == id)  # type: ignore
+                .first()
+                )
 
     def get_multi(self, db_session: Session, *, skip=0, limit=100) -> List[ModelType]:
         return db_session.query(self.model).offset(skip).limit(limit).all()
 
-    def create(self, db_session: Session, *, obj_in: CreateSchemaType) -> ModelType:
+    def create(self, db_session: Session, *, obj_in: Union[ModelType, CreateSchemaType]) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)
         db_session.add(db_obj)
@@ -54,8 +57,8 @@ class BaseCrud(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_session.refresh(db_obj)
         return db_obj
 
-    def remove(self, db_session: Session, *, id: UUID) -> ModelType:
-        obj = db_session.query(self.model).get(id)
+    def remove(self, db_session: Session, *, id: UUID) -> Optional[ModelType]:
+        obj: Optional[ModelType] = db_session.query(self.model).get(id)
         db_session.delete(obj)
         db_session.commit()
         return obj

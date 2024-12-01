@@ -1,37 +1,88 @@
+import pytest
+from typing import Any, List, Dict
 import uuid
+from uuid import UUID
+from mock_alchemy.mocking import UnifiedAlchemyMagicMock
+from sqlalchemy import create_engine, text
+from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud, InterviewQuestionGroupsCrud, InterviewQuestionsCrud
+from src.models import EntityBaseModel, UserModel, StudentModel, InterviewSessionModel, TeacherModel, InterviewQuestion, InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionModel, InterviewRecordModel
 from sqlalchemy.orm import Session
-from src.models import TeacherModel, EntityBaseModel, InterviewQuestionModel, InterviewQuestionGroupModel
-from typing import List, Type
-from sqlalchemy.orm import Session
+import random
+from datetime import datetime
+
+users_crud = UsersCrud(UserModel)
+students_crud = StudentsCrud(StudentModel)
+interview_sessions_crud = InterviewSessionsCrud(InterviewSessionModel)
+teachers_crud = TeachersCrud(TeacherModel)
+interview_question_groups_crud = InterviewQuestionGroupsCrud(
+    InterviewQuestionGroupModel)
+interview_questions_crud = InterviewQuestionsCrud(InterviewQuestionModel)
 
 
-def seed_all(session: Session):
-    seed_teachers(session)
-    question_groups = seed_question_groups(session)
-    if len(question_groups) > 0:
-        seed_questions(session, question_groups)
+@pytest.fixture
+def db_session():
+    db_session = create_db_session()
+    yield db_session
+    print("finalizing... DB connection")
+    db_session.close()
 
 
-def seed_teachers(session: Session):
-    row_count = get_number_of_rows(session, TeacherModel)
-    if row_count > 0:
-        return
-    teachers: List[TeacherModel] = [
-        TeacherModel(
-            id=uuid.uuid4(),
-            name="サンプル講師",
-            description="サンプルのイラストの講師です。",
-            image_url="/static/teacher1.png"
-        )
+@pytest.fixture(scope="module")
+def db_session_module_scoped():
+    db_session = create_db_session()
+    yield db_session
+    print("finalizing... DB connection")
+    db_session.close()
+
+
+def create_db_session():
+    db_session = UnifiedAlchemyMagicMock()
+    EntityBaseModel.metadata.create_all(db_session)
+    teachers = seed_teachers(db_session)
+    users = seed_users(db_session)
+    question_groups = seed_question_groups(db_session)
+    questions = seed_questions(db_session, question_groups)
+    seed_interview_sessions(
+        db_session, users, teachers[0], questions)
+    return db_session
+
+
+def seed_teachers(db_session: Session):
+    teacher_model = TeacherModel(
+        id=uuid.uuid4(),
+        name="Teacher 1",
+        description="1人目の先生です。"
+    )
+    teachers_crud.create(db_session=db_session, obj_in=teacher_model)
+    return [teacher_model]
+
+
+def seed_users(db_session: Session):
+    users = [
+        create_student_user(db_session, 2),
+        create_student_user(db_session, 2),
+        create_student_user(db_session, 2),
     ]
-    session.add_all(teachers)
-    session.commit()
+    return users
+
+
+def seed_interview_sessions(db_session: Session, users: List[UserModel], teacher: TeacherModel, questions: List[InterviewQuestionModel]):
+    first_question = questions[0]
+    for user in users:
+        interview_session = InterviewSessionModel(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            teacher_id=teacher.id,
+            start_at=datetime.now(),
+            current_question_id=first_question.id,
+            done=False
+        )
+        interview_sessions_crud.create(db_session=db_session,
+                                       obj_in=interview_session)
+    return interview_sessions_crud.get_multi(db_session)
 
 
 def seed_question_groups(session: Session):
-    row_count = get_number_of_rows(session, InterviewQuestionGroupModel)
-    if row_count > 0:
-        return []
     groups: List[InterviewQuestionGroupModel] = [
         InterviewQuestionGroupModel(
             id=uuid.uuid4(),
@@ -194,5 +245,41 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
     return questions
 
 
-def get_number_of_rows(session: Session, model: Type[EntityBaseModel]) -> int:
+def seed_interview_records(session: Session, questions: List[InterviewQuestionModel]):
+    for q in questions:
+        record = InterviewRecordModel(
+            id=uuid.uuid4(),
+            session_id=uuid.uuid4(),
+            question_id=q.id,
+            extracted_data="1"
+        )
+        session.add(record)
+
+
+# utils...
+
+def get_number_of_rows(session: Session, model: Any) -> int:
     return session.query(model).count()
+
+
+def create_student_user(db_session: Session, semester: int):
+    user_id = uuid.uuid4()
+    student_id = uuid.uuid4()
+    student_number = str(int(random.uniform(0000000, 9999999)))
+    user_model = UserModel(
+        id=user_id,
+        name=f"Student {student_number}さん",
+        email=f"a{student_number}@planet.kanazawa-it.ac.jp",
+        is_admin=False,
+    )
+    student_model = StudentModel(
+        id=student_id,
+        user_id=user_id,
+        student_id=student_number,
+        department="情報工学部",
+    )
+    users_crud.create(db_session=db_session,
+                      obj_in=user_model)
+    students_crud.create(db_session=db_session,
+                         obj_in=student_model)
+    return user_model
