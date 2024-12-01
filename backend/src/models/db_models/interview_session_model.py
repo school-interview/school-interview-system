@@ -80,10 +80,8 @@ class InterviewSessionModel(EntityBaseModel):
         )
         db_session.add(interview_record)
         db_session.commit()
-        (previous_value, previous_value_type) = self._get_previous_extracted_value(
-            interview_groups, questions_by_group, records)
         self._move_on_next_question(
-            db_session, interview_groups, questions_by_group, previous_value, previous_value_type)
+            db_session, interview_groups, questions_by_group, interview_record.extracted_data, self.current_question.extraction_data_type)
 
     def _get_next_question(self, interview_groups: List[InterviewQuestionGroupModel], questions_by_group: Dict[UUID, List[InterviewQuestionModel]]) -> Optional[InterviewQuestionModel]:
         """次の質問のInterviewQuestionを取得します。
@@ -152,6 +150,7 @@ class InterviewSessionModel(EntityBaseModel):
             interview_groups (List[InterviewQuestionGroup]): InterviewQuestionGroupのリスト
             questions_by_group (Dict[UUID, List[InterviewQuestionModel]]): キーがグループID、値がInterviewQuestionのリストの辞書
             previous_question_extracted_value (Optional[str]): 前の質問の抽出された値
+            previous_question_extracted_value_type (Optional[str]): 前の質問の抽出された値のデータ型
         Returns:
 
         Raises:
@@ -175,55 +174,20 @@ class InterviewSessionModel(EntityBaseModel):
             previous_extracted_value_type and
             next_question.has_condition() and
             next_question.can_skip(
-                previous_extracted_value, previous_extracted_value_type
-            )
+                previous_extracted_value, previous_extracted_value_type)
+
         ):
             # TODO: この実装だと1個次の質問しかスキップできないため、複数先の質問をスキップできるようにする。（2024/11/30現段階では要件にないため問題ない。）
             next_question = self._get_next_question(
                 interview_groups, questions_by_group
             )
+            if next_question:
+                self.current_question_id = next_question.id
+                self.current_question = next_question
 
         db_session.add(self)
         db_session.commit()
         return next_question
-
-    def _get_previous_extracted_value(
-        self,
-        interview_groups: List[InterviewQuestionGroupModel],
-        questions_by_group: Dict[UUID, List[InterviewQuestionModel]],
-        records: List[InterviewRecordModel]
-    ) -> Tuple[Optional[str], Optional[str]]:
-        """前の質問の抽出された値を取得します。
-        Args:
-            db_session (Session): DBセッション
-            interview_groups (List[InterviewQuestionGroup]): InterviewQuestionGroupのリスト
-            questions_by_group (Dict[UUID, List[InterviewQuestionModel]]): キーがグループID、値がInterviewQuestionのリストの辞書
-            records (List[InterviewRecordModel]): InterviewRecordのリスト
-
-        Returns:
-            (Optional[str], Optional[str]): 前の質問の抽出された値, 前の質問の抽出された値のデータ型
-        Raises:
-        """
-        previous_question: Optional[InterviewQuestionModel] = None
-        previous_question_found = False
-        # TODO: ソートはCRUDで行うべき
-        interview_groups.sort(key=lambda g: g.order)
-        for g in interview_groups:
-            questions = questions_by_group[g.id]
-            questions.sort(key=lambda q: q.order)
-            for q in questions:
-                if q.id == self.current_question_id:
-                    previous_question_found = True
-                    break
-                previous_question = q
-            if previous_question_found:
-                break
-        if previous_question is None:
-            return (None, None)
-        for r in records:
-            if r.session_id == self.id and r.question_id == previous_question.id:
-                return (r.extracted_data, previous_question.extraction_data_type)
-        return (None, None)
 
 
 class InterviewSessionUpdate(AppPydanticBaseModel):
