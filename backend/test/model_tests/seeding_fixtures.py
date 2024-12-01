@@ -5,7 +5,7 @@ from uuid import UUID
 from mock_alchemy.mocking import UnifiedAlchemyMagicMock
 from sqlalchemy import create_engine, text
 from src.crud import UsersCrud, StudentsCrud, InterviewSessionsCrud, TeachersCrud, InterviewQuestionGroupsCrud, InterviewQuestionsCrud
-from src.models import EntityBaseModel, UserModel, StudentModel, InterviewSessionModel, TeacherModel, InterviewQuestion, InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionModel
+from src.models import EntityBaseModel, UserModel, StudentModel, InterviewSessionModel, TeacherModel, InterviewQuestion, InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionModel, InterviewRecordModel
 from sqlalchemy.orm import Session
 import random
 from datetime import datetime
@@ -136,7 +136,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="現状の取得単位数は？",
             order=1,
             prompt="Please extract the number of credits from the following text. Extract only the numerical value.",
-            condition_target_operand_data_type="int",
             condition_left_operand=None,
             condition_left_operator=None,
             condition_right_operand=None,
@@ -153,7 +152,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="今学期の取得予定単位数は？",
             order=1,
             prompt="Please extract the number of credits planned to be taken this semester from the following text. Extract only the numerical value.",
-            condition_target_operand_data_type="int",
             condition_left_operand=None,
             condition_left_operator=None,
             condition_right_operand=None,
@@ -170,7 +168,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="累積GPAは?",
             order=1,
             prompt="Please extract the number of credits planned to be taken this semester from the following text. Extract only the numerical value.",
-            condition_target_operand_data_type="float",
             condition_left_operand=None,
             condition_left_operator=None,
             condition_right_operand=None,
@@ -187,7 +184,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="出席率は？",
             order=1,
             prompt="Please extract the attendance rate from the following text. Extract only the numerical value.",
-            condition_target_operand_data_type="int",
             condition_left_operand=None,
             condition_left_operator=None,
             condition_right_operand=None,
@@ -203,7 +199,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="出席率が低いですが、この出席率の理由は？",
             order=2,
             prompt="Please extract the factors causing low attendance rate from the following text.",
-            condition_target_operand_data_type="int",
             condition_left_operand="80",
             condition_left_operator=">",
             condition_right_operand=None,
@@ -220,7 +215,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="学校生活で困っていることは？",
             order=1,
             prompt="Please extract the factors causing difficulties in school life from the following text. If no difficulties are observed, input 'None'.",
-            condition_target_operand_data_type="str",
             condition_left_operand=None,
             condition_left_operator=None,
             condition_right_operand=None,
