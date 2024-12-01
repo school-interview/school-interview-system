@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:client/generated/l10n.dart';
-import 'package:client/view/unity_screen.dart';
+import 'package:client/view/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +19,7 @@ class _MainView extends ConsumerState<MainView> {
   Widget build(BuildContext context) {
     return MaterialApp(
       // 初期画面
-      home: const UnityDemoScreen(),
+      home: const LoginView(),
       scrollBehavior: CustomScrollBehavior(),
       localizationsDelegates: const [
         S.delegate,

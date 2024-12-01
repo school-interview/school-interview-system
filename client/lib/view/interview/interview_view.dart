@@ -10,6 +10,7 @@ import 'package:client/ui_core/interview_mic_color.dart';
 import 'package:client/view/interview_analytics/interview_analytics_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// 面談画面
@@ -81,10 +82,18 @@ class _InterviewView extends ConsumerState<InterviewView> {
                 Column(
                   children: [
                     // 面談アバター
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      height: screenHeight * 0.5,
-                      child: Image.asset('assets/image/sample_avatar.png'),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 780,
+                      ),
+                      child: SizedBox(
+                        height: screenHeight * 0.5,
+                        child: UnityWidget(
+                          onUnityCreated: (controller) {
+                            null;
+                          },
+                        ),
+                      ),
                     ),
 
                     const Spacer(),
