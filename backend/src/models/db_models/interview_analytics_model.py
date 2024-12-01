@@ -26,8 +26,8 @@ def interview_extracted_value_dict_factory(interview_records: List[InterviewReco
     order_key_mapping = {
         "1-1": "planned_credits",
         "2-1": "total_earned_credits",
-        "3-1": "attendance_rate",
-        "4-1": "gpa"
+        "3-1": "gpa",
+        "4-1": "attendance_rate"
     }
     extracted_value_dict: InterviewExtractedValueDict = {
         'attendance_rate': 0,
