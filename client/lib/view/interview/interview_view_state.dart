@@ -13,6 +13,9 @@ abstract class InterviewViewState with _$InterviewViewState {
     /// API処理結果
     Result? result,
 
+    /// Unity読み込み中フラグ
+    @Default(true) bool isLoadUnity,
+
     /// ローディング中かどうかを判別する
     @Default(false) bool isLoading,
 
@@ -20,7 +23,7 @@ abstract class InterviewViewState with _$InterviewViewState {
     @Default([]) List<ChatHistory> chatHistories,
 
     /// アバターのセリフ
-    @Default("こんにちは。これから面談を始めます。") String avatarMessage,
+    @Default("") String avatarMessage,
 
     /// ユーザーのセリフ
     @Default("") String userMessage,

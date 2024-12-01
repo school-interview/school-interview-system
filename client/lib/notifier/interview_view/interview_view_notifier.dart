@@ -27,6 +27,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
     state = state.copyWith(result: result);
   }
 
+  void setIsLoadUnity(bool isLoadUnity) {
+    state = state.copyWith(isLoadUnity: isLoadUnity);
+  }
+
   void setIsLoading(bool isLoading) {
     state = state.copyWith(isLoading: isLoading);
   }
@@ -178,13 +182,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   /// アバターの最初のセリフを発言する
   Future<void> _teacherFirstMessage(String teacherId) async {
     await TextToSpeech.speak(
-      // stateにあらかじめ初めのセリフをDefaultでセットしておく
       state.avatarMessage,
-      startFunc: () {
-        _setWhoTalking(WhoTalking.avatar);
-      },
       endFunc: () async {
-        _addChatHistories(ChatHistory(state.avatarMessage, true));
         setIsLoading(true);
         // 面談を始める
         await _startInterview(teacherId: teacherId);

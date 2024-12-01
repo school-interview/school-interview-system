@@ -18,12 +18,14 @@ class TextToSpeech {
   /// テキストを音声に変換して再生する
   static speak(
     String text, {
-    required Function startFunc,
+    Function? startFunc,
     required Function endFunc,
   }) async {
     // アバターが話し始めたときの処理
     tts.setStartHandler(() {
-      startFunc();
+      if (startFunc != null) {
+        startFunc();
+      }
       logger.i("TTS STARTED");
     });
 

@@ -31,7 +31,12 @@ class _InterviewView extends ConsumerState<InterviewView> {
     super.initState();
     Future(() async {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      await notifier.init(widget.cameraController, widget.teacherId);
+      notifier.setAvatarMessage("こんにちは。これから面談を始めます。");
+      // Unityの読み込み表示を見せないため、1秒強制ディレイさせる
+      Future.delayed(const Duration(seconds: 1)).then((_) async {
+        notifier.setIsLoadUnity(false);
+        await notifier.init(widget.cameraController, widget.teacherId);
+      });
     });
   }
 
@@ -56,6 +61,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
     });
     final state = ref.watch(interviewViewNotifierProvider);
     final screenHeight = MediaQuery.sizeOf(context).height;
+    const avatarContainerWidth = 400.0;
     // Exception対策（なくても動作は問題ない）
     final scrollController = ScrollController();
     return PopScope(
@@ -81,13 +87,12 @@ class _InterviewView extends ConsumerState<InterviewView> {
               children: [
                 Column(
                   children: [
-                    // 面談アバター
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxWidth: 780,
-                      ),
+                    Opacity(
+                      opacity: state.isLoadUnity ? 0.1 : 1.0,
+                      // 面談アバター
                       child: SizedBox(
                         height: screenHeight * 0.5,
+                        width: avatarContainerWidth,
                         child: UnityWidget(
                           onUnityCreated: (controller) {
                             null;
@@ -102,6 +107,29 @@ class _InterviewView extends ConsumerState<InterviewView> {
                     _micButton(),
                   ],
                 ),
+
+                /// Unity読み込み中の表示
+                if (state.isLoadUnity)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      color: Colors.white,
+                      height: screenHeight * 0.5,
+                      width: avatarContainerWidth,
+                      child: const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("面談相手を待っています..."),
+                            SizedBox(height: 12),
+                            CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                    ColorDefinitions.accentColor)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
 
                 // チャット部分
                 Container(

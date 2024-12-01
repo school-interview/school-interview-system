@@ -19,6 +19,9 @@ mixin _$InterviewViewState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
+  /// Unity読み込み中フラグ
+  bool get isLoadUnity => throw _privateConstructorUsedError;
+
   /// ローディング中かどうかを判別する
   bool get isLoading => throw _privateConstructorUsedError;
 
@@ -57,6 +60,7 @@ abstract class $InterviewViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Result? result,
+      bool isLoadUnity,
       bool isLoading,
       List<ChatHistory> chatHistories,
       String avatarMessage,
@@ -81,6 +85,7 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
   @override
   $Res call({
     Object? result = freezed,
+    Object? isLoadUnity = null,
     Object? isLoading = null,
     Object? chatHistories = null,
     Object? avatarMessage = null,
@@ -95,6 +100,10 @@ class _$InterviewViewStateCopyWithImpl<$Res, $Val extends InterviewViewState>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
+      isLoadUnity: null == isLoadUnity
+          ? _value.isLoadUnity
+          : isLoadUnity // ignore: cast_nullable_to_non_nullable
+              as bool,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -141,6 +150,7 @@ abstract class _$$InterviewViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Result? result,
+      bool isLoadUnity,
       bool isLoading,
       List<ChatHistory> chatHistories,
       String avatarMessage,
@@ -163,6 +173,7 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? result = freezed,
+    Object? isLoadUnity = null,
     Object? isLoading = null,
     Object? chatHistories = null,
     Object? avatarMessage = null,
@@ -177,6 +188,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
               as Result?,
+      isLoadUnity: null == isLoadUnity
+          ? _value.isLoadUnity
+          : isLoadUnity // ignore: cast_nullable_to_non_nullable
+              as bool,
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
@@ -218,9 +233,10 @@ class __$$InterviewViewStateImplCopyWithImpl<$Res>
 class _$InterviewViewStateImpl implements _InterviewViewState {
   const _$InterviewViewStateImpl(
       {this.result,
+      this.isLoadUnity = true,
       this.isLoading = false,
       final List<ChatHistory> chatHistories = const [],
-      this.avatarMessage = "こんにちは。これから面談を始めます。",
+      this.avatarMessage = "",
       this.userMessage = "",
       this.whoTalking = WhoTalking.avatar,
       this.currentInterviewSessionId = "",
@@ -231,6 +247,11 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   /// API処理結果
   @override
   final Result? result;
+
+  /// Unity読み込み中フラグ
+  @override
+  @JsonKey()
+  final bool isLoadUnity;
 
   /// ローディング中かどうかを判別する
   @override
@@ -280,7 +301,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 
   @override
   String toString() {
-    return 'InterviewViewState(result: $result, isLoading: $isLoading, chatHistories: $chatHistories, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId, interviewAnalytics: $interviewAnalytics, isFinishInterview: $isFinishInterview)';
+    return 'InterviewViewState(result: $result, isLoadUnity: $isLoadUnity, isLoading: $isLoading, chatHistories: $chatHistories, avatarMessage: $avatarMessage, userMessage: $userMessage, whoTalking: $whoTalking, currentInterviewSessionId: $currentInterviewSessionId, interviewAnalytics: $interviewAnalytics, isFinishInterview: $isFinishInterview)';
   }
 
   @override
@@ -289,6 +310,8 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
         (other.runtimeType == runtimeType &&
             other is _$InterviewViewStateImpl &&
             (identical(other.result, result) || other.result == result) &&
+            (identical(other.isLoadUnity, isLoadUnity) ||
+                other.isLoadUnity == isLoadUnity) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality()
@@ -312,6 +335,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
   int get hashCode => Object.hash(
       runtimeType,
       result,
+      isLoadUnity,
       isLoading,
       const DeepCollectionEquality().hash(_chatHistories),
       avatarMessage,
@@ -332,6 +356,7 @@ class _$InterviewViewStateImpl implements _InterviewViewState {
 abstract class _InterviewViewState implements InterviewViewState {
   const factory _InterviewViewState(
       {final Result? result,
+      final bool isLoadUnity,
       final bool isLoading,
       final List<ChatHistory> chatHistories,
       final String avatarMessage,
@@ -345,6 +370,10 @@ abstract class _InterviewViewState implements InterviewViewState {
 
   /// API処理結果
   Result? get result;
+  @override
+
+  /// Unity読み込み中フラグ
+  bool get isLoadUnity;
   @override
 
   /// ローディング中かどうかを判別する
