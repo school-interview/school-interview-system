@@ -192,11 +192,19 @@ class InterviewSessionModel(EntityBaseModel):
         Raises:
         """
         previous_question: Optional[InterviewQuestionModel] = None
+        previous_question_found = False
+        # TODO: ソートはCRUDで行うべき
+        interview_groups.sort(key=lambda g: g.order)
         for g in interview_groups:
-            for q in questions_by_group[g.id]:
+            questions = questions_by_group[g.id]
+            questions.sort(key=lambda q: q.order)
+            for q in questions:
                 if q.id == self.current_question_id:
+                    previous_question_found = True
                     break
                 previous_question = q
+            if previous_question_found:
+                break
         if previous_question is None:
             return None
         for r in records:
