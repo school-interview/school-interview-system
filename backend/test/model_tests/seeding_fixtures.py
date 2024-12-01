@@ -231,7 +231,6 @@ def seed_questions(session: Session, question_groups: List[InterviewQuestionGrou
             question="教員との面談を希望しますか？",
             order=1,
             prompt="Please extract whether a meeting with the teacher is requested from the following text. Extract as `True` or `False`.",
-            condition_target_operand_data_type="bool",
             condition_left_operand=None,
             condition_left_operator=None,
             condition_right_operand=None,
