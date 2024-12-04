@@ -3426,7 +3426,7 @@ MonoBehaviour:
   Mean: 2.5
   MaximumDeviation: 2
   Timescale: 10
---- !u!114 &589943225
+--- !u!114 &589943241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12548,6 +12548,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1521070649}
+    - target: {fileID: 6645666737893750211, guid: 98554b0dc9df34368994f1262c926669, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 73cd22e857e3d4b2d941b9821949536a, type: 2}
     - target: {fileID: 6792626178258018177, guid: 98554b0dc9df34368994f1262c926669, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -12636,6 +12640,10 @@ PrefabInstance:
       propertyPath: MouthOpening
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9108176397152562635, guid: 98554b0dc9df34368994f1262c926669, type: 3}
+      propertyPath: isMouthMoving
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12648,7 +12656,7 @@ PrefabInstance:
       addedObject: {fileID: 589943224}
     - targetCorrespondingSourceObject: {fileID: 7152400065666588812, guid: 98554b0dc9df34368994f1262c926669, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 589943225}
+      addedObject: {fileID: 589943241}
     - targetCorrespondingSourceObject: {fileID: 6266876189206075612, guid: 98554b0dc9df34368994f1262c926669, type: 3}
       insertIndex: -1
       addedObject: {fileID: 956072264}
