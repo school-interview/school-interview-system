@@ -39,7 +39,7 @@ def login(db_session: Session, id_info: IdInfo) -> UserModel:
                 id=uuid.uuid4(),
                 user_id=user_model.id
             )
-            admins_crud.crate(db_session, obj_in=admin_model)
+            admins_crud.create(db_session, obj_in=admin_model)
         else:
             students_crud = StudentsCrud(StudentModel)
             studnet_model = StudentModel(
