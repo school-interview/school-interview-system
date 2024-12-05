@@ -149,9 +149,9 @@ class _InterviewView extends ConsumerState<InterviewView> {
 
                 // チャット部分
                 Container(
-                  height: screenHeight * 0.4,
+                  height: screenHeight * 0.3,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  margin: const EdgeInsets.only(bottom: 40),
+                  margin: const EdgeInsets.only(top: 80),
                   child: Scrollbar(
                     controller: scrollController,
                     child: SingleChildScrollView(
