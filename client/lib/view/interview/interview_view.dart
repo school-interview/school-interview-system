@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:camera/camera.dart';
+import 'package:client/app.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
@@ -10,6 +11,7 @@ import 'package:client/ui_core/interview_mic_color.dart';
 import 'package:client/view/interview_analytics/interview_analytics_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// 面談画面
@@ -25,17 +27,25 @@ class InterviewView extends ConsumerStatefulWidget {
 }
 
 class _InterviewView extends ConsumerState<InterviewView> {
+  UnityWidgetController? _unityWidgetController;
+
   @override
   void initState() {
     super.initState();
     Future(() async {
       final notifier = ref.read(interviewViewNotifierProvider.notifier);
-      await notifier.init(widget.cameraController, widget.teacherId);
+      notifier.setAvatarMessage("こんにちは。これから面談を始めます。");
+      // Unityの読み込み表示を見せないため、1秒強制ディレイさせる
+      Future.delayed(const Duration(seconds: 1)).then((_) async {
+        notifier.setIsLoadUnity(false);
+        await notifier.init(widget.cameraController, widget.teacherId);
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    /// 面談終了フラグを監視し、面談が終了した際の処理を制御する
     ref.listen<bool>(
         interviewViewNotifierProvider
             .select((value) => value.isFinishInterview), (_, next) {
@@ -53,8 +63,23 @@ class _InterviewView extends ConsumerState<InterviewView> {
         /// エラーダイアログを表示してログイン画面に戻る
       }
     });
+
+    /// 誰が話している状態かを監視し、アバターの動きを制御する
+    ref.listen<WhoTalking>(
+        interviewViewNotifierProvider.select((value) => value.whoTalking),
+        (_, next) {
+      final state = ref.watch(interviewViewNotifierProvider);
+      switch (state.whoTalking) {
+        case WhoTalking.avatar:
+          _setAvatarState("talk");
+          break;
+        default:
+          _setAvatarState("nod");
+      }
+    });
     final state = ref.watch(interviewViewNotifierProvider);
     final screenHeight = MediaQuery.sizeOf(context).height;
+    const avatarContainerWidth = 400.0;
     // Exception対策（なくても動作は問題ない）
     final scrollController = ScrollController();
     return PopScope(
@@ -80,11 +105,16 @@ class _InterviewView extends ConsumerState<InterviewView> {
               children: [
                 Column(
                   children: [
-                    // 面談アバター
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      height: screenHeight * 0.5,
-                      child: Image.asset('assets/image/sample_avatar.png'),
+                    Opacity(
+                      opacity: state.isLoadUnity ? 0.1 : 1.0,
+                      // 面談アバター
+                      child: SizedBox(
+                        height: screenHeight * 0.5,
+                        width: avatarContainerWidth,
+                        child: UnityWidget(
+                          onUnityCreated: _onUnityCreated,
+                        ),
+                      ),
                     ),
 
                     const Spacer(),
@@ -93,6 +123,29 @@ class _InterviewView extends ConsumerState<InterviewView> {
                     _micButton(),
                   ],
                 ),
+
+                /// Unity読み込み中の表示
+                if (state.isLoadUnity)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      color: Colors.white,
+                      height: screenHeight * 0.5,
+                      width: avatarContainerWidth,
+                      child: const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("面談相手を待っています..."),
+                            SizedBox(height: 12),
+                            CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                    ColorDefinitions.accentColor)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
 
                 // チャット部分
                 Container(
@@ -161,6 +214,27 @@ class _InterviewView extends ConsumerState<InterviewView> {
         ),
       ),
     );
+  }
+
+  // 作成したコントローラをunityコントローラに接続するコールバック
+  void _onUnityCreated(controller) {
+    controller.resume();
+    _unityWidgetController = controller;
+  }
+
+  /// アバターの状態をUnityへ送信する
+  /// [flag] が"talk"のときアバターは話し始める
+  /// [flag] が"talk"以外の文字列のときアバターはうなずき始める
+  Future<void> _setAvatarState(String flag) async {
+    if (_unityWidgetController == null) {
+      logger.e("_unityWidgetController is null");
+    } else {
+      await _unityWidgetController?.postMessage(
+        'hiyori_free_t08', // 対象GameObject
+        'SetState', // Unityスクリプト内のメソッド名
+        flag, // 送信するメッセージ
+      );
+    }
   }
 
   /// マイクボタンを生成するWidget
