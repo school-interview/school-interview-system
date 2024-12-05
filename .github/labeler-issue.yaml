@@ -1,0 +1,21 @@
+policy:
+  - template: [ "normal_template.yaml" ]
+    section:
+      - id: [ "related" ]
+        block-list: [ ]
+        label:
+          - name: "related/backend"
+            keys: [ "Backend", "All" ]
+          - name: "related/client"
+            keys: [ "Client", "All" ]
+          - name: "related/other"
+            keys: [ "Other", "All" ]
+      - id: [ type ]
+        block-list: [ ]
+        label:
+          - name: "type/feature"
+            keys: [ "Feature" ]
+          - name: "type/bug"
+            keys: [ "Bug" ]
+          - name: "related/improvement"
+            keys: [ "Improvement" ]
