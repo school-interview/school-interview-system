@@ -34,24 +34,28 @@ def test_compare_value(groups_and_questions):
     reason_for_low_attendance_rate_question = questions_in_attendance_rate_group[1]
     assert not reason_for_low_attendance_rate_question.compare_value(
         89,
+        "int",
         reason_for_low_attendance_rate_question.condition_left_operator,
         reason_for_low_attendance_rate_question.condition_left_operand,
         'left'
     )
     assert not reason_for_low_attendance_rate_question.compare_value(
         80,
+        "int",
         reason_for_low_attendance_rate_question.condition_left_operator,
         reason_for_low_attendance_rate_question.condition_left_operand,
         'left'
     )
     assert reason_for_low_attendance_rate_question.compare_value(
         79,
+        "int",
         reason_for_low_attendance_rate_question.condition_left_operator,
         reason_for_low_attendance_rate_question.condition_left_operand,
         'left'
     )
     assert reason_for_low_attendance_rate_question.compare_value(
         70,
+        "int",
         reason_for_low_attendance_rate_question.condition_left_operator,
         reason_for_low_attendance_rate_question.condition_left_operand,
         'left'
@@ -65,16 +69,16 @@ def test_can_skip(groups_and_questions):
     attendance_rate_question_group_id = question_groups[3].id
     # 発動条件がない質問のテスト
     credit_question = questions_by_group[credit_question_group_id][0]
-    assert credit_question.can_skip(20)
-    assert credit_question.can_skip(70)
-    assert credit_question.can_skip(90)
-    assert credit_question.can_skip(124)
+    assert credit_question.can_skip(20, "int")
+    assert credit_question.can_skip(70, "int")
+    assert credit_question.can_skip(90, "int")
+    assert credit_question.can_skip(124, "int")
 
     # 発動条件を持つ質問のテスト
     reason_for_low_attendance_rate_question = (
         questions_by_group[attendance_rate_question_group_id][1]
     )
-    assert not reason_for_low_attendance_rate_question.can_skip(70)
-    assert not reason_for_low_attendance_rate_question.can_skip(79)
-    assert reason_for_low_attendance_rate_question.can_skip(80)
-    assert reason_for_low_attendance_rate_question.can_skip(100)
+    assert not reason_for_low_attendance_rate_question.can_skip(70, "int")
+    assert not reason_for_low_attendance_rate_question.can_skip(79, "int")
+    assert reason_for_low_attendance_rate_question.can_skip(80, "int")
+    assert reason_for_low_attendance_rate_question.can_skip(100, "int")
