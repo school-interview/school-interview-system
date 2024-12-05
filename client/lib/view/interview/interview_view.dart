@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:camera/camera.dart';
+import 'package:client/app.dart';
 import 'package:client/component/custom_app_bar.dart';
 import 'package:client/component/style/box_shadow_style.dart';
 import 'package:client/constant/color.dart';
@@ -26,6 +27,8 @@ class InterviewView extends ConsumerStatefulWidget {
 }
 
 class _InterviewView extends ConsumerState<InterviewView> {
+  UnityWidgetController? _unityWidgetController;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +45,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
 
   @override
   Widget build(BuildContext context) {
+    /// 面談終了フラグを監視し、面談が終了した際の処理を制御する
     ref.listen<bool>(
         interviewViewNotifierProvider
             .select((value) => value.isFinishInterview), (_, next) {
@@ -57,6 +61,20 @@ class _InterviewView extends ConsumerState<InterviewView> {
       } else {
         /// TODO 面談結果nullだった場合の処理を実装
         /// エラーダイアログを表示してログイン画面に戻る
+      }
+    });
+
+    /// 誰が話している状態かを監視し、アバターの動きを制御する
+    ref.listen<WhoTalking>(
+        interviewViewNotifierProvider.select((value) => value.whoTalking),
+        (_, next) {
+      final state = ref.watch(interviewViewNotifierProvider);
+      switch (state.whoTalking) {
+        case WhoTalking.avatar:
+          _setAvatarState("talk");
+          break;
+        default:
+          _setAvatarState("nod");
       }
     });
     final state = ref.watch(interviewViewNotifierProvider);
@@ -94,9 +112,7 @@ class _InterviewView extends ConsumerState<InterviewView> {
                         height: screenHeight * 0.5,
                         width: avatarContainerWidth,
                         child: UnityWidget(
-                          onUnityCreated: (controller) {
-                            null;
-                          },
+                          onUnityCreated: _onUnityCreated,
                         ),
                       ),
                     ),
@@ -198,6 +214,27 @@ class _InterviewView extends ConsumerState<InterviewView> {
         ),
       ),
     );
+  }
+
+  // 作成したコントローラをunityコントローラに接続するコールバック
+  void _onUnityCreated(controller) {
+    controller.resume();
+    _unityWidgetController = controller;
+  }
+
+  /// アバターの状態をUnityへ送信する
+  /// [flag] が"talk"のときアバターは話し始める
+  /// [flag] が"talk"以外の文字列のときアバターはうなずき始める
+  Future<void> _setAvatarState(String flag) async {
+    if (_unityWidgetController == null) {
+      logger.e("_unityWidgetController is null");
+    } else {
+      await _unityWidgetController?.postMessage(
+        'hiyori_free_t08', // 対象GameObject
+        'SetState', // Unityスクリプト内のメソッド名
+        flag, // 送信するメッセージ
+      );
+    }
   }
 
   /// マイクボタンを生成するWidget
