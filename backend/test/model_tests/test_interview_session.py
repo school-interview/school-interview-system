@@ -116,13 +116,14 @@ def test_move_on_next_question(data_for_test):
     group_6_id = question_groups[5].id
     group_6_question_1_id = questions_by_group[group_6_id][0].id
 
-    def test_next_question(interview_session: InterviewSessionModel, next_question_id: Optional[UUID], previous_extracted_value: str):
+    def test_next_question(interview_session: InterviewSessionModel, next_question_id: Optional[UUID], previous_extracted_value: str, previous_extracted_value_type: Optional[str]):
         next_question = (
             interview_session._move_on_next_question(
                 db_session,
                 question_groups,
                 questions_by_group,
-                previous_extracted_value
+                previous_extracted_value,
+                previous_extracted_value_type
             ))
         if next_question_id is None:
             assert next_question is None
@@ -139,24 +140,24 @@ def test_move_on_next_question(data_for_test):
         return next_question
     # 現状の単位数→今学期取得予定単位数
     test_next_question(
-        target_interivew_session, group_2_question_1_id, "30")
+        target_interivew_session, group_2_question_1_id, "30", None)
     # 今学期取得予定単位数→累計GPA
     test_next_question(
-        target_interivew_session, group_3_question_1_id, "20")
+        target_interivew_session, group_3_question_1_id, "20", "int")
     # 累計GPA→出席率
     test_next_question(
-        target_interivew_session, group_4_question_1_id, "3.0")
+        target_interivew_session, group_4_question_1_id, "3.0", "float")
     # 出席率→なぜ出席率低いのか
     test_next_question(
-        target_interivew_session, group_4_question_2_id, "79")
+        target_interivew_session, group_4_question_2_id, "79", "int")
     # 出席率OKパターンのテストのために戻す
     target_interivew_session.current_question_id = group_4_question_1_id
     # 出席率→困っていることはないか
     test_next_question(
-        target_interivew_session, group_5_question_1_id, "80")
+        target_interivew_session, group_5_question_1_id, "80", "int")
     # 困っていることはないか→教員との面談希望
     test_next_question(
-        target_interivew_session, group_6_question_1_id, "None")
+        target_interivew_session, group_6_question_1_id, "None", "str")
     # 教員との面談希望→None
     test_next_question(
-        target_interivew_session, None, "教員との面談を希望します")
+        target_interivew_session, None, "教員との面談を希望します", "str")
