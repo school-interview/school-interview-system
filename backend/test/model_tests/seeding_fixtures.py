@@ -277,6 +277,7 @@ def create_student_user(db_session: Session, semester: int):
         user_id=user_id,
         student_id=student_number,
         department="情報工学部",
+        semester=semester
     )
     users_crud.create(db_session=db_session,
                       obj_in=user_model)
