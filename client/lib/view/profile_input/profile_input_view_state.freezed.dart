@@ -19,7 +19,9 @@ mixin _$ProfileInputViewState {
   /// API処理結果
   Result? get result => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileInputViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ProfileInputViewStateCopyWith<ProfileInputViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$ProfileInputViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ProfileInputViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -79,6 +83,8 @@ class __$$ProfileInputViewStateImplCopyWithImpl<$Res>
       $Res Function(_$ProfileInputViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileInputViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -118,7 +124,9 @@ class _$ProfileInputViewStateImpl implements _ProfileInputViewState {
   @override
   int get hashCode => Object.hash(runtimeType, result);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileInputViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ProfileInputViewStateImplCopyWith<_$ProfileInputViewStateImpl>
@@ -130,12 +138,14 @@ abstract class _ProfileInputViewState implements ProfileInputViewState {
   const factory _ProfileInputViewState({final Result? result}) =
       _$ProfileInputViewStateImpl;
 
-  @override
-
   /// API処理結果
-  Result? get result;
   @override
-  @JsonKey(ignore: true)
+  Result? get result;
+
+  /// Create a copy of ProfileInputViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProfileInputViewStateImplCopyWith<_$ProfileInputViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

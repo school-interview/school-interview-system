@@ -13,18 +13,5 @@ class InterviewAnalyticsViewNotifier extends _$InterviewAnalyticsViewNotifier {
   void setIsAnimated(bool isAnimated) =>
       state = state.copyWith(isAnimated: isAnimated);
 
-  /// 円グラフにセットするデータマップを作成する
-  Map<String, double> createChartDataMap(
-      List<double> values, bool isFullScore) {
-    Map<String, double> dataMap = {};
-    if (isFullScore) {
-      dataMap.addAll({"1": 100});
-      return dataMap;
-    } else {
-      for (int i = 0; i < values.length; i++) {
-        dataMap.addAll({"${i + 1}": values[i]});
-      }
-      return dataMap;
-    }
-  }
+  void setIsCopied(bool isCopied) => state = state.copyWith(isCopied: isCopied);
 }

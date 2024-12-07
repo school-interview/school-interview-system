@@ -26,7 +26,9 @@ mixin _$AvatarSelectViewState {
   List<Teacher> get teacherList => throw _privateConstructorUsedError;
   int get teacherCount => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AvatarSelectViewStateCopyWith<AvatarSelectViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +57,8 @@ class _$AvatarSelectViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -109,6 +113,8 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
       $Res Function(_$AvatarSelectViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -196,7 +202,9 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   int get hashCode => Object.hash(runtimeType, result, isLoading,
       const DeepCollectionEquality().hash(_teacherList), teacherCount);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AvatarSelectViewStateImplCopyWith<_$AvatarSelectViewStateImpl>
@@ -211,22 +219,24 @@ abstract class _AvatarSelectViewState implements AvatarSelectViewState {
       final List<Teacher> teacherList,
       final int teacherCount}) = _$AvatarSelectViewStateImpl;
 
-  @override
-
   /// API処理結果
-  Result? get result;
   @override
+  Result? get result;
 
   /// 読み込み中フラグ
-  bool get isLoading;
   @override
+  bool get isLoading;
 
   /// 教員リスト取得APIレスポンス
+  @override
   List<Teacher> get teacherList;
   @override
   int get teacherCount;
+
+  /// Create a copy of AvatarSelectViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AvatarSelectViewStateImplCopyWith<_$AvatarSelectViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
