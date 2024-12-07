@@ -18,8 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$InterviewAnalyticsViewState {
   /// アニメーションが動いたかどうかを判別する
   bool get isAnimated => throw _privateConstructorUsedError;
+  bool get isCopied => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InterviewAnalyticsViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InterviewAnalyticsViewStateCopyWith<InterviewAnalyticsViewState>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -32,7 +35,7 @@ abstract class $InterviewAnalyticsViewStateCopyWith<$Res> {
       _$InterviewAnalyticsViewStateCopyWithImpl<$Res,
           InterviewAnalyticsViewState>;
   @useResult
-  $Res call({bool isAnimated});
+  $Res call({bool isAnimated, bool isCopied});
 }
 
 /// @nodoc
@@ -46,15 +49,22 @@ class _$InterviewAnalyticsViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InterviewAnalyticsViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? isAnimated = null,
+    Object? isCopied = null,
   }) {
     return _then(_value.copyWith(
       isAnimated: null == isAnimated
           ? _value.isAnimated
           : isAnimated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isCopied: null == isCopied
+          ? _value.isCopied
+          : isCopied // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -69,7 +79,7 @@ abstract class _$$InterviewAnalyticsViewStateImplCopyWith<$Res>
       __$$InterviewAnalyticsViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isAnimated});
+  $Res call({bool isAnimated, bool isCopied});
 }
 
 /// @nodoc
@@ -82,15 +92,22 @@ class __$$InterviewAnalyticsViewStateImplCopyWithImpl<$Res>
       $Res Function(_$InterviewAnalyticsViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InterviewAnalyticsViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? isAnimated = null,
+    Object? isCopied = null,
   }) {
     return _then(_$InterviewAnalyticsViewStateImpl(
       isAnimated: null == isAnimated
           ? _value.isAnimated
           : isAnimated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isCopied: null == isCopied
+          ? _value.isCopied
+          : isCopied // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -100,16 +117,20 @@ class __$$InterviewAnalyticsViewStateImplCopyWithImpl<$Res>
 
 class _$InterviewAnalyticsViewStateImpl
     implements _InterviewAnalyticsViewState {
-  const _$InterviewAnalyticsViewStateImpl({this.isAnimated = false});
+  const _$InterviewAnalyticsViewStateImpl(
+      {this.isAnimated = false, this.isCopied = false});
 
   /// アニメーションが動いたかどうかを判別する
   @override
   @JsonKey()
   final bool isAnimated;
+  @override
+  @JsonKey()
+  final bool isCopied;
 
   @override
   String toString() {
-    return 'InterviewAnalyticsViewState(isAnimated: $isAnimated)';
+    return 'InterviewAnalyticsViewState(isAnimated: $isAnimated, isCopied: $isCopied)';
   }
 
   @override
@@ -118,13 +139,17 @@ class _$InterviewAnalyticsViewStateImpl
         (other.runtimeType == runtimeType &&
             other is _$InterviewAnalyticsViewStateImpl &&
             (identical(other.isAnimated, isAnimated) ||
-                other.isAnimated == isAnimated));
+                other.isAnimated == isAnimated) &&
+            (identical(other.isCopied, isCopied) ||
+                other.isCopied == isCopied));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isAnimated);
+  int get hashCode => Object.hash(runtimeType, isAnimated, isCopied);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InterviewAnalyticsViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InterviewAnalyticsViewStateImplCopyWith<_$InterviewAnalyticsViewStateImpl>
@@ -134,15 +159,20 @@ class _$InterviewAnalyticsViewStateImpl
 
 abstract class _InterviewAnalyticsViewState
     implements InterviewAnalyticsViewState {
-  const factory _InterviewAnalyticsViewState({final bool isAnimated}) =
-      _$InterviewAnalyticsViewStateImpl;
-
-  @override
+  const factory _InterviewAnalyticsViewState(
+      {final bool isAnimated,
+      final bool isCopied}) = _$InterviewAnalyticsViewStateImpl;
 
   /// アニメーションが動いたかどうかを判別する
+  @override
   bool get isAnimated;
   @override
-  @JsonKey(ignore: true)
+  bool get isCopied;
+
+  /// Create a copy of InterviewAnalyticsViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InterviewAnalyticsViewStateImplCopyWith<_$InterviewAnalyticsViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

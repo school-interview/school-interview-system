@@ -23,7 +23,9 @@ mixin _$InterviewReportState {
   InterviewReportsResponse? get interviewReport =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InterviewReportState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InterviewReportStateCopyWith<InterviewReportState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +50,8 @@ class _$InterviewReportStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InterviewReportState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +90,8 @@ class __$$InterviewReportStateImplCopyWithImpl<$Res>
       $Res Function(_$InterviewReportStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InterviewReportState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -136,7 +142,9 @@ class _$InterviewReportStateImpl implements _InterviewReportState {
   @override
   int get hashCode => Object.hash(runtimeType, result, interviewReport);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InterviewReportState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InterviewReportStateImplCopyWith<_$InterviewReportStateImpl>
@@ -151,16 +159,18 @@ abstract class _InterviewReportState implements InterviewReportState {
           final InterviewReportsResponse? interviewReport}) =
       _$InterviewReportStateImpl;
 
-  @override
-
   /// API処理結果
-  Result? get result;
   @override
+  Result? get result;
 
   /// 面談結果一覧
-  InterviewReportsResponse? get interviewReport;
   @override
-  @JsonKey(ignore: true)
+  InterviewReportsResponse? get interviewReport;
+
+  /// Create a copy of InterviewReportState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InterviewReportStateImplCopyWith<_$InterviewReportStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -8,5 +8,8 @@ abstract class InterviewAnalyticsViewState with _$InterviewAnalyticsViewState {
   const factory InterviewAnalyticsViewState({
     /// アニメーションが動いたかどうかを判別する
     @Default(false) bool isAnimated,
+
+    // TODO 実験が終わったら削除
+    @Default(false) bool isCopied,
   }) = _InterviewAnalyticsViewState;
 }

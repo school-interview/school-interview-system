@@ -5,6 +5,7 @@ import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_analytics_view/interview_analytics_view_notifier.dart';
 import 'package:client/ui_core/support_necessity_level.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:openapi/api.dart';
 
@@ -188,6 +189,52 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                             ),
                           ],
                         ),
+
+                  /// 以下、実験用のセッションIDを表示する
+                  /// TODO 実験が終わったら削除
+                  const Text("実験に参加して下さった方は、以下のセッションIDをアンケートに記入してください。"),
+                  const SizedBox(height: 8),
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SelectableText(
+                          widget.interviewAnalytics.sessionId,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            state.isCopied ? Icons.done : Icons.content_copy,
+                            size: 14,
+                            color: Colors.blueGrey[200],
+                          ),
+                          onPressed: () async {
+                            final notifier = ref.read(
+                                interviewAnalyticsViewNotifierProvider
+                                    .notifier);
+                            notifier.setIsCopied(true);
+                            // クリップボードにデータをセットする
+                            Clipboard.setData(ClipboardData(
+                                text: widget.interviewAnalytics.sessionId));
+                            Future.delayed(const Duration(seconds: 2))
+                                .then((_) {
+                              notifier.setIsCopied(false);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  /// ここまで実験用
+
                   const Text("以上で面談は終了です。"),
                   const Divider(),
                   Padding(
