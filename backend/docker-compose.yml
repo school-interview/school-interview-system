@@ -4,6 +4,7 @@ services:
   backend-app:
     build: .
     volumes:
+      - ./web:/app/web
       - ./src:/app/src
       - ./test:/app/test
       - ./launch-server-docker.sh:/app/launch-server-docker.sh

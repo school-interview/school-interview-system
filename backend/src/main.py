@@ -50,8 +50,13 @@ app_fastapi.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 app_fastapi.mount(
     "/static", StaticFiles(directory="src/static"), name="static")
+
+app_fastapi.mount(
+    "/client", StaticFiles(directory="web", html=True), name="client_static")
+
 
 app_socketio = socketio.ASGIApp(sio, other_asgi_app=app_fastapi)
 
