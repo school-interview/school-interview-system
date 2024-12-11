@@ -12,7 +12,7 @@ part of openapi.api;
 
 class ApiClient {
   ApiClient({
-    this.basePath = 'https://localhost',
+    this.basePath = 'https://school-interview.com:8000',
     this.authentication,
   });
 
