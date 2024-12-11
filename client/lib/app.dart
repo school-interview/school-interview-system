@@ -3,4 +3,4 @@ import 'package:logger/logger.dart';
 // ロガー
 final logger = Logger();
 // apiのパス
-const apiBasePath = 'http://localhost:8000';
+const apiBasePath = 'https://school-interview.com:8000';
