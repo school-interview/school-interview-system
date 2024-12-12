@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:client/app.dart';
 import 'package:client/component/button_component.dart';
 import 'package:client/constant/color.dart';
 import 'package:client/notifier/interview_analytics_view/interview_analytics_view_notifier.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:openapi/api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// 要支援レベル画面
 class InterviewAnalyticsView extends ConsumerStatefulWidget {
@@ -192,7 +194,7 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
 
                   /// 以下、実験用のセッションIDを表示する
                   /// TODO 実験が終わったら削除
-                  const Text("実験に参加して下さった方は、以下のセッションIDをアンケートに記入してください。"),
+                  const Text("実験に参加して下さった方は、以下のセッションIDをコピーして、アンケートに進んでください。"),
                   const SizedBox(height: 8),
                   Container(
                     color: Colors.white,
@@ -231,7 +233,32 @@ class _InterviewAnalyticsView extends ConsumerState<InterviewAnalyticsView> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
+                  OutlinedButton(
+                    onPressed: () async {
+                      // Googleアンケートフォームへ
+                      final url = Uri.parse(
+                          "https://docs.google.com/forms/d/e/1FAIpQLSdmfkJXr-Cl5KZ52TgGdFzn8Ni92nxd7HGexyk8YJ19p5ar4A/viewform");
+                      if (await canLaunchUrl(url)) {
+                        launchUrl(url,
+                            mode: LaunchMode.platformDefault,
+                            webOnlyWindowName: '_blank');
+                      } else {
+                        logger.w('Cannot launch url: $url');
+                      }
+                    },
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.description),
+                        Text(
+                          "アンケートへ進む",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
 
                   /// ここまで実験用
 
