@@ -36,7 +36,7 @@ def verify_token(jwt: str):
         # ↓ 参考になるかも
         # https://developers.google.com/identity/protocols/oauth2/web-server#python_8
         id_info: IdInfo = id_token.verify_oauth2_token(
-            jwt, requests.Request(), CLIENT_ID
+            jwt, requests.Request(), CLIENT_ID, clock_skew_in_seconds=5
         )
     except ValueError:
         raise ErrorResponse(
