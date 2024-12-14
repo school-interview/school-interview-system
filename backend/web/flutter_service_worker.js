@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "cec75339547d5d2ffd245f83a250a2b4",
+const RESOURCES = {"flutter_bootstrap.js": "a9a6cba8dc030b405fe851dd4479dd16",
 "UnityLibrary/index.html": "c131280b30b6308f9e7ae374fbd615cc",
 "UnityLibrary/TemplateData/MemoryProfiler.png": "90178b1c01bd4c66a21b9f2866091783",
 "UnityLibrary/TemplateData/fullscreen-button.png": "489a5a9723567d8368c9810cde3dc098",
