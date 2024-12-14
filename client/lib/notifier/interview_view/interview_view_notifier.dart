@@ -112,8 +112,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// 教員メッセージ取得API
-  Future<void> _speakToTeacher(
-    CameraController cameraController, {
+  Future<void> _speakToTeacher( // CameraController cameraController,
+      {
     required String currentInterviewSessionId,
     required String userSpeech,
   }) async {
@@ -133,7 +133,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
           setIsLoading(false);
           setAvatarMessage(response.data!.messageFromTeacher);
           setCurrentInterviewSessionId(response.data!.interviewSession.id);
-          _avatarTaking(cameraController,
+          _avatarTaking(
+              // cameraController,
               message: response.data!.messageFromTeacher,
               isFinish: response.data!.interviewSession.done);
           break;
@@ -174,8 +175,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// 初回処理
-  Future<void> init(CameraController cameraController, String teacherId) async {
-    await cameraController.startVideoRecording();
+  Future<void> init(String teacherId) async {
+    // await cameraController.startVideoRecording();
     await _teacherFirstMessage(teacherId);
   }
 
@@ -218,21 +219,22 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// ユーザーが話し終えたときの処理
-  Future<void> _stopTalking(CameraController cameraController) async {
+  Future<void> _stopTalking() async {
     setIsLoading(true);
     await _speechToText.stop();
     _setWhoTalking(WhoTalking.avatar);
     _addChatHistories(ChatHistory(state.avatarMessage, true));
     await _speakToTeacher(
-      cameraController,
+      // cameraController,
       currentInterviewSessionId: state.currentInterviewSessionId,
       userSpeech: state.userMessage,
     );
   }
 
   /// アバターが話す処理
-  void _avatarTaking(
-    CameraController cameraController, {
+  void _avatarTaking( // CameraController cameraController,
+
+      {
     required String message,
     required bool isFinish,
   }) {
@@ -255,8 +257,8 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
         if (isFinish) {
           await _getInterviewAnalytics(state.currentInterviewSessionId);
           // 撮影した動画を保存する
-          await _stopRecordingAndSaveVideo(cameraController);
-          await cameraController.dispose();
+          // await _stopRecordingAndSaveVideo(cameraController);
+          // await cameraController.dispose();
           _setIsFinishInterview(true);
         }
       },
@@ -275,10 +277,10 @@ class InterviewViewNotifier extends _$InterviewViewNotifier {
   }
 
   /// マイクボタンタップ時のアクション
-  Future<void>? micButtonTapAction(CameraController cameraController) async {
+  Future<void>? micButtonTapAction() async {
     switch (state.whoTalking) {
       case WhoTalking.user:
-        return await _stopTalking(cameraController);
+        return await _stopTalking();
       case WhoTalking.avatar:
         return;
       case WhoTalking.none:
