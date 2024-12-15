@@ -33,6 +33,7 @@
 .
 ├── backend
 ├── client
+├── docs
 ├── open-api
 ├── README-ja.md
 └── README.md

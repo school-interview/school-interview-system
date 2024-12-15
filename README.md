@@ -35,6 +35,7 @@ The directory structure is as follows.
 .
 ├── backend
 ├── client
+├── docs
 ├── open-api
 ├── README-ja.md
 └── README.md
