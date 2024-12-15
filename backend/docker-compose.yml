@@ -13,7 +13,8 @@ services:
       - ./.env.local:/app/.env.local
       - ./pdf:/app/pdf
     ports:
-      - 8000:8000
+      # - 8000:8000
+      - 8430:8430
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
