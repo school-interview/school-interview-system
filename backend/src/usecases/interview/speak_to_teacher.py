@@ -113,7 +113,6 @@ def generate_message_from_teacher(
     if vectorstore is None:
         markdown_path = "./campusguide-conversation.md"
         markdown_loader = UnstructuredMarkdownLoader(markdown_path)
-        index_path = "./storage"
 
         embedding_model = HuggingFaceEmbeddings(
             model_name="intfloat/multilingual-e5-large"

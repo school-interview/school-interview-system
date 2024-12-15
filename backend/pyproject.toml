@@ -32,6 +32,7 @@ google-auth = "^2.35.0"
 itsdangerous = "^2.2.0"
 debugpy = "^1.8.7"
 mock-alchemy = "^0.2.6"
+accelerate = "^1.2.1"
 
 
 [build-system]
