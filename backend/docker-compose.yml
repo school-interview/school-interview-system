@@ -1,5 +1,5 @@
 services:
-  backend-app:
+  backend-app-llm-demo:
     build: .
     volumes:
       - ./src:/app/src
@@ -21,7 +21,7 @@ services:
     depends_on:
       - db
     profiles:
-      - backend
+      - backend-app-llm-demo
   debug:
     build: .
     volumes:
