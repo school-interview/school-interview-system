@@ -17,30 +17,40 @@ The client is developed in `Flutter`.
 
 ## Set Up
 
-* fvm
-    1. This project uses [fvm](https://fvm.app/) to manage the Flutter
-       SDK. See [here](https://fvm.app/documentation/getting-started/installation) to **fvm**
-       for installation.
-    2. Install the Flutter SDK. See [Development Environment](#Development-Environment) for the
-       version.
-   ```
-   fvm install [Version]
-   fvm use [Version]
-   ```
-  `Version`: Desired Flutter SDK version (e.g. `2.2.3`).
+### fvm
 
-* Android Studio
-    1. Install [Android Studio](https://developer.android.com/studio/install) and start it.
-    2. Install the **Flutter** plugin from `Settings < Plugins`.
-    3. Set the **Flutter SDK path** in `Settings < Preferences < Languages & Frameworks < Flutter`.
-       You will find your Flutter installation in `~/fvm/versions`.
-    4. Set `Edit Configuration Settings` as follows
+1. This project uses [fvm](https://fvm.app/) to manage the Flutter
+   SDK. See [here](https://fvm.app/documentation/getting-started/installation) to **fvm**
+   for installation.
+2. Install the Flutter SDK. See [Development Environment](#Development-Environment) for the
+   version.
+
+```
+fvm install [Version]
+fvm use [Version]
+```
+
+`Version`: Desired Flutter SDK version (e.g. `2.2.3`).
+
+### Android Studio
+
+1. Install [Android Studio](https://developer.android.com/studio/install) and start it.
+2. Install the **Flutter** plugin from `Settings < Plugins`.
+3. Set the **Flutter SDK path** in `Settings < Preferences < Languages & Frameworks < Flutter`.
+   You will find your Flutter installation in `~/fvm/versions`.
+4. Set `Edit Configuration Settings` as follows
 
 | Item                | Set Value            |
 |---------------------|----------------------|
 | Name                | Optional             |
 | Dart entrypoint     | client/lib/main.dart |
 | Additional run args | --web-port 8001      |
+
+### Unity
+
+This system uses **Unity** to implement avatars.  
+For more information on setting up
+Unity, [click here](https://github.com/school-interview/school-interview-system/blob/main/client/unity/README.md).
 
 ## Build
 

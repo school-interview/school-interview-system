@@ -17,29 +17,39 @@
 
 ## セットアップ
 
-* fvm
-    1. 本プロジェクトではFlutter SDKの管理に[fvm](https://fvm.app/)
-       を使用しています。[こちら](https://fvm.app/documentation/getting-started/installation)を参照して**fvm**
-       をインストールしてください。
-    2. Flutter SDKをインストールします。バージョンは[開発環境](#開発環境)を参照してください。
-   ```
-   fvm install [バージョン]
-   fvm use [バージョン]
-   ```
-  `バージョン`: 希望するFlutter SDKのバージョン（例：`2.2.3`）。
+### fvm
 
-* Android Studio
-    1. **Android Studio**を[インストール](https://developer.android.com/studio/install?hl=ja)して、起動してください。
-    2. `Settings < Plugins`から**Flutter**プラグインをインストールしてください。
-    3. `Settings < Preferences < Languages & Frameworks < Flutter`の**Flutter SDK path**
-       に指定したバージョンのものを設定してください。`~/fvm/versions`にインストールしたFlutterが入っています。
-    4. `Edit Configuration Settings`を以下のように設定します。
+1. 本プロジェクトではFlutter SDKの管理に[fvm](https://fvm.app/)
+   を使用しています。[こちら](https://fvm.app/documentation/getting-started/installation)を参照して**fvm**
+   をインストールしてください。
+2. Flutter SDKをインストールします。バージョンは[開発環境](#開発環境)を参照してください。
+
+```
+fvm install [バージョン]
+fvm use [バージョン]
+```
+
+`バージョン`: 希望するFlutter SDKのバージョン（例：`2.2.3`）。
+
+### Android Studio
+
+1. **Android Studio**を[インストール](https://developer.android.com/studio/install?hl=ja)して、起動してください。
+2. `Settings < Plugins`から**Flutter**プラグインをインストールしてください。
+3. `Settings < Preferences < Languages & Frameworks < Flutter`の**Flutter SDK path**
+   に指定したバージョンのものを設定してください。`~/fvm/versions`にインストールしたFlutterが入っています。
+4. `Edit Configuration Settings`を以下のように設定します。
 
 | 項目                  | 設定値                  |
 |---------------------|----------------------|
 | Name                | 任意のもの                |
 | Dart entrypoint     | client/lib/main.dart |
 | Additional run args | --web-port 8001      |
+
+### Unity
+
+本システムは、アバターの実装に**Unity**を使用しています。  
+Unityのセットアップについては[こちら](https://github.com/school-interview/school-interview-system/blob/main/client/unity/README.md)
+を参照してください。
 
 ## ビルド
 
