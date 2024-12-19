@@ -16,7 +16,7 @@
 ### 環境
 
 本システムのクライアント側は、`Flutter`で開発されているため、`Flutter`開発環境の構築が必要です。  
-詳細は、[client / README.md](https://github.com/school-interview/school-interview-system/blob/main/client/README.md#development-environment)
+詳細は、[client / README-ja.md](https://github.com/school-interview/school-interview-system/blob/main/client/README-ja.md#開発環境)
 を参照してください。
 
 ### 環境変数
@@ -35,20 +35,23 @@
 ├── client
 ├── docs
 ├── open-api
+├── readme-img
 ├── README-ja.md
 └── README.md
 ```
 
-| ディレクトリ名  | 説明                 |
-|----------|--------------------|
-| backend  | バックエンドのソースコード      |
-| client   | クライアントのソースコード      |
-| docs     | 文書                 |
-| open-api | Open API generator |
+| ディレクトリ名    | 説明                 |
+|------------|--------------------|
+| backend    | バックエンドのソースコード      |
+| client     | クライアントのソースコード      |
+| docs       | 文書                 |
+| open-api   | Open API generator |
+| readme-img | READMEに使用する画像      |
 
 ## 使用技術一覧
 
 <img src="https://img.shields.io/badge/-Flutter-02569B.svg?logo=flutter&style=flat-square" alt=""> <img src="https://img.shields.io/badge/-Dart-0175C2.svg?logo=dart&style=flat-square" alt="">
+<img src="https://img.shields.io/badge/-Unity-000000.svg?logo=unity&style=flat-square" alt="">
 <img src="https://img.shields.io/badge/-Python-3776AB.svg?logo=python&style=flat-square" alt=""> 
 <img src="https://img.shields.io/badge/-Docker-1488C6.svg?logo=docker&style=flat-square" alt=""> 
 <img src="https://img.shields.io/badge/-Android%20Studio-A4C639.svg?logo=android%20studio&style=flat-square" alt=""> 

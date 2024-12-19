@@ -37,20 +37,23 @@ The directory structure is as follows.
 ├── client
 ├── docs
 ├── open-api
+├── readme-img
 ├── README-ja.md
 └── README.md
 ```
 
-| Directory name | Description          |
-|----------------|----------------------|
-| backend        | Back-end source code |
-| client         | Client Source code   |
-| docs           | document             |
-| open-api       | Open API generator   |
+| Directory name | Description                 |
+|----------------|-----------------------------|
+| backend        | Back-end source code        |
+| client         | Client source code          |
+| docs           | document                    |
+| open-api       | Open API generator          |
+| readme-img     | Images to be used in README |
 
 ## List of technologies used
 
 <img src="https://img.shields.io/badge/-Flutter-02569B.svg?logo=flutter&style=flat-square" alt=""> <img src="https://img.shields.io/badge/-Dart-0175C2.svg?logo=dart&style=flat-square" alt="">
+<img src="https://img.shields.io/badge/-Unity-000000.svg?logo=unity&style=flat-square" alt="">
 <img src="https://img.shields.io/badge/-Python-3776AB.svg?logo=python&style=flat-square" alt=""> 
 <img src="https://img.shields.io/badge/-Docker-1488C6.svg?logo=docker&style=flat-square" alt=""> 
 <img src="https://img.shields.io/badge/-Android%20Studio-A4C639.svg?logo=android%20studio&style=flat-square" alt=""> 
