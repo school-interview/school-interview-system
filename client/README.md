@@ -1,144 +1,59 @@
 # client - School Interview System -
 
-Flutter project.
+Language: English | [日本語](README-ja.md)
 
-This is the client code for the school interview system.
+## About client directory
 
-We develop mainly for the **web application**, with mobile applications to follow.
+This is the source code that makes up the client side of the school interview system.
+
+The client is developed in `Flutter`.
 
 ## Development Environment
 
-IDE：`Visual Studio Code`（The newer version the better.）<br>
-Flutter：`3.22.2`<br>
-Dart：`3.4.3`
+|                | Version                       |
+|----------------|-------------------------------|
+| Android Studio | Use the latest stable version |
+| Flutter        | 3.24.3                        |
 
-## Getting Started
+## Set Up
 
-This section describes how to build a development environment for **web application** development.
-
-### Use VS Code to install Flutter
-
-1. Launch **VS Code**.
-2. To open the **Command Palette**, press `Command + Shift + P`.
-3. In the Command Palette, type `flutter`.
-4. Select **Flutter: New Project**.
-5. VS Code prompts you to locate the Flutter SDK on your computer.
-
-   - If you have the Flutter SDK installed, click `Locate SDK`.
-   - If you do not have the Flutter SDK installed, click `Download SDK`.
-
-6. When prompted **Which Flutter template?**, ignore it. Press `Esc`. You can create a test project after checking your development setup.
-
-### Download the Flutter SDK
-
-1. When the **Select Folder for Flutter SDK** dialog displays, choose where you want to install Flutter.
-
-   VS Code places you in your user profile to start. Choose a different location.
-
-   Consider `~/development/`
-
-2. Click `Clone Flutter`.
-
-   While downloading Flutter, VS Code displays this pop-up notification:
-
+* fvm
+    1. This project uses [fvm](https://fvm.app/) to manage the Flutter
+       SDK. See [here](https://fvm.app/documentation/getting-started/installation) to **fvm**
+       for installation.
+    2. Install the Flutter SDK. See [Development Environment](#Development-Environment) for the
+       version.
    ```
-   Downloading the Flutter SDK. This may take a few minutes.
+   fvm install [Version]
+   fvm use [Version]
    ```
+  `Version`: Desired Flutter SDK version (e.g. `2.2.3`).
 
-3. the **Output** panel displays.
+* Android Studio
+    1. Install [Android Studio](https://developer.android.com/studio/install) and start it.
+    2. Install the **Flutter** plugin from `Settings < Plugins`.
+    3. Set the **Flutter SDK path** in `Settings < Preferences < Languages & Frameworks < Flutter`.
+       You will find your Flutter installation in `~/fvm/versions`.
+    4. Set `Edit Configuration Settings` as follows
 
-   When the Flutter install succeeds, VS Code displays this pop-up notification:
+| Item                | Set Value            |
+|---------------------|----------------------|
+| Name                | Optional             |
+| Dart entrypoint     | client/lib/main.dart |
+| Additional run args | --web-port 8001      |
 
-   ```
-   Do you want to add the Flutter SDK to PATH so it's accessible in external terminals?
-   ```
-
-   (I'll explain later on how to add SDK location to PATH in your Mac)
-
-4. VS Code may display a Google Analytics notice.
-
-   If you agree, click OK.
-
-5. To enable flutter in all Terminal windows:
-   - Close, then reopen all Terminal windows.
-   - Restart VS Code.
-
-### How to add the SDK location to PATH in your Mac.
-
-If you use Mac, you can configure it by following step.
-
-1. open `~/.zshrc` file.
-
-   ```
-   // if you want to use Vim
-   vim ~/.zshrc
-   ```
-
-   (You can use VSCode as well. you can use any edtior.)
-
-2. Add following command in `.zshrc`
-   If your Flutter SDK location is `Users/danfuji/flutter/flutter`,
-   then you can add the following command in .zshrc.
-
-   (✏️ replace the location with yours!)
-
-   ```
-   export PATH=/Users/danfuji/flutter/flutter/bin:$PATH
-   ```
-
-   ↑ Don't forget to add `/bin` after the location!
-
-### Run Flutter doctor
-
-1. Open your Terminal.
-
-2. To verify your installation of all the components, run the following command.
-
-   ```
-   flutter doctor
-   ```
-
-   Since the environment was built for **web application** development, all components are not required.
-
-   ```
-   Running flutter doctor...
-   Doctor summary (to see all details, run flutter doctor -v):
-   [✓] Flutter (Channel stable, 3.22.1, on macOS 14.4.0 23E214 darwin-arm64, locale en)
-   [!] Android toolchain - develop for Android devices
-   [✓] Chrome - develop for the web
-   [!] Xcode - develop for iOS and macOS (Xcode not installed)
-   [!] Android Studio (not installed)
-   [✓] VS Code (version 1.89)
-   [✓] Connected device (1 available)
-   [✓] Network resources
-
-   ! Doctor found issues in 3 categories.
-   ```
-
-   If you want to develop for **mobile apps**, all the `!` must be `✓`, but this is not necessary.
-
-   This is because the [device_preview](https://pub.dev/packages/device_preview) package is installed, so it will never run outside of `chrome`.
-
-4. Version Confirmation.
-
-   To check the version, run the following command.
-
-   ```
-   flutter --version
-   ```
-
-   Match the environment to the [Development Environment](#development-environment) if necessary.
-
-### Run the app
-
-In `client` directory, you can run the following command to run the app.
-
-It must be run in `chrome`. (Don't run on iOS or Android, etc.)
+## Build
 
 ```
-flutter run -d chrome
+fvm flutter build [Target Environment]
 ```
 
-### reference
+`Target Environment`：If it is for a web application, `Web`, etc.
 
-- https://docs.flutter.dev/get-started/install/macos/web
+## Run
+
+The following command will launch the web application.
+
+```
+fvm flutter run --web-port 8001
+```
