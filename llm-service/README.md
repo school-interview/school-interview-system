@@ -8,8 +8,6 @@ I'll explain why I created LLM Service.
 
 Backend app had some LLM features.
 
-But I don't have a computer that has GPU at home. So, I had to test the backend app on a computer in our lab.(Because it has powerfull GPU)
+I wanted to test only LLM feature on the computer in lab which has powerful GPU.
 
-There were some limitation to lab members to use the computer... We were allowed to use only JupyterLab.
-
-TODO: 続き
+So, it's better to split it into two apps, backend-app, llm-service.
