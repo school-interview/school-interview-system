@@ -42,16 +42,17 @@ vectorstore: Optional[Chroma] = None
 
 chat_history_store = {}
 
+model_name: str = "elyza/Llama-3-ELYZA-JP-8B"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype="auto",
+    device_map="cuda",
+)
+
 
 @app.get("/interview/{session_id}")
 def interview(session_id: str, interview_requset: InterviewRequest):
-    model_name: str = "elyza/Llama-3-ELYZA-JP-8B"
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        torch_dtype="auto",
-        device_map="cuda",
-    )
     pipe = pipeline("text-generation", model=model,
                     tokenizer=tokenizer, max_new_tokens=64)
     global vectorstore
