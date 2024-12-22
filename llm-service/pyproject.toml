@@ -36,6 +36,7 @@ torch=[
 	{ url="https://download.pytorch.org/whl/cu118/torch-2.2.0%2Bcu118-cp310-cp310-win_amd64.whl", markers="sys_platform == 'win32'"}
 ]
 unstructured = "^0.16.11"
+markdown = "^3.7"
 
 
 [build-system]
