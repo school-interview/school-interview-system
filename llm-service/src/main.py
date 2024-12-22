@@ -80,7 +80,7 @@ def interview(session_id: str, interview_requset: InterviewRequest):
         split_texts = list(
             map(lambda d: d.page_content, split_texts))
         vectorstore = Chroma.from_texts(
-            texts=split_texts, embedding=embedding_model, persist_directory="./")
+            texts=split_texts, embedding=embedding_model, persist_directory="./", collection_name="campus_guide_collection")
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
