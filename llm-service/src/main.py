@@ -95,8 +95,9 @@ def interview(session_id: str, interview_requset: InterviewRequest):
             {"role": "system", "content": """
 
             Situation: You are professional Academic Advisor who support school life and carrer. Please respond to the student's question. Always try to resolve a problem the student has. And you are designed to utilize information on school. Please answer based on provided sources.
+            You asked the question ( """ + interview_requset.current_question + """) to the student, and the student will answer for your question next.
+            You must give a feedback as a professional Academic Advisor to the student.
             You must answer as if you are speaking directly to the student.
-            You can't add anything other than your question to your answer.
             You must answer in Japanese.
             Our chat history: {history}
             Context: {context}
