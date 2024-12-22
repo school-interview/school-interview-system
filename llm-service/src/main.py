@@ -56,7 +56,7 @@ def interview(session_id: str, interview_requset: InterviewRequest):
                     tokenizer=tokenizer, max_new_tokens=64)
     global vectorstore
     if vectorstore is None:
-        markdown_path = "../campus_guide.md"
+        markdown_path = "campus_guide.md"
         markdown_loader = UnstructuredMarkdownLoader(markdown_path)
         embedding_model = HuggingFaceEmbeddings(
             model_name="intfloat/multilingual-e5-large"
