@@ -1,6 +1,7 @@
 
 import os
-from typing import Any, Dict, List, Optional
+import re
+from typing import Any, Dict, List, Optional, Union, Sequence
 from uuid import UUID
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
@@ -11,18 +12,23 @@ from langchain_community.chat_models import ChatLlamaCpp
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate,PromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain import hub
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
+from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain_core.messages import BaseMessage
 from pydantic import TypeAdapter
 from src.models import InterviewSessionModel, InterviewRecordModel, TeacherResponse, InterviewQuestionModel, InterviewQuestion, InterviewQuestionGroupModel, ExtractionResult, TeacherModel, IntExtraction, BoolExtraction, FloatExtraction, StrExtraction
 from sqlalchemy.orm import Session
 from src.usecases.interview.finish_interview import finish_interview
 from src.crud import InterviewQuestionGroupsCrud, InterviewQuestionsCrud, InterviewRecordsCrud
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from pydantic import Field
+from langchain_huggingface import HuggingFacePipeline
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
@@ -37,6 +43,22 @@ interview_question_groups_crud = InterviewQuestionGroupsCrud(
     InterviewQuestionGroupModel)
 interview_questions_crud = InterviewQuestionsCrud(InterviewQuestionModel)
 interview_records_crud = InterviewRecordsCrud(InterviewRecordModel)
+
+
+class LimitedChatMessageHistory(ChatMessageHistory):
+    max_messages: int = Field(default=2)
+
+    def __init__(self, max_messages=2):
+        super().__init__()
+        self.max_messages = max_messages
+
+    def add_messages(self, messages: Sequence[BaseMessage]) -> None:
+        super().add_messages(messages)
+        self._limit_messages()
+
+    def _limit_messages(self):
+        if len(self.messages) > self.max_messages:
+            self.messages = self.messages[-self.max_messages:]
 
 
 def speak_to_teacher(db_session: Session, interview_session: InterviewSessionModel, message_from_user: str) -> str:
@@ -77,120 +99,115 @@ def generate_message_from_teacher(
         message_from_student: str,
         use_local_llm: bool = False
 ):
-    CONTEXT_SIZE = 4096
-    LLM_FILE = "src/llm/ELYZA-japanese-Llama-2-7b-instruct-q2_K.gguf"
-    CHUNK_SIZE = 256
-    CHUNK_OVERLAP = 64
-    EMB_MODEL = "sentence-transformers/distiluse-base-multilingual-cased-v2"
-    COLLECTION_NAME = "langchain"
+    model_name = "elyza/Llama-3-ELYZA-JP-8B"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        torch_dtype="auto",
+        device_map="cuda",
+    )
+    pipe = pipeline("text-generation", model=model,
+                    tokenizer=tokenizer, max_new_tokens=64)
+
     global vectorstore
     if vectorstore is None:
-        md_file = ''
-        with open("pdf/markdown_output/campusguide.md") as f:
-            md_file = f.read()
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, chunk_overlap=200)
-        splits = text_splitter.split_text(md_file)
-        embeddings = HuggingFaceEmbeddings(model_name=EMB_MODEL)
+        markdown_path = "./campusguide-conversation.md"
+        markdown_loader = UnstructuredMarkdownLoader(markdown_path)
+
+        embedding_model = HuggingFaceEmbeddings(
+            model_name="intfloat/multilingual-e5-large"
+        )
+        split_texts = list(
+            markdown_loader.load_and_split(
+                text_splitter=RecursiveCharacterTextSplitter(
+                    chunk_size=200,
+                    chunk_overlap=50
+                )
+            )
+        )
+
+        split_texts = list(map(lambda d: d.page_content, split_texts))
+
         vectorstore = Chroma.from_texts(
-            texts=splits, embedding=embeddings
+            texts=split_texts, embedding=embedding_model, persist_directory="./"
         )
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
 
+    global chat_history_store
+
     def get_session_history(session_id: str) -> BaseChatMessageHistory:
         if session_id not in chat_history_store:
-            chat_history_store[session_id] = ChatMessageHistory()
-        print("history_store", chat_history_store[session_id])
+            chat_history_store[session_id] = LimitedChatMessageHistory()
         return chat_history_store[session_id]
-
-    def generate_prompt_template(current_question: InterviewQuestion):
-        common_inst = """
-        Infomation on this university(for RAG):'{context}'
-        Our chat history: {history}
-        What the student said to you(You need to answer for this question): {question}
-
-        Situation: You are professional Academic Advisor who support school life and carrer. Please respond to the student's question. Always try to resolve a problem the student has. And you are designed to utilize information on school(RAG). Please answer based on provided sources.
-                
-        You are asking this question, [""" + current_question.question + """] to the student and make the student answer your question. You must put the question to the end of your response. It's better to add it with "ところで", "" because it's more natural in Japanese.(Anything is ok. but make it sounds natural in Japanese)
-
-        You must answer as if you are speaking directly to the student.
-
-        You must answer in Japanese.
-"""
-        template = ""
-        if use_local_llm:
-            start_llama_inst = "<s>[INST] <<SYS>>"
-            end_llama_inst = "<</SYS>>[/INST]"
-            template = start_llama_inst + common_inst + \
-                end_llama_inst + "学生の発言：{question}"
-        else:
-            template = common_inst + "学生の発言：{question}"
-        return template
 
     current_question = questions_dict[interview_session.current_question_id]
     if current_question is None:
         raise ValueError("The current question is not loaded.")
+    
+    llm = HuggingFacePipeline(
+        pipeline=pipe
+    )
+    question_prompt_template_format = tokenizer.apply_chat_template(
+        conversation = [
+            {"role": "system", "content": """
+        
+            Situation: You are professional Academic Advisor who support school life and carrer. Please respond to the student's question. Always try to resolve a problem the student has. And you are designed to utilize information on school. Please answer based on provided sources.
+            Your question to the student is [""" + current_question.question+ """].
+            You must make the user answer your question. You must put the question to the end of your response.  for example, you can put "ところで" and then you can ask the user your question ( [""" + current_question.question+ """])
+            You must answer as if you are speaking directly to the student.
+            You can't add anything other than your question to your answer.
+            You must answer in Japanese. 
+            For example, if your question is '現在の単位は幾つですか？', you must answer 'ところで現在の取得単位を押していただけますか？'
 
-    if use_local_llm:
-        llm = ChatLlamaCpp(
-            model_path=LLM_FILE,
-            n_gpu_layers=128,
-            n_ctx=CONTEXT_SIZE,
-            f16_kv=True,
-            verbose=True,
-            seed=0
-        )  # type: ignore
+            Our chat history: {history}
+            Context: {context}
+            
+            """},
+            {"role": "user", "content": "{question}"}
+        ], 
+        tokenize=False, 
+        add_generation_prompt=True
+    )
+    question_prompt = PromptTemplate(
+        template=question_prompt_template_format, # type: ignore
+        input_variables=["question"]
+    )
 
-        prompt_template = generate_prompt_template(current_question)
+    chain = (
+        {
+        "context": RunnableLambda(lambda x: x['question']) | retriever | format_docs, # type: ignore
+        "question": RunnableLambda(lambda x: x['question']), # type: ignore
+        "history": RunnableLambda(lambda x: x['history']) # type: ignore
+        }
+        | question_prompt 
+        | llm
+    )
 
-        prompt = ChatPromptTemplate.from_template(prompt_template)
-        rag_chain = (
-            {"context": RunnableLambda(lambda x: x['question']) | retriever | format_docs,
-             "question": RunnablePassthrough(),
-             "history": RunnableLambda(lambda x: x['history'])}
-            | prompt
-            | llm
-            | StrOutputParser()
-        )
-        conversational_rag_chain = RunnableWithMessageHistory(
-            rag_chain,
-            get_session_history,
-            input_messages_key="question",
-            history_messages_key="history",
-        )
-        response = conversational_rag_chain.invoke({"question": message_from_student}, config={
-            "configurable": {"session_id": interview_session.id.__str__()}})
-        return response
-    else:
-        llm = ChatOpenAI(
-            temperature=0,
-            model_name="gpt-3.5-turbo",
-            openai_api_key=OPENAI_API_KEY
-        )
-        prompt_template = generate_prompt_template(current_question)
-        print(prompt_template)
-        prompt = ChatPromptTemplate.from_template(
-            prompt_template)
-        rag_chain = (
-            {"context": RunnableLambda(lambda x: x['question']) | retriever | format_docs,
-             "question": RunnablePassthrough(),
-             "history": RunnableLambda(lambda x: x['history'])}
-            | prompt
-            | llm
-            | StrOutputParser()
-        )
-        conversational_rag_chain = RunnableWithMessageHistory(
-            rag_chain,
-            get_session_history,
-            input_messages_key="question",
-            history_messages_key="history",
-        )
-        response = conversational_rag_chain.invoke({"question": message_from_student}, config={
-            "configurable": {"session_id": interview_session.id.__str__()}})
-        return response
+    runnnable_with_history = RunnableWithMessageHistory(
+        chain,
+        get_session_history,
+        input_messages_key="question",
+        history_messages_key="history",
+    )
+    response = runnnable_with_history.invoke(
+        {"question": message_from_student},
+        config={
+            "configurable": {
+                "session_id": interview_session.id.__str__()
+            }
+        }
+    )
+    splits = response.split("\n")
+    message = ""
+    for s in splits[::-1]:
+        if "<|start_header_id|>assistant<|end_header_id|>" in s:
+            break
+        message+=s
+    return message
+
 
 
 def extract_value(
