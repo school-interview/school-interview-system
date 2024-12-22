@@ -27,9 +27,10 @@ from pydantic import Field
 from langchain_huggingface import HuggingFacePipeline
 from src.models.limited_chat_message_history import LimitedChatMessageHistory
 from src.models.requests.interview_request import InterviewRequest
-from logging import getLogger
+from logging import getLogger, INFO
 
 logger = getLogger(__name__)
+logger.setLevel(INFO)
 
 app = FastAPI()
 
