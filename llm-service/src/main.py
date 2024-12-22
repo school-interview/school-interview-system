@@ -27,6 +27,10 @@ from pydantic import Field
 from langchain_huggingface import HuggingFacePipeline
 from src.models.limited_chat_message_history import LimitedChatMessageHistory
 from src.models.requests.interview_request import InterviewRequest
+from logging import getLogger
+
+logger = getLogger(__name__)
+
 app = FastAPI()
 
 allowed_origins = "*"
@@ -53,6 +57,8 @@ model = AutoModelForCausalLM.from_pretrained(
 
 @app.get("/interview/{session_id}")
 def interview(session_id: str, interview_requset: InterviewRequest):
+    logger.info("Received interview request: %s (message: %s)",
+                session_id, interview_requset.message_from_student)
     pipe = pipeline("text-generation", model=model,
                     tokenizer=tokenizer, max_new_tokens=64)
     global vectorstore
@@ -146,4 +152,5 @@ def interview(session_id: str, interview_requset: InterviewRequest):
         if "<|start_header_id|>assistant<|end_header_id|>" in s:
             break
         message += s
+    logger.info("Generated response for session '%s': %s", session_id, message)
     return message
