@@ -91,8 +91,6 @@ def interview(session_id: str, interview_requset: InterviewRequest):
             split_texts = list(
                 map(lambda d: d.page_content, split_texts))
             vectorstore.add_texts(split_texts)
-        print("ドキュメント数", len(vectorstore))
-
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     global chat_history_store
