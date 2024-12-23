@@ -82,16 +82,14 @@ def interview(session_id: str, interview_requset: InterviewRequest):
         split_texts = list(
             map(lambda d: d.page_content, split_texts))
         persit_directory = "./"
+        collection_name = "campus_guide_collection"
         persistent_client = chromadb.PersistentClient(path=persit_directory)
         vectorstore = Chroma(
-            collection_name="campus_guide_collection",
-            client=persistent_client
+            collection_name,
+            client=persistent_client,
+            embedding_function=embedding_model
         )
         vectorstore.add_texts(split_texts)
-
-        # vectorstore = Chroma.from_texts(
-        #     texts=split_texts, embedding=embedding_model, persist_directory="./", collection_name="campus_guide_collection")
-
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     global chat_history_store
