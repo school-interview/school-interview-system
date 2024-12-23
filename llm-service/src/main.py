@@ -66,21 +66,9 @@ def interview(session_id: str, interview_requset: InterviewRequest):
                     tokenizer=tokenizer, max_new_tokens=64)
     global vectorstore
     if vectorstore is None:
-        markdown_path = "campus_guide.md"
-        markdown_loader = UnstructuredMarkdownLoader(markdown_path)
         embedding_model = HuggingFaceEmbeddings(
             model_name="intfloat/multilingual-e5-large"
         )
-        split_texts = list(
-            markdown_loader.load_and_split(
-                text_splitter=RecursiveCharacterTextSplitter(
-                    chunk_size=200,
-                    chunk_overlap=50
-                )
-            )
-        )
-        split_texts = list(
-            map(lambda d: d.page_content, split_texts))
         persit_directory = "./"
         collection_name = "campus_guide_collection"
         persistent_client = chromadb.PersistentClient(path=persit_directory)
@@ -89,8 +77,21 @@ def interview(session_id: str, interview_requset: InterviewRequest):
             client=persistent_client,
             embedding_function=embedding_model
         )
-        vectorstore.add_texts(split_texts)
-        print("length of the chroma document", len(vectorstore))
+        if len(vectorstore) == 0:
+            markdown_path = "campus_guide.md"
+            markdown_loader = UnstructuredMarkdownLoader(markdown_path)
+            split_texts = list(
+                markdown_loader.load_and_split(
+                    text_splitter=RecursiveCharacterTextSplitter(
+                        chunk_size=200,
+                        chunk_overlap=50
+                    )
+                )
+            )
+            split_texts = list(
+                map(lambda d: d.page_content, split_texts))
+            vectorstore.add_texts(split_texts)
+        print("ドキュメント数", len(vectorstore))
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
