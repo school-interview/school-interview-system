@@ -90,6 +90,8 @@ def interview(session_id: str, interview_requset: InterviewRequest):
             embedding_function=embedding_model
         )
         vectorstore.add_texts(split_texts)
+        print("length of the chroma document", len(vectorstore))
+
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
     global chat_history_store
