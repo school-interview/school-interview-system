@@ -58,7 +58,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 
-@app.get("/interview/{session_id}")
+@app.post("/interview/{session_id}")
 def interview(session_id: str, interview_requset: InterviewRequest):
     logger.info("Received interview request: %s (message: %s)",
                 session_id, interview_requset.message_from_student)
