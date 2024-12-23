@@ -28,6 +28,8 @@ from langchain_huggingface import HuggingFacePipeline
 from src.models.limited_chat_message_history import LimitedChatMessageHistory
 from src.models.requests.interview_request import InterviewRequest
 from logging import getLogger, INFO
+from src.utils.format_docs import format_docs
+
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)
@@ -83,9 +85,6 @@ def interview(session_id: str, interview_requset: InterviewRequest):
             texts=split_texts, embedding=embedding_model, persist_directory="./", collection_name="campus_guide_collection")
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
-
-    def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
 
     global chat_history_store
 
