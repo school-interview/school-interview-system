@@ -27,6 +27,13 @@ from pydantic import Field
 from langchain_huggingface import HuggingFacePipeline
 from src.models.limited_chat_message_history import LimitedChatMessageHistory
 from src.models.requests.interview_request import InterviewRequest
+from logging import getLogger, INFO
+from src.utils.format_docs import format_docs
+import chromadb
+
+logger = getLogger(__name__)
+logger.setLevel(INFO)
+
 app = FastAPI()
 
 allowed_origins = "*"
@@ -53,32 +60,38 @@ model = AutoModelForCausalLM.from_pretrained(
 
 @app.get("/interview/{session_id}")
 def interview(session_id: str, interview_requset: InterviewRequest):
+    logger.info("Received interview request: %s (message: %s)",
+                session_id, interview_requset.message_from_student)
     pipe = pipeline("text-generation", model=model,
                     tokenizer=tokenizer, max_new_tokens=64)
     global vectorstore
     if vectorstore is None:
-        markdown_path = "campus_guide.md"
-        markdown_loader = UnstructuredMarkdownLoader(markdown_path)
         embedding_model = HuggingFaceEmbeddings(
             model_name="intfloat/multilingual-e5-large"
         )
-        split_texts = list(
-            markdown_loader.load_and_split(
-                text_splitter=RecursiveCharacterTextSplitter(
-                    chunk_size=200,
-                    chunk_overlap=50
+        persit_directory = "./"
+        collection_name = "campus_guide_collection"
+        persistent_client = chromadb.PersistentClient(path=persit_directory)
+        vectorstore = Chroma(
+            collection_name,
+            client=persistent_client,
+            embedding_function=embedding_model
+        )
+        if len(vectorstore) == 0:
+            markdown_path = "campus_guide.md"
+            markdown_loader = UnstructuredMarkdownLoader(markdown_path)
+            split_texts = list(
+                markdown_loader.load_and_split(
+                    text_splitter=RecursiveCharacterTextSplitter(
+                        chunk_size=200,
+                        chunk_overlap=50
+                    )
                 )
             )
-        )
-        split_texts = list(
-            map(lambda d: d.page_content, split_texts))
-        vectorstore = Chroma.from_texts(
-            texts=split_texts, embedding=embedding_model, persist_directory="./")
-
+            split_texts = list(
+                map(lambda d: d.page_content, split_texts))
+            vectorstore.add_texts(split_texts)
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
-
-    def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
 
     global chat_history_store
 
@@ -146,4 +159,5 @@ def interview(session_id: str, interview_requset: InterviewRequest):
         if "<|start_header_id|>assistant<|end_header_id|>" in s:
             break
         message += s
+    logger.info("Generated response for session '%s': %s", session_id, message)
     return message
