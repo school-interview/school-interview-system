@@ -29,7 +29,7 @@ from src.models.limited_chat_message_history import LimitedChatMessageHistory
 from src.models.requests.interview_request import InterviewRequest
 from logging import getLogger, INFO
 from src.utils.format_docs import format_docs
-
+import chromadb
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)
@@ -81,8 +81,16 @@ def interview(session_id: str, interview_requset: InterviewRequest):
         )
         split_texts = list(
             map(lambda d: d.page_content, split_texts))
-        vectorstore = Chroma.from_texts(
-            texts=split_texts, embedding=embedding_model, persist_directory="./", collection_name="campus_guide_collection")
+        persit_directory = "./"
+        persistent_client = chromadb.PersistentClient(path=persit_directory)
+        vectorstore = Chroma(
+            collection_name="campus_guide_collection",
+            client=persistent_client
+        )
+        vectorstore.add_texts(split_texts)
+
+        # vectorstore = Chroma.from_texts(
+        #     texts=split_texts, embedding=embedding_model, persist_directory="./", collection_name="campus_guide_collection")
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
