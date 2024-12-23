@@ -26,6 +26,7 @@ from src.models.app_models.interview_report_model import InterviewReport
 from src.models.api_models.requests.interview_session_request_model import InterviewSessionRequest
 from src.models.api_models.requests.login_request_model import LoginRequest
 from src.models.api_models.requests.speak_to_teacher_request_model import SpeakToTeacherRequest
+from src.models.api_models.requests.llm_service_interview_request_model import LlmServiceInterviewRequest
 from src.models.api_models.responses.error_response_model import ErrorResponse
 from src.models.api_models.responses.start_interview_response_model import StartInterviewResponse
 from src.models.api_models.responses.teacher_response_model import TeacherResponse
