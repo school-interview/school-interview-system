@@ -2,7 +2,8 @@ from typing import Any, Optional
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
-from src.models import EntityBaseModel, User
+from src.models.db_models.base_model import EntityBaseModel
+from src.models.db_models.user_model import UserModel, User
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
