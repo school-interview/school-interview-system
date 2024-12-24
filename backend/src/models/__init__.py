@@ -1,5 +1,7 @@
 # DBモデル
 from src.models.db_models.base_model import EntityBaseModel
+from src.models.db_models.admin_model import Admin, AdminModel, AdminUpdate
+from src.models.db_models.student_model import Student, StudentModel, StudentUpdate
 from src.models.db_models.user_model import User, UserModel, UserUpdate, UserRoleUpdate
 from src.models.db_models.connection_model import WebsocketConnection, WebsocketConnectionModel
 from src.models.db_models.teacher_model import Teacher, TeacherModel, TeacherUpdate
@@ -7,8 +9,6 @@ from src.models.db_models.interview_session_model import InterviewSession, Inter
 from src.models.db_models.interview_question_model import InterviewQuestion, InterviewQuestionModel, InterviewQuestionUpdate
 from src.models.db_models.interview_record_model import InterviewRecord, InterviewRecordModel, InterviewRecordUpdate
 from src.models.db_models.interview_analytics_model import InterviewAnalytics, InterviewAnalyticsModel, InterviewAnalyticsUpdate, InterviewExtractedValueDict, interview_extracted_value_dict_factory
-from src.models.db_models.admin_model import Admin, AdminModel, AdminUpdate
-from src.models.db_models.student_model import Student, StudentModel, StudentUpdate
 from src.models.db_models.interview_question_group_model import InterviewQuestionGroup, InterviewQuestionGroupModel, InterviewQuestionGroupUpdate
 
 # バックエンドアプリで使うモデル
@@ -26,6 +26,7 @@ from src.models.app_models.interview_report_model import InterviewReport
 from src.models.api_models.requests.interview_session_request_model import InterviewSessionRequest
 from src.models.api_models.requests.login_request_model import LoginRequest
 from src.models.api_models.requests.speak_to_teacher_request_model import SpeakToTeacherRequest
+from src.models.api_models.requests.llm_service_interview_request_model import LlmServiceInterviewRequest
 from src.models.api_models.responses.error_response_model import ErrorResponse
 from src.models.api_models.responses.start_interview_response_model import StartInterviewResponse
 from src.models.api_models.responses.teacher_response_model import TeacherResponse

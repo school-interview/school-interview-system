@@ -1,5 +1,5 @@
 services:
-  backend-app-llm-demo:
+  backend:
     build: .
     volumes:
       - ./src:/app/src
@@ -11,8 +11,7 @@ services:
       - ./.env.local:/app/.env.local
       - ./pdf:/app/pdf
     ports:
-      # - 8000:8000
-      - 8430:8430
+      - 8000:8000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
@@ -21,7 +20,7 @@ services:
     depends_on:
       - db
     profiles:
-      - backend-app-llm-demo
+      - backend
   debug:
     build: .
     volumes:
