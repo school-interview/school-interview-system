@@ -2,14 +2,9 @@ from uuid import UUID
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
 from src.models.db_models.base_model import EntityBaseModel
 from sqlalchemy import Boolean, String
-from typing import TYPE_CHECKING, Any, ForwardRef, List, Optional
+from typing import TYPE_CHECKING, Any, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import Field
-# if TYPE_CHECKING:
-#     from src.models.db_models.student_model import Student
-#     from src.models.db_models.admin_model import Admin
-# Student = ForwardRef('Student')
-# Admin = ForwardRef('Admin')
 
 
 class User(AppPydanticBaseModel):
