@@ -65,6 +65,7 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
     if interview_session.done:
         raise Exception("The interview session is already done.")
     questions_dict = interview_questions_crud.get_multi_in_dict(db_session)
+    current_question = questions_dict[interview_session.current_question_id]
     extraction_result = extract_value(
         interview_session, message_from_user, questions_dict)
     if extraction_result.succeeded_to_extract:
@@ -81,32 +82,33 @@ def speak_to_teacher(db_session: Session, interview_session: InterviewSessionMod
             # TODO: この返答雑すぎるので、もう少し工夫する。（ここもLLM使って生成したい）
             return "面談はこれで終了です。ありがとうございました。"
         db_session.commit()
+    next_question = questions_dict[interview_session.current_question_id]
     message_from_teacher = generate_message_from_teacher(
-        db_session, interview_session, questions_dict, message_from_user, use_local_llm)
+        interview_session,  message_from_user, current_question, next_question)
     return message_from_teacher
 
 
 def generate_message_from_teacher(
-        db_session: Session,
         interview_session: InterviewSessionModel,
-        questions_dict: Dict[UUID, InterviewQuestion],
         message_from_student: str,
-        use_local_llm: bool = False
+        current_question: InterviewQuestion,
+        next_question: InterviewQuestion
 ):
     if LLM_SERVICE_ENDPOINT is None:
         raise Exception(
             "could not load LLM_SERVICE_ENDPOINT. It's likely because .env.local file doesn't exist.")
-    url = LLM_SERVICE_ENDPOINT + "/interview/" + str(interview_session.id)
+    url = LLM_SERVICE_ENDPOINT + "interview/" + str(interview_session.id)
     request_body = LlmServiceInterviewRequest(
         message_from_student=message_from_student,
-        current_question=questions_dict[interview_session.current_question_id].question
+        current_question=current_question.question
     )
     with httpx.Client() as client:
         response = client.post(url, json=request_body.__dict__)
-    if response.status_code != 200:
+    if response and response.status_code != 200:
         raise Exception(
             "Failed to generate message from teacher. Status code: " + str(response.status_code))
-    return response.json()
+    message = response.json() + next_question.question
+    return message
 
 
 def extract_value(
