@@ -1,15 +1,10 @@
 from uuid import UUID
 from src.models.app_pydantic_base_model import AppPydanticBaseModel
-from src.models import EntityBaseModel
+from src.models.db_models.base_model import EntityBaseModel
 from sqlalchemy import Boolean, String
-from typing import TYPE_CHECKING, Any, ForwardRef, List, Optional
+from typing import TYPE_CHECKING, Any, Optional
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import Field
-if TYPE_CHECKING:
-    from src.models import Student
-    from src.models import Admin
-Student = ForwardRef('Student')
-Admin = ForwardRef('Admin')
 
 
 class User(AppPydanticBaseModel):
@@ -18,8 +13,8 @@ class User(AppPydanticBaseModel):
     email: str
     is_admin: bool
     # 本当は型を指定したいけどcircular importになるのでAnyにしている...
-    student: Optional[Student] = None  # type: ignore
-    admin: Optional[Admin] = None  # type: ignore
+    student: Optional[Any] = None  # type: ignore
+    admin: Optional[Any] = None  # type: ignore
 
 
 class UserModel(EntityBaseModel):
