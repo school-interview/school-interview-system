@@ -122,7 +122,7 @@ def extract_value(
         raise Exception(
             "could not load LLM_SERVICE_ENDPOINT. It's likely because .env.local file doesn't exist.")
     url = LLM_SERVICE_ENDPOINT + \
-        f"extraction/?extraction_type={current_question.extraction_data_type}&text={message_from_student}"
+        f"extraction/?extraction_type={current_question.extraction_data_type}&text={message_from_student}&question={current_question.question}"
 
     with httpx.Client() as client:
         response = client.get(url)
