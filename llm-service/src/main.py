@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Any, Dict, List, Optional, Union, Sequence
 from uuid import UUID
@@ -30,6 +30,8 @@ from src.models.requests.interview_request import InterviewRequest
 from logging import getLogger, INFO
 from src.utils.format_docs import format_docs
 import chromadb
+from src.constant import EXAMPLE_OUTPUTS
+from fastapi import Response
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)
@@ -49,12 +51,21 @@ vectorstore: Optional[Chroma] = None
 
 chat_history_store = {}
 
-model_name: str = "elyza/Llama-3-ELYZA-JP-8B"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
+conversation_model_name: str = "elyza/Llama-3-ELYZA-JP-8B"
+conversation_tokenizer = AutoTokenizer.from_pretrained(conversation_model_name)
+conversation_model = AutoModelForCausalLM.from_pretrained(
+    conversation_model_name,
     torch_dtype="auto",
     device_map="cuda",
+)
+
+extraction_model_name: str = "Qwen/Qwen2.5-7B-Instruct"
+extraction_tokenizer = AutoTokenizer.from_pretrained(extraction_model_name)
+extraction_model = AutoModelForCausalLM.from_pretrained(
+    extraction_model_name,
+    torch_dtype="auto",
+    device_map="cuda",
+    trust_remote_code=True,
 )
 
 
@@ -62,8 +73,8 @@ model = AutoModelForCausalLM.from_pretrained(
 def interview(session_id: str, interview_requset: InterviewRequest):
     logger.info("Received interview request: %s (message: %s)",
                 session_id, interview_requset.message_from_student)
-    pipe = pipeline("text-generation", model=model,
-                    tokenizer=tokenizer, max_new_tokens=64)
+    pipe = pipeline("text-generation", model=conversation_model,
+                    tokenizer=conversation_tokenizer, max_new_tokens=64)
     global vectorstore
     if vectorstore is None:
         embedding_model = HuggingFaceEmbeddings(
@@ -103,7 +114,7 @@ def interview(session_id: str, interview_requset: InterviewRequest):
     llm = HuggingFacePipeline(
         pipeline=pipe
     )
-    question_prompt_template_format = tokenizer.apply_chat_template(
+    question_prompt_template_format = conversation_tokenizer.apply_chat_template(
         conversation=[
             {"role": "system", "content": """
 
@@ -161,3 +172,42 @@ def interview(session_id: str, interview_requset: InterviewRequest):
         message += s
     logger.info("Generated response for session '%s': %s", session_id, message)
     return message
+
+
+@app.get("/extraction/")
+def extract_value(extraction_type: str, text: str):
+    if not extraction_type:
+        raise HTTPException(
+            status_code=400, detail="extraction_type is required")
+    if not text:
+        raise HTTPException(status_code=400, detail="text is required")
+    if not (type(extraction_type) in ['int', 'float', 'str', 'bool']):
+        raise HTTPException(
+            status_code=400, detail="extraction_type must be one of ['int', 'float', 'str', 'bool']")
+    pipe = pipeline("text-generation", model=extraction_model,
+                    tokenizer=extraction_tokenizer)
+    generation_args = {
+        "max_new_tokens": 500,
+        "return_full_text": False,
+        "temperature": 0.0,
+        "do_sample": False,
+    }
+    conversations = [
+        {
+            "role": "system",
+            "content": """
+                
+                You are a world class algorithm for extracting data and make it to JSON. 
+                You must output in JSON format.
+            """
+            +
+            EXAMPLE_OUTPUTS[extraction_type]
+        },
+        {
+            "role": "user",
+            "content": text
+        }
+    ]
+    output = pipe(conversations, **generation_args)
+    json_output = output[0][0]['generated_text']  # type: ignore
+    return Response(content=json_output, media_type="application/json")
