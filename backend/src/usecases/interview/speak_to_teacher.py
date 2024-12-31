@@ -118,43 +118,26 @@ def extract_value(
     questions_dict: Dict[UUID, InterviewQuestion]
 ):
     current_question = questions_dict[interview_session.current_question_id]
-    prompt_template = current_question.prompt + """
-    Please extract structured data from the following [text]. If extraction is not possible, input 'None'.
-    [text]
-    {text}
-    """
-    prompt_msgs = [
-        SystemMessage(
-            content="You are a world class algorithm for extracting documents in structured formats."
-        ),
-        HumanMessagePromptTemplate.from_template(prompt_template),
-        HumanMessage(
-            content="Tips: Make sure to answer in the correct format."),
-    ]
-    prompt = ChatPromptTemplate(messages=prompt_msgs)
-    llm = ChatOpenAI(
-        temperature=0,
-        model_name="gpt-3.5-turbo",  # type: ignore
-        openai_api_key=OPENAI_API_KEY  # type: ignore
-    )
+    if LLM_SERVICE_ENDPOINT is None:
+        raise Exception(
+            "could not load LLM_SERVICE_ENDPOINT. It's likely because .env.local file doesn't exist.")
+    url = LLM_SERVICE_ENDPOINT + \
+        f"extraction?extraction_type={current_question.extraction_data_type}&text={message_from_student}"
 
-    structured_output_class: Any = None
+    with httpx.Client() as client:
+        response = client.get(url)
+        if response and response.status_code != 200:
+            raise Exception(
+                "Failed to generate message from teacher. Status code: " + str(response.status_code))
+    extracted_value = response.json()['extracted_value']
 
     match current_question.extraction_data_type:
         case 'bool':
-            structured_output_class = BoolExtraction
+            extracted_value = True if extracted_value.lower() == 'true' else False
         case 'int':
-            structured_output_class = IntExtraction
+            extracted_value = int(extracted_value)
         case 'float':
-            structured_output_class = FloatExtraction
-        case 'str':
-            structured_output_class = StrExtraction
-
-    chain = prompt | llm.with_structured_output(structured_output_class)
-    output: Any = chain.invoke({"text": message_from_student},
-                               config={"callbacks": [ConsoleCallbackHandler()]})
-    output_dict = output.dict()
-    extracted_value = output_dict['extracted_value']
+            extracted_value = float(extracted_value)
 
     return ExtractionResult(
         question_id_before_update=current_question.id,
