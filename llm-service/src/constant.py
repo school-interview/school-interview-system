@@ -37,6 +37,7 @@ EXAMPLE_OUTPUTS = {
 		}
 """,
     'str': """
+	If you can't find anything, put "None" to "extracted_value" field.
 	
 	If the input is "私の悩み事は数学が難しいいことです" the example output is below.
 	{
@@ -46,6 +47,11 @@ EXAMPLE_OUTPUTS = {
 	If the input is "私の悩み事は朝起きれないことです" the example output is below.
 	{
 			"extracted_value":"朝起きれないことです"
+	}
+
+	If the input is "特になにもありません" the example output is below.
+	{
+			"extracted_value":"None"
 	}
 """
 }

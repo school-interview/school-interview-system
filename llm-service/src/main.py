@@ -175,12 +175,15 @@ def interview(session_id: str, interview_requset: InterviewRequest):
 
 
 @app.get("/extraction/")
-def extract_value(extraction_type: str, text: str):
+def extract_value(extraction_type: str, text: str, question: str):
     if not extraction_type:
         raise HTTPException(
             status_code=400, detail="extraction_type is required")
     if not text:
         raise HTTPException(status_code=400, detail="text is required")
+    if not question:
+        raise HTTPException(
+            status_code=400, detail="question is required")
     if not (extraction_type in ['int', 'float', 'str', 'bool']):
         raise HTTPException(
             status_code=400, detail="extraction_type must be one of ['int', 'float', 'str', 'bool']")
@@ -199,8 +202,8 @@ def extract_value(extraction_type: str, text: str):
                 
                 You are a world class algorithm for extracting data and make it to JSON. 
                 You must output in valid JSON format no matter what happens.
+                You must extract data which is the answer to the question '"""+question+"""'
                 If you can't find anything, put null to "extracted_value" field.
-
             """
             +
             EXAMPLE_OUTPUTS[extraction_type]
