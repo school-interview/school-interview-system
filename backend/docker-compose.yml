@@ -1,5 +1,5 @@
 services:
-  backend-app:
+  backend:
     build: .
     volumes:
       - ./web:/app/web
