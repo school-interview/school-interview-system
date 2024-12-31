@@ -198,10 +198,19 @@ def extract_value(extraction_type: str, text: str):
             "content": """
                 
                 You are a world class algorithm for extracting data and make it to JSON. 
-                You must output in JSON format.
+                You must output in valid JSON format no matter what happens.
+                If you can't find anything, put null to "extracted_value" field.
+
             """
             +
             EXAMPLE_OUTPUTS[extraction_type]
+            +
+            """
+            If the input is "あいうえお", the example output is below.
+            {
+                "extracted_value": null
+            }
+            """
         },
         {
             "role": "user",
