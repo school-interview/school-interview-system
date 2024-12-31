@@ -103,7 +103,7 @@ def generate_message_from_teacher(
         current_question=current_question.question
     )
     with httpx.Client() as client:
-        response = client.post(url, json=request_body.__dict__)
+        response = client.post(url, json=request_body.__dict__, timeout=30)
     if response and response.status_code != 200:
         raise Exception(
             "Failed to generate message from teacher. Status code: " + str(response.status_code))
