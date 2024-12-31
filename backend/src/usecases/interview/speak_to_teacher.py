@@ -135,9 +135,11 @@ def extract_value(
         case 'bool':
             extracted_value = True if extracted_value.lower() == 'true' else False
         case 'int':
-            extracted_value = int(extracted_value)
+            if extracted_value is not None:
+                extracted_value = int(extracted_value)
         case 'float':
-            extracted_value = float(extracted_value)
+            if extracted_value is not None:
+                extracted_value = float(extracted_value)
 
     return ExtractionResult(
         question_id_before_update=current_question.id,
