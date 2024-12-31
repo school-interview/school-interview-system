@@ -209,6 +209,5 @@ def extract_value(extraction_type: str, text: str):
         }
     ]
     output = pipe(conversations, **generation_args)
-    print(output)
-    json_output = output[0][0]['generated_text']  # type: ignore
+    json_output = output[0]['generated_text']  # type: ignore
     return Response(content=json_output, media_type="application/json")
