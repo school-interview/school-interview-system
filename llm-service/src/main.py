@@ -181,7 +181,7 @@ def extract_value(extraction_type: str, text: str):
             status_code=400, detail="extraction_type is required")
     if not text:
         raise HTTPException(status_code=400, detail="text is required")
-    if not (type(extraction_type) in ['int', 'float', 'str', 'bool']):
+    if not (extraction_type in ['int', 'float', 'str', 'bool']):
         raise HTTPException(
             status_code=400, detail="extraction_type must be one of ['int', 'float', 'str', 'bool']")
     pipe = pipeline("text-generation", model=extraction_model,
