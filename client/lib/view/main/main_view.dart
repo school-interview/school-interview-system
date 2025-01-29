@@ -18,6 +18,7 @@ class _MainView extends ConsumerState<MainView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       // 初期画面
       home: const LoginView(),
       scrollBehavior: CustomScrollBehavior(),
