@@ -132,8 +132,6 @@ def extract_value(
     extracted_value = response.json()['extracted_value']
 
     match current_question.extraction_data_type:
-        case 'bool':
-            extracted_value = True if extracted_value.lower() == 'true' else False
         case 'int':
             if extracted_value is not None:
                 extracted_value = int(extracted_value)
