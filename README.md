@@ -1,35 +1,31 @@
-# School Interview System
+# 修学面談システム
 
-Language: English | [日本語](README-ja.md)
+## 概要
 
-## Overview
+大学における修学面談の効率化・自動化を目指して開発しているシステムです。
 
-This system is being developed to improve the efficiency and automation of the university's study
-interviewing process.
+### 目的
 
-### Purpose
+✅ 支援が必要な学生を効率的に見極め、教員の負担を軽減すること。  
+✅ 学生に対して、有益な情報やサポートを平等に提供すること。
 
-✅ Efficiently identify students in need of assistance and reduce the burden on faculty.  
-✅ Provide students with equal access to useful information and support.
+## 本システムの動かし方
 
-## How this system works
+### 環境
 
-### Environment
+本システムのクライアント側は、`Flutter`で開発されているため、`Flutter`開発環境の構築が必要です。  
+詳細は、[client / README-ja.md](https://github.com/school-interview/school-interview-system/blob/main/client/README-ja.md#開発環境)
+を参照してください。
 
-The client side of this system is developed in `Flutter`, so it is necessary to build a `Flutter`
-development environment.  
-For details,
-see [client / README.md](https://github.com/school-interview/school-interview-system/blob/main/client/README.md#development-environment)
+### 環境変数
 
-### Environment variable
+`backend`フォルダ内に`.env.local`ファイルを作成して環境変数を設定する必要があります。  
+設定する内容の詳細は、[backend / README.me](https://github.com/school-interview/school-interview-system/blob/main/backend/README.md#prepare-envlocal-in-backend-directory)
+を参照してください。
 
-You must create a `.env.local` file in the `backend` folder and set the environment variables.  
-For details on what to set,
-see [backend / README.me](https://github.com/school-interview/school-interview-system/blob/main/backend/README.md#prepare-envlocal-in-backend-directory)
+## ディレクトリ構成
 
-## Directory structure
-
-The directory structure is as follows.
+ディレクトリ構成は次の通りです。
 
 ```text
 .
@@ -38,20 +34,21 @@ The directory structure is as follows.
 ├── docs
 ├── open-api
 ├── readme-img
+├── llm-service
 ├── README-ja.md
 └── README.md
 ```
 
-| Directory name | Description                 |
-| -------------- | --------------------------- |
-| backend        | Back-end source code        |
-| llm-service    | LLM Service source code     |
-| client         | Client source code          |
-| docs           | document                    |
-| open-api       | Open API generator          |
-| readme-img     | Images to be used in README |
+| ディレクトリ名 | 説明                       |
+| -------------- | -------------------------- |
+| backend        | バックエンドのソースコード |
+| llm-service    | LLM Service のソースコード |
+| client         | クライアントのソースコード |
+| docs           | 文書                       |
+| open-api       | Open API generator         |
+| readme-img     | README に使用する画像      |
 
-## List of technologies used
+## 使用技術一覧
 
 <img src="https://img.shields.io/badge/-Flutter-02569B.svg?logo=flutter&style=flat-square" alt=""> <img src="https://img.shields.io/badge/-Dart-0175C2.svg?logo=dart&style=flat-square" alt="">
 <img src="https://img.shields.io/badge/-Unity-000000.svg?logo=unity&style=flat-square" alt="">
