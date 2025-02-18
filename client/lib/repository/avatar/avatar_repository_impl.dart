@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:client/app.dart';
 import 'package:client/core/response_extension.dart';
 import 'package:client/repository/api_result.dart';
-import 'package:client/repository/teacher/teacher_repository.dart';
+import 'package:client/repository/avatar/avatar_repository.dart';
 import 'package:openapi/api.dart';
 
-class TeacherRepositoryImpl extends TeacherRepository {
-  /// 教員リスト取得API
+class AvatarRepositoryImpl extends AvatarRepository {
+  /// アバターリスト取得API
   @override
-  Future<ApiResult<TeachersListResponse>> getTeacherList() async {
-    logger.i("run getTeacherList()");
+  Future<ApiResult<TeachersListResponse>> getAvatarList() async {
+    logger.i("run getAvatarList()");
     ApiClient apiClient = ApiClient(basePath: apiBasePath);
     final api = DefaultApi(apiClient);
     try {
