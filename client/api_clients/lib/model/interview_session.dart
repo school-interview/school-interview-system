@@ -43,56 +43,59 @@ class InterviewSession {
   bool done;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is InterviewSession &&
-    other.id == id &&
-    other.userId == userId &&
-    other.user == user &&
-    other.teacherId == teacherId &&
-    other.teacher == teacher &&
-    other.startAt == startAt &&
-    other.currentQuestionId == currentQuestionId &&
-    other.currentQuestion == currentQuestion &&
-    other.done == done;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InterviewSession &&
+          other.id == id &&
+          other.userId == userId &&
+          other.user == user &&
+          other.teacherId == teacherId &&
+          other.teacher == teacher &&
+          other.startAt == startAt &&
+          other.currentQuestionId == currentQuestionId &&
+          other.currentQuestion == currentQuestion &&
+          other.done == done;
 
   @override
   int get hashCode =>
-    // ignore: unnecessary_parenthesis
-    (id.hashCode) +
-    (userId.hashCode) +
-    (user == null ? 0 : user!.hashCode) +
-    (teacherId.hashCode) +
-    (teacher == null ? 0 : teacher!.hashCode) +
-    (startAt.hashCode) +
-    (currentQuestionId.hashCode) +
-    (currentQuestion == null ? 0 : currentQuestion!.hashCode) +
-    (done.hashCode);
+      // ignore: unnecessary_parenthesis
+      (id.hashCode) +
+      (userId.hashCode) +
+      (user == null ? 0 : user!.hashCode) +
+      (teacherId.hashCode) +
+      (teacher == null ? 0 : teacher!.hashCode) +
+      (startAt.hashCode) +
+      (currentQuestionId.hashCode) +
+      (currentQuestion == null ? 0 : currentQuestion!.hashCode) +
+      (done.hashCode);
 
   @override
-  String toString() => 'InterviewSession[id=$id, userId=$userId, user=$user, teacherId=$teacherId, teacher=$teacher, startAt=$startAt, currentQuestionId=$currentQuestionId, currentQuestion=$currentQuestion, done=$done]';
+  String toString() =>
+      'InterviewSession[id=$id, userId=$userId, user=$user, teacherId=$teacherId, avatar=$teacher, startAt=$startAt, currentQuestionId=$currentQuestionId, currentQuestion=$currentQuestion, done=$done]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
-      json[r'id'] = this.id;
-      json[r'userId'] = this.userId;
+    json[r'id'] = this.id;
+    json[r'userId'] = this.userId;
     if (this.user != null) {
       json[r'user'] = this.user;
     } else {
       json[r'user'] = null;
     }
-      json[r'teacherId'] = this.teacherId;
+    json[r'teacherId'] = this.teacherId;
     if (this.teacher != null) {
-      json[r'teacher'] = this.teacher;
+      json[r'avatar'] = this.teacher;
     } else {
-      json[r'teacher'] = null;
+      json[r'avatar'] = null;
     }
-      json[r'startAt'] = this.startAt.toUtc().toIso8601String();
-      json[r'currentQuestionId'] = this.currentQuestionId;
+    json[r'startAt'] = this.startAt.toUtc().toIso8601String();
+    json[r'currentQuestionId'] = this.currentQuestionId;
     if (this.currentQuestion != null) {
       json[r'currentQuestion'] = this.currentQuestion;
     } else {
       json[r'currentQuestion'] = null;
     }
-      json[r'done'] = this.done;
+    json[r'done'] = this.done;
     return json;
   }
 
@@ -108,8 +111,10 @@ class InterviewSession {
       // Note 2: this code is stripped in release mode!
       assert(() {
         requiredKeys.forEach((key) {
-          assert(json.containsKey(key), 'Required key "InterviewSession[$key]" is missing from JSON.');
-          assert(json[key] != null, 'Required key "InterviewSession[$key]" has a null value in JSON.');
+          assert(json.containsKey(key),
+              'Required key "InterviewSession[$key]" is missing from JSON.');
+          assert(json[key] != null,
+              'Required key "InterviewSession[$key]" has a null value in JSON.');
         });
         return true;
       }());
@@ -119,7 +124,7 @@ class InterviewSession {
         userId: mapValueOfType<String>(json, r'userId')!,
         user: User.fromJson(json[r'user']),
         teacherId: mapValueOfType<String>(json, r'teacherId')!,
-        teacher: Teacher.fromJson(json[r'teacher']),
+        teacher: Teacher.fromJson(json[r'avatar']),
         startAt: mapDateTime(json, r'startAt', r'')!,
         currentQuestionId: mapValueOfType<String>(json, r'currentQuestionId')!,
         currentQuestion: InterviewQuestion.fromJson(json[r'currentQuestion']),
@@ -129,7 +134,10 @@ class InterviewSession {
     return null;
   }
 
-  static List<InterviewSession> listFromJson(dynamic json, {bool growable = false,}) {
+  static List<InterviewSession> listFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final result = <InterviewSession>[];
     if (json is List && json.isNotEmpty) {
       for (final row in json) {
@@ -157,13 +165,19 @@ class InterviewSession {
   }
 
   // maps a json object with a list of InterviewSession-objects as value to a dart map
-  static Map<String, List<InterviewSession>> mapListFromJson(dynamic json, {bool growable = false,}) {
+  static Map<String, List<InterviewSession>> mapListFromJson(
+    dynamic json, {
+    bool growable = false,
+  }) {
     final map = <String, List<InterviewSession>>{};
     if (json is Map && json.isNotEmpty) {
       // ignore: parameter_assignments
       json = json.cast<String, dynamic>();
       for (final entry in json.entries) {
-        map[entry.key] = InterviewSession.listFromJson(entry.value, growable: growable,);
+        map[entry.key] = InterviewSession.listFromJson(
+          entry.value,
+          growable: growable,
+        );
       }
     }
     return map;
@@ -179,4 +193,3 @@ class InterviewSession {
     'done',
   };
 }
-

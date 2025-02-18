@@ -26,7 +26,7 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
     super.initState();
     Future(() async {
       final notifier = ref.read(avatarSelectViewNotifierProvider.notifier);
-      await notifier.getTeacherList();
+      await notifier.getAvatarList();
     });
   }
 
@@ -70,7 +70,7 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                             horizontal: 16, vertical: 8),
                         child: GridView.builder(
                           controller: scrollController,
-                          itemCount: state.teacherCount,
+                          itemCount: state.avatarCount,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
@@ -81,7 +81,7 @@ class _AvatarSelectView extends ConsumerState<AvatarSelectView> {
                             mainAxisExtent: 180,
                           ),
                           itemBuilder: (context, index) {
-                            final teacher = state.teacherList[index];
+                            final teacher = state.avatarList[index];
                             return _AvatarSelectBox(
                               avatarName: teacher.name,
                               onTapSelectBox: () async {

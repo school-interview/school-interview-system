@@ -22,13 +22,11 @@ mixin _$AvatarSelectViewState {
   /// 読み込み中フラグ
   bool get isLoading => throw _privateConstructorUsedError;
 
-  /// 教員リスト取得APIレスポンス
-  List<Teacher> get teacherList => throw _privateConstructorUsedError;
-  int get teacherCount => throw _privateConstructorUsedError;
+  /// アバターリスト取得APIレスポンス
+  List<Teacher> get avatarList => throw _privateConstructorUsedError;
+  int get avatarCount => throw _privateConstructorUsedError;
 
-  /// Create a copy of AvatarSelectViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $AvatarSelectViewStateCopyWith<AvatarSelectViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,8 +40,8 @@ abstract class $AvatarSelectViewStateCopyWith<$Res> {
   $Res call(
       {Result? result,
       bool isLoading,
-      List<Teacher> teacherList,
-      int teacherCount});
+      List<Teacher> avatarList,
+      int avatarCount});
 }
 
 /// @nodoc
@@ -57,15 +55,13 @@ class _$AvatarSelectViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AvatarSelectViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? result = freezed,
     Object? isLoading = null,
-    Object? teacherList = null,
-    Object? teacherCount = null,
+    Object? avatarList = null,
+    Object? avatarCount = null,
   }) {
     return _then(_value.copyWith(
       result: freezed == result
@@ -76,13 +72,13 @@ class _$AvatarSelectViewStateCopyWithImpl<$Res,
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      teacherList: null == teacherList
-          ? _value.teacherList
-          : teacherList // ignore: cast_nullable_to_non_nullable
+      avatarList: null == avatarList
+          ? _value.avatarList
+          : avatarList // ignore: cast_nullable_to_non_nullable
               as List<Teacher>,
-      teacherCount: null == teacherCount
-          ? _value.teacherCount
-          : teacherCount // ignore: cast_nullable_to_non_nullable
+      avatarCount: null == avatarCount
+          ? _value.avatarCount
+          : avatarCount // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -100,8 +96,8 @@ abstract class _$$AvatarSelectViewStateImplCopyWith<$Res>
   $Res call(
       {Result? result,
       bool isLoading,
-      List<Teacher> teacherList,
-      int teacherCount});
+      List<Teacher> avatarList,
+      int avatarCount});
 }
 
 /// @nodoc
@@ -113,15 +109,13 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
       $Res Function(_$AvatarSelectViewStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AvatarSelectViewState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? result = freezed,
     Object? isLoading = null,
-    Object? teacherList = null,
-    Object? teacherCount = null,
+    Object? avatarList = null,
+    Object? avatarCount = null,
   }) {
     return _then(_$AvatarSelectViewStateImpl(
       result: freezed == result
@@ -132,13 +126,13 @@ class __$$AvatarSelectViewStateImplCopyWithImpl<$Res>
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      teacherList: null == teacherList
-          ? _value._teacherList
-          : teacherList // ignore: cast_nullable_to_non_nullable
+      avatarList: null == avatarList
+          ? _value._avatarList
+          : avatarList // ignore: cast_nullable_to_non_nullable
               as List<Teacher>,
-      teacherCount: null == teacherCount
-          ? _value.teacherCount
-          : teacherCount // ignore: cast_nullable_to_non_nullable
+      avatarCount: null == avatarCount
+          ? _value.avatarCount
+          : avatarCount // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -150,9 +144,9 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   const _$AvatarSelectViewStateImpl(
       {this.result,
       this.isLoading = false,
-      final List<Teacher> teacherList = const [],
-      this.teacherCount = 0})
-      : _teacherList = teacherList;
+      final List<Teacher> avatarList = const [],
+      this.avatarCount = 0})
+      : _avatarList = avatarList;
 
   /// API処理結果
   @override
@@ -163,25 +157,25 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
   @JsonKey()
   final bool isLoading;
 
-  /// 教員リスト取得APIレスポンス
-  final List<Teacher> _teacherList;
+  /// アバターリスト取得APIレスポンス
+  final List<Teacher> _avatarList;
 
-  /// 教員リスト取得APIレスポンス
+  /// アバターリスト取得APIレスポンス
   @override
   @JsonKey()
-  List<Teacher> get teacherList {
-    if (_teacherList is EqualUnmodifiableListView) return _teacherList;
+  List<Teacher> get avatarList {
+    if (_avatarList is EqualUnmodifiableListView) return _avatarList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_teacherList);
+    return EqualUnmodifiableListView(_avatarList);
   }
 
   @override
   @JsonKey()
-  final int teacherCount;
+  final int avatarCount;
 
   @override
   String toString() {
-    return 'AvatarSelectViewState(result: $result, isLoading: $isLoading, teacherList: $teacherList, teacherCount: $teacherCount)';
+    return 'AvatarSelectViewState(result: $result, isLoading: $isLoading, avatarList: $avatarList, avatarCount: $avatarCount)';
   }
 
   @override
@@ -193,18 +187,16 @@ class _$AvatarSelectViewStateImpl implements _AvatarSelectViewState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             const DeepCollectionEquality()
-                .equals(other._teacherList, _teacherList) &&
-            (identical(other.teacherCount, teacherCount) ||
-                other.teacherCount == teacherCount));
+                .equals(other._avatarList, _avatarList) &&
+            (identical(other.avatarCount, avatarCount) ||
+                other.avatarCount == avatarCount));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, result, isLoading,
-      const DeepCollectionEquality().hash(_teacherList), teacherCount);
+      const DeepCollectionEquality().hash(_avatarList), avatarCount);
 
-  /// Create a copy of AvatarSelectViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AvatarSelectViewStateImplCopyWith<_$AvatarSelectViewStateImpl>
@@ -216,27 +208,25 @@ abstract class _AvatarSelectViewState implements AvatarSelectViewState {
   const factory _AvatarSelectViewState(
       {final Result? result,
       final bool isLoading,
-      final List<Teacher> teacherList,
-      final int teacherCount}) = _$AvatarSelectViewStateImpl;
+      final List<Teacher> avatarList,
+      final int avatarCount}) = _$AvatarSelectViewStateImpl;
+
+  @override
 
   /// API処理結果
-  @override
   Result? get result;
+  @override
 
   /// 読み込み中フラグ
-  @override
   bool get isLoading;
+  @override
 
-  /// 教員リスト取得APIレスポンス
+  /// アバターリスト取得APIレスポンス
+  List<Teacher> get avatarList;
   @override
-  List<Teacher> get teacherList;
+  int get avatarCount;
   @override
-  int get teacherCount;
-
-  /// Create a copy of AvatarSelectViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AvatarSelectViewStateImplCopyWith<_$AvatarSelectViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

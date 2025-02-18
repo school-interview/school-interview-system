@@ -26,9 +26,7 @@ mixin _$LoginState {
   /// ユーザー情報
   User? get user => throw _privateConstructorUsedError;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,8 +50,6 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,8 +93,6 @@ class __$$LoginStateImplCopyWithImpl<$Res>
       _$LoginStateImpl _value, $Res Function(_$LoginStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -160,9 +154,7 @@ class _$LoginStateImpl implements _LoginState {
   @override
   int get hashCode => Object.hash(runtimeType, result, isAdmin, user);
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
@@ -175,23 +167,21 @@ abstract class _LoginState implements LoginState {
       final bool isAdmin,
       final User? user}) = _$LoginStateImpl;
 
-  /// API処理結果
   @override
+
+  /// API処理結果
   Result? get result;
+  @override
 
   /// ユーザーが学生が教員か
   /// true:教員 false:学生
-  @override
   bool get isAdmin;
+  @override
 
   /// ユーザー情報
-  @override
   User? get user;
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

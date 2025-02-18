@@ -7,7 +7,7 @@ part of 'interview_analytics_view_notifier.dart';
 // **************************************************************************
 
 String _$interviewAnalyticsViewNotifierHash() =>
-    r'28f667e067897b396d9a5dfbd0aabce325ba577b';
+    r'5baf44cb57703f8feb4fc1b77bec5d68244651b2';
 
 /// See also [InterviewAnalyticsViewNotifier].
 @ProviderFor(InterviewAnalyticsViewNotifier)
@@ -25,4 +25,4 @@ final interviewAnalyticsViewNotifierProvider = AutoDisposeNotifierProvider<
 typedef _$InterviewAnalyticsViewNotifier
     = AutoDisposeNotifier<InterviewAnalyticsViewState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

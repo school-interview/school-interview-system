@@ -7,7 +7,7 @@ part of 'avatar_select_view_notifier.dart';
 // **************************************************************************
 
 String _$avatarSelectViewNotifierHash() =>
-    r'8ec0bed46631e9010a5eb34c876b81dd23231e1e';
+    r'8c6de64ba445db12616d382f69d5ff591764ed21';
 
 /// See also [AvatarSelectViewNotifier].
 @ProviderFor(AvatarSelectViewNotifier)
@@ -24,4 +24,4 @@ final avatarSelectViewNotifierProvider = AutoDisposeNotifierProvider<
 
 typedef _$AvatarSelectViewNotifier = AutoDisposeNotifier<AvatarSelectViewState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
